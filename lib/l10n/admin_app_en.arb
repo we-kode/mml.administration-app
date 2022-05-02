@@ -1,0 +1,11 @@
+{
+  "appTitle": "My Media Lib Administration",
+  "serverName": "Servername (domain:port)",
+  "serverNameUncahnged": "Servername (domain:port) (unchanged)",
+  "invalidServerName": "A valid server name must be specified!",
+  "login": "Login",
+  "username": "Username",
+  "password": "Password",
+  "clientId": "Client-ID",
+  "clientIdUnchanged": "Client-ID (unchanged)"
+}

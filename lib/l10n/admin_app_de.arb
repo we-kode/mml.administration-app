@@ -1,0 +1,11 @@
+{
+  "appTitle": "Meine Mediathek Administration",
+  "serverName": "Server (Domain:Port)",
+  "serverNameUncahnged": "Server (Domain:Port) (unverändert)",
+  "invalidServerName": "Eine korrekte Serveradresse muss angegeben werden!",
+  "login": "Anmelden",
+  "username": "Benutzername",
+  "password": "Passwort",
+  "clientId": "Client-ID",
+  "clientIdUnchanged": "Client-ID (unverändert)"
+}
