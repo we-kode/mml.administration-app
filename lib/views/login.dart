@@ -93,6 +93,21 @@ class LoginScreen extends StatelessWidget {
                           },
                         ),
                         spacer,
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: vm.appKeyLabel,
+                            icon: const Icon(Icons.vpn_key_outlined),
+                          ),
+                          onSaved: (String? appKey) {
+                            vm.appKey = appKey;
+                          },
+                          validator: vm.validateAppKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          onChanged: (String? appKey) {
+                            vm.appKey = appKey;
+                          },
+                        ),
+                        spacer,
                         spacer,
                         Align(
                           alignment: Alignment.centerRight,

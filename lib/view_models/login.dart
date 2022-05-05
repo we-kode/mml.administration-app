@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/extensions/is_valid_guid.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 class LoginViewModel extends ChangeNotifier {
   late String username;
   late String password;
+  late String? appKey;
   late String? clientId;
   late String? serverName;
-  late String? _persistedServerName;
+  late String? _persistedAppKey;
   late String? _persistedClientId;
+  late String? _persistedServerName;
   late AppLocalizations locales;
   final formKey = GlobalKey<FormState>();
 
@@ -18,8 +21,9 @@ class LoginViewModel extends ChangeNotifier {
       // else
 
       locales = AppLocalizations.of(context)!;
-      _persistedServerName = await SecureStorageService.getInstance().get('serverName');
+      _persistedAppKey = await SecureStorageService.getInstance().get('appKey');
       _persistedClientId = await SecureStorageService.getInstance().get('clientId');
+      _persistedServerName = await SecureStorageService.getInstance().get('serverName');
 
       return true;
     });
@@ -34,19 +38,27 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   String? validateUsername(String? username) {
-    return username != null && username.isNotEmpty ? null : "A username must be specified!";
+    return username != null && username.isNotEmpty ? null : locales.invalidUsername;
   }
 
   String? validatePassword(String? password) {
-    return password != null && password.isNotEmpty ? null : "A password must be specified!";
+    return password != null && password.isNotEmpty ? null : locales.invalidPassword;
+  }
+
+  String? validateAppKey(String? appKey) {
+    if ((appKey == null || appKey.isEmpty) && (_persistedAppKey != null && _persistedAppKey!.isNotEmpty)) {
+      serverName = _persistedServerName;
+    }
+
+    return appKey != null && appKey.isValidGuid() ? null : locales.invalidAppKey;
   }
 
   String? validateClientId(String? clientId) {
     if ((clientId == null || clientId.isEmpty) && (_persistedClientId != null && _persistedClientId!.isNotEmpty)) {
-      serverName = _persistedServerName;
+      clientId = _persistedClientId;
     }
 
-    return clientId != null && clientId.isNotEmpty ? null : "A client id must be specified!";
+    return clientId != null && clientId.isValidGuid() ? null : locales.invalidClientId;
   }
 
   String? validateServerName(String? serverName) {
@@ -54,8 +66,11 @@ class LoginViewModel extends ChangeNotifier {
       serverName = _persistedServerName;
     }
 
-    // TODO: Validate format
     return serverName != null && serverName.isNotEmpty ? null : locales.invalidServerName;
+  }
+
+  String get appKeyLabel {
+    return _persistedAppKey != null && _persistedAppKey!.isNotEmpty && (appKey == null || appKey!.isEmpty) ? locales.appKeyUnchanged : locales.appKey;
   }
 
   String get clientIdLabel {
@@ -63,6 +78,6 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   String get serverNameLabel {
-    return _persistedServerName != null && _persistedServerName!.isNotEmpty && (serverName == null || serverName!.isEmpty) ? locales.serverNameUncahnged : locales.serverName;
+    return _persistedServerName != null && _persistedServerName!.isNotEmpty && (serverName == null || serverName!.isEmpty) ? locales.serverNameUnchanged : locales.serverName;
   }
 }

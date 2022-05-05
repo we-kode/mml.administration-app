@@ -1,11 +1,17 @@
 {
   "appTitle": "Meine Mediathek Administration",
   "serverName": "Server (Domain:Port)",
-  "serverNameUncahnged": "Server (Domain:Port) (unverändert)",
+  "serverNameUnchanged": "Server (Domain:Port) (unverändert)",
   "invalidServerName": "Eine korrekte Serveradresse muss angegeben werden!",
   "login": "Anmelden",
   "username": "Benutzername",
   "password": "Passwort",
   "clientId": "Client-ID",
-  "clientIdUnchanged": "Client-ID (unverändert)"
+  "clientIdUnchanged": "Client-ID (unverändert)",
+  "appKey": "App-Schlüssel",
+  "appKeyUnchanged": "App-Schlüssel (unverändert)",
+  "invalidClientId": "Eine korrekter Client-ID muss angegeben werden!",
+  "invalidAppKey": "Ein korrekter App-Schlüssel muss angegeben werden!",
+  "invalidUsername": "Bitte geben Sie Ihren Benutzernamen an!",
+  "invalidPassword": "Bitte geben Sie Ihr Passwort an!"
 }

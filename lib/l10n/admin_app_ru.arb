@@ -1,11 +1,17 @@
 {
   "appTitle": "Администрация Моя Медиятека",
   "serverName": "Сервер (домен:порт)",
-  "serverNameUncahnged": "Сервер (домен:порт) (прежний)",
+  "serverNameUnchanged": "Сервер (домен:порт) (прежний)",
   "invalidServerName": "Адрес сервера неправильный!",
   "login": "Войти",
   "username": "Логин",
   "password": "Пароль",
   "clientId": "Идентификатор клиента",
-  "clientIdUnchanged": "Идентификатор клиента (прежний)"
+  "clientIdUnchanged": "Идентификатор клиента (прежний)",
+  "appKey": "Ключ приложения",
+  "appKeyUnchanged": "Ключ приложения (прежний)",
+  "invalidClientId": "Идентификатор клиента неправильный!",
+  "invalidAppKey": "Ключ приложения неправильный!",
+  "invalidUsername": "Пожалуйста введите логин!",
+  "invalidPassword": "Пожалуйста введите пароль!"
 }

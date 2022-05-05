@@ -10,7 +10,7 @@ class RouterService {
 
   Map<String, Widget Function(BuildContext)> getRoutes() {
     return {
-      LoginScreen.route: (context) => LoginScreen()
+      LoginScreen.route: (context) => const LoginScreen()
     };
   }
 
