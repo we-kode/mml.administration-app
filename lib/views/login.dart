@@ -6,8 +6,6 @@ import 'package:mml_admin/components/horizontal_spacer.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
-  static String route = '/login';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

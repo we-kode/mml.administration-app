@@ -3,6 +3,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class SecureStorageService {
   static final SecureStorageService _instance = SecureStorageService();
   final _storage = const FlutterSecureStorage();
+  static const String appKeyStorageKey = 'appKey';
+  static const String clientIdStorageKey = 'clientId';
+  static const String serverNameStorageKey = 'serverName';
 
   static SecureStorageService getInstance() {
     return _instance;
@@ -16,8 +19,8 @@ class SecureStorageService {
     return (await get(key)) != null;
   }
 
-  void set(String key, String value) async {
-    await _storage.write(key: key, value: value);
+  Future<void> set(String key, String? value) async {
+    return await _storage.write(key: key, value: value);
   }
 
   delete(String key) async {

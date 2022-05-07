@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/view_models/login.dart';
 import 'package:mml_admin/views/login.dart';
 
 class RouterService {
@@ -10,11 +11,11 @@ class RouterService {
 
   Map<String, Widget Function(BuildContext)> getRoutes() {
     return {
-      LoginScreen.route: (context) => const LoginScreen()
+      LoginViewModel.route: (context) => const LoginScreen()
     };
   }
 
   String getInitialRoute() {
-    return LoginScreen.route;
+    return LoginViewModel.route;
   }
 }

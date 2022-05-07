@@ -1,40 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/extensions/is_valid_guid.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/services/user.dart';
 
 class LoginViewModel extends ChangeNotifier {
-  late String username;
-  late String password;
-  late String? appKey;
-  late String? clientId;
-  late String? serverName;
   late String? _persistedAppKey;
   late String? _persistedClientId;
   late String? _persistedServerName;
+  late BuildContext _context;
+
+  String? username;
+  String? password;
+  String? appKey;
+  String? clientId;
+  String? serverName;
+
   late AppLocalizations locales;
   final formKey = GlobalKey<FormState>();
 
+  static String route = '/login';
+
   Future<bool> init(BuildContext context) async {
+    _context = context;
+
     return Future<bool>.microtask(() async {
       // TODO: check if token given and try get user data or a refresh token and redirect on success
       // else
 
-      locales = AppLocalizations.of(context)!;
-      _persistedAppKey = await SecureStorageService.getInstance().get('appKey');
-      _persistedClientId = await SecureStorageService.getInstance().get('clientId');
-      _persistedServerName = await SecureStorageService.getInstance().get('serverName');
+      locales = AppLocalizations.of(_context)!;
+      _persistedAppKey = await SecureStorageService.getInstance().get(SecureStorageService.appKeyStorageKey);
+      _persistedClientId = await SecureStorageService.getInstance().get(SecureStorageService.clientIdStorageKey);
+      _persistedServerName = await SecureStorageService.getInstance().get(SecureStorageService.serverNameStorageKey);
 
       return true;
     });
   }
 
-  void login() {
+  void login() async {
     if (formKey.currentState!.validate()) {
-      formKey.currentState!.save();
-    }
+      showProgressIndicator(_context);
 
-    // UserService.getInstance().
+      formKey.currentState!.save();
+
+      await SecureStorageService.getInstance().set(SecureStorageService.appKeyStorageKey, appKey);
+      await SecureStorageService.getInstance().set(SecureStorageService.clientIdStorageKey, clientId);
+      await SecureStorageService.getInstance().set(SecureStorageService.serverNameStorageKey, serverName);
+
+      var result = await UserService.getInstance().login(username!, password!);
+
+      Navigator.pop(_context);
+
+      if (result) {
+        // Navigator.pushNamed(_context, ClientsOverviewViewModel.route);
+        ScaffoldMessenger.of(_context).showSnackBar(const SnackBar(
+          content: Text('Success')
+        ));
+      } else {
+        ScaffoldMessenger.of(_context).showSnackBar(const SnackBar(
+          content: Text('Error')
+        ));
+      }
+    }
   }
 
   String? validateUsername(String? username) {
@@ -47,7 +75,7 @@ class LoginViewModel extends ChangeNotifier {
 
   String? validateAppKey(String? appKey) {
     if ((appKey == null || appKey.isEmpty) && (_persistedAppKey != null && _persistedAppKey!.isNotEmpty)) {
-      serverName = _persistedServerName;
+      appKey = _persistedAppKey;
     }
 
     return appKey != null && appKey.isValidGuid() ? null : locales.invalidAppKey;
