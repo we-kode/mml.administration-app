@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mml_admin/constants/http_status_codes.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/api.dart';
 import 'package:mml_admin/services/secure_storage.dart';
@@ -38,21 +39,38 @@ class UserService {
   Future<bool> login(String username, String password) async {
     var clientId = await SecureStorageService.getInstance().get(SecureStorageService.clientIdStorageKey);
 
-    return Future.delayed(Duration(seconds: 10), () => false);
+    Response<Map> response = await _apiService.request(
+      '/identity/connect/token',
+      data: FormData.fromMap({
+        'grant_type': 'password',
+        'client_id': clientId,
+        'scope': 'offline_access',
+        'username': username,
+        'password': password
+      }),
+      options: Options(method: 'POST')
+    );
 
-    // TODO: Specify generic type?!
-    // var response = await _apiService.request(
-    //   '/identity/connect/token',
-    //   data: FormData.fromMap({
-    //     'grant_type': 'password',
-    //     'client_id': clientId,
-    //     'scope': 'offline_access',
-    //     'username': username,
-    //     'password': password
-    //   }),
-    //   options: Options(method: 'POST')
-    // );
+    if (response.statusCode == HttpStatusCodes.ok) {
+      SecureStorageService.getInstance().set(SecureStorageService.accessTokenStorageKey, response.data?['access_token']);
+      SecureStorageService.getInstance().set(SecureStorageService.refreshTokenStorageKey, response.data?['refresh_token']);
 
-    // return false;
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<bool> isAuthenticated() async {
+    if (await SecureStorageService.getInstance().has(SecureStorageService.accessTokenStorageKey)) {
+      var response = await _apiService.request(
+        '/identity/connect/userinfo',
+        options: Options(method: 'GET')
+      );
+
+      return response.statusCode == HttpStatusCodes.ok;
+    }
+
+    return false;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/extensions/is_valid_guid.dart';
@@ -26,15 +28,17 @@ class LoginViewModel extends ChangeNotifier {
     _context = context;
 
     return Future<bool>.microtask(() async {
-      // TODO: check if token given and try get user data or a refresh token and redirect on success
-      // else
+      if (await UserService.getInstance().isAuthenticated()) {
+        return true;
+      }
 
       locales = AppLocalizations.of(_context)!;
+
       _persistedAppKey = await SecureStorageService.getInstance().get(SecureStorageService.appKeyStorageKey);
       _persistedClientId = await SecureStorageService.getInstance().get(SecureStorageService.clientIdStorageKey);
       _persistedServerName = await SecureStorageService.getInstance().get(SecureStorageService.serverNameStorageKey);
 
-      return true;
+      return false;
     });
   }
 
@@ -44,23 +48,31 @@ class LoginViewModel extends ChangeNotifier {
 
       formKey.currentState!.save();
 
-      await SecureStorageService.getInstance().set(SecureStorageService.appKeyStorageKey, appKey);
-      await SecureStorageService.getInstance().set(SecureStorageService.clientIdStorageKey, clientId);
-      await SecureStorageService.getInstance().set(SecureStorageService.serverNameStorageKey, serverName);
+      if (appKey != null && appKey!.isNotEmpty) {
+        await SecureStorageService.getInstance().set(SecureStorageService.appKeyStorageKey, appKey);
+      }
 
-      var result = await UserService.getInstance().login(username!, password!);
+      if (clientId != null && clientId!.isNotEmpty) {
+        await SecureStorageService.getInstance().set(SecureStorageService.clientIdStorageKey, clientId);
+      }
 
-      Navigator.pop(_context);
+      if (serverName != null && serverName!.isNotEmpty) {
+        await SecureStorageService.getInstance().set(SecureStorageService.serverNameStorageKey, serverName);
+      }
 
-      if (result) {
-        // Navigator.pushNamed(_context, ClientsOverviewViewModel.route);
-        ScaffoldMessenger.of(_context).showSnackBar(const SnackBar(
-          content: Text('Success')
-        ));
-      } else {
-        ScaffoldMessenger.of(_context).showSnackBar(const SnackBar(
-          content: Text('Error')
-        ));
+      try {
+        var result = await UserService.getInstance().login(username!, password!);
+
+        if (result) {
+          // Navigator.pushNamed(_context, ClientsOverviewViewModel.route);
+        } else {
+          // TODO: Let throw until here?!
+        }
+      } catch(e) {
+        print("unhandled error");
+        print(e);
+      } finally {
+        Navigator.pop(_context);
       }
     }
   }

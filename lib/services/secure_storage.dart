@@ -6,6 +6,8 @@ class SecureStorageService {
   static const String appKeyStorageKey = 'appKey';
   static const String clientIdStorageKey = 'clientId';
   static const String serverNameStorageKey = 'serverName';
+  static const String accessTokenStorageKey = 'a';
+  static const String refreshTokenStorageKey = 'r';
 
   static SecureStorageService getInstance() {
     return _instance;

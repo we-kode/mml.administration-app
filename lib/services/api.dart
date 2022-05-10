@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 
 class ApiService {
@@ -11,14 +14,37 @@ class ApiService {
         var serverName = await SecureStorageService.getInstance().get(SecureStorageService.serverNameStorageKey);
 
         options.baseUrl = 'https://$serverName/api/v1.0/';
-        // TODO (headers):
-        //  - Set accept language
-        //  - Set Bearer token
-        //  - Set app key
+        options.headers['Accept-Language'] = Platform.localeName;
 
-        // options.headers.
+        var accessToken = await SecureStorageService.getInstance().get(SecureStorageService.accessTokenStorageKey);
+
+        if (accessToken != null) {
+          options.headers['Authorization'] = "Bearer $accessToken";
+        }
+
+        var appKey = await SecureStorageService.getInstance().get(SecureStorageService.appKeyStorageKey);
+
+        if (appKey != null) {
+          options.headers['App-Key'] = appKey;
+        }
 
         return handler.next(options);
+      }
+    ));
+    _dio.interceptors.add(QueuedInterceptorsWrapper(
+      onError: (DioError e, handler) async {
+        if (e.response != null) {
+          if (e.response!.statusCode == 401) {
+            RequestOptions requestOptions = e.requestOptions;
+
+            await _refreshToken();
+
+          }
+        }
+
+        MessengerService.getInstance().showMessage("An unknown error occured!");
+
+        return handler.reject(e);
       }
       // TODO: Handle responses, also to get a new token if current expired
     ));
@@ -46,5 +72,10 @@ class ApiService {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress
     );
+  }
+
+  Future _refreshToken() async {
+    // TODO: Send request for a new refresh token either with current or new dio instance
+    // and persist the gotten token
   }
 }
