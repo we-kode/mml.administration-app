@@ -13,5 +13,10 @@
   "invalidClientId": "Идентификатор клиента неправильный!",
   "invalidAppKey": "Ключ приложения неправильный!",
   "invalidUsername": "Пожалуйста введите логин!",
-  "invalidPassword": "Пожалуйста введите пароль!"
+  "invalidPassword": "Пожалуйста введите пароль!",
+  "records": "Записи",
+  "adminUsers": "Админы",
+  "devices": "Устройства",
+  "settings": "Настройки",
+  "logout": "Выйти"
 }

@@ -13,5 +13,10 @@
   "invalidClientId": "A valid Client-ID must be specified!",
   "invalidAppKey": "An valid App-Key must be specified!",
   "invalidUsername": "Please enter your username!",
-  "invalidPassword": "Please enter your password!"
+  "invalidPassword": "Please enter your password!",
+  "records": "Records",
+  "adminUsers": "Admins",
+  "devices": "Devices",
+  "settings": "Settings",
+  "logout": "Logout"
 }
