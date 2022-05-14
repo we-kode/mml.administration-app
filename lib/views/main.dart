@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/view_models/main.dart';
+import 'package:mml_admin/views/clients.dart';
+import 'package:mml_admin/views/records.dart';
+import 'package:mml_admin/views/settings.dart';
+import 'package:mml_admin/views/users.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatelessWidget {
@@ -65,12 +69,10 @@ class MainScreen extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                    child: Center(
-                      child: Consumer<MainViewModel>(
-                        builder: (context, vm, _) {
-                          return Text('#');
-                        },
-                      ),
+                    child: Consumer<MainViewModel>(
+                      builder: (context, vm, _) {
+                        return page(vm.selectedIndex);
+                      },
                     ),
                   ),
                 ],
@@ -80,5 +82,20 @@ class MainScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Widget page(int index) {
+    switch (index) {
+      case 0:
+        return RecordsScreen();
+      case 1:
+        return ClientsScreen();
+      case 2:
+        return UsersScreen();
+      case 3:
+        return SettingsScreen();
+      default:
+        return RecordsScreen();
+    }
   }
 }
