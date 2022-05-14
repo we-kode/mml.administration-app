@@ -41,14 +41,18 @@ class UserService {
 
     Response<Map> response = await _apiService.request(
       '/identity/connect/token',
-      data: FormData.fromMap({
+      data: {
         'grant_type': 'password',
         'client_id': clientId,
+        'client_secret': '',
         'scope': 'offline_access',
         'username': username,
         'password': password
-      }),
-      options: Options(method: 'POST')
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.formUrlEncodedContentType,
+      )
     );
 
     if (response.statusCode == HttpStatusCodes.ok) {
