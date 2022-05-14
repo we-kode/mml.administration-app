@@ -36,22 +36,10 @@ class MainScreen extends StatelessWidget {
                             },
                             labelType: NavigationRailLabelType.all,
                             destinations: [
-                              NavigationRailDestination(
-                                icon: const Icon(Icons.music_note_outlined),
-                                label: Text(vm.locales.records),
-                              ),
-                              NavigationRailDestination(
-                                icon: const Icon(Icons.phone_android_rounded),
-                                label: Text(vm.locales.devices),
-                              ),
-                              NavigationRailDestination(
-                                icon: const Icon(Icons.person),
-                                label: Text(vm.locales.adminUsers),
-                              ),
-                              NavigationRailDestination(
-                                icon: const Icon(Icons.settings),
-                                label: Text(vm.locales.settings),
-                              ),
+                              _navItem(Icons.music_note_outlined, vm.locales.records),
+                              _navItem(Icons.phone_android_rounded, vm.locales.devices),
+                              _navItem(Icons.person, vm.locales.adminUsers),
+                              _navItem(Icons.settings, vm.locales.settings),
                             ],
                           );
                         },
@@ -71,7 +59,7 @@ class MainScreen extends StatelessWidget {
                   Expanded(
                     child: Consumer<MainViewModel>(
                       builder: (context, vm, _) {
-                        return page(vm.selectedIndex);
+                        return _page(vm.selectedIndex);
                       },
                     ),
                   ),
@@ -84,7 +72,14 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Widget page(int index) {
+  NavigationRailDestination _navItem(IconData icon, String label) {
+    return NavigationRailDestination(
+      icon: Icon(icon),
+      label: Text(label),
+    );
+  }
+
+  Widget _page(int index) {
     switch (index) {
       case 0:
         return RecordsScreen();
