@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/view_models/main.dart';
-import 'package:mml_admin/views/clients.dart';
-import 'package:mml_admin/views/records.dart';
-import 'package:mml_admin/views/settings.dart';
-import 'package:mml_admin/views/users.dart';
+import 'package:mml_admin/view_models/records.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatelessWidget {
@@ -32,12 +29,18 @@ class MainScreen extends StatelessWidget {
                           return NavigationRail(
                             selectedIndex: vm.selectedIndex,
                             onDestinationSelected: (int index) {
+                              if (index == vm.selectedIndex) {
+                                return;
+                              }
                               vm.selectedIndex = index;
+                              vm.load();
                             },
                             labelType: NavigationRailLabelType.all,
                             destinations: [
-                              _navItem(Icons.music_note_outlined, vm.locales.records),
-                              _navItem(Icons.phone_android_rounded, vm.locales.devices),
+                              _navItem(Icons.music_note_outlined,
+                                  vm.locales.records),
+                              _navItem(Icons.phone_android_rounded,
+                                  vm.locales.devices),
                               _navItem(Icons.person, vm.locales.adminUsers),
                               _navItem(Icons.settings, vm.locales.settings),
                             ],
@@ -57,9 +60,12 @@ class MainScreen extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                    child: Consumer<MainViewModel>(
-                      builder: (context, vm, _) {
-                        return _page(vm.selectedIndex);
+                    child: Navigator(
+                      key: RouterService.getInstance().nestedNavigatorKey,
+                      initialRoute: RecordsViewModel.route,
+                      onGenerateRoute: (settings) {
+                        return RouterService.getInstance()
+                            .getNestedRoutes()[settings.name];
                       },
                     ),
                   ),
@@ -77,20 +83,5 @@ class MainScreen extends StatelessWidget {
       icon: Icon(icon),
       label: Text(label),
     );
-  }
-
-  Widget _page(int index) {
-    switch (index) {
-      case 0:
-        return RecordsScreen();
-      case 1:
-        return ClientsScreen();
-      case 2:
-        return UsersScreen();
-      case 3:
-        return SettingsScreen();
-      default:
-        return RecordsScreen();
-    }
   }
 }

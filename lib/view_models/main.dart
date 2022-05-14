@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/services/router.dart';
 
 class MainViewModel extends ChangeNotifier {
   static String route = '/';
+  
 
   late BuildContext _context;
   late AppLocalizations locales;
@@ -30,5 +32,14 @@ class MainViewModel extends ChangeNotifier {
   void logout() {
     // TODO implelemnt logout flow
     print('user logged out!');
+  }
+
+  void load() {
+    var routeService = RouterService.getInstance();
+    var route = routeService
+        .getNestedRoutes()
+        .keys
+        .elementAt(_selectedIndex);
+    routeService.nestedNavigatorKey.currentState!.pushNamed(route);
   }
 }
