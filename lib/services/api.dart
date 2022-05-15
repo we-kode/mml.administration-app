@@ -14,7 +14,7 @@ class ApiService {
   final SecureStorageService _store = SecureStorageService.getInstance();
 
   ApiService._() {
-    initDio(_dio, true);
+    _initDio(_dio, true);
   }
 
   static ApiService getInstance() {
@@ -41,7 +41,7 @@ class ApiService {
     );
   }
 
-  void initDio(Dio dio, bool addErrorHandling) {
+  void _initDio(Dio dio, bool addErrorHandling) {
     _addRequestOptionsInterceptor(dio);
 
     if (addErrorHandling) {
@@ -93,7 +93,7 @@ class ApiService {
 
               // Retry request with the new token.
               var retryDio = Dio();
-              initDio(retryDio, true);
+              _initDio(retryDio, true);
 
               var options = Options(
                 method: requestOptions.method,
@@ -155,7 +155,7 @@ class ApiService {
 
   Future _refreshToken() async {
     var dio = Dio();
-    initDio(dio, false);
+    _initDio(dio, false);
 
     try {
       var clientId = await _store.get(SecureStorageService.clientIdStorageKey);
@@ -179,9 +179,11 @@ class ApiService {
         _store.set(SecureStorageService.accessTokenStorageKey, response.data?['access_token']);
         _store.set(SecureStorageService.refreshTokenStorageKey, response.data?['refresh_token']);
       } else {
+        // TODO: Relogin message
         await UserService.getInstance().logout();
       }
     } catch (e) {
+      // TODO: Relogin message
       await UserService.getInstance().logout();
     }
   }

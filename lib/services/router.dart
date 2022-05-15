@@ -3,6 +3,7 @@ import 'package:mml_admin/view_models/login.dart';
 import 'package:mml_admin/views/login.dart';
 
 class RouterService {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
   static final RouterService _instance = RouterService();
 
   static RouterService getInstance() {
@@ -11,7 +12,8 @@ class RouterService {
 
   Map<String, Widget Function(BuildContext)> getRoutes() {
     return {
-      LoginViewModel.route: (context) => const LoginScreen()
+      LoginViewModel.route: (context) => const LoginScreen(),
+
     };
   }
 

@@ -5,6 +5,8 @@ import 'package:mml_admin/services/secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/user.dart';
 
+import '../models/user.dart';
+
 class LoginViewModel extends ChangeNotifier {
   late String? _persistedAppKey;
   late String? _persistedClientId;
@@ -22,12 +24,13 @@ class LoginViewModel extends ChangeNotifier {
 
   static String route = '/login';
 
-  Future<bool> init(BuildContext context) async {
+  Future<User?> init(BuildContext context) async {
     _context = context;
 
-    return Future<bool>.microtask(() async {
-      if (await UserService.getInstance().isAuthenticated()) {
-        return true;
+    return Future<User?>.microtask(() async {
+      var user = await UserService.getInstance().getUserInfo();
+      if (user != null) {
+        return user;
       }
 
       locales = AppLocalizations.of(_context)!;
@@ -36,7 +39,7 @@ class LoginViewModel extends ChangeNotifier {
       _persistedClientId = await SecureStorageService.getInstance().get(SecureStorageService.clientIdStorageKey);
       _persistedServerName = await SecureStorageService.getInstance().get(SecureStorageService.serverNameStorageKey);
 
-      return false;
+      return null;
     });
   }
 

@@ -13,6 +13,7 @@ class AdminApp extends StatelessWidget {
     return MaterialApp(
       onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
       scaffoldMessengerKey: MessengerService.getInstance().snackbarKey,
+      navigatorKey: RouterService.getInstance().navigatorKey,
       theme: ThemeData(
         colorScheme: lightColorScheme
       ),
