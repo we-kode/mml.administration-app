@@ -29,12 +29,17 @@ class LoginScreen extends StatelessWidget {
                       minWidth: 400,
                       minHeight: 250,
                       maxWidth: 400,
-                      maxHeight: 500
+                      maxHeight: 700
                     ),
                     child: Column(
                       children: [
-                        // TODO: Design logo and title
-                        Text(vm.locales.login),
+                        Image.asset(
+                          'assets/images/logo_admin.png',
+                          width: 256,
+                          height: 256,
+                        ),
+                        spacer,
+                        spacer,
                         spacer,
                         TextFormField(
                           decoration: InputDecoration(

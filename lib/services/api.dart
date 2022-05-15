@@ -143,7 +143,9 @@ class ApiService {
     DefaultHttpClientAdapter httpClient = dio.httpClientAdapter as DefaultHttpClientAdapter;
     httpClient.onHttpClientCreate = (HttpClient client) {
       client.badCertificateCallback = (X509Certificate cert, String host, int port) {
-        _messenger.showMessage(_messenger.badCertificate);
+        if (!kDebugMode) {
+          _messenger.showMessage(_messenger.badCertificate);
+        }
         return kDebugMode;
       };
 
