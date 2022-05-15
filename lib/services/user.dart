@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:mml_admin/constants/http_status_codes.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/api.dart';
 import 'package:mml_admin/services/secure_storage.dart';
@@ -36,7 +37,7 @@ class UserService {
     throw UnimplementedError();
   }
 
-  Future<bool> login(String username, String password) async {
+  Future login(String username, String password) async {
     var clientId = await SecureStorageService.getInstance().get(SecureStorageService.clientIdStorageKey);
 
     Response<Map> response = await _apiService.request(
@@ -44,7 +45,6 @@ class UserService {
       data: {
         'grant_type': 'password',
         'client_id': clientId,
-        'client_secret': '',
         'scope': 'offline_access',
         'username': username,
         'password': password
@@ -55,14 +55,14 @@ class UserService {
       )
     );
 
-    if (response.statusCode == HttpStatusCodes.ok) {
+    if (response.statusCode == HttpStatus.ok) {
       SecureStorageService.getInstance().set(SecureStorageService.accessTokenStorageKey, response.data?['access_token']);
       SecureStorageService.getInstance().set(SecureStorageService.refreshTokenStorageKey, response.data?['refresh_token']);
-
-      return true;
     }
+  }
 
-    return false;
+  Future logout() async {
+    // TODO: Logout maybe with new dio instance
   }
 
   Future<bool> isAuthenticated() async {
@@ -72,7 +72,7 @@ class UserService {
         options: Options(method: 'GET')
       );
 
-      return response.statusCode == HttpStatusCodes.ok;
+      return response.statusCode == HttpStatus.ok;
     }
 
     return false;

@@ -59,16 +59,9 @@ class LoginViewModel extends ChangeNotifier {
       }
 
       try {
-        var result = await UserService.getInstance().login(username!, password!);
+        await UserService.getInstance().login(username!, password!);
 
-        if (result) {
-          // Navigator.pushNamed(_context, ClientsOverviewViewModel.route);
-        } else {
-          // TODO: Let throw until here?!
-        }
-      } catch(e) {
-        print("unhandled error");
-        print(e);
+        // Navigator.pushNamed(_context, ClientsOverviewViewModel.route);
       } finally {
         Navigator.pop(_context);
       }
