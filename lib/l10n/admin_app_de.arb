@@ -1,4 +1,6 @@
 {
+  "@@locale": "de",
+
   "appTitle": "Meine Mediathek Administration",
   "serverName": "Server (Domain:Port)",
   "serverNameUnchanged": "Server (Domain:Port) (unverändert)",
@@ -14,6 +16,17 @@
   "invalidAppKey": "Ein korrekter App-Schlüssel muss angegeben werden!",
   "invalidUsername": "Bitte geben Sie Ihren Benutzernamen an!",
   "invalidPassword": "Bitte geben Sie Ihr Passwort an!",
+  "badCertificate": "Es ist ein Zertifikatfehler aufgetreten!",
+  "unexpectedError": "Es ist ein unerwarterter Fehler aufgetreten: {message}",
+  "@unexpectedError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "forbidden": "Sie haben nicht die notwendigen Rechte, die Aktion auszuführen!",
+  "incorrectCredentials": "Anmeldung fehlgeschlagen!",
   "records": "Aufnahmen",
   "adminUsers": "Admins",
   "devices": "Geräte",

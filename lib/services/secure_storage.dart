@@ -1,13 +1,14 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorageService {
-  static final SecureStorageService _instance = SecureStorageService();
-  final _storage = const FlutterSecureStorage();
   static const String appKeyStorageKey = 'appKey';
   static const String clientIdStorageKey = 'clientId';
   static const String serverNameStorageKey = 'serverName';
   static const String accessTokenStorageKey = 'a';
   static const String refreshTokenStorageKey = 'r';
+
+  static final SecureStorageService _instance = SecureStorageService();
+  final _storage = const FlutterSecureStorage();
 
   static SecureStorageService getInstance() {
     return _instance;

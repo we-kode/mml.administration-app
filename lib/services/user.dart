@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:mml_admin/constants/http_status_codes.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/api.dart';
+import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
+import 'package:mml_admin/view_models/login.dart';
 
 class UserService {
   static final UserService _instance = UserService._();
@@ -16,11 +20,11 @@ class UserService {
     return _instance;
   }
 
-  Future<List<UserModel>> getUsers(/* user filter*/) async {
+  Future<List<User>> getUsers(/* user filter*/) async {
     throw UnimplementedError();
   }
 
-  Future<UserModel> getUser(int id) async {
+  Future<User> getUser(int id) async {
     throw UnimplementedError();
   }
 
@@ -36,41 +40,58 @@ class UserService {
     throw UnimplementedError();
   }
 
-  Future<bool> login(String username, String password) async {
+  Future login(String username, String password) async {
     var clientId = await SecureStorageService.getInstance().get(SecureStorageService.clientIdStorageKey);
 
     Response<Map> response = await _apiService.request(
       '/identity/connect/token',
-      data: FormData.fromMap({
+      data: {
         'grant_type': 'password',
         'client_id': clientId,
         'scope': 'offline_access',
         'username': username,
         'password': password
-      }),
-      options: Options(method: 'POST')
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.formUrlEncodedContentType,
+      )
     );
 
-    if (response.statusCode == HttpStatusCodes.ok) {
-      SecureStorageService.getInstance().set(SecureStorageService.accessTokenStorageKey, response.data?['access_token']);
-      SecureStorageService.getInstance().set(SecureStorageService.refreshTokenStorageKey, response.data?['refresh_token']);
-
-      return true;
+    if (response.statusCode == HttpStatus.ok) {
+      await SecureStorageService.getInstance().set(SecureStorageService.accessTokenStorageKey, response.data?['access_token']);
+      await SecureStorageService.getInstance().set(SecureStorageService.refreshTokenStorageKey, response.data?['refresh_token']);
     }
-
-    return false;
   }
 
-  Future<bool> isAuthenticated() async {
+  Future logout() async {
+    try {
+      await _apiService.request(
+        '/identity/connect/logout',
+        data: {},
+        options: Options(
+          method: 'POST',
+          contentType: Headers.formUrlEncodedContentType,
+        )
+      );
+    } finally {
+      await SecureStorageService.getInstance().delete(SecureStorageService.accessTokenStorageKey);
+      await SecureStorageService.getInstance().delete(SecureStorageService.refreshTokenStorageKey);
+
+      RouterService.getInstance().navigatorKey.currentState!.pushNamed(LoginViewModel.route);
+    }
+  }
+
+  Future<User?> getUserInfo() async {
     if (await SecureStorageService.getInstance().has(SecureStorageService.accessTokenStorageKey)) {
       var response = await _apiService.request(
         '/identity/connect/userinfo',
         options: Options(method: 'GET')
       );
 
-      return response.statusCode == HttpStatusCodes.ok;
+      return User.fromJson(jsonDecode(response.data));
     }
 
-    return false;
+    return null;
   }
 }

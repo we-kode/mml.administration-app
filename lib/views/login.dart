@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/view_models/login.dart';
 import 'package:provider/provider.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
+
+import '../models/user.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,12 +18,19 @@ class LoginScreen extends StatelessWidget {
           var vm = Provider.of<LoginViewModel>(context, listen: false);
           return FutureBuilder(
             future: vm.init(context),
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
               if (!snapshot.hasData) {
                 return const Center(
                   child: CircularProgressIndicator()
                 );
               }
+              if (snapshot.data != null) {
+                /*Future.microtask(() => RouterService.getInstance().navigatorKey.currentState!.pushNamed(
+                  change password page -> check and redirect to main page or stay on page
+                ));*/
+                return Container();
+              }
+
               return Form(
                 key: vm.formKey,
                 child: Center(
@@ -29,12 +39,17 @@ class LoginScreen extends StatelessWidget {
                       minWidth: 400,
                       minHeight: 250,
                       maxWidth: 400,
-                      maxHeight: 500
+                      maxHeight: 700
                     ),
                     child: Column(
                       children: [
-                        // TODO: Design logo and title
-                        Text(vm.locales.login),
+                        Image.asset(
+                          'assets/images/logo_admin.png',
+                          width: 256,
+                          height: 256,
+                        ),
+                        spacer,
+                        spacer,
                         spacer,
                         TextFormField(
                           decoration: InputDecoration(

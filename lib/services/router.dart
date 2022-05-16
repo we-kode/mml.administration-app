@@ -13,6 +13,7 @@ import 'package:mml_admin/views/settings.dart';
 import 'package:mml_admin/views/users.dart';
 
 class RouterService {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
   static final RouterService _instance = RouterService();
 
   /// Navigator key for the nested pages.
