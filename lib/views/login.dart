@@ -20,9 +20,7 @@ class LoginScreen extends StatelessWidget {
             future: vm.init(context),
             builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
               if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator()
-                );
+                return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.data != null) {
                 /*Future.microtask(() => RouterService.getInstance().navigatorKey.currentState!.pushNamed(
@@ -39,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                       minWidth: 400,
                       minHeight: 250,
                       maxWidth: 400,
-                      maxHeight: 700
+                      maxHeight: 700,
                     ),
                     child: Column(
                       children: [
@@ -126,18 +124,18 @@ class LoginScreen extends StatelessWidget {
                           alignment: Alignment.centerRight,
                           child: ElevatedButton(
                             child: Text(vm.locales.login),
-                            onPressed: vm.login
-                          )
-                        )
-                      ]
-                    )
-                  )
-                )
+                            onPressed: vm.login,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               );
-            }
+            },
           );
-        }
-      )
+        },
+      ),
     );
   }
 }

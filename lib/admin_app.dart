@@ -11,18 +11,15 @@ class AdminApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
+      onGenerateTitle: (BuildContext context) =>
+          AppLocalizations.of(context)!.appTitle,
       scaffoldMessengerKey: MessengerService.getInstance().snackbarKey,
       navigatorKey: RouterService.getInstance().navigatorKey,
-      theme: ThemeData(
-        colorScheme: lightColorScheme
-      ),
-      darkTheme: ThemeData(
-        colorScheme: darkColorScheme
-      ),
+      theme: ThemeData(colorScheme: lightColorScheme),
+      darkTheme: ThemeData(colorScheme: darkColorScheme),
       themeMode: ThemeMode.system,
-      initialRoute: RouterService.getInstance().getInitialRoute(),
-      routes: RouterService.getInstance().getRoutes(),
+      initialRoute: RouterService.getInstance().initialRoute,
+      routes: RouterService.getInstance().routes,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

@@ -11,7 +11,14 @@ class User {
   final String? oldPassword;
   final String? newPassword;
 
-  User({this.id, this.name, this.isConfirmed, this.password, this.oldPassword, this.newPassword});
+  User({
+    this.id,
+    this.name,
+    this.isConfirmed,
+    this.password,
+    this.oldPassword,
+    this.newPassword,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

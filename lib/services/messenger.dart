@@ -21,7 +21,8 @@ class MessengerService {
   }
 
   String unexpectedError(String message) {
-    return AppLocalizations.of(snackbarKey.currentContext!)!.unexpectedError(message);
+    return AppLocalizations.of(snackbarKey.currentContext!)!
+        .unexpectedError(message);
   }
 
   String get forbidden {
@@ -29,6 +30,7 @@ class MessengerService {
   }
 
   String get incorrectCredentials {
-    return AppLocalizations.of(snackbarKey.currentContext!)!.incorrectCredentials;
+    return AppLocalizations.of(snackbarKey.currentContext!)!
+        .incorrectCredentials;
   }
 }

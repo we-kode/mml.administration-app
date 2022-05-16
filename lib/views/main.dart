@@ -15,12 +15,14 @@ class MainScreen extends StatelessWidget {
         create: (context) => MainViewModel(),
         builder: (context, _) {
           var vm = Provider.of<MainViewModel>(context, listen: false);
+
           return FutureBuilder(
             future: vm.init(context),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
+
               return Row(
                 children: [
                   Stack(
@@ -66,7 +68,7 @@ class MainScreen extends StatelessWidget {
                       initialRoute: RecordsViewModel.route,
                       onGenerateRoute: (settings) {
                         return RouterService.getInstance()
-                            .getNestedRoutes()[settings.name];
+                            .nestedRoutes[settings.name];
                       },
                     ),
                   ),

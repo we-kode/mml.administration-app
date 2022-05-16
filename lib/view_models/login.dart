@@ -13,6 +13,9 @@ class LoginViewModel extends ChangeNotifier {
   late String? _persistedServerName;
   late BuildContext _context;
 
+  final SecureStorageService _storage = SecureStorageService.getInstance();
+  final UserService _userService = UserService.getInstance();
+
   String? username;
   String? password;
   String? appKey;
@@ -28,16 +31,22 @@ class LoginViewModel extends ChangeNotifier {
     _context = context;
 
     return Future<User?>.microtask(() async {
-      var user = await UserService.getInstance().getUserInfo();
+      var user = await _userService.getUserInfo();
       if (user != null) {
         return user;
       }
 
       locales = AppLocalizations.of(_context)!;
 
-      _persistedAppKey = await SecureStorageService.getInstance().get(SecureStorageService.appKeyStorageKey);
-      _persistedClientId = await SecureStorageService.getInstance().get(SecureStorageService.clientIdStorageKey);
-      _persistedServerName = await SecureStorageService.getInstance().get(SecureStorageService.serverNameStorageKey);
+      _persistedAppKey = await _storage.get(
+        SecureStorageService.appKeyStorageKey,
+      );
+      _persistedClientId = await _storage.get(
+        SecureStorageService.clientIdStorageKey,
+      );
+      _persistedServerName = await _storage.get(
+        SecureStorageService.serverNameStorageKey,
+      );
 
       return null;
     });
@@ -50,19 +59,28 @@ class LoginViewModel extends ChangeNotifier {
       formKey.currentState!.save();
 
       if (appKey != null && appKey!.isNotEmpty) {
-        await SecureStorageService.getInstance().set(SecureStorageService.appKeyStorageKey, appKey);
+        await _storage.set(
+          SecureStorageService.appKeyStorageKey,
+          appKey,
+        );
       }
 
       if (clientId != null && clientId!.isNotEmpty) {
-        await SecureStorageService.getInstance().set(SecureStorageService.clientIdStorageKey, clientId);
+        await _storage.set(
+          SecureStorageService.clientIdStorageKey,
+          clientId,
+        );
       }
 
       if (serverName != null && serverName!.isNotEmpty) {
-        await SecureStorageService.getInstance().set(SecureStorageService.serverNameStorageKey, serverName);
+        await _storage.set(
+          SecureStorageService.serverNameStorageKey,
+          serverName,
+        );
       }
 
       try {
-        await UserService.getInstance().login(username!, password!);
+        await _userService.login(username!, password!);
 
         // Navigator.pushNamed(_context, ClientsOverviewViewModel.route);
       } finally {
@@ -72,46 +90,71 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   String? validateUsername(String? username) {
-    return username != null && username.isNotEmpty ? null : locales.invalidUsername;
+    return username != null && username.isNotEmpty
+        ? null
+        : locales.invalidUsername;
   }
 
   String? validatePassword(String? password) {
-    return password != null && password.isNotEmpty ? null : locales.invalidPassword;
+    return password != null && password.isNotEmpty
+        ? null
+        : locales.invalidPassword;
   }
 
   String? validateAppKey(String? appKey) {
-    if ((appKey == null || appKey.isEmpty) && (_persistedAppKey != null && _persistedAppKey!.isNotEmpty)) {
+    if ((appKey == null || appKey.isEmpty) &&
+        (_persistedAppKey != null && _persistedAppKey!.isNotEmpty)) {
       appKey = _persistedAppKey;
     }
 
-    return appKey != null && appKey.isValidGuid() ? null : locales.invalidAppKey;
+    return appKey != null && appKey.isValidGuid()
+        ? null
+        : locales.invalidAppKey;
   }
 
   String? validateClientId(String? clientId) {
-    if ((clientId == null || clientId.isEmpty) && (_persistedClientId != null && _persistedClientId!.isNotEmpty)) {
+    if ((clientId == null || clientId.isEmpty) &&
+        (_persistedClientId != null && _persistedClientId!.isNotEmpty)) {
       clientId = _persistedClientId;
     }
 
-    return clientId != null && clientId.isValidGuid() ? null : locales.invalidClientId;
+    return clientId != null && clientId.isValidGuid()
+        ? null
+        : locales.invalidClientId;
   }
 
   String? validateServerName(String? serverName) {
-    if ((serverName == null || serverName.isEmpty) && (_persistedServerName != null && _persistedServerName!.isNotEmpty)) {
+    if ((serverName == null || serverName.isEmpty) &&
+        (_persistedServerName != null && _persistedServerName!.isNotEmpty)) {
       serverName = _persistedServerName;
     }
 
-    return serverName != null && serverName.isNotEmpty ? null : locales.invalidServerName;
+    return serverName != null && serverName.isNotEmpty
+        ? null
+        : locales.invalidServerName;
   }
 
   String get appKeyLabel {
-    return _persistedAppKey != null && _persistedAppKey!.isNotEmpty && (appKey == null || appKey!.isEmpty) ? locales.appKeyUnchanged : locales.appKey;
+    return _persistedAppKey != null &&
+            _persistedAppKey!.isNotEmpty &&
+            (appKey == null || appKey!.isEmpty)
+        ? locales.appKeyUnchanged
+        : locales.appKey;
   }
 
   String get clientIdLabel {
-    return _persistedClientId != null && _persistedClientId!.isNotEmpty && (clientId == null || clientId!.isEmpty) ? locales.clientIdUnchanged : locales.clientId;
+    return _persistedClientId != null &&
+            _persistedClientId!.isNotEmpty &&
+            (clientId == null || clientId!.isEmpty)
+        ? locales.clientIdUnchanged
+        : locales.clientId;
   }
 
   String get serverNameLabel {
-    return _persistedServerName != null && _persistedServerName!.isNotEmpty && (serverName == null || serverName!.isEmpty) ? locales.serverNameUnchanged : locales.serverName;
+    return _persistedServerName != null &&
+            _persistedServerName!.isNotEmpty &&
+            (serverName == null || serverName!.isEmpty)
+        ? locales.serverNameUnchanged
+        : locales.serverName;
   }
 }

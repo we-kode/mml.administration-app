@@ -10,11 +10,11 @@ import 'package:mml_admin/view_models/login.dart';
 
 class UserService {
   static final UserService _instance = UserService._();
-  late ApiService _apiService;
 
-  UserService._() {
-    _apiService = ApiService.getInstance();
-  }
+  final ApiService _apiService = ApiService.getInstance();
+  final SecureStorageService _storage = SecureStorageService.getInstance();
+
+  UserService._();
 
   static UserService getInstance() {
     return _instance;
@@ -41,7 +41,7 @@ class UserService {
   }
 
   Future login(String username, String password) async {
-    var clientId = await SecureStorageService.getInstance().get(SecureStorageService.clientIdStorageKey);
+    var clientId = await _storage.get(SecureStorageService.clientIdStorageKey);
 
     Response<Map> response = await _apiService.request(
       '/identity/connect/token',
@@ -55,12 +55,18 @@ class UserService {
       options: Options(
         method: 'POST',
         contentType: Headers.formUrlEncodedContentType,
-      )
+      ),
     );
 
     if (response.statusCode == HttpStatus.ok) {
-      await SecureStorageService.getInstance().set(SecureStorageService.accessTokenStorageKey, response.data?['access_token']);
-      await SecureStorageService.getInstance().set(SecureStorageService.refreshTokenStorageKey, response.data?['refresh_token']);
+      await _storage.set(
+        SecureStorageService.accessTokenStorageKey,
+        response.data?['access_token'],
+      );
+      await _storage.set(
+        SecureStorageService.refreshTokenStorageKey,
+        response.data?['refresh_token'],
+      );
     }
   }
 
@@ -72,21 +78,24 @@ class UserService {
         options: Options(
           method: 'POST',
           contentType: Headers.formUrlEncodedContentType,
-        )
+        ),
       );
     } finally {
-      await SecureStorageService.getInstance().delete(SecureStorageService.accessTokenStorageKey);
-      await SecureStorageService.getInstance().delete(SecureStorageService.refreshTokenStorageKey);
+      await _storage.delete(SecureStorageService.accessTokenStorageKey);
+      await _storage.delete(SecureStorageService.refreshTokenStorageKey);
 
-      RouterService.getInstance().navigatorKey.currentState!.pushNamed(LoginViewModel.route);
+      RouterService.getInstance()
+          .navigatorKey
+          .currentState!
+          .pushNamed(LoginViewModel.route);
     }
   }
 
   Future<User?> getUserInfo() async {
-    if (await SecureStorageService.getInstance().has(SecureStorageService.accessTokenStorageKey)) {
+    if (await _storage.has(SecureStorageService.accessTokenStorageKey)) {
       var response = await _apiService.request(
         '/identity/connect/userinfo',
-        options: Options(method: 'GET')
+        options: Options(method: 'GET'),
       );
 
       return User.fromJson(jsonDecode(response.data));

@@ -44,7 +44,7 @@ class MainViewModel extends ChangeNotifier {
   /// Loads the selected page of the navigation
   void loadPage() {
     var routeService = RouterService.getInstance();
-    var route = routeService.getNestedRoutes().keys.elementAt(_selectedIndex);
+    var route = routeService.nestedRoutes.keys.elementAt(_selectedIndex);
     routeService.nestedNavigatorKey.currentState!.pushNamed(route);
   }
 }
