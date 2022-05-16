@@ -26,5 +26,10 @@
     }
   },
   "forbidden": "Sie haben nicht die notwendigen Rechte, die Aktion auszuführen!",
-  "incorrectCredentials": "Anmeldung fehlgeschlagen!"
+  "incorrectCredentials": "Anmeldung fehlgeschlagen!",
+  "records": "Aufnahmen",
+  "adminUsers": "Admins",
+  "devices": "Geräte",
+  "settings": "Einstellungen",
+  "logout": "Abmelden"
 }

@@ -19,5 +19,10 @@
   "badCertificate": "An certificate error occurred!",
   "unexpectedError": "An unexpected error occurred: {message}",
   "forbidden": "You have not the necessary rights, to execute this action!",
-  "incorrectCredentials": "Login failed!"
+  "incorrectCredentials": "Login failed!",
+  "records": "Records",
+  "adminUsers": "Admins",
+  "devices": "Devices",
+  "settings": "Settings",
+  "logout": "Logout"
 }

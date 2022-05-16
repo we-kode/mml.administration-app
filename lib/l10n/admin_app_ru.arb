@@ -19,5 +19,10 @@
   "badCertificate": "Произошла ошибка с сертификатом!",
   "unexpectedError": "Произошла непредвиденная ошибка: {message}",
   "forbidden": "У вас нет необходимых прав, чтобы выполнить это действие!",
-  "incorrectCredentials": "Не удалось войти в систему!"
+  "incorrectCredentials": "Не удалось войти в систему!",
+  "records": "Записи",
+  "adminUsers": "Админы",
+  "devices": "Устройства",
+  "settings": "Настройки",
+  "logout": "Выйти"
 }
