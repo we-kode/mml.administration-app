@@ -4,6 +4,7 @@ import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/view_models/records.dart';
 import 'package:provider/provider.dart';
 
+/// Main View with navigation
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -33,7 +34,7 @@ class MainScreen extends StatelessWidget {
                                 return;
                               }
                               vm.selectedIndex = index;
-                              vm.load();
+                              vm.loadPage();
                             },
                             labelType: NavigationRailLabelType.all,
                             destinations: [

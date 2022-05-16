@@ -14,6 +14,8 @@ import 'package:mml_admin/views/users.dart';
 
 class RouterService {
   static final RouterService _instance = RouterService();
+
+  /// Navigator key for the nested pages.
   final nestedNavigatorKey = GlobalKey<NavigatorState>();
 
   static RouterService getInstance() {
@@ -28,10 +30,10 @@ class RouterService {
   }
 
   String getInitialRoute() {
-    // return LoginViewModel.route;
-    return MainViewModel.route;
+    return LoginViewModel.route;
   }
 
+  /// Neted routes which can be reached by the navigation.
   Map<String, Route<dynamic>?> getNestedRoutes() {
     return {
       RecordsViewModel.route:
