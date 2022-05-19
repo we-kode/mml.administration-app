@@ -13,11 +13,13 @@ class ChangePasswordViewModel extends ChangeNotifier {
       user = ModalRoute.of(context)!.settings.arguments as User;
 
       if (user.isConfirmed == true) {
-
-      RouterService.getInstance().navigatorKey.currentState!.pushNamed(
-          MainViewModel.route,
-          arguments: user,
-        );
+        RouterService.getInstance()
+            .navigatorKey
+            .currentState!
+            .pushReplacementNamed(
+              MainViewModel.route,
+              arguments: user,
+            );
         return false;
       }
 

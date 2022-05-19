@@ -88,21 +88,24 @@ class LoginViewModel extends ChangeNotifier {
         User? user = await _userService.getUserInfo();
 
         if (user != null) {
+          RouterService.getInstance().navigatorKey.currentState!.pop();
           await afterLogin(user);
         }
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
-      } finally {
         RouterService.getInstance().navigatorKey.currentState!.pop();
       }
     }
   }
 
   Future afterLogin(User user) async {
-    await RouterService.getInstance().navigatorKey.currentState!.pushNamed(
-      ChangePasswordViewModel.route,
-      arguments: user,
-    );
+    await RouterService.getInstance()
+        .navigatorKey
+        .currentState!
+        .pushReplacementNamed(
+          ChangePasswordViewModel.route,
+          arguments: user,
+        );
   }
 
   String? validateUsername(String? username) {

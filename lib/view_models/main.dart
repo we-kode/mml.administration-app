@@ -39,9 +39,10 @@ class MainViewModel extends ChangeNotifier {
 
   /// Logouts the user.
   void logout() async {
-    showProgressIndicator(RouterService.getInstance().navigatorKey.currentContext!);
+    showProgressIndicator(
+      RouterService.getInstance().navigatorKey.currentContext!,
+    );
     await UserService.getInstance().logout();
-    RouterService.getInstance().navigatorKey.currentState!.pop();
   }
 
   /// Loads the selected page of the navigation.
@@ -60,6 +61,6 @@ class MainViewModel extends ChangeNotifier {
     });
     var routeService = RouterService.getInstance();
     var route = routeService.nestedRoutes.keys.elementAt(_selectedIndex);
-    state?.pushNamed(route);
+    state?.pushReplacementNamed(route);
   }
 }

@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/api.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
-import 'package:mml_admin/view_models/login.dart';
 
 class UserService {
   static final UserService _instance = UserService._();
@@ -88,10 +88,8 @@ class UserService {
       await _storage.delete(SecureStorageService.accessTokenStorageKey);
       await _storage.delete(SecureStorageService.refreshTokenStorageKey);
 
-      RouterService.getInstance()
-          .navigatorKey
-          .currentState!
-          .pushNamed(LoginViewModel.route);
+      NavigatorState state = RouterService.getInstance().navigatorKey.currentState!;
+      state.pushReplacementNamed('/login');
     }
   }
 
