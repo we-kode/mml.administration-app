@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/view_models/change_password.dart';
 import 'package:mml_admin/view_models/clients.dart';
 import 'package:mml_admin/view_models/login.dart';
 import 'package:mml_admin/view_models/records.dart';
 import 'package:mml_admin/view_models/settings.dart';
 import 'package:mml_admin/view_models/users.dart';
+import 'package:mml_admin/views/change_password.dart';
 import 'package:mml_admin/views/clients.dart';
 import 'package:mml_admin/views/login.dart';
 import 'package:mml_admin/view_models/main.dart';
@@ -27,6 +29,7 @@ class RouterService {
   Map<String, Widget Function(BuildContext)> get routes {
     return {
       LoginViewModel.route: (context) => const LoginScreen(),
+      ChangePasswordViewModel.route: (context) => const ChangePasswordScreen(),
       MainViewModel.route: (context) => const MainScreen(),
     };
   }

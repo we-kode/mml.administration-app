@@ -33,4 +33,8 @@ class MessengerService {
     return AppLocalizations.of(snackbarKey.currentContext!)!
         .incorrectCredentials;
   }
+
+  String get relogin {
+    return AppLocalizations.of(snackbarKey.currentContext!)!.relogin;
+  }
 }

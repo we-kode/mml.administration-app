@@ -6,6 +6,8 @@ import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/user.dart';
 
 import '../models/user.dart';
+import '../services/router.dart';
+import 'change_password.dart';
 
 class LoginViewModel extends ChangeNotifier {
   late String? _persistedAppKey;
@@ -27,16 +29,18 @@ class LoginViewModel extends ChangeNotifier {
 
   static String route = '/login';
 
-  Future<User?> init(BuildContext context) async {
+  Future<User> init(BuildContext context) async {
     _context = context;
+    locales = AppLocalizations.of(_context)!;
 
-    return Future<User?>.microtask(() async {
-      var user = await _userService.getUserInfo();
-      if (user != null) {
-        return user;
-      }
+    return Future<User>.microtask(() async {
+      User? user;
 
-      locales = AppLocalizations.of(_context)!;
+      try {
+        user = await _userService.getUserInfo();
+      } catch (e) {
+        // Catch all errors and do nothing, since handled by api service!
+      } finally {}
 
       _persistedAppKey = await _storage.get(
         SecureStorageService.appKeyStorageKey,
@@ -48,7 +52,7 @@ class LoginViewModel extends ChangeNotifier {
         SecureStorageService.serverNameStorageKey,
       );
 
-      return null;
+      return user ?? User();
     });
   }
 
@@ -81,12 +85,24 @@ class LoginViewModel extends ChangeNotifier {
 
       try {
         await _userService.login(username!, password!);
+        User? user = await _userService.getUserInfo();
 
-        // Navigator.pushNamed(_context, ClientsOverviewViewModel.route);
+        if (user != null) {
+          await afterLogin(user);
+        }
+      } catch (e) {
+        // Catch all errors and do nothing, since handled by api service!
       } finally {
-        Navigator.pop(_context);
+        RouterService.getInstance().navigatorKey.currentState!.pop();
       }
     }
+  }
+
+  Future afterLogin(User user) async {
+    await RouterService.getInstance().navigatorKey.currentState!.pushNamed(
+      ChangePasswordViewModel.route,
+      arguments: user,
+    );
   }
 
   String? validateUsername(String? username) {

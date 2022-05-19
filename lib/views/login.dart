@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mml_admin/services/router.dart';
-import 'package:mml_admin/view_models/login.dart';
+import '../view_models/login.dart';
 import 'package:provider/provider.dart';
-import 'package:mml_admin/components/horizontal_spacer.dart';
+import '../components/horizontal_spacer.dart';
 
 import '../models/user.dart';
 
@@ -18,14 +17,18 @@ class LoginScreen extends StatelessWidget {
           var vm = Provider.of<LoginViewModel>(context, listen: false);
           return FutureBuilder(
             future: vm.init(context),
-            builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (snapshot.data != null) {
-                /*Future.microtask(() => RouterService.getInstance().navigatorKey.currentState!.pushNamed(
-                  change password page -> check and redirect to main page or stay on page
-                ));*/
+
+              var user = snapshot.data as User;
+              if (user.id != null) {
+                Future.microtask(
+                  () async {
+                    await vm.afterLogin(user);
+                  },
+                );
                 return Container();
               }
 
@@ -123,8 +126,8 @@ class LoginScreen extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerRight,
                           child: ElevatedButton(
-                            child: Text(vm.locales.login),
                             onPressed: vm.login,
+                            child: Text(vm.locales.login),
                           ),
                         ),
                       ],

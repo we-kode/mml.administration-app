@@ -24,5 +24,6 @@
   "adminUsers": "Admins",
   "devices": "Devices",
   "settings": "Settings",
-  "logout": "Logout"
+  "logout": "Logout",
+  "relogin": "You were automatically logged out! Please login again!"
 }

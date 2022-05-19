@@ -14,7 +14,7 @@ class ApiService {
   final SecureStorageService _store = SecureStorageService.getInstance();
 
   ApiService._() {
-    _initDio(_dio, true);
+    initDio(_dio, true);
   }
 
   static ApiService getInstance() {
@@ -41,16 +41,16 @@ class ApiService {
     );
   }
 
-  void _initDio(Dio dio, bool addErrorHandling) {
-    _addRequestOptionsInterceptor(dio);
+  void initDio(Dio dio, bool addErrorHandling) {
+    addRequestOptionsInterceptor(dio);
 
     if (addErrorHandling) {
-      _addDefaultErrorHandlerInterceptor(dio);
-      _initClientBadCertificateCallback(dio);
+      addDefaultErrorHandlerInterceptor(dio);
+      initClientBadCertificateCallback(dio);
     }
   }
 
-  void _addRequestOptionsInterceptor(Dio dio) {
+  void addRequestOptionsInterceptor(Dio dio) {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         var serverName = await _store.get(SecureStorageService.serverNameStorageKey);
@@ -75,8 +75,8 @@ class ApiService {
     ));
   }
 
-  void _addDefaultErrorHandlerInterceptor(Dio dio) {
-    dio.interceptors.add(QueuedInterceptorsWrapper(
+  void addDefaultErrorHandlerInterceptor(Dio dio) {
+    dio.interceptors.add(InterceptorsWrapper(
       onError: (DioError e, handler) async {
         if (e.response != null) {
           var statusCode = e.response!.statusCode;
@@ -93,7 +93,7 @@ class ApiService {
 
               // Retry request with the new token.
               var retryDio = Dio();
-              _initDio(retryDio, true);
+              initDio(retryDio, true);
 
               var options = Options(
                 method: requestOptions.method,
@@ -139,7 +139,7 @@ class ApiService {
     ));
   }
 
-  void _initClientBadCertificateCallback(Dio dio) {
+  void initClientBadCertificateCallback(Dio dio) {
     DefaultHttpClientAdapter httpClient = dio.httpClientAdapter as DefaultHttpClientAdapter;
     httpClient.onHttpClientCreate = (HttpClient client) {
       client.badCertificateCallback = (X509Certificate cert, String host, int port) {
@@ -155,7 +155,7 @@ class ApiService {
 
   Future _refreshToken() async {
     var dio = Dio();
-    _initDio(dio, false);
+    initDio(dio, false);
 
     try {
       var clientId = await _store.get(SecureStorageService.clientIdStorageKey);
@@ -179,11 +179,11 @@ class ApiService {
         _store.set(SecureStorageService.accessTokenStorageKey, response.data?['access_token']);
         _store.set(SecureStorageService.refreshTokenStorageKey, response.data?['refresh_token']);
       } else {
-        // TODO: Relogin message
+        _messenger.showMessage(_messenger.relogin);
         await UserService.getInstance().logout();
       }
     } catch (e) {
-      // TODO: Relogin message
+        _messenger.showMessage(_messenger.relogin);
       await UserService.getInstance().logout();
     }
   }

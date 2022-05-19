@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -72,7 +71,10 @@ class UserService {
 
   Future logout() async {
     try {
-      await _apiService.request(
+      var dio = Dio();
+      _apiService.addRequestOptionsInterceptor(dio);
+      _apiService.initClientBadCertificateCallback(dio);
+      await dio.request(
         '/identity/connect/logout',
         data: {},
         options: Options(
@@ -80,6 +82,8 @@ class UserService {
           contentType: Headers.formUrlEncodedContentType,
         ),
       );
+    } catch (e) {
+      // Ignore all errors, since logout will always be done by expiration of tokens.
     } finally {
       await _storage.delete(SecureStorageService.accessTokenStorageKey);
       await _storage.delete(SecureStorageService.refreshTokenStorageKey);
@@ -98,7 +102,7 @@ class UserService {
         options: Options(method: 'GET'),
       );
 
-      return User.fromJson(jsonDecode(response.data));
+      return User.fromJson(response.data);
     }
 
     return null;

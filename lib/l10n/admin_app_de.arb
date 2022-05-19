@@ -31,5 +31,6 @@
   "adminUsers": "Admins",
   "devices": "Geräte",
   "settings": "Einstellungen",
-  "logout": "Abmelden"
+  "logout": "Abmelden",
+  "relogin": "Sie wurden automatisch abgemeldet! Bitte melden Sie sich neu an!"
 }
