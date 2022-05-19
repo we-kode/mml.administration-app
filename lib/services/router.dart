@@ -19,9 +19,6 @@ class RouterService {
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
-  /// Navigator key for the nested pages.
-  final nestedNavigatorKey = GlobalKey<NavigatorState>();
-
   static RouterService getInstance() {
     return _instance;
   }

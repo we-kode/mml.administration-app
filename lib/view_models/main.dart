@@ -39,15 +39,27 @@ class MainViewModel extends ChangeNotifier {
 
   /// Logouts the user.
   void logout() async {
-    showProgressIndicator(_context);
+    showProgressIndicator(RouterService.getInstance().navigatorKey.currentContext!);
     await UserService.getInstance().logout();
     RouterService.getInstance().navigatorKey.currentState!.pop();
   }
 
   /// Loads the selected page of the navigation.
   void loadPage() {
+    NavigatorState? state;
+    _context.visitChildElements((element) {
+      element.visitChildElements((element) {
+        element.visitChildElements((element) {
+          element.visitChildElements((element) {
+            if (element.widget is Navigator) {
+              state = (element as StatefulElement).state as NavigatorState;
+            }
+          });
+        });
+      });
+    });
     var routeService = RouterService.getInstance();
     var route = routeService.nestedRoutes.keys.elementAt(_selectedIndex);
-    routeService.nestedNavigatorKey.currentState!.pushNamed(route);
+    state?.pushNamed(route);
   }
 }

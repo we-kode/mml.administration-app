@@ -40,10 +40,14 @@ class MainScreen extends StatelessWidget {
                             },
                             labelType: NavigationRailLabelType.all,
                             destinations: [
-                              _navItem(Icons.music_note_outlined,
-                                  vm.locales.records),
-                              _navItem(Icons.phone_android_rounded,
-                                  vm.locales.devices),
+                              _navItem(
+                                Icons.music_note_outlined,
+                                vm.locales.records,
+                              ),
+                              _navItem(
+                                Icons.phone_android_rounded,
+                                vm.locales.devices,
+                              ),
                               _navItem(Icons.person, vm.locales.adminUsers),
                               _navItem(Icons.settings, vm.locales.settings),
                             ],
@@ -64,7 +68,6 @@ class MainScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Navigator(
-                      key: RouterService.getInstance().nestedNavigatorKey,
                       initialRoute: RecordsViewModel.route,
                       onGenerateRoute: (settings) {
                         return RouterService.getInstance()
