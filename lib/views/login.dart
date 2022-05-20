@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import '../view_models/login.dart';
 import 'package:provider/provider.dart';
-import '../components/horizontal_spacer.dart';
+import '../components/vertical_spacer.dart';
 
 import '../models/user.dart';
 
+/// Login screen where user can pass his login information and get logged in to
+/// the administration application.
 class LoginScreen extends StatelessWidget {
+  /// Initializes the instance.
   const LoginScreen({Key? key}) : super(key: key);
 
+  /// Builds the screen with the login form.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +26,8 @@ class LoginScreen extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
+              // Redirect the user to the change password view, if the user is
+              // logged in on startup and hence the user id is set.
               var user = snapshot.data as User;
               if (user.id != null) {
                 Future.microtask(

@@ -14,15 +14,23 @@ import 'package:mml_admin/views/records.dart';
 import 'package:mml_admin/views/settings.dart';
 import 'package:mml_admin/views/users.dart';
 
+/// Service that holds all routing information of the navigators of the app.
 class RouterService {
-  static final RouterService _instance = RouterService();
+  /// Instance of the router service.
+  static final RouterService _instance = RouterService._();
 
+  /// GlobalKey of the state of the main navigator.
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
+  /// Private constructor of the service.
+  RouterService._();
+
+  /// Returns the singleton instance of the [RouterService].
   static RouterService getInstance() {
     return _instance;
   }
 
+  /// Routes of the main navigator.
   Map<String, Widget Function(BuildContext)> get routes {
     return {
       LoginViewModel.route: (context) => const LoginScreen(),
@@ -31,11 +39,12 @@ class RouterService {
     };
   }
 
+  /// Name of the initial route for the main navigation.
   String get initialRoute {
     return LoginViewModel.route;
   }
 
-  /// Neted routes which can be reached by the navigation.
+  /// Routes of the nested navigator.
   Map<String, Route<dynamic>?> get nestedRoutes {
     return {
       RecordsViewModel.route: MaterialPageRoute(

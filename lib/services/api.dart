@@ -7,20 +7,33 @@ import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:mml_admin/services/user.dart';
 
+/// Service that handles requests to the server by adding all necessary headers
+/// and handles errors with interceptors, that can occur during requests.
 class ApiService {
+  /// Instance of the api service.
   static final ApiService _instance = ApiService._();
+
+  /// [Dio] instance that is used to send request.
   final Dio _dio = Dio();
+
+  /// Instance of the messenger service, to show messages with.
   final MessengerService _messenger = MessengerService.getInstance();
+
+  /// Instance of the [SecureStorageService] to handle data in the secure
+  /// storage.
   final SecureStorageService _store = SecureStorageService.getInstance();
 
+  /// Private constructor of the service.
   ApiService._() {
     initDio(_dio, true);
   }
 
+  /// Returns the singleton instance of the [ApiService].
   static ApiService getInstance() {
     return _instance;
   }
 
+  /// Sends a request with the given parameters to the server.
   Future<Response<T>> request<T>(
     String path, {
     data,
@@ -30,17 +43,18 @@ class ApiService {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) {
-    return _dio.request<T>(
-      path,
-      data: data,
-      queryParameters: queryParameters,
-      cancelToken: cancelToken,
-      options: options,
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress
-    );
+    return _dio.request<T>(path,
+        data: data,
+        queryParameters: queryParameters,
+        cancelToken: cancelToken,
+        options: options,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress);
   }
 
+  /// Initializes the [dio] instance with interceptors for the default handling.
+  ///
+  /// Adds interceptors for error handling if [addErrorHandling] is set to true.
   void initDio(Dio dio, bool addErrorHandling) {
     addRequestOptionsInterceptor(dio);
 
@@ -50,15 +64,21 @@ class ApiService {
     }
   }
 
+  /// Adds an interceptor to the [dio] instance, that adds all necessary headers
+  /// to a request send with the passed instance.
   void addRequestOptionsInterceptor(Dio dio) {
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        var serverName = await _store.get(SecureStorageService.serverNameStorageKey);
+    dio.interceptors.add(
+      InterceptorsWrapper(onRequest: (options, handler) async {
+        var serverName = await _store.get(
+          SecureStorageService.serverNameStorageKey,
+        );
 
         options.baseUrl = 'https://$serverName/api/v1.0/';
         options.headers['Accept-Language'] = Platform.localeName;
 
-        var accessToken = await _store.get(SecureStorageService.accessTokenStorageKey);
+        var accessToken = await _store.get(
+          SecureStorageService.accessTokenStorageKey,
+        );
 
         if (accessToken != null) {
           options.headers['Authorization'] = "Bearer $accessToken";
@@ -71,13 +91,15 @@ class ApiService {
         }
 
         return handler.next(options);
-      }
-    ));
+      }),
+    );
   }
 
+  /// Adds an interceptor to the [dio] instance, that handles errors occured
+  /// during requests send with the passed instance.
   void addDefaultErrorHandlerInterceptor(Dio dio) {
-    dio.interceptors.add(InterceptorsWrapper(
-      onError: (DioError e, handler) async {
+    dio.interceptors.add(
+      InterceptorsWrapper(onError: (DioError e, handler) async {
         if (e.response != null) {
           var statusCode = e.response!.statusCode;
           if (statusCode == HttpStatus.unauthorized) {
@@ -86,7 +108,9 @@ class ApiService {
             if (await _store.has(SecureStorageService.refreshTokenStorageKey)) {
               await _refreshToken();
 
-              if (!(await _store.has(SecureStorageService.refreshTokenStorageKey))) {
+              if (!(await _store.has(
+                SecureStorageService.refreshTokenStorageKey,
+              ))) {
                 // Logout was called, since token incorrect or expired!
                 return handler.reject(e);
               }
@@ -98,7 +122,7 @@ class ApiService {
               var options = Options(
                 method: requestOptions.method,
                 contentType: requestOptions.contentType,
-                headers: requestOptions.headers
+                headers: requestOptions.headers,
               );
 
               try {
@@ -108,7 +132,7 @@ class ApiService {
                   onReceiveProgress: requestOptions.onReceiveProgress,
                   options: options,
                   data: requestOptions.data,
-                  queryParameters: requestOptions.queryParameters
+                  queryParameters: requestOptions.queryParameters,
                 );
 
                 return handler.resolve(retryResponse);
@@ -123,7 +147,9 @@ class ApiService {
           } else if (statusCode == HttpStatus.forbidden) {
             _messenger.showMessage(_messenger.forbidden);
             return handler.reject(e);
-          } else if (statusCode != null && statusCode >= HttpStatus.badRequest && statusCode < HttpStatus.internalServerError) {
+          } else if (statusCode != null &&
+              statusCode >= HttpStatus.badRequest &&
+              statusCode < HttpStatus.internalServerError) {
             // Client errors should be handled by the specific widget!
             return handler.reject(e);
           }
@@ -135,14 +161,22 @@ class ApiService {
         }
 
         return handler.reject(e);
-      }
-    ));
+      }),
+    );
   }
 
+  /// Adds an error hadnler to the passed [dio] instance, to handle errors
+  /// occured due to bad certificates.
   void initClientBadCertificateCallback(Dio dio) {
-    DefaultHttpClientAdapter httpClient = dio.httpClientAdapter as DefaultHttpClientAdapter;
+    DefaultHttpClientAdapter httpClient =
+        dio.httpClientAdapter as DefaultHttpClientAdapter;
     httpClient.onHttpClientCreate = (HttpClient client) {
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) {
+      client.badCertificateCallback = (
+        X509Certificate cert,
+        String host,
+        int port,
+      ) {
+        // Ignore bad certificates in debug mode!
         if (!kDebugMode) {
           _messenger.showMessage(_messenger.badCertificate);
         }
@@ -153,13 +187,18 @@ class ApiService {
     };
   }
 
+  /// Tries to refresh the tokens with the credentials stored in the secure
+  /// storage.
   Future _refreshToken() async {
     var dio = Dio();
     initDio(dio, false);
 
     try {
+      // Get new tokens.
       var clientId = await _store.get(SecureStorageService.clientIdStorageKey);
-      var refreshToken = await _store.get(SecureStorageService.refreshTokenStorageKey);
+      var refreshToken = await _store.get(
+        SecureStorageService.refreshTokenStorageKey,
+      );
 
       Response response = await dio.request(
         "/identity/connect/token",
@@ -171,19 +210,27 @@ class ApiService {
         },
         options: Options(
           method: 'POST',
-          contentType: Headers.formUrlEncodedContentType
-        )
+          contentType: Headers.formUrlEncodedContentType,
+        ),
       );
 
+      // Store the tokens on successfull request.
       if (response.statusCode == HttpStatus.ok) {
-        _store.set(SecureStorageService.accessTokenStorageKey, response.data?['access_token']);
-        _store.set(SecureStorageService.refreshTokenStorageKey, response.data?['refresh_token']);
+        _store.set(
+          SecureStorageService.accessTokenStorageKey,
+          response.data?['access_token'],
+        );
+        _store.set(
+          SecureStorageService.refreshTokenStorageKey,
+          response.data?['refresh_token'],
+        );
       } else {
         _messenger.showMessage(_messenger.relogin);
         await UserService.getInstance().logout();
       }
     } catch (e) {
-        _messenger.showMessage(_messenger.relogin);
+      // Logout on errors.
+      _messenger.showMessage(_messenger.relogin);
       await UserService.getInstance().logout();
     }
   }

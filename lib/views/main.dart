@@ -4,10 +4,12 @@ import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/view_models/records.dart';
 import 'package:provider/provider.dart';
 
-/// Main View with navigation
+/// Main view with nested navigation element.
 class MainScreen extends StatelessWidget {
+  /// Initializes the instance.
   const MainScreen({Key? key}) : super(key: key);
 
+  /// Builds the main screen with the navigator instance.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,6 +86,8 @@ class MainScreen extends StatelessWidget {
     );
   }
 
+  /// Returns a new navigation rail destination with the given
+  /// [label] and [icon].
   NavigationRailDestination _navItem(IconData icon, String label) {
     return NavigationRailDestination(
       icon: Icon(icon),

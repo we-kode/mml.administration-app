@@ -14,6 +14,7 @@ class MainViewModel extends ChangeNotifier {
   /// Locales of the app.
   late AppLocalizations locales;
 
+  /// Index of the currently selected route.
   int _selectedIndex = 0;
 
   /// Initializes the view model.
@@ -39,14 +40,13 @@ class MainViewModel extends ChangeNotifier {
 
   /// Logouts the user.
   void logout() async {
-    showProgressIndicator(
-      RouterService.getInstance().navigatorKey.currentContext!,
-    );
+    showProgressIndicator();
     await UserService.getInstance().logout();
   }
 
   /// Loads the selected page of the navigation.
   void loadPage() {
+    // Get the nested navigator state to change the nested route.
     NavigatorState? state;
     _context.visitChildElements((element) {
       element.visitChildElements((element) {
@@ -59,6 +59,7 @@ class MainViewModel extends ChangeNotifier {
         });
       });
     });
+
     var routeService = RouterService.getInstance();
     var route = routeService.nestedRoutes.keys.elementAt(_selectedIndex);
     state?.pushReplacementNamed(route);
