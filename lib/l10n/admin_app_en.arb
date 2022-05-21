@@ -25,5 +25,6 @@
   "devices": "Devices",
   "settings": "Settings",
   "logout": "Logout",
-  "relogin": "You were automatically logged out! Please login again!"
+  "relogin": "You were automatically logged out! Please login again!",
+  "advanced": "Advanced"
 }
