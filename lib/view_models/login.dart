@@ -232,4 +232,9 @@ class LoginViewModel extends ChangeNotifier {
         ? locales.serverNameUnchanged
         : locales.serverName;
   }
+
+  /// Determines if the advanced settings on the login screen will be inital expanded or collapsed.
+  bool get showAdvanced {
+    return (_persistedAppKey ?? '').isEmpty || (_persistedClientId ?? '').isEmpty || (_persistedServerName ?? '').isEmpty;
+  }
 }
