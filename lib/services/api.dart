@@ -56,17 +56,17 @@ class ApiService {
   ///
   /// Adds interceptors for error handling if [addErrorHandling] is set to true.
   void initDio(Dio dio, bool addErrorHandling) {
-    addRequestOptionsInterceptor(dio);
+    _addRequestOptionsInterceptor(dio);
+    _initClientBadCertificateCallback(dio);
 
     if (addErrorHandling) {
-      addDefaultErrorHandlerInterceptor(dio);
-      initClientBadCertificateCallback(dio);
+      _addDefaultErrorHandlerInterceptor(dio);
     }
   }
 
   /// Adds an interceptor to the [dio] instance, that adds all necessary headers
   /// to a request send with the passed instance.
-  void addRequestOptionsInterceptor(Dio dio) {
+  void _addRequestOptionsInterceptor(Dio dio) {
     dio.interceptors.add(
       InterceptorsWrapper(onRequest: (options, handler) async {
         var serverName = await _store.get(
@@ -97,7 +97,7 @@ class ApiService {
 
   /// Adds an interceptor to the [dio] instance, that handles errors occured
   /// during requests send with the passed instance.
-  void addDefaultErrorHandlerInterceptor(Dio dio) {
+  void _addDefaultErrorHandlerInterceptor(Dio dio) {
     dio.interceptors.add(
       InterceptorsWrapper(onError: (DioError e, handler) async {
         if (e.response != null) {
@@ -167,7 +167,7 @@ class ApiService {
 
   /// Adds an error hadnler to the passed [dio] instance, to handle errors
   /// occured due to bad certificates.
-  void initClientBadCertificateCallback(Dio dio) {
+  void _initClientBadCertificateCallback(Dio dio) {
     DefaultHttpClientAdapter httpClient =
         dio.httpClientAdapter as DefaultHttpClientAdapter;
     httpClient.onHttpClientCreate = (HttpClient client) {

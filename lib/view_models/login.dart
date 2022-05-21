@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/extensions/is_valid_guid.dart';
 import 'package:mml_admin/services/secure_storage.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/user.dart';
-
-import '../models/user.dart';
-import '../services/router.dart';
-import 'change_password.dart';
+import 'package:mml_admin/models/user.dart';
+import 'package:mml_admin/services/router.dart';
+import 'package:mml_admin/view_models/change_password.dart';
 
 /// View model of the login screen.
 class LoginViewModel extends ChangeNotifier {
@@ -71,7 +70,7 @@ class LoginViewModel extends ChangeNotifier {
         user = await _userService.getUserInfo();
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
-      } finally {}
+      }
 
       // Load maybe persisted keys from secure storage.
       _persistedAppKey = await _storage.get(
