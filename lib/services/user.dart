@@ -97,8 +97,7 @@ class UserService {
       // Use new dio instance without error handling to avoid endless logout
       // loop.
       var dio = Dio();
-      _apiService.addRequestOptionsInterceptor(dio);
-      _apiService.initClientBadCertificateCallback(dio);
+      _apiService.initDio(dio, false);
 
       await dio.request(
         '/identity/connect/logout',

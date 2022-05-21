@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import '../view_models/login.dart';
+import 'package:mml_admin/view_models/login.dart';
 import 'package:provider/provider.dart';
-import '../components/vertical_spacer.dart';
-
-import '../models/user.dart';
+import 'package:mml_admin/components/vertical_spacer.dart';
+import 'package:mml_admin/models/user.dart';
 
 /// Login screen where user can pass his login information and get logged in to
 /// the administration application.
