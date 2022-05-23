@@ -47,17 +47,21 @@ class RouterService {
   /// Routes of the nested navigator.
   Map<String, Route<dynamic>?> get nestedRoutes {
     return {
-      RecordsViewModel.route: MaterialPageRoute(
-        builder: (_) => const RecordsScreen(),
+      RecordsViewModel.route: PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => const RecordsScreen(),
+        transitionDuration: const Duration(seconds: 0),
       ),
-      ClientsViewModel.route: MaterialPageRoute(
-        builder: (_) => const ClientsScreen(),
+      ClientsViewModel.route: PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => const ClientsScreen(),
+        transitionDuration: const Duration(seconds: 0),
       ),
-      UsersViewModel.route: MaterialPageRoute(
-        builder: (_) => const UsersScreen(),
+      UsersViewModel.route: PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => const UsersScreen(),
+        transitionDuration: const Duration(seconds: 0),
       ),
-      SettingsViewModel.route: MaterialPageRoute(
-        builder: (_) => const SettingsScreen(),
+      SettingsViewModel.route: PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => const SettingsScreen(),
+        transitionDuration: const Duration(seconds: 0),
       ),
     };
   }
