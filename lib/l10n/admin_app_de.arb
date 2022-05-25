@@ -33,5 +33,9 @@
   "settings": "Einstellungen",
   "logout": "Abmelden",
   "relogin": "Sie wurden automatisch abgemeldet! Bitte melden Sie sich neu an!",
-  "advanced": "Erweitert"
+  "advanced": "Erweitert",
+  "add": "Hinzufügen",
+  "remove": "Löschen",
+  "cancel": "Abbrechen",
+  "filter": "Filter"
 }

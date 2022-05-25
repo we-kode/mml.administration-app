@@ -26,5 +26,9 @@
   "settings": "Settings",
   "logout": "Logout",
   "relogin": "You were automatically logged out! Please login again!",
-  "advanced": "Advanced"
+  "advanced": "Advanced",
+  "add": "Add",
+  "remove": "Remove",
+  "cancel": "Cancel",
+  "filter": "Filter"
 }

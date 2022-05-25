@@ -51,9 +51,9 @@ class LoginScreen extends StatelessWidget {
                           width: 256,
                           height: 256,
                         ),
-                        spacer,
-                        spacer,
-                        spacer,
+                        verticalSpacer,
+                        verticalSpacer,
+                        verticalSpacer,
                         TextFormField(
                           decoration: InputDecoration(
                             labelText: vm.locales.username,
@@ -65,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: vm.validateUsername,
                         ),
-                        spacer,
+                        verticalSpacer,
                         TextFormField(
                           obscureText: true,
                           decoration: InputDecoration(
@@ -78,7 +78,7 @@ class LoginScreen extends StatelessWidget {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: vm.validatePassword,
                         ),
-                        spacer,
+                        verticalSpacer,
                         ExpansionTile(
                           leading: const Icon(Icons.extension),
                           initiallyExpanded: vm.showAdvanced,
@@ -100,7 +100,7 @@ class LoginScreen extends StatelessWidget {
                                 vm.clientId = clientId;
                               },
                             ),
-                            spacer,
+                            verticalSpacer,
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: vm.serverNameLabel,
@@ -116,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                                 vm.serverName = serverName;
                               },
                             ),
-                            spacer,
+                            verticalSpacer,
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: vm.appKeyLabel,
@@ -132,10 +132,10 @@ class LoginScreen extends StatelessWidget {
                                 vm.appKey = appKey;
                               },
                             ),
-                            spacer,
+                            verticalSpacer,
                           ],
                         ),
-                        spacer,
+                        verticalSpacer,
                         Align(
                           alignment: Alignment.centerRight,
                           child: ElevatedButton(
