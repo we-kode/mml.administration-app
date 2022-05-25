@@ -1,20 +1,55 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/progress_indicator.dart';
+import 'package:mml_admin/services/messenger.dart';
+import 'package:mml_admin/services/user.dart';
 import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/router.dart';
+import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 /// View model of the change password screen.
 class ChangePasswordViewModel extends ChangeNotifier {
   /// Route of the change password screen.
   static String route = '/change_password';
 
-  /// Current user passed to this route after successfull login.
+  /// [UserService] used to login and load data of the current user.
+  final UserService _userService = UserService.getInstance();
+
+  /// Instance of the messenger service, to show messages with.
+  final MessengerService _messenger = MessengerService.getInstance();
+
+  /// Current build context.
+  late BuildContext _context;
+
+  /// Current user passed to this route after successfull login. TODO laod usert from local storage here or only in main?)
   late User user;
+
+  /// Locales of the application.
+  late AppLocalizations locales;
+
+  /// Global key of the login form.
+  ///
+  /// Is used to call validate and save on the form.
+  final formKey = GlobalKey<FormState>();
+
+  /// Password set in the field of the login form.
+  String? actualPassword;
+  String? _actualPasswordError;
+
+  /// Password set in the field of the login form.
+  String? newPassword;
+  String? _newPasswordError;
+
+  /// Password set in the field of the login form.
+  String? newConfirmPassword;
 
   /// Initialize the change password view model.
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
+      _context = context;
       user = ModalRoute.of(context)!.settings.arguments as User;
+      locales = AppLocalizations.of(_context)!;
 
       // Redirect to main page, if the logged in user is confirmed.
       if (user.isConfirmed == true) {
@@ -30,5 +65,108 @@ class ChangePasswordViewModel extends ChangeNotifier {
 
       return true;
     });
+  }
+
+  /// Validates the given [password] and returns an error message or null if
+  /// the password is valid.
+  String? validateActualPassword(String? password) {
+    if ((actualPassword ?? '').isEmpty) {
+      return locales.invalidPassword;
+    }
+
+    if ((_actualPasswordError ?? '').isNotEmpty) {
+      return _actualPasswordError;
+    }
+
+    return null;
+  }
+
+  /// Validates the given [password] and returns an error message or null if
+  /// the password is valid.
+  String? validateNewPassword(String? password) {
+    return _validatePassword(password);
+  }
+
+  /// Validates the given [password] and returns an error message or null if
+  /// the password is valid.
+  String? validateConfirmPassword(String? password) {
+    return _validatePassword(password);
+  }
+
+  String? _validatePassword(String? password) {
+    if ((password ?? '').isEmpty) {
+      return locales.invalidPassword;
+    }
+
+    if (newPassword != newConfirmPassword) {
+      return locales.invalidConfirmPasswords;
+    }
+
+    if ((_newPasswordError ?? '').isNotEmpty) {
+      return _newPasswordError;
+    }
+
+    return null;
+  }
+
+  void clearActualPasswordError() {
+    _actualPasswordError = '';
+  }
+
+  void clearNewPasswordError() {
+    _newPasswordError = '';
+  }
+
+  /// Tries to confirm new password
+  ///
+  /// On success the user will be transfered to the main view.
+  void confirmPassword() async {
+    clearActualPasswordError();
+    clearNewPasswordError();
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
+    showProgressIndicator();
+    formKey.currentState!.save();
+
+    try {
+      await _userService.updateUser(User(
+          name: user.name,
+          oldPassword: actualPassword,
+          newPassword: newPassword));
+      RouterService.getInstance().navigatorKey.currentState!.pop();
+      await afterConfirmation();
+    } on DioError catch (e) {
+      RouterService.getInstance().navigatorKey.currentState!.pop();
+      var errData = e.response!;
+      if (errData.data is String && errData.data == 'USER_UPDATE_FAILED') {
+        _messenger.showMessage(locales.updatePasswordFailed);
+        return;
+      }
+
+      var errors = ((errData.data as Map)['errors'] as Map);
+      errors.forEach((key, value) {
+        switch (key) {
+          case 'NewPassword':
+            _newPasswordError = value[0];
+            break;
+          case 'OldPassword':
+            _actualPasswordError = value[0];
+            break;
+        }
+        formKey.currentState!.validate();
+      });
+    } catch (e) {
+      // other errors will be handled by api service or else
+    }
+  }
+
+  /// Redirects the logged in [user] to the [ChangePasswordScreen].
+  Future afterConfirmation() async {
+    await RouterService.getInstance()
+        .navigatorKey
+        .currentState!
+        .pushReplacementNamed(MainViewModel.route);
   }
 }

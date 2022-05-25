@@ -26,5 +26,12 @@
   "settings": "Settings",
   "logout": "Logout",
   "relogin": "You were automatically logged out! Please login again!",
-  "advanced": "Advanced"
+  "advanced": "Advanced",
+  "save": "Save",
+  "confirmAccount": "Please update your password to proceed.",
+  "actualPassword": "Actual password",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Cofirm password",
+  "invalidConfirmPasswords": "New password does not match verification.",
+  "updatePasswordFailed": "Updating password failed!"
 }

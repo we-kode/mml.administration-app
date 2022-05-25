@@ -53,7 +53,11 @@ class UserService {
 
   /// Updates the given [User] on the server.
   Future<void> updateUser(User user) async {
-    throw UnimplementedError();
+    Response<Map> response = await _apiService.request(
+      '/identity/user',
+      data: user.toJson(),
+      options: Options(method: 'POST'),
+    );
   }
 
   /// Tries to login with the given [username] and [password].
