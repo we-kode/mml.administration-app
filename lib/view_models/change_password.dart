@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
+import 'package:mml_admin/route_arguments/change_password.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/user.dart';
 import 'package:mml_admin/view_models/main.dart';
@@ -24,6 +25,9 @@ class ChangePasswordViewModel extends ChangeNotifier {
 
   /// Current user passed to this route after successfull login.
   late User user;
+
+  /// Indicates, taht the change password screen can be cloased, as it has been manually triggered
+  late bool isCloseable;
 
   /// Locales of the application.
   late AppLocalizations locales;
@@ -52,11 +56,14 @@ class ChangePasswordViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
-      user = ModalRoute.of(context)!.settings.arguments as User;
+      var args =
+          ModalRoute.of(context)!.settings.arguments as ChangePasswordArguments;
+      user = args.user;
+      isCloseable = args.isManualTriggered;
       locales = AppLocalizations.of(_context)!;
 
       // Redirect to main page, if the logged in user is confirmed.
-      if (user.isConfirmed == true) {
+      if (user.isConfirmed == true && !args.isManualTriggered) {
         RouterService.getInstance()
             .navigatorKey
             .currentState!
@@ -178,5 +185,10 @@ class ChangePasswordViewModel extends ChangeNotifier {
         .navigatorKey
         .currentState!
         .pushReplacementNamed(MainViewModel.route);
+  }
+
+  /// Returns to calling screen
+  void cancel() {
+    RouterService.getInstance().navigatorKey.currentState!.pop();
   }
 }

@@ -40,5 +40,8 @@
   "newPassword": "Neues Passwort",
   "confirmNewPassword": "Passwort bestätigen",
   "invalidConfirmPasswords": "Neues Passwort stimmt mit Überprüfung nicht überein.",
-  "updatePasswordFailed": "Passwortaktualisierung fehlgeschlagen!"
+  "updatePasswordFailed": "Passwortaktualisierung fehlgeschlagen!",
+  "actualUser": "Aktueller Benutzer",
+  "changePassword": "Passwort ändern",
+  "cancel": "Abbrechen"
 }

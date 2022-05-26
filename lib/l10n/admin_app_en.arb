@@ -33,5 +33,8 @@
   "newPassword": "New Password",
   "confirmNewPassword": "Cofirm password",
   "invalidConfirmPasswords": "New password does not match verification.",
-  "updatePasswordFailed": "Updating password failed!"
+  "updatePasswordFailed": "Updating password failed!",
+  "actualUser": "Actual user",
+  "changePassword": "Change Password",
+  "cancel": "Cancel"
 }

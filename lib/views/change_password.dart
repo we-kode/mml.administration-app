@@ -29,79 +29,90 @@ class ChangePasswordScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 500,
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Text(
-                              vm.locales.confirmAccount,
-                              textScaleFactor: 1.5,
-                            ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Text(
+                            vm.locales.confirmAccount,
+                            textScaleFactor: 1.5,
                           ),
-                          spacer,
-                          TextFormField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              labelText: vm.locales.actualPassword,
-                              icon: const Icon(Icons.lock),
-                            ),
-                            onSaved: (String? password) {
-                              vm.actualPassword = password!;
-                            },
-                            onChanged: (String? password) {
-                              vm.clearActualPasswordError();
-                              vm.actualPassword = password;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: vm.validateActualPassword,
+                        ),
+                        spacer,
+                        TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: vm.locales.actualPassword,
+                            icon: const Icon(Icons.lock),
                           ),
-                          spacer,
-                          TextFormField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              labelText: vm.locales.newPassword,
-                              icon: const Icon(Icons.lock),
-                            ),
-                            onSaved: (String? password) {
-                              vm.newPassword = password!;
-                            },
-                            onChanged: (String? password) {
-                              vm.clearNewPasswordError();
-                              vm.newPassword = password;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: vm.validateNewPassword,
+                          onSaved: (String? password) {
+                            vm.actualPassword = password!;
+                          },
+                          onChanged: (String? password) {
+                            vm.clearActualPasswordError();
+                            vm.actualPassword = password;
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: vm.validateActualPassword,
+                        ),
+                        spacer,
+                        TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: vm.locales.newPassword,
+                            icon: const Icon(Icons.lock),
                           ),
-                          spacer,
-                          TextFormField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              labelText: vm.locales.confirmNewPassword,
-                              icon: const Icon(Icons.lock),
-                            ),
-                            onSaved: (String? password) {
-                              vm.newConfirmPassword = password!;
-                            },
-                            onChanged: (String? password) {
-                              vm.clearNewPasswordError();
-                              vm.newConfirmPassword = password;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: vm.validateConfirmPassword,
+                          onSaved: (String? password) {
+                            vm.newPassword = password!;
+                          },
+                          onChanged: (String? password) {
+                            vm.clearNewPasswordError();
+                            vm.newPassword = password;
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: vm.validateNewPassword,
+                        ),
+                        spacer,
+                        TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: vm.locales.confirmNewPassword,
+                            icon: const Icon(Icons.lock),
                           ),
-                          spacer,
-                          spacer,
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: ElevatedButton(
-                              onPressed: vm.confirmPassword,
-                              child: Text(vm.locales.save),
-                            ),
+                          onSaved: (String? password) {
+                            vm.newConfirmPassword = password!;
+                          },
+                          onChanged: (String? password) {
+                            vm.clearNewPasswordError();
+                            vm.newConfirmPassword = password;
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: vm.validateConfirmPassword,
+                        ),
+                        spacer,
+                        spacer,
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              if (vm.isCloseable)
+                                ElevatedButton(
+                                  onPressed: vm.cancel,
+                                  child: Text(vm.locales.cancel),
+                                ),
+                              if (vm.isCloseable)
+                                const Padding(
+                                    padding: EdgeInsets.only(right: 10)),
+                              ElevatedButton(
+                                onPressed: vm.confirmPassword,
+                                child: Text(vm.locales.save),
+                              ),
+                            ],
                           ),
-                        ]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
