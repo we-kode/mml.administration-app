@@ -13,7 +13,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
   /// Route of the change password screen.
   static String route = '/change_password';
 
-  /// [UserService] used to login and load data of the current user.
+  /// [UserService] used to load data of the current user.
   final UserService _userService = UserService.getInstance();
 
   /// Instance of the messenger service, to show messages with.
@@ -22,26 +22,30 @@ class ChangePasswordViewModel extends ChangeNotifier {
   /// Current build context.
   late BuildContext _context;
 
-  /// Current user passed to this route after successfull login. TODO laod usert from local storage here or only in main?)
+  /// Current user passed to this route after successfull login.
   late User user;
 
   /// Locales of the application.
   late AppLocalizations locales;
 
-  /// Global key of the login form.
+  /// Global key of the change password form.
   ///
   /// Is used to call validate and save on the form.
   final formKey = GlobalKey<FormState>();
 
-  /// Password set in the field of the login form.
+  /// The old password set in the form
   String? actualPassword;
+
+  /// Server side validation error for the old password
   String? _actualPasswordError;
 
-  /// Password set in the field of the login form.
+  /// The new entered password
   String? newPassword;
+
+  /// Server side validation error for the new password
   String? _newPasswordError;
 
-  /// Password set in the field of the login form.
+  /// The validation of right entered new password
   String? newConfirmPassword;
 
   /// Initialize the change password view model.
@@ -109,10 +113,12 @@ class ChangePasswordViewModel extends ChangeNotifier {
     return null;
   }
 
+  /// Clears the server side validation error of the old password
   void clearActualPasswordError() {
     _actualPasswordError = '';
   }
 
+  /// Clears the server side validation error of the new password
   void clearNewPasswordError() {
     _newPasswordError = '';
   }
@@ -145,6 +151,10 @@ class ChangePasswordViewModel extends ChangeNotifier {
         return;
       }
 
+      if (errData.data is! Map) {
+        return;
+      }
+
       var errors = ((errData.data as Map)['errors'] as Map);
       errors.forEach((key, value) {
         switch (key) {
@@ -162,7 +172,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
     }
   }
 
-  /// Redirects the logged in [user] to the [ChangePasswordScreen].
+  /// Redirects to the [MainScreen].
   Future afterConfirmation() async {
     await RouterService.getInstance()
         .navigatorKey
