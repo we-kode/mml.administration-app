@@ -3,9 +3,9 @@ import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 
 class AsyncListView extends StatefulWidget {
-  Function<> loadData;
+  //Function<> loadData;, required loadData
 
-  const AsyncListView({Key? key, required loadData}) : super(key: key);
+  const AsyncListView({Key? key}) : super(key: key);
 
   @override
   _AsyncListViewState createState() => _AsyncListViewState();
@@ -15,8 +15,6 @@ class _AsyncListViewState extends State<AsyncListView> {
   bool _isInMultiSelectMode = false;
   List<int> _selectedItems = [];
   ScrollController _controller = ScrollController();
-
-
 
   //controller.addListener(() {
   //});
@@ -82,43 +80,48 @@ class _AsyncListViewState extends State<AsyncListView> {
           ),
           Expanded(
             // TODO: Show Message for empty list and add infinite scroll/lazy loading
-            child: ListView.separated(
-              controller: _controller,
-              separatorBuilder: (context, index) {
-                return const Divider(
-                  height: 1,
-                );
-              },
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: _isInMultiSelectMode
-                      ? Checkbox(
-                          onChanged: (_) {
-                            onItemChecked(index);
-                          },
-                          value: _selectedItems.contains(index),
-                        )
-                      : null,
-                  minVerticalPadding: 0,
-                  title: Text("$index"), // TODO: Display
-                  onTap: () {
-                    if (_isInMultiSelectMode) {
-                      onItemChecked(index);
-                    }
-                    // TODO: Edit action
-                  },
-                  onLongPress: () {
-                    if (!_isInMultiSelectMode) {
-                      setState(() {
-                        _isInMultiSelectMode = true;
-                      });
-                    }
+            child: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                scrollbars: false,
+              ),
+              child: ListView.separated(
+                controller: _controller,
+                separatorBuilder: (context, index) {
+                  return const Divider(
+                    height: 1,
+                  );
+                },
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: _isInMultiSelectMode
+                        ? Checkbox(
+                            onChanged: (_) {
+                              onItemChecked(index);
+                            },
+                            value: _selectedItems.contains(index),
+                          )
+                        : null,
+                    minVerticalPadding: 0,
+                    title: Text("$index"), // TODO: Display
+                    onTap: () {
+                      if (_isInMultiSelectMode) {
+                        onItemChecked(index);
+                      }
+                      // TODO: Edit action
+                    },
+                    onLongPress: () {
+                      if (!_isInMultiSelectMode) {
+                        setState(() {
+                          _isInMultiSelectMode = true;
+                        });
+                      }
 
-                    onItemChecked(index);
-                  },
-                );
-              },
-              itemCount: 50,
+                      onItemChecked(index);
+                    },
+                  );
+                },
+                itemCount: 20000,
+              ),
             ),
           ),
         ],
