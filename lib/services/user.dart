@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/api.dart';
+import 'package:mml_admin/services/local_storage.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:mml_admin/view_models/login.dart';
@@ -19,6 +20,10 @@ class UserService {
   /// Instance of the [SecureStorageService] to handle data in the secure
   /// storage.
   final SecureStorageService _storage = SecureStorageService.getInstance();
+
+  /// Instance of the [LocalStorageService] to handle data in the local
+  /// storage.
+  final LocalStorageService _localStorage = LocalStorageService.getInstance();
 
   /// Private constructor of the service.
   UserService._();
@@ -53,7 +58,11 @@ class UserService {
 
   /// Updates the given [User] on the server.
   Future<void> updateUser(User user) async {
-    throw UnimplementedError();
+    await _apiService.request(
+      '/identity/user',
+      data: user.toJson(),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
+    );
   }
 
   /// Tries to login with the given [username] and [password].
@@ -129,8 +138,9 @@ class UserService {
         '/identity/connect/userinfo',
         options: Options(method: 'GET'),
       );
-
-      return User.fromJson(response.data);
+      var user = User.fromJson(response.data);
+      _localStorage.set(LocalStorageService.userIdKey, user.id.toString());
+      return user;
     }
 
     return null;

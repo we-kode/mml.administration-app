@@ -37,5 +37,14 @@
   "add": "Hinzufügen",
   "remove": "Löschen",
   "cancel": "Abbrechen",
-  "filter": "Filter"
+  "filter": "Filter",
+  "save": "Speichern",
+  "confirmAccount": "Bitte aktualisieren Sie Ihr Passwort, um fortzufahren.",
+  "actualPassword": "Aktuelles Passwort",
+  "newPassword": "Neues Passwort",
+  "confirmNewPassword": "Passwort bestätigen",
+  "invalidConfirmPasswords": "Neues Passwort stimmt mit Überprüfung nicht überein.",
+  "updatePasswordFailed": "Passwortaktualisierung fehlgeschlagen!",
+  "actualUser": "Aktueller Benutzer",
+  "changePassword": "Passwort ändern"
 }

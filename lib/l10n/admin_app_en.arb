@@ -30,5 +30,14 @@
   "add": "Add",
   "remove": "Remove",
   "cancel": "Cancel",
-  "filter": "Filter"
+  "filter": "Filter",
+  "save": "Save",
+  "confirmAccount": "Please update your password to proceed.",
+  "actualPassword": "Actual password",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Cofirm password",
+  "invalidConfirmPasswords": "New password does not match verification.",
+  "updatePasswordFailed": "Updating password failed!",
+  "actualUser": "Actual user",
+  "changePassword": "Change Password",
 }
