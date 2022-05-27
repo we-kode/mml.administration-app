@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/extensions/is_valid_guid.dart';
+import 'package:mml_admin/route_arguments/change_password.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:mml_admin/services/user.dart';
 import 'package:mml_admin/models/user.dart';
@@ -145,7 +146,7 @@ class LoginViewModel extends ChangeNotifier {
         .currentState!
         .pushReplacementNamed(
           ChangePasswordViewModel.route,
-          arguments: user,
+          arguments: ChangePasswordArguments(user),
         );
   }
 
