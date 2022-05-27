@@ -26,7 +26,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
   /// Current user passed to this route after successfull login.
   late User user;
 
-  /// Indicates, taht the change password screen can be cloased, as it has been manually triggered
+  /// Indicates, taht the change password screen can be cloased, as it has been manually triggered.
   late bool isCloseable;
 
   /// Locales of the application.
@@ -40,16 +40,16 @@ class ChangePasswordViewModel extends ChangeNotifier {
   /// The old password set in the form.
   String? actualPassword;
 
-  /// Server side validation error for the old password
+  /// Server side validation error for the old password.
   String? _actualPasswordError;
 
-  /// The new entered password
+  /// The new entered password.
   String? newPassword;
 
-  /// Server side validation error for the new password
+  /// Server side validation error for the new password.
   String? _newPasswordError;
 
-  /// The validation of right entered new password
+  /// The validation of right entered new password.
   String? newConfirmPassword;
 
   /// Initialize the change password view model.
@@ -120,12 +120,12 @@ class ChangePasswordViewModel extends ChangeNotifier {
     return null;
   }
 
-  /// Clears the server side validation error of the old password
+  /// Clears the server side validation error of the old password.
   void clearActualPasswordError() {
     _actualPasswordError = '';
   }
 
-  /// Clears the server side validation error of the new password
+  /// Clears the server side validation error of the new password.
   void clearNewPasswordError() {
     _newPasswordError = '';
   }
@@ -146,9 +146,10 @@ class ChangePasswordViewModel extends ChangeNotifier {
     try {
       await _userService.updateUser(
         User(
-            name: user.name,
-            oldPassword: actualPassword,
-            newPassword: newPassword),
+          name: user.name,
+          oldPassword: actualPassword,
+          newPassword: newPassword,
+        ),
       );
       RouterService.getInstance().navigatorKey.currentState!.pop();
       await afterConfirmation();
@@ -181,7 +182,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
     }
   }
 
-  /// Redirects to the [MainScreen].
+  /// Redirects to the [MainScreen]..
   Future afterConfirmation() async {
     await RouterService.getInstance()
         .navigatorKey
@@ -189,7 +190,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
         .pushReplacementNamed(MainViewModel.route);
   }
 
-  /// Returns to calling screen
+  /// Returns to calling screen.
   void cancel() {
     RouterService.getInstance().navigatorKey.currentState!.pop();
   }

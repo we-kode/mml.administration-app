@@ -45,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
                       label: Text(vm.locales.changePassword),
                     ),
                     spacer,
-                    const Divider()
+                    const Divider(),
                   ],
                 ),
               );
