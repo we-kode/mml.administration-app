@@ -21,7 +21,7 @@ class UserService {
   /// storage.
   final SecureStorageService _storage = SecureStorageService.getInstance();
 
-  /// Instance of the [LocalStorageService] to handle data in the secure
+  /// Instance of the [LocalStorageService] to handle data in the local
   /// storage.
   final LocalStorageService _localStorage = LocalStorageService.getInstance();
 

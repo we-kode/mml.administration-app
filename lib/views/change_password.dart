@@ -103,7 +103,8 @@ class ChangePasswordScreen extends StatelessWidget {
                                 ),
                               if (vm.isCloseable)
                                 const Padding(
-                                    padding: EdgeInsets.only(right: 10)),
+                                  padding: EdgeInsets.only(right: 10),
+                                ),
                               ElevatedButton(
                                 onPressed: vm.confirmPassword,
                                 child: Text(vm.locales.save),

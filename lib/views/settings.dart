@@ -20,7 +20,9 @@ class SettingsScreen extends StatelessWidget {
             future: vm.init(context),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
 
               return Padding(
@@ -36,13 +38,14 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     spacer,
                     ElevatedButton.icon(
-                        onPressed: () {
-                          vm.changePassword();
-                        },
-                        icon: const Icon(Icons.lock),
-                        label: Text(vm.locales.changePassword)),
-                        spacer,
-                        const Divider()
+                      onPressed: () {
+                        vm.changePassword();
+                      },
+                      icon: const Icon(Icons.lock),
+                      label: Text(vm.locales.changePassword),
+                    ),
+                    spacer,
+                    const Divider()
                   ],
                 ),
               );

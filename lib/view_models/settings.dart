@@ -23,7 +23,7 @@ class SettingsViewModel extends ChangeNotifier {
   /// Locales of the application.
   late AppLocalizations locales;
 
-  /// Initialize the change password view model.
+  /// Initialize the settings view model.
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
@@ -40,7 +40,8 @@ class SettingsViewModel extends ChangeNotifier {
   /// Redirects the logged in [user] to the [ChangePasswordScreen].
   Future changePassword() async {
     await RouterService.getInstance().navigatorKey.currentState!.pushNamed(
-        ChangePasswordViewModel.route,
-        arguments: ChangePasswordArguments(user!, isManualTriggered: true));
+          ChangePasswordViewModel.route,
+          arguments: ChangePasswordArguments(user!, isManualTriggered: true),
+        );
   }
 }

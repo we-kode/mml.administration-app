@@ -37,7 +37,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
   /// Is used to call validate and save on the form.
   final formKey = GlobalKey<FormState>();
 
-  /// The old password set in the form
+  /// The old password set in the form.
   String? actualPassword;
 
   /// Server side validation error for the old password
@@ -130,7 +130,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
     _newPasswordError = '';
   }
 
-  /// Tries to confirm new password
+  /// Tries to confirm new password.
   ///
   /// On success the user will be transfered to the main view.
   void confirmPassword() async {
@@ -144,10 +144,12 @@ class ChangePasswordViewModel extends ChangeNotifier {
     formKey.currentState!.save();
 
     try {
-      await _userService.updateUser(User(
-          name: user.name,
-          oldPassword: actualPassword,
-          newPassword: newPassword));
+      await _userService.updateUser(
+        User(
+            name: user.name,
+            oldPassword: actualPassword,
+            newPassword: newPassword),
+      );
       RouterService.getInstance().navigatorKey.currentState!.pop();
       await afterConfirmation();
     } on DioError catch (e) {
