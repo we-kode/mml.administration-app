@@ -38,7 +38,7 @@ class ChangePasswordScreen extends StatelessWidget {
                             textScaleFactor: 1.5,
                           ),
                         ),
-                        spacer,
+                        verticalSpacer,
                         TextFormField(
                           obscureText: true,
                           decoration: InputDecoration(
@@ -55,7 +55,7 @@ class ChangePasswordScreen extends StatelessWidget {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: vm.validateActualPassword,
                         ),
-                        spacer,
+                        verticalSpacer,
                         TextFormField(
                           obscureText: true,
                           decoration: InputDecoration(
@@ -72,7 +72,7 @@ class ChangePasswordScreen extends StatelessWidget {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: vm.validateNewPassword,
                         ),
-                        spacer,
+                        verticalSpacer,
                         TextFormField(
                           obscureText: true,
                           decoration: InputDecoration(
@@ -89,8 +89,8 @@ class ChangePasswordScreen extends StatelessWidget {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: vm.validateConfirmPassword,
                         ),
-                        spacer,
-                        spacer,
+                        verticalSpacer,
+                        verticalSpacer,
                         Align(
                           alignment: Alignment.centerRight,
                           child: Row(
