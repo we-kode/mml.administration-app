@@ -1,23 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
+import 'package:mml_admin/models/model_base.dart';
+import 'package:mml_admin/models/model_list.dart';
+
+typedef LoadDataFunction = Future<ModelList> Function({
+  String? filter,
+  int? offset,
+  int? take,
+});
+typedef DeleteFunction = Future<void> Function(List<ModelBase>);
+typedef EditFunction = Future<void> Function(ModelBase);
+typedef AddFunction = Future<void> Function();
 
 class AsyncListView extends StatefulWidget {
-  //Function<> loadData;, required loadData
+  final LoadDataFunction loadData;
+  final DeleteFunction deleteItems;
+  final bool showAddButton;
+  final AddFunction? addItem;
+  final EditFunction editItem;
 
-  const AsyncListView({Key? key}) : super(key: key);
+  const AsyncListView({
+    Key? key,
+    required this.loadData,
+    required this.deleteItems,
+    required this.editItem,
+    this.showAddButton = true,
+    this.addItem,
+  }) : super(key: key);
 
   @override
-  _AsyncListViewState createState() => _AsyncListViewState();
+  State<AsyncListView> createState() => _AsyncListViewState();
 }
 
 class _AsyncListViewState extends State<AsyncListView> {
   bool _isInMultiSelectMode = false;
-  List<int> _selectedItems = [];
-  ScrollController _controller = ScrollController();
+  List<ModelBase> _selectedItems = [];
+  final ScrollController _controller = ScrollController();
+  ModelList? _items;
+  String? _filter;
+  bool _isLoadingData = true;
 
   //controller.addListener(() {
   //});
+
+  @override
+  void initState() {
+    _loadData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +68,11 @@ class _AsyncListViewState extends State<AsyncListView> {
                       icon: const Icon(Icons.filter_list_alt),
                     ),
                     onChanged: (String filterText) {
-                      // TODO: Filter action
+                      setState(() {
+                        _filter = filterText;
+                      });
+
+                      _loadData();
                     },
                   ),
                 ),
@@ -62,10 +97,16 @@ class _AsyncListViewState extends State<AsyncListView> {
                         horizontalSpacer,
                         IconButton(
                           onPressed: () {
-                            // TODO: Delete action
-                            setState(() {
-                              _isInMultiSelectMode = false;
-                              _selectedItems = [];
+                            // TODO: Show loading overlay
+                            widget.deleteItems(_selectedItems).then((value) {
+                              setState(() {
+                                _isInMultiSelectMode = false;
+                                _selectedItems = [];
+                              });
+
+                              _loadData();
+                            }).onError((error, stackTrace) {
+                              // Do nothing but hide loading overlay.
                             });
                           },
                           icon: const Icon(Icons.remove),
@@ -79,72 +120,136 @@ class _AsyncListViewState extends State<AsyncListView> {
             ),
           ),
           Expanded(
-            // TODO: Show Message for empty list and add infinite scroll/lazy loading
-            child: ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(
-                scrollbars: false,
-              ),
-              child: ListView.separated(
-                controller: _controller,
-                separatorBuilder: (context, index) {
-                  return const Divider(
-                    height: 1,
-                  );
-                },
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: _isInMultiSelectMode
-                        ? Checkbox(
-                            onChanged: (_) {
-                              onItemChecked(index);
-                            },
-                            value: _selectedItems.contains(index),
-                          )
-                        : null,
-                    minVerticalPadding: 0,
-                    title: Text("$index"), // TODO: Display
-                    onTap: () {
-                      if (_isInMultiSelectMode) {
-                        onItemChecked(index);
-                      }
-                      // TODO: Edit action
-                    },
-                    onLongPress: () {
-                      if (!_isInMultiSelectMode) {
-                        setState(() {
-                          _isInMultiSelectMode = true;
-                        });
-                      }
-
-                      onItemChecked(index);
-                    },
-                  );
-                },
-                itemCount: 20000,
-              ),
-            ),
+            child: _isLoadingData
+                ? _createLoadingWidget()
+                : (_items!.totalCount > 0
+                    ? _createListViewWidget()
+                    : _createNoDataWidget()),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {}, // TODO: Add action
-        tooltip: locales.add,
-        child: const Icon(Icons.add),
-        // TODO: Visibility mode
+      floatingActionButton: Visibility(
+        visible: widget.showAddButton,
+        child: FloatingActionButton(
+          onPressed: () {
+            if (widget.addItem == null) {
+              return;
+            }
+
+            widget.addItem!().then((value) {
+              _loadData();
+            });
+          },
+          tooltip: locales.add,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
 
-  // TODO: Work with real items and guids
-  void onItemChecked(int index) {
-    if (_selectedItems.contains(index)) {
-      _selectedItems.remove(index);
+  void _onItemChecked(int index) {
+    if (_selectedItems.contains(_items![index])) {
+      _selectedItems.remove(_items![index]);
     } else {
-      _selectedItems.add(index);
+      _selectedItems.add(_items![index]);
     }
+
     setState(() {
       _selectedItems = _selectedItems;
     });
+  }
+
+  void _loadData() {
+    setState(() {
+      _isLoadingData = true;
+    });
+
+    // TODO call load with indexes!
+    widget.loadData(filter: _filter).then((value) {
+      setState(() {
+        _isLoadingData = false;
+        _items = value;
+      });
+    }).onError((e, _) {
+      setState(() {
+        _isLoadingData = false;
+        _items = ModelList([], 0);
+      });
+    });
+  }
+
+  Widget _createListViewWidget() {
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(
+        scrollbars: false,
+      ),
+      child: ListView.separated(
+        controller: _controller,
+        separatorBuilder: (context, index) {
+          return const Divider(
+            height: 1,
+          );
+        },
+        itemBuilder: (context, index) {
+          var item = _items![index];
+
+          return ListTile(
+            leading: _isInMultiSelectMode
+                ? Checkbox(
+                    onChanged: (_) {
+                      _onItemChecked(index);
+                    },
+                    value: _selectedItems.contains(item),
+                  )
+                : null,
+            minVerticalPadding: 0,
+            title: Text(item.getDisplayDescription()),
+            onTap: () {
+              if (_isInMultiSelectMode) {
+                _onItemChecked(index);
+              } else {
+                widget.editItem(item).then((value) {
+                  _loadData();
+                });
+              }
+            },
+            onLongPress: () {
+              if (!_isInMultiSelectMode) {
+                setState(() {
+                  _isInMultiSelectMode = true;
+                });
+              }
+
+              _onItemChecked(index);
+            },
+          );
+        },
+        itemCount: _items?.totalCount ?? 0,
+      ),
+    );
+  }
+
+  Widget _createLoadingWidget() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _createNoDataWidget() {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("No data available!"),
+          horizontalSpacer,
+          TextButton.icon(
+            onPressed: _loadData,
+            icon: const Icon(Icons.refresh),
+            label: Text("Reload"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override

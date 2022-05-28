@@ -1,10 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mml_admin/models/model_base.dart';
 
 part 'user.g.dart';
 
 /// User model that holds all information of an admin user.
 @JsonSerializable(includeIfNull: false)
-class User {
+class User extends ModelBase {
   /// Id of the user.
   final int? id;
 
@@ -46,4 +47,14 @@ class User {
 
   /// Converts the current user model to a json object/map.
   Map<String, dynamic> toJson() => _$UserToJson(this);
+
+  @override
+  String getDisplayDescription() {
+    return name!;
+  }
+
+  @override
+  String getId() {
+    return id!.toString();
+  }
 }
