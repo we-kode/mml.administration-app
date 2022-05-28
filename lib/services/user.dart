@@ -21,10 +21,6 @@ class UserService {
   /// storage.
   final SecureStorageService _storage = SecureStorageService.getInstance();
 
-  /// Instance of the [LocalStorageService] to handle data in the local
-  /// storage.
-  final LocalStorageService _localStorage = LocalStorageService.getInstance();
-
   /// Private constructor of the service.
   UserService._();
 
@@ -133,13 +129,14 @@ class UserService {
 
   /// Returns the current logged in [User] or null.
   Future<User?> getUserInfo() async {
+    var localStorage = await LocalStorageService.getInstance();
     if (await _storage.has(SecureStorageService.accessTokenStorageKey)) {
       var response = await _apiService.request(
         '/identity/connect/userinfo',
         options: Options(method: 'GET'),
       );
       var user = User.fromJson(response.data);
-      _localStorage.set(LocalStorageService.userIdKey, user.id.toString());
+      localStorage.set(LocalStorageService.userIdKey, user.id.toString());
       return user;
     }
 
