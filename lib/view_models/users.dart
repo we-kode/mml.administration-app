@@ -9,11 +9,11 @@ class UsersViewModel extends ChangeNotifier {
   static String route = '/users';
 
   Future<ModelList> loadUsers({String? filter, int? offset, int? take}) async {
-    return Future.delayed(Duration(seconds: 10), () => ModelList([User(name: "Test")], 1));
+    return Future.delayed(Duration(seconds: 2), () => ModelList(List<User>.generate(100, (i) => User(name: "User $i")), 1000));
   }
 
   Future<void> deleteUsers(List<ModelBase> users) async {
-    print(users);
+    return Future.delayed(Duration(seconds: 2));
   }
 
   Future<void> addUser() async {

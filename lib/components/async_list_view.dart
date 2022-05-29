@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
+import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/services/router.dart';
+import 'package:shimmer/shimmer.dart';
 
 typedef LoadDataFunction = Future<ModelList> Function({
   String? filter,
@@ -97,8 +100,12 @@ class _AsyncListViewState extends State<AsyncListView> {
                         horizontalSpacer,
                         IconButton(
                           onPressed: () {
-                            // TODO: Show loading overlay
+                            showProgressIndicator();
                             widget.deleteItems(_selectedItems).then((value) {
+                              RouterService.getInstance()
+                                  .navigatorKey
+                                  .currentState!
+                                  .pop();
                               setState(() {
                                 _isInMultiSelectMode = false;
                                 _selectedItems = [];
@@ -106,7 +113,10 @@ class _AsyncListViewState extends State<AsyncListView> {
 
                               _loadData();
                             }).onError((error, stackTrace) {
-                              // Do nothing but hide loading overlay.
+                              RouterService.getInstance()
+                                  .navigatorKey
+                                  .currentState!
+                                  .pop();
                             });
                           },
                           icon: const Icon(Icons.remove),
@@ -191,38 +201,11 @@ class _AsyncListViewState extends State<AsyncListView> {
           );
         },
         itemBuilder: (context, index) {
-          var item = _items![index];
+          // TODO Load more data/show loading list tile if actually not loaded
 
-          return ListTile(
-            leading: _isInMultiSelectMode
-                ? Checkbox(
-                    onChanged: (_) {
-                      _onItemChecked(index);
-                    },
-                    value: _selectedItems.contains(item),
-                  )
-                : null,
-            minVerticalPadding: 0,
-            title: Text(item.getDisplayDescription()),
-            onTap: () {
-              if (_isInMultiSelectMode) {
-                _onItemChecked(index);
-              } else {
-                widget.editItem(item).then((value) {
-                  _loadData();
-                });
-              }
-            },
-            onLongPress: () {
-              if (!_isInMultiSelectMode) {
-                setState(() {
-                  _isInMultiSelectMode = true;
-                });
-              }
-
-              _onItemChecked(index);
-            },
-          );
+          return index < _items!.length
+              ? _createListTile(index)
+              : _createLoadingTile(context);
         },
         itemCount: _items?.totalCount ?? 0,
       ),
@@ -248,6 +231,62 @@ class _AsyncListViewState extends State<AsyncListView> {
             label: Text("Reload"),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _createListTile(int index) {
+    var item = _items![index];
+
+    return ListTile(
+      leading: _isInMultiSelectMode
+          ? Checkbox(
+              onChanged: (_) {
+                _onItemChecked(index);
+              },
+              value: _selectedItems.contains(item),
+            )
+          : null,
+      minVerticalPadding: 0,
+      title: Text(item.getDisplayDescription()),
+      onTap: () {
+        if (_isInMultiSelectMode) {
+          _onItemChecked(index);
+        } else {
+          widget.editItem(item).then((value) {
+            _loadData();
+          });
+        }
+      },
+      onLongPress: () {
+        if (!_isInMultiSelectMode) {
+          setState(() {
+            _isInMultiSelectMode = true;
+          });
+        }
+
+        _onItemChecked(index);
+      },
+    );
+  }
+
+  Widget _createLoadingTile(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Theme.of(context).colorScheme.surfaceVariant,
+      highlightColor: Theme.of(context).colorScheme.surface,
+      child: ListTile(
+        title: Stack(
+          children: [
+            Container(
+              width: 200,
+              height: 15,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
