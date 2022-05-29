@@ -39,13 +39,11 @@ class AsyncListView extends StatefulWidget {
 class _AsyncListViewState extends State<AsyncListView> {
   bool _isInMultiSelectMode = false;
   List<ModelBase> _selectedItems = [];
-  final ScrollController _controller = ScrollController();
   ModelList? _items;
   String? _filter;
+  int _offset = 0;
+  int _take = 100;
   bool _isLoadingData = true;
-
-  //controller.addListener(() {
-  //});
 
   @override
   void initState() {
@@ -75,7 +73,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                         _filter = filterText;
                       });
 
-                      _loadData();
+                      _reloadData();
                     },
                   ),
                 ),
@@ -111,7 +109,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                                 _selectedItems = [];
                               });
 
-                              _loadData();
+                              _reloadData();
                             }).onError((error, stackTrace) {
                               RouterService.getInstance()
                                   .navigatorKey
@@ -147,7 +145,7 @@ class _AsyncListViewState extends State<AsyncListView> {
             }
 
             widget.addItem!().then((value) {
-              _loadData();
+              _reloadData();
             });
           },
           tooltip: locales.add,
@@ -169,13 +167,23 @@ class _AsyncListViewState extends State<AsyncListView> {
     });
   }
 
-  void _loadData() {
+  void _reloadData() {
     setState(() {
-      _isLoadingData = true;
+      _offset = 0;
+      _take = 100;
     });
 
-    // TODO call load with indexes!
-    widget.loadData(filter: _filter).then((value) {
+    _loadData();
+  }
+
+  void _loadData({bool showLoadingOverlay = true}) {
+    if (showLoadingOverlay) {
+      setState(() {
+        _isLoadingData = true;
+      });
+    }
+
+    widget.loadData(filter: _filter, offset: _offset, take: _take,).then((value) {
       setState(() {
         _isLoadingData = false;
         _items = value;
@@ -194,16 +202,33 @@ class _AsyncListViewState extends State<AsyncListView> {
         scrollbars: false,
       ),
       child: ListView.separated(
-        controller: _controller,
         separatorBuilder: (context, index) {
           return const Divider(
             height: 1,
           );
         },
         itemBuilder: (context, index) {
-          // TODO Load more data/show loading list tile if actually not loaded
+          if (index < _items!.totalCount && index == (((_offset + _take) * 0.75).ceil())) {
+            Future.microtask(() {
+              setState(() {
+                _offset = _offset + 50;
+                _take = 150;
+              });
 
-          return index < _items!.length
+              _loadData(showLoadingOverlay: false);
+            });
+          } else if (index > 0 && index == _offset) {
+            Future.microtask(() {
+              setState(() {
+                _offset = _offset - 50;
+                _take = 150;
+              });
+
+              _loadData(showLoadingOverlay: false);
+            });
+          }
+
+          return index < (_offset + _take) && (index - _offset) >= 0
               ? _createListTile(index)
               : _createLoadingTile(context);
         },
@@ -236,6 +261,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   Widget _createListTile(int index) {
+    index = index - _offset;
     var item = _items![index];
 
     return ListTile(
@@ -261,7 +287,7 @@ class _AsyncListViewState extends State<AsyncListView> {
           _onItemChecked(index);
         } else {
           widget.editItem(item).then((value) {
-            _loadData();
+            _reloadData();
           });
         }
       },
@@ -304,7 +330,6 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 }
