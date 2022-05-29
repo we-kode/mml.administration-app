@@ -240,16 +240,23 @@ class _AsyncListViewState extends State<AsyncListView> {
 
     return ListTile(
       leading: _isInMultiSelectMode
-          ? Checkbox(
-              onChanged: (_) {
-                _onItemChecked(index);
-              },
-              value: _selectedItems.contains(item),
+          ? Visibility(
+              visible: item.isDeletable,
+              child: Checkbox(
+                onChanged: (_) {
+                  _onItemChecked(index);
+                },
+                value: _selectedItems.contains(item),
+              ),
             )
           : null,
       minVerticalPadding: 0,
       title: Text(item.getDisplayDescription()),
       onTap: () {
+        if (!item.isDeletable && _isInMultiSelectMode) {
+          return;
+        }
+
         if (_isInMultiSelectMode) {
           _onItemChecked(index);
         } else {
@@ -259,6 +266,10 @@ class _AsyncListViewState extends State<AsyncListView> {
         }
       },
       onLongPress: () {
+        if (!item.isDeletable) {
+          return;
+        }
+
         if (!_isInMultiSelectMode) {
           setState(() {
             _isInMultiSelectMode = true;

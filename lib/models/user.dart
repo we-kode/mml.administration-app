@@ -40,7 +40,8 @@ class User extends ModelBase {
     this.password,
     this.oldPassword,
     this.newPassword,
-  });
+    bool isDeletable = true
+  }) : super(isDeletable: isDeletable);
 
   /// Converts a json object/map to the user model.
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
@@ -51,10 +52,5 @@ class User extends ModelBase {
   @override
   String getDisplayDescription() {
     return name!;
-  }
-
-  @override
-  String getId() {
-    return id!.toString();
   }
 }

@@ -136,7 +136,12 @@ class UserService {
         options: Options(method: 'GET'),
       );
       var user = User.fromJson(response.data);
-      localStorage.set(LocalStorageService.userIdKey, user.id.toString());
+
+      await localStorage.set(
+        LocalStorageService.userIdKey,
+        user.id.toString(),
+      );
+
       return user;
     }
 
