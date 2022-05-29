@@ -12,7 +12,7 @@ typedef LoadDataFunction = Future<ModelList> Function({
   int? offset,
   int? take,
 });
-typedef DeleteFunction = Future<void> Function(List<ModelBase>);
+typedef DeleteFunction = Future<void> Function<T>(List<T>);
 typedef EditFunction = Future<void> Function(ModelBase);
 typedef AddFunction = Future<void> Function();
 
@@ -38,7 +38,7 @@ class AsyncListView extends StatefulWidget {
 
 class _AsyncListViewState extends State<AsyncListView> {
   bool _isInMultiSelectMode = false;
-  List<ModelBase> _selectedItems = [];
+  List<dynamic> _selectedItems = [];
   ModelList? _items;
   String? _filter;
   int _offset = 0;
@@ -156,10 +156,10 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   void _onItemChecked(int index) {
-    if (_selectedItems.contains(_items![index])) {
-      _selectedItems.remove(_items![index]);
-    } else {
-      _selectedItems.add(_items![index]);
+    if (_selectedItems.contains(_items![index]?.getIdentifier())) {
+      _selectedItems.remove(_items![index]?.getIdentifier());
+    } else if (_items![index] != null) {
+      _selectedItems.add(_items![index]!.getIdentifier());
     }
 
     setState(() {
@@ -168,10 +168,8 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   void _reloadData() {
-    setState(() {
-      _offset = 0;
-      _take = 100;
-    });
+    _offset = 0;
+    _take = 100;
 
     _loadData();
   }
@@ -191,7 +189,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     }).onError((e, _) {
       setState(() {
         _isLoadingData = false;
-        _items = ModelList([], 0);
+        _items = ModelList([], 0, 0);
       });
     });
   }
@@ -208,22 +206,18 @@ class _AsyncListViewState extends State<AsyncListView> {
           );
         },
         itemBuilder: (context, index) {
-          if (index < _items!.totalCount && index == (((_offset + _take) * 0.75).ceil())) {
-            Future.microtask(() {
-              setState(() {
-                _offset = _offset + 50;
-                _take = 150;
-              });
+          if ((_offset + _take) <= _items!.totalCount && index == (_offset + _take - 25)) {
+            _offset = _offset + 50;
+            _take = 150;
 
+            Future.microtask(() {
               _loadData(showLoadingOverlay: false);
             });
           } else if (index > 0 && index == _offset) {
-            Future.microtask(() {
-              setState(() {
-                _offset = _offset - 50;
-                _take = 150;
-              });
+            _offset = _offset - 50;
+            _take = 150;
 
+            Future.microtask(() {
               _loadData(showLoadingOverlay: false);
             });
           }
@@ -261,8 +255,11 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   Widget _createListTile(int index) {
-    index = index - _offset;
     var item = _items![index];
+
+    if (item == null) {
+      return _createLoadingTile(context);
+    }
 
     return ListTile(
       leading: _isInMultiSelectMode
@@ -272,7 +269,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                 onChanged: (_) {
                   _onItemChecked(index);
                 },
-                value: _selectedItems.contains(item),
+                value: _selectedItems.contains(item.getIdentifier()),
               ),
             )
           : null,

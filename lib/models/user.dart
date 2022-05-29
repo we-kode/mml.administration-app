@@ -53,4 +53,9 @@ class User extends ModelBase {
   String getDisplayDescription() {
     return name!;
   }
+
+  @override
+  dynamic getIdentifier() {
+    return id;
+  }
 }

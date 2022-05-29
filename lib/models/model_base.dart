@@ -8,4 +8,6 @@ abstract class ModelBase {
 
   ///
   String getDisplayDescription();
+
+  dynamic getIdentifier();
 }

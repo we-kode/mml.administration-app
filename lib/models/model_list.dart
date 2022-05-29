@@ -1,17 +1,19 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:mml_admin/models/model_base.dart';
 
-class ModelList extends ListBase<ModelBase> {
+class ModelList extends ListBase<ModelBase?> {
 
-  List<ModelBase> _l = [];
-
+  List<ModelBase?> _l = [];
 
   int totalCount;
 
 
-  ModelList(List<ModelBase> data, this.totalCount) {
-    _l = data;
+  ModelList(List<ModelBase> data, int offset, this.totalCount) {
+    _l = [];
+    _l.length = totalCount;
+    _l.replaceRange(offset, min(_l.length, offset + data.length), data);
   }
 
   @override
@@ -23,10 +25,10 @@ class ModelList extends ListBase<ModelBase> {
   int get length => _l.length;
 
   @override
-  ModelBase operator [](int index) => _l[index];
+  ModelBase? operator [](int index) => _l[index];
 
   @override
-  void operator []=(int index, ModelBase value) {
+  void operator []=(int index, ModelBase? value) {
     throw UnimplementedError();
   }
 }
