@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/api.dart';
-import 'package:mml_admin/services/local_storage.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:mml_admin/view_models/login.dart';
@@ -129,19 +128,12 @@ class UserService {
 
   /// Returns the current logged in [User] or null.
   Future<User?> getUserInfo() async {
-    var localStorage = await LocalStorageService.getInstance();
     if (await _storage.has(SecureStorageService.accessTokenStorageKey)) {
       var response = await _apiService.request(
         '/identity/connect/userinfo',
         options: Options(method: 'GET'),
       );
       var user = User.fromJson(response.data);
-
-      await localStorage.set(
-        LocalStorageService.userIdKey,
-        user.id.toString(),
-      );
-
       return user;
     }
 
