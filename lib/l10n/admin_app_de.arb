@@ -46,5 +46,7 @@
   "invalidConfirmPasswords": "Neues Passwort stimmt mit Überprüfung nicht überein.",
   "updatePasswordFailed": "Passwortaktualisierung fehlgeschlagen!",
   "actualUser": "Aktueller Benutzer",
-  "changePassword": "Passwort ändern"
+  "changePassword": "Passwort ändern",
+  "noData": "Keine Datensätze wurden gefunden!",
+  "reload": "Neu laden"
 }

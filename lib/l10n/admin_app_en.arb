@@ -39,5 +39,7 @@
   "invalidConfirmPasswords": "New password does not match verification.",
   "updatePasswordFailed": "Updating password failed!",
   "actualUser": "Actual user",
-  "changePassword": "Change Password"
+  "changePassword": "Change Password",
+  "noData": "No data were found!",
+  "reload": "Reload"
 }

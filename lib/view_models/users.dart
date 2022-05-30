@@ -8,19 +8,45 @@ class UsersViewModel extends ChangeNotifier {
   /// Route for the users overview screen.
   static String route = '/users';
 
+  /// Loads the user with the passing [filter] starting at [offset] and loading
+  /// [take] data.
   Future<ModelList> loadUsers({String? filter, int? offset, int? take}) async {
-    return Future.delayed(Duration(seconds: 2), () => ModelList(List<User>.generate(take ?? 100, (i) => User(id: (offset ?? 0) + i, name: "User ${(offset ?? 0) + i}")), offset ?? 0, 1000));
+    // TODO: Remove mock and implement real functionality
+    return Future.delayed(
+      const Duration(seconds: 2),
+      () => ModelList(
+          List<User>.generate(
+            take ?? 100,
+            (i) => User(
+              id: (offset ?? 0) + i,
+              name: "User ${(offset ?? 0) + i}",
+            ),
+          ),
+          offset ?? 0,
+          1000),
+    );
   }
 
-  Future<void> deleteUsers<int>(List<int> userIds) async {
-    return Future.delayed(Duration(seconds: 2));
+  /// Deletes the users with the passed [userIds] or or aborts, if the user
+  /// cancels the operation.
+  Future<bool> deleteUsers<int>(List<int> userIds) async {
+    // TODO: Implement
+    return Future.delayed(const Duration(seconds: 2), () => true);
   }
 
-  Future<void> addUser() async {
+  /// Shows a dialog for creating an new user and creates the user or aborts,
+  /// if the user cancels the operation.
+  Future<bool> addUser() async {
+    // TODO: Implement
     print("Add user");
+    return true;
   }
 
-  Future<void> editUser(ModelBase user) async {
+  /// Shows a dialog for editing an existing user and updates the user or
+  /// aborts, if the user cancels the operation.
+  Future<bool> editUser(ModelBase user) async {
+    // TODO: Implement
     print(user);
+    return true;
   }
 }

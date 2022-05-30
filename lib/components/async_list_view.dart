@@ -7,22 +7,72 @@ import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:shimmer/shimmer.dart';
 
+/// Function to load data with the passed [filter], starting from [offset] and
+/// loading an amount of [take] data.
 typedef LoadDataFunction = Future<ModelList> Function({
   String? filter,
   int? offset,
   int? take,
 });
-typedef DeleteFunction = Future<void> Function<T>(List<T>);
-typedef EditFunction = Future<void> Function(ModelBase);
-typedef AddFunction = Future<void> Function();
 
+/// Function that deletes the items with the passed [itemIdentifiers].
+///
+/// This function should return a [Future], that either resolves with true
+/// after successful deletion or false on cancel.
+/// The list will reload the data starting from beginning, if true will be
+/// returned.
+typedef DeleteFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
+
+/// Function that updates the passed [item].
+///
+/// This function should return a [Future], that either resolves with true
+/// after successful update or false on cancel.
+/// The list will reload the data starting from beginning, if true will be
+/// returned.
+typedef EditFunction = Future<bool> Function(ModelBase item);
+
+/// Function that creates an new item.
+///
+/// This function should return a [Future], that either resolves with true
+/// after successful creation or false on cancel.
+/// The list will reload the data starting from beginning, if true will be
+/// returned.
+typedef AddFunction = Future<bool> Function();
+
+/// List that supports async loading of data, when necessary in chunks.
 class AsyncListView extends StatefulWidget {
+  /// Function to load data with the passed [filter], starting from [offset] and
+  /// loading an amount of [take] data.
   final LoadDataFunction loadData;
+
+  /// Function that deletes the items with the passed [itemIdentifiers].
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful deletion or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
   final DeleteFunction deleteItems;
+
+  /// Indicates, whether the add button should be shown or not.
   final bool showAddButton;
+
+  /// Function that creates an new item.
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful creation or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
   final AddFunction? addItem;
+
+  /// Function that updates the passed [item].
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful update or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
   final EditFunction editItem;
 
+  /// Initializes the list view.
   const AsyncListView({
     Key? key,
     required this.loadData,
@@ -36,97 +86,55 @@ class AsyncListView extends StatefulWidget {
   State<AsyncListView> createState() => _AsyncListViewState();
 }
 
+/// State of the list view.
 class _AsyncListViewState extends State<AsyncListView> {
+  /// Initial offset to start loading data from.
+  final int _initialOffset = 0;
+
+  /// Intial amount of data that should be loaded.
+  final int _initialTake = 100;
+
+  /// Delta the [_offset] should be increased or decreased while scrolling and
+  /// lazy loading next/previuous data.
+  final int _offsetDelta = 50;
+
+  /// Indicates, whether the list is currently in multi select mode.
   bool _isInMultiSelectMode = false;
+
+  /// Identifiers of the selected items in the list.
   List<dynamic> _selectedItems = [];
+
+  /// List of lazy loaded items.
   ModelList? _items;
+
+  /// Filter to send to the sever.
   String? _filter;
+
+  /// Offset to start loading data from.
   int _offset = 0;
+
+  /// Amount of data that should be loaded starting from [_offset].
   int _take = 100;
+
+  /// Indicates, whether data is loading and an loading indicator should be
+  /// shown.
   bool _isLoadingData = true;
 
   @override
   void initState() {
-    _loadData();
+    _reloadData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var locales = AppLocalizations.of(context)!;
-
     return Scaffold(
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: locales.filter,
-                      icon: const Icon(Icons.filter_list_alt),
-                    ),
-                    onChanged: (String filterText) {
-                      setState(() {
-                        _filter = filterText;
-                      });
+          // List header with filter and action buttons.
+          _createListHeaderWidget(),
 
-                      _reloadData();
-                    },
-                  ),
-                ),
-                Visibility(
-                  visible: _isInMultiSelectMode,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isInMultiSelectMode = false;
-                              _selectedItems = [];
-                            });
-                          },
-                          icon: const Icon(Icons.close),
-                          tooltip: locales.cancel,
-                        ),
-                        horizontalSpacer,
-                        Text("${_selectedItems.length}"),
-                        horizontalSpacer,
-                        IconButton(
-                          onPressed: () {
-                            showProgressIndicator();
-                            widget.deleteItems(_selectedItems).then((value) {
-                              RouterService.getInstance()
-                                  .navigatorKey
-                                  .currentState!
-                                  .pop();
-                              setState(() {
-                                _isInMultiSelectMode = false;
-                                _selectedItems = [];
-                              });
-
-                              _reloadData();
-                            }).onError((error, stackTrace) {
-                              RouterService.getInstance()
-                                  .navigatorKey
-                                  .currentState!
-                                  .pop();
-                            });
-                          },
-                          icon: const Icon(Icons.remove),
-                          tooltip: locales.remove,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // List, loading indicator or no data widget.
           Expanded(
             child: _isLoadingData
                 ? _createLoadingWidget()
@@ -136,6 +144,8 @@ class _AsyncListViewState extends State<AsyncListView> {
           ),
         ],
       ),
+
+      // Floating button.
       floatingActionButton: Visibility(
         visible: widget.showAddButton,
         child: FloatingActionButton(
@@ -145,16 +155,20 @@ class _AsyncListViewState extends State<AsyncListView> {
             }
 
             widget.addItem!().then((value) {
-              _reloadData();
+              if (value) {
+                _reloadData();
+              }
             });
           },
-          tooltip: locales.add,
+          tooltip: AppLocalizations.of(context)!.add,
           child: const Icon(Icons.add),
         ),
       ),
     );
   }
 
+  /// Stores the identifer of the item at the [index] or removes it, when
+  /// the identifier was in the list of selected items.
   void _onItemChecked(int index) {
     if (_selectedItems.contains(_items![index]?.getIdentifier())) {
       _selectedItems.remove(_items![index]?.getIdentifier());
@@ -167,13 +181,19 @@ class _AsyncListViewState extends State<AsyncListView> {
     });
   }
 
+  /// Reloads the data starting from inital offset with inital count.
   void _reloadData() {
-    _offset = 0;
-    _take = 100;
+    _offset = _initialOffset;
+    _take = _initialTake;
 
     _loadData();
   }
 
+  /// Loads the data for the [_offset] and [_take] with the [_filter].
+  ///
+  /// Shows a loading indicator instead of the list during load, if
+  /// [showLoadingOverlay] is true.
+  /// Otherwhise the data will be loaded lazy in the background.
   void _loadData({bool showLoadingOverlay = true}) {
     if (showLoadingOverlay) {
       setState(() {
@@ -181,7 +201,13 @@ class _AsyncListViewState extends State<AsyncListView> {
       });
     }
 
-    widget.loadData(filter: _filter, offset: _offset, take: _take,).then((value) {
+    var dataFuture = widget.loadData(
+      filter: _filter,
+      offset: _offset,
+      take: _take,
+    );
+
+    dataFuture.then((value) {
       setState(() {
         _isLoadingData = false;
         _items = value;
@@ -189,11 +215,93 @@ class _AsyncListViewState extends State<AsyncListView> {
     }).onError((e, _) {
       setState(() {
         _isLoadingData = false;
-        _items = ModelList([], 0, 0);
+        _items = ModelList([], _initialOffset, 0);
       });
     });
   }
 
+  /// Creates the list header widget with filter and remove action buttons.
+  Widget _createListHeaderWidget() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      child: Row(
+        children: [
+          // Filter input.
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.filter,
+                icon: const Icon(Icons.filter_list_alt),
+              ),
+              onChanged: (String filterText) {
+                setState(() {
+                  _filter = filterText;
+                });
+
+                _reloadData();
+              },
+            ),
+          ),
+
+          // Remove action buttons. Only visible in multi select mode.
+          Visibility(
+            visible: _isInMultiSelectMode,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isInMultiSelectMode = false;
+                        _selectedItems = [];
+                      });
+                    },
+                    icon: const Icon(Icons.close),
+                    tooltip: AppLocalizations.of(context)!.cancel,
+                  ),
+                  horizontalSpacer,
+                  Text("${_selectedItems.length}"),
+                  horizontalSpacer,
+                  IconButton(
+                    onPressed: () {
+                      showProgressIndicator();
+                      widget.deleteItems(_selectedItems).then((value) {
+                        RouterService.getInstance()
+                            .navigatorKey
+                            .currentState!
+                            .pop();
+
+                        if (!value) {
+                          return;
+                        }
+
+                        setState(() {
+                          _isInMultiSelectMode = false;
+                          _selectedItems = [];
+                        });
+
+                        _reloadData();
+                      }).onError((error, stackTrace) {
+                        RouterService.getInstance()
+                            .navigatorKey
+                            .currentState!
+                            .pop();
+                      });
+                    },
+                    icon: const Icon(Icons.remove),
+                    tooltip: AppLocalizations.of(context)!.remove,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Creates the list view widget.
   Widget _createListViewWidget() {
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(
@@ -206,73 +314,85 @@ class _AsyncListViewState extends State<AsyncListView> {
           );
         },
         itemBuilder: (context, index) {
-          if ((_offset + _take) <= _items!.totalCount && index == (_offset + _take - 25)) {
-            _offset = _offset + 50;
-            _take = 150;
+          var endNotReached = (_offset + _take) <= _items!.totalCount;
+          var loadNextIndexReached =
+              index == (_offset + _take - (_offsetDelta / 2).ceil());
+          var loadPreviuousIndexReached = index == _offset;
+          var beginNotReached = index > 0;
+
+          if (endNotReached && loadNextIndexReached) {
+            _offset = _offset + _offsetDelta;
+            _take = _initialTake + _offsetDelta;
 
             Future.microtask(() {
               _loadData(showLoadingOverlay: false);
             });
-          } else if (index > 0 && index == _offset) {
-            _offset = _offset - 50;
-            _take = 150;
+          } else if (beginNotReached && loadPreviuousIndexReached) {
+            _offset = _offset - _offsetDelta;
+            _take = _initialTake + _offsetDelta;
 
             Future.microtask(() {
               _loadData(showLoadingOverlay: false);
             });
           }
 
-          return index < (_offset + _take) && (index - _offset) >= 0
-              ? _createListTile(index)
-              : _createLoadingTile(context);
+          var itemLoaded = index < (_offset + _take) && (index - _offset) >= 0;
+
+          return itemLoaded ? _createListTile(index) : _createLoadingTile();
         },
         itemCount: _items?.totalCount ?? 0,
       ),
     );
   }
 
+  /// Creates a loading indicator widget.
   Widget _createLoadingWidget() {
     return const Center(
       child: CircularProgressIndicator(),
     );
   }
 
+  /// Creates a widget that will be showed if no data were loaded or an error
+  /// occured during loading of data.
   Widget _createNoDataWidget() {
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("No data available!"),
+          Text(AppLocalizations.of(context)!.noData),
           horizontalSpacer,
           TextButton.icon(
             onPressed: _loadData,
             icon: const Icon(Icons.refresh),
-            label: Text("Reload"),
+            label: Text(AppLocalizations.of(context)!.reload),
           ),
         ],
       ),
     );
   }
 
+  /// Creates a tile widget for one list item at the given [index].
   Widget _createListTile(int index) {
     var item = _items![index];
 
     if (item == null) {
-      return _createLoadingTile(context);
+      return _createLoadingTile();
     }
 
+    var ledingTile = !_isInMultiSelectMode
+        ? null
+        : Visibility(
+            visible: item.isDeletable,
+            child: Checkbox(
+              onChanged: (_) {
+                _onItemChecked(index);
+              },
+              value: _selectedItems.contains(item.getIdentifier()),
+            ),
+          );
+
     return ListTile(
-      leading: _isInMultiSelectMode
-          ? Visibility(
-              visible: item.isDeletable,
-              child: Checkbox(
-                onChanged: (_) {
-                  _onItemChecked(index);
-                },
-                value: _selectedItems.contains(item.getIdentifier()),
-              ),
-            )
-          : null,
+      leading: ledingTile,
       minVerticalPadding: 0,
       title: Text(item.getDisplayDescription()),
       onTap: () {
@@ -284,7 +404,9 @@ class _AsyncListViewState extends State<AsyncListView> {
           _onItemChecked(index);
         } else {
           widget.editItem(item).then((value) {
-            _reloadData();
+            if (value) {
+              _reloadData();
+            }
           });
         }
       },
@@ -304,7 +426,8 @@ class _AsyncListViewState extends State<AsyncListView> {
     );
   }
 
-  Widget _createLoadingTile(BuildContext context) {
+  /// Creates a list tile widget for a not loded list item.
+  Widget _createLoadingTile() {
     return Shimmer.fromColors(
       baseColor: Theme.of(context).colorScheme.surfaceVariant,
       highlightColor: Theme.of(context).colorScheme.surface,
@@ -323,10 +446,5 @@ class _AsyncListViewState extends State<AsyncListView> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

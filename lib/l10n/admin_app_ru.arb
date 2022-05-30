@@ -33,8 +33,13 @@
   "filter": "Фильтр",
   "save": "Сохранить",
   "confirmAccount": "Пожалуйста, обновите свой пароль, чтобы продолжить.",
+  "actualPassword": "Текущий пароль",
+  "newPassword": "Новый пароль",
+  "confirmNewPassword": "Подтвердить пароль",
   "invalidConfirmPasswords": "Новый пароль не соответствует проверке.",
   "updatePasswordFailed": "Не удалось обновить пароль!",
   "actualUser": "Текущий пользователь",
-  "changePassword": "Сменить пароль"
+  "changePassword": "Сменить пароль",
+  "noData": "Никаких записей найдено не было!",
+  "reload": "Перезагрузить"
 }
