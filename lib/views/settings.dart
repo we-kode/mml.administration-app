@@ -36,7 +36,7 @@ class SettingsScreen extends StatelessWidget {
                         Text(' ${vm.locales.actualUser}: ${vm.user!.name!}'),
                       ],
                     ),
-                    spacer,
+                    verticalSpacer,
                     ElevatedButton.icon(
                       onPressed: () {
                         vm.changePassword();
@@ -44,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
                       icon: const Icon(Icons.lock),
                       label: Text(vm.locales.changePassword),
                     ),
-                    spacer,
+                    verticalSpacer,
                     const Divider(),
                   ],
                 ),

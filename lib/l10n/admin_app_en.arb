@@ -27,6 +27,10 @@
   "logout": "Logout",
   "relogin": "You were automatically logged out! Please login again!",
   "advanced": "Advanced",
+  "add": "Add",
+  "remove": "Remove",
+  "cancel": "Cancel",
+  "filter": "Filter",
   "save": "Save",
   "confirmAccount": "Please update your password to proceed.",
   "actualPassword": "Actual password",
@@ -36,5 +40,6 @@
   "updatePasswordFailed": "Updating password failed!",
   "actualUser": "Actual user",
   "changePassword": "Change Password",
-  "cancel": "Cancel"
+  "noData": "No data were found!",
+  "reload": "Reload"
 }
