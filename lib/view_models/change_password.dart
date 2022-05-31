@@ -26,7 +26,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
   /// Current user passed to this route after successfull login.
   late User user;
 
-  /// Indicates, taht the change password screen can be cloased, as it has been
+  /// Indicates, taht the change password screen can be closed, as it has been
   /// manually triggered.
   late bool isCloseable;
 
@@ -183,7 +183,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
     }
   }
 
-  /// Redirects to the [MainScreen]..
+  /// Redirects to the [MainScreen].
   Future afterConfirmation() async {
     await RouterService.getInstance()
         .navigatorKey

@@ -1,6 +1,6 @@
 /// Base model with abstract methods that should be implemented by all models.
 abstract class ModelBase {
-  /// Indicates wheter the model object is deleteable.
+  /// Indicates whether the model object is deletable.
   late bool isDeletable;
 
   /// Creates a new instance of the model.

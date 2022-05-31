@@ -222,77 +222,83 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   /// Creates the list header widget with filter and remove action buttons.
   Widget _createListHeaderWidget() {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       child: Row(
+        mainAxisSize: MainAxisSize.max,
         children: [
           // Filter input.
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.filter,
-                icon: const Icon(Icons.filter_list_alt),
-              ),
-              onChanged: (String filterText) {
-                setState(() {
-                  _filter = filterText;
-                });
+          Visibility(
+            visible: !_isInMultiSelectMode,
+            child: Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.filter,
+                  icon: const Icon(Icons.filter_list_alt),
+                ),
+                onChanged: (String filterText) {
+                  setState(() {
+                    _filter = filterText;
+                  });
 
-                _reloadData();
-              },
+                  _reloadData();
+                },
+              ),
             ),
           ),
 
           // Remove action buttons. Only visible in multi select mode.
           Visibility(
             visible: _isInMultiSelectMode,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _isInMultiSelectMode = false;
-                        _selectedItems = [];
-                      });
-                    },
-                    icon: const Icon(Icons.close),
-                    tooltip: AppLocalizations.of(context)!.cancel,
-                  ),
-                  horizontalSpacer,
-                  Text("${_selectedItems.length}"),
-                  horizontalSpacer,
-                  IconButton(
-                    onPressed: () {
-                      showProgressIndicator();
-                      widget.deleteItems(_selectedItems).then((value) {
-                        RouterService.getInstance()
-                            .navigatorKey
-                            .currentState!
-                            .pop();
-
-                        if (!value) {
-                          return;
-                        }
-
+            child: Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(top: 5, bottom: 5),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
                         setState(() {
                           _isInMultiSelectMode = false;
                           _selectedItems = [];
                         });
+                      },
+                      icon: const Icon(Icons.close),
+                      tooltip: AppLocalizations.of(context)!.cancel,
+                    ),
+                    horizontalSpacer,
+                    Text("${_selectedItems.length}"),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        showProgressIndicator();
+                        widget.deleteItems(_selectedItems).then((value) {
+                          RouterService.getInstance()
+                              .navigatorKey
+                              .currentState!
+                              .pop();
 
-                        _reloadData();
-                      }).onError((error, stackTrace) {
-                        RouterService.getInstance()
-                            .navigatorKey
-                            .currentState!
-                            .pop();
-                      });
-                    },
-                    icon: const Icon(Icons.remove),
-                    tooltip: AppLocalizations.of(context)!.remove,
-                  ),
-                ],
+                          if (!value) {
+                            return;
+                          }
+
+                          setState(() {
+                            _isInMultiSelectMode = false;
+                            _selectedItems = [];
+                          });
+
+                          _reloadData();
+                        }).onError((error, stackTrace) {
+                          RouterService.getInstance()
+                              .navigatorKey
+                              .currentState!
+                              .pop();
+                        });
+                      },
+                      icon: const Icon(Icons.remove),
+                      tooltip: AppLocalizations.of(context)!.remove,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -352,7 +358,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     );
   }
 
-  /// Creates a widget that will be showed if no data were loaded or an error
+  /// Creates a widget that will be shown, if no data were loaded or an error
   /// occured during loading of data.
   Widget _createNoDataWidget() {
     return Center(
