@@ -183,6 +183,8 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   /// Reloads the data starting from inital offset with inital count.
   void _reloadData() {
+    if (!mounted) { return; }
+
     _offset = _initialOffset;
     _take = _initialTake;
 
@@ -208,11 +210,15 @@ class _AsyncListViewState extends State<AsyncListView> {
     );
 
     dataFuture.then((value) {
+      if (!mounted) { return; }
+
       setState(() {
         _isLoadingData = false;
         _items = value;
       });
     }).onError((e, _) {
+      if (!mounted) { return; }
+
       setState(() {
         _isLoadingData = false;
         _items = ModelList([], _initialOffset, 0);
@@ -272,6 +278,8 @@ class _AsyncListViewState extends State<AsyncListView> {
                       onPressed: () {
                         showProgressIndicator();
                         widget.deleteItems(_selectedItems).then((value) {
+                          if (!mounted) { return; }
+
                           RouterService.getInstance()
                               .navigatorKey
                               .currentState!
@@ -288,6 +296,8 @@ class _AsyncListViewState extends State<AsyncListView> {
 
                           _reloadData();
                         }).onError((error, stackTrace) {
+                          if (!mounted) { return; }
+
                           RouterService.getInstance()
                               .navigatorKey
                               .currentState!
