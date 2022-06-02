@@ -13,13 +13,25 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       password: json['password'] as String?,
       oldPassword: json['oldPassword'] as String?,
       newPassword: json['newPassword'] as String?,
+      isDeletable: json['isDeletable'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'isConfirmed': instance.isConfirmed,
-      'password': instance.password,
-      'oldPassword': instance.oldPassword,
-      'newPassword': instance.newPassword,
-    };
+Map<String, dynamic> _$UserToJson(User instance) {
+  final val = <String, dynamic>{
+    'isDeletable': instance.isDeletable,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('name', instance.name);
+  writeNotNull('isConfirmed', instance.isConfirmed);
+  writeNotNull('password', instance.password);
+  writeNotNull('oldPassword', instance.oldPassword);
+  writeNotNull('newPassword', instance.newPassword);
+  return val;
+}
