@@ -41,5 +41,7 @@
   "actualUser": "Actual user",
   "changePassword": "Change Password",
   "noData": "No data were found!",
-  "reload": "Reload"
+  "reload": "Reload",
+  "areYouSure": "Are you sure?",
+  "ok": "Ok"
 }

@@ -48,5 +48,7 @@
   "actualUser": "Aktueller Benutzer",
   "changePassword": "Passwort ändern",
   "noData": "Keine Datensätze wurden gefunden!",
-  "reload": "Neu laden"
+  "reload": "Neu laden",
+  "areYouSure": "Sind Sie sicher?",
+  "ok": "Ok"
 }
