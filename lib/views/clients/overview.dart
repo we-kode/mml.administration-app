@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/models/model_base.dart';
-import 'package:mml_admin/view_models/clients.dart';
+import 'package:mml_admin/view_models/clients/overview.dart';
+import 'package:mml_admin/views/clients/edit.dart';
 import 'package:provider/provider.dart';
 
 /// Overview screen of the app clients of the music lib.
@@ -28,11 +29,17 @@ class ClientsScreen extends StatelessWidget {
           },
           addItem: vm.registerClient,
           editItem: (ModelBase client) async {
-            var shouldDelete = await showDeleteDialog(context);
-            if (shouldDelete) {
-              vm.editClient(client);
-            }
-            return shouldDelete;
+            var client = await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: EditClientScreen(),
+
+                );
+              },
+            );
+            return true;
           },
           loadData: vm.loadClients,
         );
