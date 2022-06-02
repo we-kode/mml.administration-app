@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/api.dart';
 import 'package:mml_admin/services/router.dart';
@@ -30,8 +31,34 @@ class UserService {
 
   /// Returns a list of users with the amount of [take] that match the given
   /// [filter] starting from the [offset].
-  Future<List<User>> getUsers(String? filter, int? offset, int? take) async {
-    throw UnimplementedError();
+  Future<ModelList> getUsers(String? filter, int? offset, int? take) async {
+    Map<String, dynamic> queryParameters = {};
+
+    if ((filter ?? '').isNotEmpty) {
+      queryParameters['filter'] = filter;
+    }
+
+    if (offset != null) {
+      queryParameters['skip'] = offset;
+    }
+
+    if (take != null) {
+      queryParameters['take'] = take;
+    }
+
+    var response = await _apiService.request(
+      '/identity/user/list',
+      queryParameters: queryParameters,
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return ModelList(
+      List<User>.from(response.data['items'].map((item) => User.fromJson(item))),
+      offset ?? 0,
+      response.data['totalCount'],
+    );
   }
 
   /// Loads the user with the given [id] from the server.
