@@ -50,5 +50,8 @@
   "noData": "Keine Datensätze wurden gefunden!",
   "reload": "Neu laden",
   "areYouSure": "Sind Sie sicher?",
-  "ok": "Ok"
+  "ok": "Ok",
+  "editClient": "Gerätebearbeitung",
+  "displayName": "Name",
+  "invalidDisplayName": "Bitte geben Sie einen Namen an!"
 }

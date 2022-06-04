@@ -1,6 +1,5 @@
 {
   "@@locale": "en",
-
   "appTitle": "My Media Lib Administration",
   "serverName": "Servername (domain:port)",
   "serverNameUnchanged": "Servername (domain:port) (unchanged)",
@@ -43,5 +42,8 @@
   "noData": "No data were found!",
   "reload": "Reload",
   "areYouSure": "Are you sure?",
-  "ok": "Ok"
+  "ok": "Ok",
+  "editClient": "Device editing",
+  "displayName": "Name",
+  "invalidDisplayName": "Please enter your name!"
 }

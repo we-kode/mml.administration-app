@@ -1,7 +1,7 @@
-import 'package:mml_admin/models/client.dart';
-import 'package:mml_admin/models/model_base.dart';
+import 'package:flutter/material.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/clients.dart';
+import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 /// View model for the app clients overview screen.
 class ClientsViewModel {
@@ -9,6 +9,17 @@ class ClientsViewModel {
   static String route = '/clients';
 
   final ClientService _service = ClientService.getInstance();
+
+  /// Locales of the application.
+  late AppLocalizations locales;
+
+  /// Initialize the change password view model.
+  Future<bool> init(BuildContext context) async {
+    return Future<bool>.microtask(() async {
+      locales = AppLocalizations.of(context)!;
+      return true;
+    });
+  }
 
   /// Loads the clients with the passing [filter] starting at [offset] and loading
   /// [take] data.
@@ -28,13 +39,6 @@ class ClientsViewModel {
   /// if the user cancels the operation.
   Future<bool> registerClient() async {
     // TODO: Implement
-    return true;
-  }
-
-  /// Shows a dialog for editing an existing client and updates the client or
-  /// aborts, if the user cancels the operation.
-  Future<bool> editClient(ModelBase client) async {
-    await _service.updateClient(client as Client);
     return true;
   }
 }
