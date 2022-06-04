@@ -8,12 +8,13 @@ class ClientsViewModel {
   /// Route for the app clients overview screen.
   static String route = '/clients';
 
+  /// [ClientService] used to load data for the client overview screen.
   final ClientService _service = ClientService.getInstance();
 
   /// Locales of the application.
   late AppLocalizations locales;
 
-  /// Initialize the change password view model.
+  /// Initialize the clients view model.
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       locales = AppLocalizations.of(context)!;

@@ -4,8 +4,9 @@ import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/api.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 
+/// Service that handles the clients data of the server.
 class ClientService {
-  /// Instance of the user service.
+  /// Instance of the client service.
   static final ClientService _instance = ClientService._();
 
   /// Instance of the [ApiService] to access the server with.
@@ -18,7 +19,7 @@ class ClientService {
   /// Private constructor of the service.
   ClientService._();
 
-  /// Returns the singleton instance of the [UserService].
+  /// Returns the singleton instance of the [ClientService].
   static ClientService getInstance() {
     return _instance;
   }
@@ -38,16 +39,18 @@ class ClientService {
     return ModelList(items, offset ?? 0, response.data["totalCount"]);
   }
 
+  /// Deletes the clients with the given [clientIds] on the server.
   Future<void> deleteClients(clientIds) async {
-   await _apiService.request(
+    await _apiService.request(
       '/identity/client/deleteList',
       data: clientIds,
       options: Options(method: 'POST'),
     );
   }
 
+  /// Updates the given [Client] on the server.
   Future<void> updateClient(Client client) async {
-   await _apiService.request(
+    await _apiService.request(
       '/identity/client',
       data: client.toJson(),
       options: Options(method: 'POST'),

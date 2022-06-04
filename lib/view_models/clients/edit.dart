@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
-import 'package:provider/provider.dart';
 
+/// View model for the edit client screen.
 class EditClientViewModel extends ChangeNotifier {
   final ClientService _service = ClientService.getInstance();
 
@@ -13,9 +13,10 @@ class EditClientViewModel extends ChangeNotifier {
   /// Locales of the application.
   late AppLocalizations locales;
 
+  /// The clientto be edited
   late Client client;
 
-  /// Initialize the change password view model.
+  /// Initialize the edit client view model.
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
@@ -24,8 +25,8 @@ class EditClientViewModel extends ChangeNotifier {
     });
   }
 
-  /// Validates the given [password] and returns an error message or null if
-  /// the password is valid.
+  /// Validates the given [displayName] and returns an error message or null if
+  /// the [displayName] is valid.
   String? validateDisplayName(String? displayName) {
     if ((client.displayName ?? '').isEmpty) {
       return locales.invalidDisplayName;

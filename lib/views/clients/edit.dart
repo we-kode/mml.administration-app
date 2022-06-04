@@ -3,15 +3,18 @@ import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/view_models/clients/edit.dart';
 import 'package:provider/provider.dart';
 
+/// Edit screen of the client of the music lib.
 class EditClientScreen extends StatelessWidget {
   /// Initializes the instance.
   EditClientScreen({Key? key, required this.client}) : super(key: key);
 
+  /// THe vieModel af the screen.
   late EditClientViewModel vm;
 
+  /// client to be edited.
   final Client client;
 
-  /// Builds the clients overview screen.
+  /// Builds the clients editing screen.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EditClientViewModel>(
@@ -49,7 +52,7 @@ class EditClientScreen extends StatelessWidget {
     );
   }
 
-  void save() async{
+  void save() async {
     await vm.editClient();
   }
 }

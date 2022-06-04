@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
+/// Shows a confirmation dialog for deletion
 showDeleteDialog(BuildContext context) async{
   var localization = AppLocalizations.of(context)!;
   var shouldDelete = await showDialog<bool>(
