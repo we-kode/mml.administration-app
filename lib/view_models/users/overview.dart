@@ -7,7 +7,7 @@ class UsersOverviewViewModel extends ChangeNotifier {
   /// Route for the users overview screen.
   static String route = '/users';
 
-  ///
+  /// [UserService] that handles the requests to the server.
   final UserService _userService = UserService.getInstance();
 
   /// Loads the user with the passing [filter] starting at [offset] and loading
