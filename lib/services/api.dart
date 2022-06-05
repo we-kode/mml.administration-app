@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:mml_admin/services/user.dart';
@@ -74,7 +75,7 @@ class ApiService {
         );
 
         options.baseUrl = 'https://$serverName/api/v1.0/';
-        options.headers['Accept-Language'] = Platform.localeName;
+        options.headers['Accept-Language'] = Intl.shortLocale(Platform.localeName);
 
         var accessToken = await _store.get(
           SecureStorageService.accessTokenStorageKey,
