@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/model_list.dart';
-import 'package:mml_admin/models/user.dart';
+import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/services/user.dart';
 
 /// View model for the users overview screen.
-class UsersViewModel extends ChangeNotifier {
+class UsersOverviewViewModel extends ChangeNotifier {
   /// Route for the users overview screen.
   static String route = '/users';
 
