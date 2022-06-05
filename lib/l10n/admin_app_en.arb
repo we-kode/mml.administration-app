@@ -8,6 +8,7 @@
   "login": "Login",
   "username": "Username",
   "password": "Password",
+  "passwordUnchanged": "Password (unchanged)",
   "clientId": "Client-ID",
   "clientIdUnchanged": "Client-ID (unchanged)",
   "appKey": "App-Key",
@@ -40,6 +41,11 @@
   "updatePasswordFailed": "Updating password failed!",
   "actualUser": "Actual user",
   "changePassword": "Change Password",
-  "noData": "No data were found!",
-  "reload": "Reload"
+  "noData": "No records were found!",
+  "reload": "Reload",
+  "deleteConfirmation": "Are you really want to delete the selected records?",
+  "yes": "Yes",
+  "createUser": "Create admin",
+  "editUser": "Edit admin",
+  "notFound": "The requested record wasn't found!"
 }

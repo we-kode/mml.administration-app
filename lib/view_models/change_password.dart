@@ -179,6 +179,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
         formKey.currentState!.validate();
       });
     } catch (e) {
+      RouterService.getInstance().navigatorKey.currentState!.pop();
       // other errors will be handled by api service or else
     }
   }

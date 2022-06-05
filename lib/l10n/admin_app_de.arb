@@ -8,6 +8,7 @@
   "login": "Anmelden",
   "username": "Benutzername",
   "password": "Passwort",
+  "passwordUnchanged": "Passwort (unverändert)",
   "clientId": "Client-ID",
   "clientIdUnchanged": "Client-ID (unverändert)",
   "appKey": "App-Schlüssel",
@@ -48,5 +49,10 @@
   "actualUser": "Aktueller Benutzer",
   "changePassword": "Passwort ändern",
   "noData": "Keine Datensätze wurden gefunden!",
-  "reload": "Neu laden"
+  "reload": "Neu laden",
+  "deleteConfirmation": "Möchten Sie tatsächlich die gewählten Datensätze löschen?",
+  "yes": "Ja",
+  "createUser": "Admin hinzufügen",
+  "editUser": "Admin bearbeiten",
+  "notFound": "Der aufgerufene Datensatz wurde nicht gefunden!"
 }
