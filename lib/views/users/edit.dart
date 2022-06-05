@@ -28,7 +28,12 @@ class UsersEditDialog extends StatelessWidget {
             future: vm.init(context, userId),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    CircularProgressIndicator(),
+                  ],
+                );
               }
 
               return snapshot.data!
@@ -47,6 +52,7 @@ class UsersEditDialog extends StatelessWidget {
       key: vm.formKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
             initialValue: vm.user.name,
@@ -56,32 +62,36 @@ class UsersEditDialog extends StatelessWidget {
             ),
             onSaved: (String? name) {
               vm.clearBackendErrors('Name');
-              vm.user.name = name!;
+              vm.user.name = name;
             },
-            onChanged: (String? password) {
+            onChanged: (String? name) {
               vm.clearBackendErrors('Name');
-              vm.user.password = password!;
+              vm.user.name = name;
             },
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: vm.validateUsername,
           ),
           verticalSpacer,
-          TextFormField(
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: vm.passwordLabel,
-              errorMaxLines: 5,
-            ),
-            onSaved: (String? password) {
-              vm.clearBackendErrors('Password');
-              vm.user.password = password!;
+          Consumer<UsersEditDialogViewModel>(
+            builder: (context, value, child) {
+              return TextFormField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: vm.passwordLabel,
+                  errorMaxLines: 5,
+                ),
+                onSaved: (String? password) {
+                  vm.clearBackendErrors('Password');
+                  vm.password = password;
+                },
+                onChanged: (String? password) {
+                  vm.clearBackendErrors('Password');
+                  vm.password = password;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: vm.validatePassword,
+              );
             },
-            onChanged: (String? password) {
-              vm.clearBackendErrors('Password');
-              vm.user.password = password!;
-            },
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: vm.validatePassword,
           ),
         ],
       ),

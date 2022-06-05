@@ -37,14 +37,18 @@ class UsersEditDialogViewModel extends ChangeNotifier {
     _context = context;
 
     if (userId == null) {
-      user = User();
-      userLoadedSuccessfully = true;
-      return true;
+      return Future.microtask(() {
+        user = User();
+        userLoadedSuccessfully = true;
+        notifyListeners();
+        return true;
+      });
     }
 
     try {
       user = await _userService.getUser(userId);
       userLoadedSuccessfully = true;
+      notifyListeners();
     } catch (e) {
       if (e is DioError && e.response?.statusCode == HttpStatus.notFound) {
         var messenger = MessengerService.getInstance();
@@ -84,8 +88,13 @@ class UsersEditDialogViewModel extends ChangeNotifier {
     return _addBackendErrors('Password', error);
   }
 
+  set password(String? password) {
+    user.password = password;
+  }
+
   clearBackendErrors(String fieldName) {
     errors.remove(fieldName);
+    notifyListeners();
   }
 
   ///

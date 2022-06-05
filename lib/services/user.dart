@@ -101,7 +101,7 @@ class UserService {
     user.password = (user.password ?? '').isNotEmpty ? user.password : null;
 
     await _apiService.request(
-      '/identity/user',
+      '/identity/user${user.id == null ? '' : '/${user.id}'}',
       data: user.toJson(),
       options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
