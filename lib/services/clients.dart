@@ -28,14 +28,16 @@ class ClientService {
       options: Options(method: 'GET'),
     );
 
-    var items = (response.data["items"] as List<dynamic>)
-        .map((item) => Client.fromJson(item))
-        .toList();
-    return ModelList(items, offset ?? 0, response.data["totalCount"]);
+    return ModelList(
+        List<Client>.from(
+          response.data['items'].map((item) => Client.fromJson(item)),
+        ),
+        offset ?? 0,
+        response.data["totalCount"]);
   }
 
   /// Deletes the clients with the given [clientIds] on the server.
-  Future<void> deleteClients(clientIds) async {
+  Future<void> deleteClients<String>(List<String> clientIds) async {
     await _apiService.request(
       '/identity/client/deleteList',
       data: clientIds,
@@ -50,5 +52,19 @@ class ClientService {
       data: client.toJson(),
       options: Options(method: 'POST'),
     );
+  }
+
+  /// Loads the client with the given [id] from the server.
+  ///
+  /// Returns the [Client] instance or null if the client was not found.
+  Future<Client> getClient(String id) async {
+    var response = await _apiService.request(
+      '/identity/client/$id',
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return Client.fromJson(response.data);
   }
 }

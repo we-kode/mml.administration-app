@@ -31,37 +31,19 @@ class ClientsScreen extends StatelessWidget {
               deleteItems: <String>(List<String> clientIds) async {
                 var shouldDelete = await showDeleteDialog(context);
                 if (shouldDelete) {
-                  vm.deleteClients(clientIds);
+                  vm.deleteClients<String>(clientIds);
                 }
                 return shouldDelete;
               },
               addItem: vm.registerClient,
-              editItem: (ModelBase c) async {
-               var edited = await showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (BuildContext context) {
-                    var editScreen = EditClientScreen(client: c as Client);
-                    return AlertDialog(
-                      title: Text(vm.locales.editClient),
-                      content: editScreen,
-                      actions: [
-                        TextButton(
-                          child: Text(vm.locales.cancel),
-                          onPressed: () {
-                            Navigator.pop(context, false);
-                          },
-                        ),
-                        TextButton(
-                          child: Text(vm.locales.save),
-                          onPressed: () {
-                            editScreen.save();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
+              editItem: (ModelBase client) async {
+                var edited = await showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ClientEditDialog(
+                          clientId: (client as Client).clientId);
+                    });
                 return edited;
               },
               loadData: vm.loadClients,

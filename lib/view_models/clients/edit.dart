@@ -1,13 +1,23 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/services/messenger.dart';
+import 'package:mml_admin/services/router.dart';
 
 /// View model for the edit client screen.
-class EditClientViewModel extends ChangeNotifier {
-
-   /// [ClientService] used to load data for the client editing screen.
+class ClientsEditViewModel extends ChangeNotifier {
+  /// [ClientService] used to load data for the client editing screen.
   final ClientService _service = ClientService.getInstance();
+
+  /// Key of the user edit form.
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  /// Name of display name field in the errors response.
+  final String displayNameField = 'DisplayName';
 
   /// Current build context.
   late BuildContext _context;
@@ -18,38 +28,98 @@ class EditClientViewModel extends ChangeNotifier {
   /// The clientto be edited
   late Client client;
 
+  /// Flag that indicates whether the client is successful loaded.
+  bool clientLoadedSuccessfully = false;
+
+  /// Map of errors from the server.
+  Map<String, List<String>> errors = {};
+
   /// Initialize the edit client view model.
-  Future<bool> init(BuildContext context) async {
-    return Future<bool>.microtask(() async {
-      _context = context;
-      locales = AppLocalizations.of(context)!;
+  Future<bool> init(BuildContext context, String? clientId) async {
+    _context = context;
+    locales = AppLocalizations.of(context)!;
+    try {
+      client = await _service.getClient(clientId!);
+      clientLoadedSuccessfully = true;
+      notifyListeners();
       return true;
-    });
+    } catch (e) {
+      if (e is DioError && e.response?.statusCode == HttpStatus.notFound) {
+        var messenger = MessengerService.getInstance();
+
+        messenger.showMessage(messenger.notFound);
+      }
+
+      Navigator.pop(context, true);
+      return false;
+    }
   }
 
   /// Validates the given [displayName] and returns an error message or null if
   /// the [displayName] is valid.
   String? validateDisplayName(String? displayName) {
-    if ((client.displayName ?? '').isEmpty) {
-      return locales.invalidDisplayName;
-    }
-
-    return null;
+    var error = (client.displayName ?? '').isNotEmpty
+        ? null
+        : locales.invalidDisplayName;
+    return _addBackendErrors(displayNameField, error);
   }
 
-  /// Shows a dialog for editing an existing client and updates the client or
-  /// aborts, if the user cancels the operation.
-  Future<void> editClient() async {
-    if (client.getDisplayDescription().isEmpty) {
+  /// Sets the passed [displayNmae] to the client.
+  set password(String? name) {
+    client.displayName = name;
+    notifyListeners();
+  }
+
+  /// Clears the errors from the backend for the field with the passed
+  /// [fieldName].
+  clearBackendErrors(String fieldName) {
+    errors.remove(fieldName);
+  }
+
+  /// Updates the client or aborts, if the user cancels the operation.
+  void saveClient() async {
+    var nav = Navigator.of(_context);
+
+    if (!clientLoadedSuccessfully || !formKey.currentState!.validate()) {
+      RouterService.getInstance().navigatorKey.currentState!.pop();
       return;
     }
 
-    var nav = Navigator.of(_context);
+    formKey.currentState!.save();
+
+    var shouldClose = false;
+
     try {
       await _service.updateClient(client);
-      nav.pop();
-    } catch (e) {
-      // Will be handled by api service
+      shouldClose = true;
+    } on DioError catch (e) {
+      var statusCode = e.response?.statusCode;
+
+      if (statusCode == HttpStatus.notFound) {
+        var messenger = MessengerService.getInstance();
+        messenger.showMessage(messenger.notFound);
+      } else if (statusCode == HttpStatus.badRequest) {
+        errors = ((e.response!.data as Map)['errors'] as Map).map((key, value) {
+          return MapEntry(key.toString(), List<String>.from(value));
+        });
+
+        formKey.currentState!.validate();
+      }
+    } finally {
+      if (shouldClose) {
+        nav.pop(true);
+      }
     }
+  }
+
+  /// Adds errors from backend for passed [fieldName] to the [error] string
+  /// divided by new lines and returns the extended error string.
+  String? _addBackendErrors(String fieldName, String? error) {
+    if (errors.containsKey(fieldName) && errors[fieldName]!.isNotEmpty) {
+      error = (error != null ? '$error\n' : '');
+      error += errors[fieldName]!.join("\n");
+    }
+
+    return error;
   }
 }

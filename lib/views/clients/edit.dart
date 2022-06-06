@@ -1,58 +1,104 @@
 import 'package:flutter/material.dart';
-import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/view_models/clients/edit.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 /// Edit screen of the client of the music lib.
-class EditClientScreen extends StatelessWidget {
+class ClientEditDialog extends StatelessWidget {
+  /// Id of the client to be edited.
+  final String? clientId;
+
   /// Initializes the instance.
-  EditClientScreen({Key? key, required this.client}) : super(key: key);
-
-  /// THe vieModel af the screen.
-  late EditClientViewModel vm;
-
-  /// client to be edited.
-  final Client client;
+  const ClientEditDialog({Key? key, required this.clientId}) : super(key: key);
 
   /// Builds the clients editing screen.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<EditClientViewModel>(
-      create: (context) => EditClientViewModel(),
+    return ChangeNotifierProvider<ClientsEditViewModel>(
+      create: (context) => ClientsEditViewModel(),
       builder: (context, _) {
-        vm = Provider.of<EditClientViewModel>(context, listen: false);
-        vm.client = client;
+        var vm = Provider.of<ClientsEditViewModel>(context, listen: false);
+        var locales = AppLocalizations.of(context)!;
 
-        return FutureBuilder(
-          future: vm.init(context),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        return AlertDialog(
+          title: Text(locales.editClient),
+          content: FutureBuilder(
+            future: vm.init(context, clientId),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if (!snapshot.hasData) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    CircularProgressIndicator(),
+                  ],
+                );
+              }
 
-            return Form(
-              child: TextFormField(
-                initialValue: vm.client.displayName,
-                decoration: InputDecoration(
-                  labelText: vm.locales.displayName,
-                ),
-                onSaved: (String? displayName) {
-                  vm.client.displayName = displayName!;
-                },
-                onChanged: (String? displayName) {
-                  vm.client.displayName = displayName;
-                },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: vm.validateDisplayName,
-              ),
-            );
-          },
+              return snapshot.data!
+                  ? _createEditForm(context, vm)
+                  : Container();
+            },
+          ),
+          actions: _createActions(context, vm),
         );
       },
     );
   }
 
-  void save() async {
-    await vm.editClient();
+  /// Creates the edit form that should be shown in the dialog.
+  Widget _createEditForm(BuildContext context, ClientsEditViewModel vm) {
+    return Form(
+      key: vm.formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextFormField(
+            initialValue: vm.client.displayName,
+            decoration: InputDecoration(
+              labelText: vm.locales.displayName,
+              errorMaxLines: 5,
+            ),
+            onSaved: (String? displayName) {
+              vm.clearBackendErrors(vm.displayNameField);
+              vm.client.displayName = displayName!;
+            },
+            onChanged: (String? displayName) {
+              vm.clearBackendErrors(vm.displayNameField);
+              vm.client.displayName = displayName;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: vm.validateDisplayName,
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Creates a list of action widgets that should be shown at the bottom of the
+  /// edit dialog.
+  _createActions(BuildContext context, ClientsEditViewModel vm) {
+    var locales = AppLocalizations.of(context)!;
+
+    return [
+      Consumer<ClientsEditViewModel>(
+        builder: (context, value, child) {
+          return TextButton(
+            onPressed: value.clientLoadedSuccessfully
+                ? () => Navigator.pop(context, false)
+                : null,
+            child: Text(locales.cancel),
+          );
+        },
+      ),
+      Consumer<ClientsEditViewModel>(
+        builder: (context, value, child) {
+          return TextButton(
+            onPressed: value.clientLoadedSuccessfully ? vm.saveClient : null,
+            child: Text(locales.save),
+          );
+        },
+      ),
+    ];
   }
 }
