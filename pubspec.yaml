@@ -42,6 +42,7 @@ dependencies:
   dio: ^4.0.6
   json_annotation: ^4.5.0
   shimmer: ^2.0.0
+  window_manager: ^0.2.5
 
 dev_dependencies:
   flutter_test:
