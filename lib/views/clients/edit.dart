@@ -77,7 +77,7 @@ class ClientEditDialog extends StatelessWidget {
 
   /// Creates a list of action widgets that should be shown at the bottom of the
   /// edit dialog.
-  _createActions(BuildContext context, ClientsEditViewModel vm) {
+  List<Widget> _createActions(BuildContext context, ClientsEditViewModel vm) {
     var locales = AppLocalizations.of(context)!;
 
     return [
