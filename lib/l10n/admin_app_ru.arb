@@ -42,8 +42,6 @@
   "changePassword": "Сменить пароль",
   "noData": "Никаких записей найдено не было!",
   "reload": "Перезагрузить",
-  "areYouSure": "Вы уверены?",
-  "ok": "Ок",
   "editClient": "Переименовать устройства",
   "displayName": "Имя",
   "invalidDisplayName": "Пожалуйста введите имя!",

@@ -41,8 +41,6 @@
   "actualUser": "Actual user",
   "changePassword": "Change Password",
   "reload": "Reload",
-  "areYouSure": "Are you sure?",
-  "ok": "Ok",
   "editClient": "Edit device",
   "displayName": "Name",
   "invalidDisplayName": "Please enter your name!",
