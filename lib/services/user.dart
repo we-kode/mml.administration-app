@@ -32,23 +32,13 @@ class UserService {
   /// Returns a list of users with the amount of [take] that match the given
   /// [filter] starting from the [offset].
   Future<ModelList> getUsers(String? filter, int? offset, int? take) async {
-    Map<String, dynamic> queryParameters = {};
-
-    if ((filter ?? '').isNotEmpty) {
-      queryParameters['filter'] = filter;
-    }
-
-    if (offset != null) {
-      queryParameters['skip'] = offset;
-    }
-
-    if (take != null) {
-      queryParameters['take'] = take;
-    }
-
     var response = await _apiService.request(
       '/identity/user/list',
-      queryParameters: queryParameters,
+      queryParameters: {
+        'filter': filter,
+        'skip': offset,
+        'take': take,
+      },
       options: Options(
         method: 'GET',
       ),

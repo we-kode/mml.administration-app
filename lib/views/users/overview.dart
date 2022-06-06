@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
-import 'package:mml_admin/components/delete_dialog.dart';
-import 'package:mml_admin/components/progress_indicator.dart';
-import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/view_models/users/overview.dart';
 import 'package:mml_admin/views/users/edit.dart';
 import 'package:mml_admin/models/model_base.dart';
@@ -23,18 +20,10 @@ class UsersOverviewScreen extends StatelessWidget {
         var vm = Provider.of<UsersOverviewViewModel>(context, listen: false);
 
         return AsyncListView(
-          deleteItems: <int>(List<int> userIds) async {
-            var shouldDelete = await showDeleteDialog(context);
-
-            if (shouldDelete) {
-              showProgressIndicator();
-              var result = await vm.deleteUsers(userIds);
-              RouterService.getInstance().navigatorKey.currentState!.pop();
-              return result;
-            }
-
-            return shouldDelete;
-          },
+          deleteItems: <int>(List<int> userIds) => vm.deleteUsers(
+            context,
+            userIds,
+          ),
           addItem: () async {
             return await showDialog(
               barrierDismissible: false,
