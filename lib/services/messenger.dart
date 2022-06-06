@@ -17,6 +17,11 @@ class MessengerService {
     return _instance;
   }
 
+  /// Translated string for a message if a record is not found.
+  String get notFound {
+    return AppLocalizations.of(snackbarKey.currentContext!)!.notFound;
+  }
+
   /// Shows the given [text] in the app snackbar.
   showMessage(String text) {
     final SnackBar snackBar = SnackBar(content: Text(text));

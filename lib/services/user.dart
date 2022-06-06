@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/api.dart';
 import 'package:mml_admin/services/router.dart';
@@ -30,31 +31,67 @@ class UserService {
 
   /// Returns a list of users with the amount of [take] that match the given
   /// [filter] starting from the [offset].
-  Future<List<User>> getUsers(String? filter, int? offset, int? take) async {
-    throw UnimplementedError();
+  Future<ModelList> getUsers(String? filter, int? offset, int? take) async {
+    var response = await _apiService.request(
+      '/identity/user/list',
+      queryParameters: {
+        'filter': filter,
+        'skip': offset,
+        'take': take,
+      },
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return ModelList(
+      List<User>.from(
+        response.data['items'].map((item) => User.fromJson(item)),
+      ),
+      offset ?? 0,
+      response.data['totalCount'],
+    );
   }
 
   /// Loads the user with the given [id] from the server.
   ///
   /// Returns the [User] instance or null if the user was not found.
-  Future<User?> getUser(int id) async {
-    throw UnimplementedError();
+  Future<User> getUser(int id) async {
+    var response = await _apiService.request(
+      '/identity/user/$id',
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return User.fromJson(response.data);
   }
 
-  /// Deletes the user with the given [id] on the server.
-  Future<void> deleteUser(int id) async {
-    throw UnimplementedError();
+  /// Deletes the users with the given [userIds] on the server.
+  Future<void> deleteUsers<int>(List<int> userIds) async {
+    await _apiService.request(
+      '/identity/user/deleteList',
+      data: userIds,
+      options: Options(method: 'POST'),
+    );
   }
 
   /// Creates the given [User] on the server.
   Future<void> createUser(User user) async {
-    throw UnimplementedError();
+    await _apiService.request(
+      '/identity/user/create',
+      data: user.toJson(),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
+    );
   }
 
   /// Updates the given [User] on the server.
   Future<void> updateUser(User user) async {
+    // Sent null for empty password to prevent change!
+    user.password = (user.password ?? '').isNotEmpty ? user.password : null;
+
     await _apiService.request(
-      '/identity/user',
+      '/identity/user${user.id == null ? '' : '/${user.id}'}',
       data: user.toJson(),
       options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );

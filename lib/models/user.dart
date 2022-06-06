@@ -10,7 +10,7 @@ class User extends ModelBase {
   final int? id;
 
   /// Name of the user.
-  final String? name;
+  String? name;
 
   /// Bool that indicates, whether the user is confirmed or not.
   ///
@@ -20,17 +20,17 @@ class User extends ModelBase {
   /// Password of the user.
   ///
   /// Only to be set if a new user gets created.
-  final String? password;
+  String? password;
 
   /// Current password of the user.
   ///
   /// Only to be set if the users password should be changed.
-  final String? oldPassword;
+  String? oldPassword;
 
   /// New password of the user.
   ///
   /// Only to be set if the users password should be changed.
-  final String? newPassword;
+  String? newPassword;
 
   /// Creates a new user instance with the given values.
   User({
