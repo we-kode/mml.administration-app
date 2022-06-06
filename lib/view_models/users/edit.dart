@@ -135,6 +135,7 @@ class UsersEditDialogViewModel extends ChangeNotifier {
       if (statusCode == HttpStatus.notFound) {
         var messenger = MessengerService.getInstance();
         messenger.showMessage(messenger.notFound);
+        shouldClose = true;
       } else if (statusCode == HttpStatus.badRequest) {
         errors = ((e.response!.data as Map)['errors'] as Map).map((key, value) {
           return MapEntry(key.toString(), List<String>.from(value));
