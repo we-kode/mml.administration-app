@@ -28,12 +28,12 @@ class ClientsScreen extends StatelessWidget {
           addItem: vm.registerClient,
           editItem: (ModelBase client) async {
             var edited = await showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (BuildContext context) {
-                  return ClientEditDialog(
-                      clientId: (client as Client).clientId);
-                });
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return ClientEditDialog(clientId: (client as Client).clientId);
+              },
+            );
             return edited;
           },
           loadData: vm.loadClients,

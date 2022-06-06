@@ -35,6 +35,7 @@ class ClientsViewModel {
         await _service.deleteClients(clientIds);
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
+        RouterService.getInstance().navigatorKey.currentState!.pop();
         // Do not reload list on error!
         return false;
       }

@@ -30,6 +30,7 @@ class UsersOverviewViewModel extends ChangeNotifier {
         await _userService.deleteUsers(userIds);
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
+        RouterService.getInstance().navigatorKey.currentState!.pop();
         // Do not reload list on error!
         return false;
       }
