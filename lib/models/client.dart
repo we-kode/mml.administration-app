@@ -28,7 +28,7 @@ class Client extends ModelBase {
   }
 
   @override
-  getIdentifier() {
+  dynamic getIdentifier() {
     return clientId;
   }
 }
