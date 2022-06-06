@@ -5,6 +5,8 @@ import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 /// View model for the edit client screen.
 class EditClientViewModel extends ChangeNotifier {
+
+   /// [ClientService] used to load data for the client editing screen.
   final ClientService _service = ClientService.getInstance();
 
   /// Current build context.

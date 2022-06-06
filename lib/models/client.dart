@@ -3,7 +3,7 @@ import 'package:mml_admin/models/model_base.dart';
 
 part 'client.g.dart';
 
-/// Client model that holds all information of an client.
+/// Client model that holds all information of a client.
 @JsonSerializable(includeIfNull: false)
 class Client extends ModelBase {
   /// Id of the client.

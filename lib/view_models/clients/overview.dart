@@ -24,9 +24,12 @@ class ClientsViewModel {
 
   /// Loads the clients with the passing [filter] starting at [offset] and loading
   /// [take] data.
-  Future<ModelList> loadClients(
-      {String? filter, int? offset, int? take}) async {
-    return _service.getClients(filter, offset, take);
+  Future<ModelList> loadClients({
+    String? filter,
+    int? offset,
+    int? take,
+  }) async {
+    return await _service.getClients(filter, offset, take);
   }
 
   /// Deletes the clients with the passed [clientIds] or or aborts, if the user

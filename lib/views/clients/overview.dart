@@ -37,7 +37,7 @@ class ClientsScreen extends StatelessWidget {
               },
               addItem: vm.registerClient,
               editItem: (ModelBase c) async {
-                await showDialog(
+               var edited = await showDialog(
                   barrierDismissible: false,
                   context: context,
                   builder: (BuildContext context) {
@@ -49,7 +49,7 @@ class ClientsScreen extends StatelessWidget {
                         TextButton(
                           child: Text(vm.locales.cancel),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.pop(context, false);
                           },
                         ),
                         TextButton(
@@ -62,7 +62,7 @@ class ClientsScreen extends StatelessWidget {
                     );
                   },
                 );
-                return true;
+                return edited;
               },
               loadData: vm.loadClients,
             );

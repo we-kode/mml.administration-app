@@ -43,7 +43,7 @@
   "reload": "Reload",
   "areYouSure": "Are you sure?",
   "ok": "Ok",
-  "editClient": "Device editing",
+  "editClient": "Edit device",
   "displayName": "Name",
   "invalidDisplayName": "Please enter your name!"
 }

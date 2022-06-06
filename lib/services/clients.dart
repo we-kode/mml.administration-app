@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/api.dart';
-import 'package:mml_admin/services/secure_storage.dart';
 
 /// Service that handles the clients data of the server.
 class ClientService {
@@ -11,10 +10,6 @@ class ClientService {
 
   /// Instance of the [ApiService] to access the server with.
   final ApiService _apiService = ApiService.getInstance();
-
-  /// Instance of the [SecureStorageService] to handle data in the secure
-  /// storage.
-  final SecureStorageService _storage = SecureStorageService.getInstance();
 
   /// Private constructor of the service.
   ClientService._();
