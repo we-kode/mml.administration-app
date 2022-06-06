@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -80,6 +81,8 @@ class ClientsEditViewModel extends ChangeNotifier {
   void saveClient() async {
     var nav = Navigator.of(_context);
 
+    showProgressIndicator();
+
     if (!clientLoadedSuccessfully || !formKey.currentState!.validate()) {
       RouterService.getInstance().navigatorKey.currentState!.pop();
       return;
@@ -106,6 +109,8 @@ class ClientsEditViewModel extends ChangeNotifier {
         formKey.currentState!.validate();
       }
     } finally {
+      RouterService.getInstance().navigatorKey.currentState!.pop();
+
       if (shouldClose) {
         nav.pop(true);
       }
