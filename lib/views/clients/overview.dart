@@ -20,35 +20,23 @@ class ClientsScreen extends StatelessWidget {
       builder: (context, _) {
         var vm = Provider.of<ClientsViewModel>(context, listen: false);
 
-        return FutureBuilder(
-          future: vm.init(context),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            return AsyncListView(
-              deleteItems: <String>(List<String> clientIds) async {
-                var shouldDelete = await showDeleteDialog(context);
-                if (shouldDelete) {
-                  vm.deleteClients<String>(clientIds);
-                }
-                return shouldDelete;
-              },
-              addItem: vm.registerClient,
-              editItem: (ModelBase client) async {
-                var edited = await showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ClientEditDialog(
-                          clientId: (client as Client).clientId);
-                    });
-                return edited;
-              },
-              loadData: vm.loadClients,
-            );
+        return AsyncListView(
+          deleteItems: <String>(List<String> clientIds) => vm.deleteClients(
+            clientIds,
+            context,
+          ),
+          addItem: vm.registerClient,
+          editItem: (ModelBase client) async {
+            var edited = await showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) {
+                  return ClientEditDialog(
+                      clientId: (client as Client).clientId);
+                });
+            return edited;
           },
+          loadData: vm.loadClients,
         );
       },
     );

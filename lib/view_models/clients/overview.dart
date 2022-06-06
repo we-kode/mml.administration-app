@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/delete_dialog.dart';
+import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/services/router.dart';
 
 /// View model for the app clients overview screen.
 class ClientsViewModel {
@@ -10,17 +13,6 @@ class ClientsViewModel {
 
   /// [ClientService] used to load data for the client overview screen.
   final ClientService _service = ClientService.getInstance();
-
-  /// Locales of the application.
-  late AppLocalizations locales;
-
-  /// Initialize the clients view model.
-  Future<bool> init(BuildContext context) async {
-    return Future<bool>.microtask(() async {
-      locales = AppLocalizations.of(context)!;
-      return true;
-    });
-  }
 
   /// Loads the clients with the passing [filter] starting at [offset] and loading
   /// [take] data.
@@ -34,9 +26,21 @@ class ClientsViewModel {
 
   /// Deletes the clients with the passed [clientIds] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> deleteClients<String>(List<String> clientIds) async {
-    await _service.deleteClients(clientIds);
-    return true;
+  Future<bool> deleteClients<String>(List<String> clientIds, BuildContext context) async {
+    var shouldDelete = await showDeleteDialog(context);
+
+    if (shouldDelete) {
+      try {
+        showProgressIndicator();
+        await _service.deleteClients(clientIds);
+        RouterService.getInstance().navigatorKey.currentState!.pop();
+      } catch (e) {
+        // Do not reload list on error!
+        return false;
+      }
+    }
+
+    return shouldDelete;
   }
 
   /// Shows a dialog for register a new client and creates the client or aborts,
