@@ -1,6 +1,5 @@
 {
   "@@locale": "en",
-
   "appTitle": "My Media Lib Administration",
   "serverName": "Servername (domain:port)",
   "serverNameUnchanged": "Servername (domain:port) (unchanged)",
@@ -41,8 +40,11 @@
   "updatePasswordFailed": "Updating password failed!",
   "actualUser": "Actual user",
   "changePassword": "Change Password",
-  "noData": "No records were found!",
   "reload": "Reload",
+  "editClient": "Edit device",
+  "displayName": "Name",
+  "invalidDisplayName": "Please enter your name!",
+  "noData": "No records were found!",
   "deleteConfirmation": "Are you really want to delete the selected records?",
   "yes": "Yes",
   "createUser": "Create admin",
