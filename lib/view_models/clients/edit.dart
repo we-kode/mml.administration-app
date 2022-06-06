@@ -65,8 +65,8 @@ class ClientsEditViewModel extends ChangeNotifier {
     return _addBackendErrors(displayNameField, error);
   }
 
-  /// Sets the passed [displayNmae] to the client.
-  set password(String? name) {
+  /// Sets the passed [displayName] to the client.
+  set displayName(String? name) {
     client.displayName = name;
     notifyListeners();
   }
