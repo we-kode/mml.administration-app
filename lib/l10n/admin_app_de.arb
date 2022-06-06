@@ -8,6 +8,7 @@
   "login": "Anmelden",
   "username": "Benutzername",
   "password": "Passwort",
+  "passwordUnchanged": "Passwort (unverändert)",
   "clientId": "Client-ID",
   "clientIdUnchanged": "Client-ID (unverändert)",
   "appKey": "App-Schlüssel",
@@ -49,9 +50,12 @@
   "changePassword": "Passwort ändern",
   "noData": "Keine Datensätze wurden gefunden!",
   "reload": "Neu laden",
-  "areYouSure": "Sind Sie sicher?",
-  "ok": "Ok",
   "editClient": "Gerät bearbeiten",
   "displayName": "Name",
-  "invalidDisplayName": "Bitte geben Sie einen Namen an!"
+  "invalidDisplayName": "Bitte geben Sie einen Namen an!",
+  "deleteConfirmation": "Möchten Sie tatsächlich die gewählten Datensätze löschen?",
+  "yes": "Ja",
+  "createUser": "Admin hinzufügen",
+  "editUser": "Admin bearbeiten",
+  "notFound": "Der aufgerufene Datensatz wurde nicht gefunden!"
 }

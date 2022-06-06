@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
-/// Shows a confirmation dialog for deletion
+/// Shows a confirmation dialog for deletion.
 showDeleteDialog(BuildContext context) async{
   var localization = AppLocalizations.of(context)!;
   var shouldDelete = await showDialog<bool>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
       title: Text(localization.remove),
-      content: Text(localization.areYouSure),
+      content: Text(localization.deleteConfirmation),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, false),
@@ -16,7 +16,7 @@ showDeleteDialog(BuildContext context) async{
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
-          child: Text(localization.ok),
+          child: Text(localization.yes),
         ),
       ],
     ),

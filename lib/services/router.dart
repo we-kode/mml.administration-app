@@ -4,7 +4,7 @@ import 'package:mml_admin/view_models/clients/overview.dart';
 import 'package:mml_admin/view_models/login.dart';
 import 'package:mml_admin/view_models/records.dart';
 import 'package:mml_admin/view_models/settings.dart';
-import 'package:mml_admin/view_models/users.dart';
+import 'package:mml_admin/view_models/users/overview.dart';
 import 'package:mml_admin/views/change_password.dart';
 import 'package:mml_admin/views/clients/overview.dart';
 import 'package:mml_admin/views/login.dart';
@@ -12,7 +12,7 @@ import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/views/main.dart';
 import 'package:mml_admin/views/records.dart';
 import 'package:mml_admin/views/settings.dart';
-import 'package:mml_admin/views/users.dart';
+import 'package:mml_admin/views/users/overview.dart';
 
 /// Service that holds all routing information of the navigators of the app.
 class RouterService {
@@ -55,12 +55,14 @@ class RouterService {
         pageBuilder: (context, animation1, animation2) => const ClientsScreen(),
         transitionDuration: const Duration(seconds: 0),
       ),
-      UsersViewModel.route: PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => const UsersScreen(),
+      UsersOverviewViewModel.route: PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            const UsersOverviewScreen(),
         transitionDuration: const Duration(seconds: 0),
       ),
       SettingsViewModel.route: PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => const SettingsScreen(),
+        pageBuilder: (context, animation1, animation2) =>
+            const SettingsScreen(),
         transitionDuration: const Duration(seconds: 0),
       ),
     };
