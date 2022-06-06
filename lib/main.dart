@@ -19,8 +19,8 @@ void main() async {
   var appLocales = await AppLocalizations.delegate.load(locale);
 
   WindowOptions windowOptions = WindowOptions(
-    size: const Size(1600, 1000),
-    minimumSize: const Size(1600, 1000),
+    size: const Size(1600, 900),
+    minimumSize: const Size(1600, 900),
     center: true,
     title: appLocales.appTitle,
   );
