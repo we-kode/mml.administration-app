@@ -53,7 +53,7 @@ class ClientsScreen extends StatelessWidget {
                           },
                         ),
                         TextButton(
-                          child: Text(vm.locales.ok),
+                          child: Text(vm.locales.save),
                           onPressed: () {
                             editScreen.save();
                           },
