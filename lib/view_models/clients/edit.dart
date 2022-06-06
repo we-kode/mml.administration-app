@@ -65,12 +65,6 @@ class ClientsEditViewModel extends ChangeNotifier {
     return _addBackendErrors(displayNameField, error);
   }
 
-  /// Sets the passed [displayName] to the client.
-  set displayName(String? name) {
-    client.displayName = name;
-    notifyListeners();
-  }
-
   /// Clears the errors from the backend for the field with the passed
   /// [fieldName].
   clearBackendErrors(String fieldName) {
