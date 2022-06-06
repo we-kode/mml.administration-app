@@ -25,15 +25,18 @@ class ClientService {
     var response = await _apiService.request(
       '/identity/client/list',
       queryParameters: {"filter": filter, "skip": offset, "take": take},
-      options: Options(method: 'GET'),
+      options: Options(
+        method: 'GET',
+      ),
     );
 
     return ModelList(
-        List<Client>.from(
-          response.data['items'].map((item) => Client.fromJson(item)),
-        ),
-        offset ?? 0,
-        response.data["totalCount"]);
+      List<Client>.from(
+        response.data['items'].map((item) => Client.fromJson(item)),
+      ),
+      offset ?? 0,
+      response.data["totalCount"],
+    );
   }
 
   /// Deletes the clients with the given [clientIds] on the server.
@@ -41,7 +44,9 @@ class ClientService {
     await _apiService.request(
       '/identity/client/deleteList',
       data: clientIds,
-      options: Options(method: 'POST'),
+      options: Options(
+        method: 'POST',
+      ),
     );
   }
 
@@ -50,7 +55,9 @@ class ClientService {
     await _apiService.request(
       '/identity/client',
       data: client.toJson(),
-      options: Options(method: 'POST'),
+      options: Options(
+        method: 'POST',
+      ),
     );
   }
 
