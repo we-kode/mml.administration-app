@@ -13,7 +13,7 @@ class Client extends ModelBase {
   String? displayName;
 
   /// Creates a new client instance with the given values.
-  Client({this.clientId, this.displayName, bool isDeletable = true})
+  Client({required this.clientId, this.displayName, bool isDeletable = true})
       : super(isDeletable: isDeletable);
 
   /// Converts a json object/map to the client model.

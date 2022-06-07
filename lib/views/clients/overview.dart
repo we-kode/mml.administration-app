@@ -5,6 +5,7 @@ import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/view_models/clients/overview.dart';
 import 'package:mml_admin/views/clients/edit.dart';
+import 'package:mml_admin/views/clients/register.dart';
 import 'package:provider/provider.dart';
 
 /// Overview screen of the app clients of the music lib.
@@ -25,16 +26,23 @@ class ClientsScreen extends StatelessWidget {
             clientIds,
             context,
           ),
-          addItem: vm.registerClient,
+          addItem: () async {
+            return await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return const ClientRegisterDialog();
+              },
+            );
+          },
           editItem: (ModelBase client) async {
-            var edited = await showDialog(
+            return await showDialog(
               barrierDismissible: false,
               context: context,
               builder: (BuildContext context) {
                 return ClientEditDialog(clientId: (client as Client).clientId);
               },
             );
-            return edited;
           },
           loadData: vm.loadClients,
         );

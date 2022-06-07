@@ -26,7 +26,8 @@ class ClientsViewModel {
 
   /// Deletes the clients with the passed [clientIds] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> deleteClients<String>(List<String> clientIds, BuildContext context) async {
+  Future<bool> deleteClients<String>(
+      List<String> clientIds, BuildContext context) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete) {
@@ -42,12 +43,5 @@ class ClientsViewModel {
     }
 
     return shouldDelete;
-  }
-
-  /// Shows a dialog for register a new client and creates the client or aborts,
-  /// if the user cancels the operation.
-  Future<bool> registerClient() async {
-    // TODO: Implement
-    return true;
   }
 }

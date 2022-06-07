@@ -42,6 +42,7 @@
   "changePassword": "Change Password",
   "reload": "Reload",
   "editClient": "Edit device",
+  "registerClient": "Register client",
   "displayName": "Name",
   "invalidDisplayName": "Please enter your name!",
   "noData": "No records were found!",

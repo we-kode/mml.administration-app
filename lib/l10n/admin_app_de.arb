@@ -51,6 +51,7 @@
   "noData": "Keine Datensätze wurden gefunden!",
   "reload": "Neu laden",
   "editClient": "Gerät bearbeiten",
+  "registerClient": "Gerät registrieren",
   "displayName": "Name",
   "invalidDisplayName": "Bitte geben Sie einen Namen an!",
   "deleteConfirmation": "Möchten Sie tatsächlich die gewählten Datensätze löschen?",
