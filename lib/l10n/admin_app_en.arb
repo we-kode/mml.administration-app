@@ -50,5 +50,6 @@
   "yes": "Yes",
   "createUser": "Create admin",
   "editUser": "Edit admin",
-  "notFound": "The requested record wasn't found!"
+  "notFound": "The requested record wasn't found!",
+  "retrieveTokenFailed": "A token could not be retrieved!"
 }

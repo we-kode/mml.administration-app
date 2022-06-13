@@ -58,5 +58,6 @@
   "yes": "Ja",
   "createUser": "Admin hinzufügen",
   "editUser": "Admin bearbeiten",
-  "notFound": "Der aufgerufene Datensatz wurde nicht gefunden!"
+  "notFound": "Der aufgerufene Datensatz wurde nicht gefunden!",
+  "retrieveTokenFailed": "Es konnte kein Token geladen werden!"
 }

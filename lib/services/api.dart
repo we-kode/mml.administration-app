@@ -107,7 +107,7 @@ class ApiService {
             RequestOptions requestOptions = e.requestOptions;
 
             if (await _store.has(SecureStorageService.refreshTokenStorageKey)) {
-              await _refreshToken();
+              await refreshToken();
 
               if (!(await _store.has(
                 SecureStorageService.refreshTokenStorageKey,
@@ -190,7 +190,7 @@ class ApiService {
 
   /// Tries to refresh the tokens with the credentials stored in the secure
   /// storage.
-  Future _refreshToken() async {
+  Future refreshToken() async {
     var dio = Dio();
     initDio(dio, false);
 

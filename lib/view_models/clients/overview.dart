@@ -3,7 +3,6 @@ import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/clients.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/router.dart';
 
 /// View model for the app clients overview screen.

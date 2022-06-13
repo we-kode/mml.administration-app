@@ -5,17 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
-import 'package:mml_admin/models/clientRegistration.dart';
+import 'package:mml_admin/models/client_registration.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
-import 'package:mml_admin/services/secure_storage.dart';
+import 'package:mml_admin/services/socket.dart';
 
+/// View model for the register client screen.
 class ClientsRegisterViewModel extends ChangeNotifier {
-  /// [SecureStorageService] used to load data from the secure storage.
-  final SecureStorageService _storage = SecureStorageService.getInstance();
-
-  /// [ClientService] used to load data for the client editing screen.
+  /// [ClientService] used to load data for the client registration screen.
   final ClientService _service = ClientService.getInstance();
 
   /// Key of the user edit form.
@@ -27,26 +25,45 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   /// Locales of the application.
   late AppLocalizations locales;
 
-  Client? client = null;
+  /// Socket connection to the server.
+  late SocketService _socket;
 
+  /// The new [Client].
+  ///
+  /// If the client is not registered yet the value will be null.
+  Client? client;
+
+  /// Flag indicates, if registered client is confirmed by user.
   var isClientConfirmed = false;
 
-  ClientRegistration? registration = null;
+  /// Flag indicates that a client registration took place and the check animation should be played.
+  var playAnimation = false;
 
-  /// Initialize the edit client view model.
+  /// [ClientRegistration] Information needed by the user to register a new client.
+  ClientRegistration? registration;
+
+  /// Initialize the registration client view model.
   Future<bool> init(BuildContext context) async {
     _context = context;
     locales = AppLocalizations.of(context)!;
-    // TODO try to connect to socket. and retrieve tokenfrom connection
-    registration =
-        ClientRegistration(token: 'token', url: 'url', appKey: 'appKey');
+    _socket = SocketService(
+      onUpdate: (tokenInfo) => updateCode(tokenInfo),
+      onRegistered: <String>(clientId) => registerClient(clientId),
+    );
 
-    // on error show error in message
+    try {
+      await _socket.connect();
+    } catch (e) {
+      // on errors close Dialog
+      final messenger = MessengerService.getInstance();
+      messenger.unexpectedError(locales.retrieveTokenFailed);
+      Navigator.of(_context).pop(false);
+    }
 
     return true;
   }
 
-  /// Updates the client or aborts, if the user cancels the operation.
+  /// Updates the registered client or aborts, if the user cancels the operation.
   void saveClient() async {
     var nav = Navigator.of(_context);
 
@@ -81,11 +98,38 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     }
   }
 
+  /// Closes the view if user aborts registration view.
+  void abort() async {
+    var nav = Navigator.of(_context);
+    await _socket.close();
+    nav.pop(false);
+  }
+
   /// Validates the given [displayName] and returns an error message or null if
   /// the [displayName] is valid.
   String? validateDisplayName(String? displayName) {
     return client != null && (client!.displayName ?? '').isNotEmpty
         ? null
         : locales.invalidDisplayName;
+  }
+
+  /// Updates the [ClientRegistration] information if the token was updated.
+  void updateCode(ClientRegistration tokenInfo) {
+    registration = tokenInfo;
+    notifyListeners();
+  }
+
+  /// Inititales the just registered [Client] to update its information.
+  void registerClient<String>(String clientId) {
+    client = Client(clientId: clientId.toString());
+    playAnimation = true;
+    notifyListeners();
+  }
+
+  /// Stops the playing animation.
+  Future stopAnimation() async {
+    isClientConfirmed = true;
+    playAnimation = false;
+    notifyListeners();
   }
 }

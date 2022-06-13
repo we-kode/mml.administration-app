@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
-import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/view_models/clients/overview.dart';

@@ -1,5 +1,6 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/check_animation.dart';
 import 'package:mml_admin/view_models/clients/register.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -8,7 +9,7 @@ class ClientRegisterDialog extends StatelessWidget {
   /// Initializes the instance.
   const ClientRegisterDialog({Key? key}) : super(key: key);
 
-  /// Builds the clients editing screen.
+  /// Builds the clients registration screen.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ClientsRegisterViewModel>(
@@ -57,63 +58,81 @@ class ClientRegisterDialog extends StatelessWidget {
                       CircularProgressIndicator(),
                     ],
                   )
-                : !value.isClientConfirmed
-                    ? Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          BarcodeWidget(
-                            barcode: Barcode.qrCode(),
-                            color: Theme.of(context).colorScheme.primary,
-                            height: 256,
-                            width: 256,
-                            data: vm.registration.toString(),
-                            errorBuilder: (context, error) => Center(
-                              child: Text(error),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).cardColor,
-                              shape: BoxShape.circle,
-                            ),
-                            margin: const EdgeInsets.all(100.0),
-                            width: 50,
-                            height: 50,
-                            child: Image.asset(
-                              'assets/images/logo.png',
-                              scale: 20,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Form(
-                        key: vm.formKey,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            TextFormField(
-                              initialValue: vm.client!.displayName,
-                              decoration: InputDecoration(
-                                labelText: vm.locales.displayName,
-                                errorMaxLines: 5,
-                              ),
-                              onSaved: (String? displayName) {
-                                vm.client!.displayName = displayName!;
-                              },
-                              onChanged: (String? displayName) {
-                                vm.client!.displayName = displayName;
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              validator: vm.validateDisplayName,
-                            ),
-                          ],
-                        ),
-                      );
+                : _actualState(context, value);
           },
         ),
       ],
+    );
+  }
+
+  Widget _actualState(BuildContext context, ClientsRegisterViewModel vm) {
+    if (!vm.isClientConfirmed && !vm.playAnimation) {
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          BarcodeWidget(
+            barcode: Barcode.qrCode(),
+            color: Theme.of(context).colorScheme.primary,
+            height: 256,
+            width: 256,
+            data: vm.registration.toString(),
+            errorBuilder: (context, error) => Center(
+              child: Text(error),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              shape: BoxShape.circle,
+            ),
+            margin: const EdgeInsets.all(100.0),
+            width: 50,
+            height: 50,
+            child: Image.asset(
+              'assets/images/logo.png',
+              scale: 20,
+            ),
+          ),
+        ],
+      );
+    }
+
+    if (vm.playAnimation) {
+      return Container(
+        alignment: Alignment.center,
+        height: 256,
+        width: 256,
+        child: CheckAnimation(
+          onStop: () async {
+            await vm.stopAnimation();
+          },
+        ),
+      );
+    }
+
+    return Form(
+      key: vm.formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextFormField(
+            initialValue: vm.client!.displayName,
+            decoration: InputDecoration(
+              labelText: vm.locales.displayName,
+              errorMaxLines: 5,
+            ),
+            onSaved: (String? displayName) {
+              vm.client!.displayName = displayName!;
+            },
+            onChanged: (String? displayName) {
+              vm.client!.displayName = displayName;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: vm.validateDisplayName,
+          ),
+        ],
+      ),
     );
   }
 
@@ -127,7 +146,7 @@ class ClientRegisterDialog extends StatelessWidget {
       Consumer<ClientsRegisterViewModel>(
         builder: (context, value, child) {
           return TextButton(
-            onPressed: () => Navigator.pop(context, false),
+            onPressed: () => vm.abort(),
             child: Text(locales.cancel),
           );
         },
