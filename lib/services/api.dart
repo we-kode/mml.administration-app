@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/secure_storage.dart';
@@ -58,7 +56,6 @@ class ApiService {
   /// Adds interceptors for error handling if [addErrorHandling] is set to true.
   void initDio(Dio dio, bool addErrorHandling) {
     _addRequestOptionsInterceptor(dio);
-    _initClientBadCertificateCallback(dio);
 
     if (addErrorHandling) {
       _addDefaultErrorHandlerInterceptor(dio);
@@ -75,7 +72,8 @@ class ApiService {
         );
 
         options.baseUrl = 'https://$serverName/api/v1.0/';
-        options.headers['Accept-Language'] = Intl.shortLocale(Platform.localeName);
+        options.headers['Accept-Language'] =
+            Intl.shortLocale(Platform.localeName);
 
         var accessToken = await _store.get(
           SecureStorageService.accessTokenStorageKey,
@@ -164,27 +162,5 @@ class ApiService {
         return handler.reject(e);
       }),
     );
-  }
-
-  /// Adds an error hadnler to the passed [dio] instance, to handle errors
-  /// occured due to bad certificates.
-  void _initClientBadCertificateCallback(Dio dio) {
-    DefaultHttpClientAdapter httpClient =
-        dio.httpClientAdapter as DefaultHttpClientAdapter;
-    httpClient.onHttpClientCreate = (HttpClient client) {
-      client.badCertificateCallback = (
-        X509Certificate cert,
-        String host,
-        int port,
-      ) {
-        // Ignore bad certificates in debug mode!
-        if (kReleaseMode) {
-          _messenger.showMessage(_messenger.badCertificate);
-        }
-        return !kReleaseMode;
-      };
-
-      return client;
-    };
   }
 }

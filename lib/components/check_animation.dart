@@ -7,12 +7,12 @@ typedef StopFunction = Future Function();
 /// Animation for a check symbol.
 class CheckAnimation extends StatefulWidget {
   /// [StopFunction] called, when animation ends.
-  final StopFunction onStop;
+  final StopFunction? onStop;
 
   /// Initializes the animation.
   const CheckAnimation({
     Key? key,
-    required this.onStop,
+    this.onStop,
   }) : super(key: key);
 
   @override
@@ -28,7 +28,9 @@ class CheckAnimationState extends State<CheckAnimation> {
   void initState() {
     super.initState();
     _controller = OneShotAnimation('show', onStop: () async {
-      await widget.onStop();
+      if (widget.onStop != null) {
+        await widget.onStop!();
+      }
       setState(() => {});
     });
   }

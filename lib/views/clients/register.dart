@@ -147,13 +147,9 @@ class ClientRegisterDialog extends StatelessWidget {
     var locales = AppLocalizations.of(context)!;
 
     return [
-      Consumer<ClientsRegisterViewModel>(
-        builder: (context, value, child) {
-          return TextButton(
-            onPressed: () => vm.abort(),
-            child: Text(locales.cancel),
-          );
-        },
+      TextButton(
+        onPressed: () => vm.abort(),
+        child: Text(locales.cancel),
       ),
       Consumer<ClientsRegisterViewModel>(
         builder: (context, value, child) {

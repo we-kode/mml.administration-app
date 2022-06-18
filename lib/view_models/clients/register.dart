@@ -2,14 +2,16 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/client_registration.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:mml_admin/services/messenger.dart';
-import 'package:mml_admin/services/router.dart';
+import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/registration.dart';
+import 'package:mml_admin/services/router.dart';
+import 'package:mml_admin/services/user.dart';
+import 'package:signalr_pure/signalr_pure.dart';
 
 /// View model for the register client dialog.
 class ClientsRegisterViewModel extends ChangeNotifier {
@@ -51,12 +53,22 @@ class ClientsRegisterViewModel extends ChangeNotifier {
       onRegistered: <String>(clientId) => registerClient(clientId),
     );
 
+    final messenger = MessengerService.getInstance();
+
     try {
       await _socket.connect();
-    } catch (e) {
+    } on HttpException catch (e) {
+      if (e.statusCode != HttpStatus.unauthorized) {
+        messenger.showMessage(messenger.unexpectedError(e.message));
+        Navigator.of(_context).pop(false);
+      }
+
+      await UserService.getInstance().refreshToken();
+      await _socket.connect();
+    } catch (ex) {
       // on errors close Dialog
-      final messenger = MessengerService.getInstance();
-      messenger.showMessage(messenger.unexpectedError(locales.retrieveTokenFailed));
+      messenger
+          .showMessage(messenger.unexpectedError(locales.retrieveTokenFailed));
       Navigator.of(_context).pop(false);
     }
 

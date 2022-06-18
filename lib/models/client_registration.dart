@@ -31,5 +31,11 @@ class ClientRegistration {
   Map<String, dynamic> toJson() => _$ClientRegistrationToJson(this);
 
   @override
-  String toString() => base64Encode(utf8.encode(jsonEncode(toJson())));
+  String toString() {
+    try {
+      return base64Encode(utf8.encode(jsonEncode(toJson())));
+    } on FormatException catch (_) {
+      return "";
+    }
+  }
 }
