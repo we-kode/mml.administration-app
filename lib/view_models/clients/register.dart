@@ -122,7 +122,9 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   /// Closes the view if user aborts registration view.
   void abort() async {
     var nav = Navigator.of(_context);
+    showProgressIndicator();
     await _socket.close();
+    RouterService.getInstance().navigatorKey.currentState!.pop();
     nav.pop(false);
   }
 
