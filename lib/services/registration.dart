@@ -4,6 +4,7 @@ import 'package:mml_admin/models/client_registration.dart';
 import 'package:mml_admin/services/api.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/secure_storage.dart';
+import 'package:mml_admin/services/user.dart';
 import 'package:signalr_pure/signalr_pure.dart';
 
 /// Function called when the actual registration token has been updated.
@@ -13,7 +14,7 @@ typedef UpdateTokenFunction = void Function(ClientRegistration tokenInfo);
 typedef ClientRegisteredFunction = void Function<String>(String clientId);
 
 /// Service creating a socket connection to the server for getting registration tokens.
-class SocketService {
+class RegistrationService {
   /// Instance of the [SecureStorageService] to handle data in the secure
   /// storage.
   final SecureStorageService _secureStore = SecureStorageService.getInstance();
@@ -33,8 +34,8 @@ class SocketService {
   /// Function called, when a client registered successful.
   final ClientRegisteredFunction onRegistered;
 
-  /// Initialize the [SocketService]].
-  SocketService({
+  /// Initialize the [RegistrationService]].
+  RegistrationService({
     required this.onUpdate,
     required this.onRegistered,
   });
@@ -49,7 +50,7 @@ class SocketService {
         return;
       }
 
-      await _api.refreshToken();
+      await UserService.getInstance().refreshToken();
       await _startConnection();
     }
   }

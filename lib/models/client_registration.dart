@@ -17,8 +17,11 @@ class ClientRegistration {
   final String appKey;
 
   /// Creates a new [ClientRegistration] with the given values.
-  ClientRegistration(
-      {required this.token, required this.appKey, this.endpoint});
+  ClientRegistration({
+    required this.token,
+    required this.appKey,
+    this.endpoint,
+  });
 
   /// Converts a json object/map to the model.
   factory ClientRegistration.fromJson(Map<String, dynamic> json) =>

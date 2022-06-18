@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/api.dart';
+import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:mml_admin/view_models/login.dart';
@@ -20,6 +21,9 @@ class UserService {
   /// Instance of the [SecureStorageService] to handle data in the secure
   /// storage.
   final SecureStorageService _storage = SecureStorageService.getInstance();
+
+  /// Instance of the messenger service, to show messages with.
+  final MessengerService _messenger = MessengerService.getInstance();
 
   /// Private constructor of the service.
   UserService._();
@@ -175,5 +179,53 @@ class UserService {
     }
 
     return null;
+  }
+
+  /// Tries to refresh the tokens with the credentials stored in the secure
+  /// storage.
+  Future refreshToken() async {
+    var dio = Dio();
+    _apiService.initDio(dio, false);
+
+    try {
+      // Get new tokens.
+      var clientId = await _storage.get(SecureStorageService.clientIdStorageKey);
+      var refreshToken = await _storage.get(
+        SecureStorageService.refreshTokenStorageKey,
+      );
+
+      Response response = await dio.request(
+        "/identity/connect/token",
+        data: {
+          "grant_type": "refresh_token",
+          "client_id": clientId,
+          "refresh_token": refreshToken,
+          "scope": "offline_access"
+        },
+        options: Options(
+          method: 'POST',
+          contentType: Headers.formUrlEncodedContentType,
+        ),
+      );
+
+      // Store the tokens on successfull request.
+      if (response.statusCode == HttpStatus.ok) {
+        _storage.set(
+          SecureStorageService.accessTokenStorageKey,
+          response.data?['access_token'],
+        );
+        _storage.set(
+          SecureStorageService.refreshTokenStorageKey,
+          response.data?['refresh_token'],
+        );
+      } else {
+        _messenger.showMessage(_messenger.relogin);
+        await UserService.getInstance().logout();
+      }
+    } catch (e) {
+      // Logout on errors.
+      _messenger.showMessage(_messenger.relogin);
+      await UserService.getInstance().logout();
+    }
   }
 }

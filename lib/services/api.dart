@@ -107,7 +107,7 @@ class ApiService {
             RequestOptions requestOptions = e.requestOptions;
 
             if (await _store.has(SecureStorageService.refreshTokenStorageKey)) {
-              await refreshToken();
+              await UserService.getInstance().refreshToken();
 
               if (!(await _store.has(
                 SecureStorageService.refreshTokenStorageKey,
@@ -186,53 +186,5 @@ class ApiService {
 
       return client;
     };
-  }
-
-  /// Tries to refresh the tokens with the credentials stored in the secure
-  /// storage.
-  Future refreshToken() async {
-    var dio = Dio();
-    initDio(dio, false);
-
-    try {
-      // Get new tokens.
-      var clientId = await _store.get(SecureStorageService.clientIdStorageKey);
-      var refreshToken = await _store.get(
-        SecureStorageService.refreshTokenStorageKey,
-      );
-
-      Response response = await dio.request(
-        "/identity/connect/token",
-        data: {
-          "grant_type": "refresh_token",
-          "client_id": clientId,
-          "refresh_token": refreshToken,
-          "scope": "offline_access"
-        },
-        options: Options(
-          method: 'POST',
-          contentType: Headers.formUrlEncodedContentType,
-        ),
-      );
-
-      // Store the tokens on successfull request.
-      if (response.statusCode == HttpStatus.ok) {
-        _store.set(
-          SecureStorageService.accessTokenStorageKey,
-          response.data?['access_token'],
-        );
-        _store.set(
-          SecureStorageService.refreshTokenStorageKey,
-          response.data?['refresh_token'],
-        );
-      } else {
-        _messenger.showMessage(_messenger.relogin);
-        await UserService.getInstance().logout();
-      }
-    } catch (e) {
-      // Logout on errors.
-      _messenger.showMessage(_messenger.relogin);
-      await UserService.getInstance().logout();
-    }
   }
 }

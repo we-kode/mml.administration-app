@@ -9,11 +9,11 @@ import 'package:mml_admin/models/client_registration.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
-import 'package:mml_admin/services/socket.dart';
+import 'package:mml_admin/services/registration.dart';
 
-/// View model for the register client screen.
+/// View model for the register client dialog.
 class ClientsRegisterViewModel extends ChangeNotifier {
-  /// [ClientService] used to load data for the client registration screen.
+  /// [ClientService] used to load data for the client registration dialog.
   final ClientService _service = ClientService.getInstance();
 
   /// Key of the user edit form.
@@ -26,7 +26,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   late AppLocalizations locales;
 
   /// Socket connection to the server.
-  late SocketService _socket;
+  late RegistrationService _socket;
 
   /// The new [Client].
   ///
@@ -46,7 +46,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     _context = context;
     locales = AppLocalizations.of(context)!;
-    _socket = SocketService(
+    _socket = RegistrationService(
       onUpdate: (tokenInfo) => updateCode(tokenInfo),
       onRegistered: <String>(clientId) => registerClient(clientId),
     );
@@ -56,7 +56,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     } catch (e) {
       // on errors close Dialog
       final messenger = MessengerService.getInstance();
-      messenger.unexpectedError(locales.retrieveTokenFailed);
+      messenger.showMessage(messenger.unexpectedError(locales.retrieveTokenFailed));
       Navigator.of(_context).pop(false);
     }
 
@@ -108,7 +108,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   /// Validates the given [displayName] and returns an error message or null if
   /// the [displayName] is valid.
   String? validateDisplayName(String? displayName) {
-    return client != null && (client!.displayName ?? '').isNotEmpty
+    return (client?.displayName ?? '').isNotEmpty
         ? null
         : locales.invalidDisplayName;
   }
