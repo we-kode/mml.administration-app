@@ -64,15 +64,24 @@ class ClientsRegisterViewModel extends ChangeNotifier {
       }
 
       await UserService.getInstance().refreshToken();
-      await _socket.connect();
-    } catch (ex) {
-      // on errors close Dialog
-      messenger
-          .showMessage(messenger.unexpectedError(locales.retrieveTokenFailed));
-      Navigator.of(_context).pop(false);
+      try {
+        await _socket.connect();
+      } catch (_) {
+        _closeOnError();
+      }
+    } catch (_) {
+      _closeOnError();
     }
 
     return true;
+  }
+
+// on errors close Dialog
+  void _closeOnError() {
+    final messenger = MessengerService.getInstance();
+    messenger
+        .showMessage(messenger.unexpectedError(locales.retrieveTokenFailed));
+    Navigator.of(_context).pop(false);
   }
 
   /// Updates the registered client or aborts, if the user cancels the operation.
