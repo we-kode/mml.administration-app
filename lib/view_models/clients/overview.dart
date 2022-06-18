@@ -3,7 +3,6 @@ import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/clients.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/router.dart';
 
 /// View model for the app clients overview screen.
@@ -26,7 +25,10 @@ class ClientsViewModel {
 
   /// Deletes the clients with the passed [clientIds] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> deleteClients<String>(List<String> clientIds, BuildContext context) async {
+  Future<bool> deleteClients<String>(
+    List<String> clientIds,
+    BuildContext context,
+  ) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete) {
@@ -42,12 +44,5 @@ class ClientsViewModel {
     }
 
     return shouldDelete;
-  }
-
-  /// Shows a dialog for register a new client and creates the client or aborts,
-  /// if the user cancels the operation.
-  Future<bool> registerClient() async {
-    // TODO: Implement
-    return true;
   }
 }

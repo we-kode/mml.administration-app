@@ -51,11 +51,13 @@
   "noData": "Keine Datensätze wurden gefunden!",
   "reload": "Neu laden",
   "editClient": "Gerät bearbeiten",
+  "registerClient": "Gerät registrieren",
   "displayName": "Name",
   "invalidDisplayName": "Bitte geben Sie einen Namen an!",
   "deleteConfirmation": "Möchten Sie tatsächlich die gewählten Datensätze löschen?",
   "yes": "Ja",
   "createUser": "Admin hinzufügen",
   "editUser": "Admin bearbeiten",
-  "notFound": "Der aufgerufene Datensatz wurde nicht gefunden!"
+  "notFound": "Der aufgerufene Datensatz wurde nicht gefunden!",
+  "retrieveTokenFailed": "Es konnte kein Token geladen werden!"
 }

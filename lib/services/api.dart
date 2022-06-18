@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/secure_storage.dart';
@@ -58,7 +56,6 @@ class ApiService {
   /// Adds interceptors for error handling if [addErrorHandling] is set to true.
   void initDio(Dio dio, bool addErrorHandling) {
     _addRequestOptionsInterceptor(dio);
-    _initClientBadCertificateCallback(dio);
 
     if (addErrorHandling) {
       _addDefaultErrorHandlerInterceptor(dio);
@@ -75,7 +72,8 @@ class ApiService {
         );
 
         options.baseUrl = 'https://$serverName/api/v1.0/';
-        options.headers['Accept-Language'] = Intl.shortLocale(Platform.localeName);
+        options.headers['Accept-Language'] =
+            Intl.shortLocale(Platform.localeName);
 
         var accessToken = await _store.get(
           SecureStorageService.accessTokenStorageKey,
@@ -107,7 +105,7 @@ class ApiService {
             RequestOptions requestOptions = e.requestOptions;
 
             if (await _store.has(SecureStorageService.refreshTokenStorageKey)) {
-              await _refreshToken();
+              await UserService.getInstance().refreshToken();
 
               if (!(await _store.has(
                 SecureStorageService.refreshTokenStorageKey,
@@ -164,75 +162,5 @@ class ApiService {
         return handler.reject(e);
       }),
     );
-  }
-
-  /// Adds an error hadnler to the passed [dio] instance, to handle errors
-  /// occured due to bad certificates.
-  void _initClientBadCertificateCallback(Dio dio) {
-    DefaultHttpClientAdapter httpClient =
-        dio.httpClientAdapter as DefaultHttpClientAdapter;
-    httpClient.onHttpClientCreate = (HttpClient client) {
-      client.badCertificateCallback = (
-        X509Certificate cert,
-        String host,
-        int port,
-      ) {
-        // Ignore bad certificates in debug mode!
-        if (kReleaseMode) {
-          _messenger.showMessage(_messenger.badCertificate);
-        }
-        return !kReleaseMode;
-      };
-
-      return client;
-    };
-  }
-
-  /// Tries to refresh the tokens with the credentials stored in the secure
-  /// storage.
-  Future _refreshToken() async {
-    var dio = Dio();
-    initDio(dio, false);
-
-    try {
-      // Get new tokens.
-      var clientId = await _store.get(SecureStorageService.clientIdStorageKey);
-      var refreshToken = await _store.get(
-        SecureStorageService.refreshTokenStorageKey,
-      );
-
-      Response response = await dio.request(
-        "/identity/connect/token",
-        data: {
-          "grant_type": "refresh_token",
-          "client_id": clientId,
-          "refresh_token": refreshToken,
-          "scope": "offline_access"
-        },
-        options: Options(
-          method: 'POST',
-          contentType: Headers.formUrlEncodedContentType,
-        ),
-      );
-
-      // Store the tokens on successfull request.
-      if (response.statusCode == HttpStatus.ok) {
-        _store.set(
-          SecureStorageService.accessTokenStorageKey,
-          response.data?['access_token'],
-        );
-        _store.set(
-          SecureStorageService.refreshTokenStorageKey,
-          response.data?['refresh_token'],
-        );
-      } else {
-        _messenger.showMessage(_messenger.relogin);
-        await UserService.getInstance().logout();
-      }
-    } catch (e) {
-      // Logout on errors.
-      _messenger.showMessage(_messenger.relogin);
-      await UserService.getInstance().logout();
-    }
   }
 }
