@@ -65,7 +65,7 @@ class RegistrationService {
     );
     _connection.on(
       'CLIENT_REGISTERED',
-      <String>(String clientId) => onRegistered(clientId),
+      (clientIds) => onRegistered(clientIds.first),
     );
 
     await _connection.startAsync();
