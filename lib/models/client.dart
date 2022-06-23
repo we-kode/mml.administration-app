@@ -12,9 +12,19 @@ class Client extends ModelBase {
   /// Display name of the client.
   String? displayName;
 
+  /// The device name of the client.
+  String? device;
+
+  DateTime? lastTokenRefreshDate;
+
   /// Creates a new client instance with the given values.
-  Client({required this.clientId, this.displayName, bool isDeletable = true})
-      : super(isDeletable: isDeletable);
+  Client({
+    required this.clientId,
+    this.displayName,
+    this.device,
+    this.lastTokenRefreshDate,
+    bool isDeletable = true,
+  }) : super(isDeletable: isDeletable);
 
   /// Converts a json object/map to the client model.
   factory Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);

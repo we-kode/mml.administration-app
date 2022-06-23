@@ -30,16 +30,13 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   /// Socket connection to the server.
   late RegistrationService _socket;
 
+  /// [RegistrationState] of the current process.
+  RegistrationState _state = RegistrationState.scan;
+
   /// The new [Client].
   ///
   /// If the client is not registered yet the value will be null.
   Client? client;
-
-  /// Flag indicates, if registered client is confirmed by user.
-  var isClientConfirmed = false;
-
-  /// Flag indicates that a client registration took place and the check animation should be played.
-  var playAnimation = false;
 
   /// [ClientRegistration] Information needed by the user to register a new client.
   ClientRegistration? registration;
@@ -50,7 +47,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     locales = AppLocalizations.of(context)!;
     _socket = RegistrationService(
       onUpdate: (tokenInfo) => updateCode(tokenInfo),
-      onRegistered: <String>(clientId) => registerClient(clientId),
+      onRegistered: (clientId) => registerClient(clientId),
     );
 
     final messenger = MessengerService.getInstance();
@@ -136,6 +133,12 @@ class ClientsRegisterViewModel extends ChangeNotifier {
         : locales.invalidDisplayName;
   }
 
+  /// Validates the given [deviceName] and returns an error message or null if
+  /// the [deviceName] is valid.
+  String? validateDeviceName(String? deviceName) {
+    return (client?.device ?? '').isNotEmpty ? null : locales.invalidDeviceName;
+  }
+
   /// Updates the [ClientRegistration] information if the token was updated.
   void updateCode(ClientRegistration tokenInfo) {
     registration = tokenInfo;
@@ -143,16 +146,40 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   }
 
   /// Inititales the just registered [Client] to update its information.
-  void registerClient<String>(String clientId) {
-    client = Client(clientId: clientId.toString());
-    playAnimation = true;
+  void registerClient(String clientId) async {
+    try {
+      client = await _service.getClient(clientId);
+      _state = RegistrationState.register;
+    } catch (e) {
+      if (e is DioError && e.response?.statusCode == HttpStatus.notFound) {
+        var messenger = MessengerService.getInstance();
+        messenger.showMessage(messenger.notFound);
+      }
+      _state = RegistrationState.error;
+    }
     notifyListeners();
   }
 
   /// Stops the playing animation.
   Future stopAnimation() async {
-    isClientConfirmed = true;
-    playAnimation = false;
+    _state = RegistrationState.success;
     notifyListeners();
   }
+
+  Future stopErrorAnimation() async {
+    Navigator.pop(_context, true);
+  }
+
+  /// Returns the current [state] of the registration process.
+  RegistrationState get state {
+    return _state;
+  }
+}
+
+/// State of the registration process.
+enum RegistrationState {
+  scan,
+  register,
+  error,
+  success,
 }

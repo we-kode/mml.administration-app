@@ -6,7 +6,7 @@ import 'package:signalr_pure/signalr_pure.dart';
 typedef UpdateTokenFunction = void Function(ClientRegistration tokenInfo);
 
 /// Function called, when a client registered successful.
-typedef ClientRegisteredFunction = void Function<String>(String clientId);
+typedef ClientRegisteredFunction = void Function(String clientId);
 
 /// Service creating a socket connection to the server for getting registration tokens.
 class RegistrationService {

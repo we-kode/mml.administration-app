@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/clients/edit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -69,6 +70,24 @@ class ClientEditDialog extends StatelessWidget {
             },
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: vm.validateDisplayName,
+          ),
+          verticalSpacer,
+          TextFormField(
+            initialValue: vm.client.device,
+            decoration: InputDecoration(
+              labelText: vm.locales.deviceName,
+              errorMaxLines: 5,
+            ),
+            onSaved: (String? deviceName) {
+              vm.clearBackendErrors(vm.deviceNameField);
+              vm.client.device = deviceName!;
+            },
+            onChanged: (String? deviceName) {
+              vm.clearBackendErrors(vm.deviceNameField);
+              vm.client.device = deviceName;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: vm.validateDeviceName,
           ),
         ],
       ),
