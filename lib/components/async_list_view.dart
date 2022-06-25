@@ -183,7 +183,9 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   /// Reloads the data starting from inital offset with inital count.
   void _reloadData() {
-    if (!mounted) { return; }
+    if (!mounted) {
+      return;
+    }
 
     _offset = _initialOffset;
     _take = _initialTake;
@@ -210,14 +212,18 @@ class _AsyncListViewState extends State<AsyncListView> {
     );
 
     dataFuture.then((value) {
-      if (!mounted) { return; }
+      if (!mounted) {
+        return;
+      }
 
       setState(() {
         _isLoadingData = false;
         _items = value;
       });
     }).onError((e, _) {
-      if (!mounted) { return; }
+      if (!mounted) {
+        return;
+      }
 
       setState(() {
         _isLoadingData = false;
@@ -278,7 +284,9 @@ class _AsyncListViewState extends State<AsyncListView> {
                       onPressed: () {
                         showProgressIndicator();
                         widget.deleteItems(_selectedItems).then((value) {
-                          if (!mounted) { return; }
+                          if (!mounted) {
+                            return;
+                          }
 
                           RouterService.getInstance()
                               .navigatorKey
@@ -296,7 +304,9 @@ class _AsyncListViewState extends State<AsyncListView> {
 
                           _reloadData();
                         }).onError((error, stackTrace) {
-                          if (!mounted) { return; }
+                          if (!mounted) {
+                            return;
+                          }
 
                           RouterService.getInstance()
                               .navigatorKey
@@ -410,7 +420,15 @@ class _AsyncListViewState extends State<AsyncListView> {
     return ListTile(
       leading: ledingTile,
       minVerticalPadding: 0,
-      title: Text(item.getDisplayDescription()),
+      title: Row(
+        children: [
+          Text(item.getDisplayDescription()),
+          _additionalTitle(item),
+        ],
+      ),
+      subtitle: item.getSubtitle(context) != null
+          ? Text(item.getSubtitle(context)!)
+          : null,
       onTap: () {
         if (!item.isDeletable && _isInMultiSelectMode) {
           return;
@@ -440,6 +458,18 @@ class _AsyncListViewState extends State<AsyncListView> {
         _onItemChecked(index);
       },
     );
+  }
+
+  Widget _additionalTitle(ModelBase? item) {
+    if (item!.getDisplayDescriptionAdditional() != null) {
+      return Text(
+        " (${item.getDisplayDescriptionAdditional()})",
+        style: const TextStyle(
+          color: Color(0xb3ffffff),
+        ),
+      );
+    }
+    return const Text('');
   }
 
   /// Creates a list tile widget for a not loded list item.

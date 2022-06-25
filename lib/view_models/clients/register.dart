@@ -150,14 +150,15 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     try {
       client = await _service.getClient(clientId);
       _state = RegistrationState.register;
+      notifyListeners();
     } catch (e) {
       if (e is DioError && e.response?.statusCode == HttpStatus.notFound) {
         var messenger = MessengerService.getInstance();
         messenger.showMessage(messenger.notFound);
       }
       _state = RegistrationState.error;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   /// Stops the playing animation.

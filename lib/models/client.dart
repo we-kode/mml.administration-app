@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mml_admin/models/model_base.dart';
+import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 part 'client.g.dart';
 
@@ -34,11 +37,22 @@ class Client extends ModelBase {
 
   @override
   String getDisplayDescription() {
-    return displayName!;
+    return "$displayName";
+  }
+
+  @override
+  String getDisplayDescriptionAdditional() {
+    return "$device";
   }
 
   @override
   dynamic getIdentifier() {
     return clientId;
+  }
+
+  @override
+  String? getSubtitle(BuildContext context) {
+    var locales = AppLocalizations.of(context)!;
+    return locales.lastTokenRefresh(DateFormat().format(lastTokenRefreshDate!.toLocal()));
   }
 }

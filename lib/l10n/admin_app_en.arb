@@ -53,5 +53,6 @@
   "notFound": "The requested record wasn't found!",
   "retrieveTokenFailed": "A token could not be retrieved!",
   "invalidDeviceName": "Please enter a device name!",
-  "deviceName": "Device name"
+  "deviceName": "Device name",
+  "lastTokenRefresh": "Last activity: {date}"
 }
