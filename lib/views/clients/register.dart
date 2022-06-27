@@ -100,7 +100,7 @@ class ClientRegisterDialog extends StatelessWidget {
             ),
           ],
         );
-      case RegistrationState.register:
+      case RegistrationState.success:
         return Container(
           alignment: Alignment.center,
           height: 256,
@@ -111,7 +111,7 @@ class ClientRegisterDialog extends StatelessWidget {
             },
           ),
         );
-      case RegistrationState.success:
+      case RegistrationState.register:
         return Form(
           key: vm.formKey,
           child: Column(
@@ -135,16 +135,16 @@ class ClientRegisterDialog extends StatelessWidget {
               ),
               verticalSpacer,
               TextFormField(
-                initialValue: vm.client!.device,
+                initialValue: vm.client!.deviceIdentifier,
                 decoration: InputDecoration(
                   labelText: vm.locales.deviceName,
                   errorMaxLines: 5,
                 ),
                 onSaved: (String? deviceName) {
-                  vm.client!.device = deviceName!;
+                  vm.client!.deviceIdentifier = deviceName!;
                 },
                 onChanged: (String? deviceName) {
-                  vm.client!.device = deviceName;
+                  vm.client!.deviceIdentifier = deviceName;
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: vm.validateDeviceName,
@@ -178,7 +178,7 @@ class ClientRegisterDialog extends StatelessWidget {
       Consumer<ClientsRegisterViewModel>(
         builder: (context, value, child) {
           return TextButton(
-            onPressed: vm.state == RegistrationState.success ? null : vm.abort,
+            onPressed: vm.state == RegistrationState.register ? null : vm.abort,
             child: Text(locales.cancel),
           );
         },
@@ -187,7 +187,7 @@ class ClientRegisterDialog extends StatelessWidget {
         builder: (context, value, child) {
           return TextButton(
             onPressed:
-                vm.state == RegistrationState.success ? vm.saveClient : null,
+                vm.state == RegistrationState.register ? vm.saveClient : null,
             child: Text(locales.save),
           );
         },

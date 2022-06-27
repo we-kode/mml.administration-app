@@ -73,18 +73,18 @@ class ClientEditDialog extends StatelessWidget {
           ),
           verticalSpacer,
           TextFormField(
-            initialValue: vm.client.device,
+            initialValue: vm.client.deviceIdentifier,
             decoration: InputDecoration(
               labelText: vm.locales.deviceName,
               errorMaxLines: 5,
             ),
             onSaved: (String? deviceName) {
               vm.clearBackendErrors(vm.deviceNameField);
-              vm.client.device = deviceName!;
+              vm.client.deviceIdentifier = deviceName!;
             },
             onChanged: (String? deviceName) {
               vm.clearBackendErrors(vm.deviceNameField);
-              vm.client.device = deviceName;
+              vm.client.deviceIdentifier = deviceName;
             },
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: vm.validateDeviceName,

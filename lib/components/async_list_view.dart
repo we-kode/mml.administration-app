@@ -461,9 +461,9 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   Widget _additionalTitle(ModelBase? item) {
-    if (item!.getDisplayDescriptionAdditional() != null) {
+    if (item!.getDisplayDescriptionSuffix() != null) {
       return Text(
-        " (${item.getDisplayDescriptionAdditional()})",
+        " (${item.getDisplayDescriptionSuffix()})",
         style: const TextStyle(
           color: Color(0xb3ffffff),
         ),

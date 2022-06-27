@@ -15,9 +15,9 @@ abstract class ModelBase {
   /// can be used in widgets, e.g. lists.
   String getDisplayDescription();
 
-  /// Returns an additional text which will be shown in the display description of the model object, that
+  /// Returns an suffix text which will be shown in the display description of the model object, that
   /// can be used in widgets, e.g. lists.
-  String? getDisplayDescriptionAdditional() {
+  String? getDisplayDescriptionSuffix() {
     return null;
   }
 

@@ -167,6 +167,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Function called when error animation stops.
   Future stopErrorAnimation() async {
     Navigator.pop(_context, true);
   }

@@ -15,16 +15,17 @@ class Client extends ModelBase {
   /// Display name of the client.
   String? displayName;
 
-  /// The device name of the client.
-  String? device;
+  /// The device identifier of the client.
+  String? deviceIdentifier;
 
+  /// The date and time the client requested a new token.
   DateTime? lastTokenRefreshDate;
 
   /// Creates a new client instance with the given values.
   Client({
     required this.clientId,
     this.displayName,
-    this.device,
+    this.deviceIdentifier,
     this.lastTokenRefreshDate,
     bool isDeletable = true,
   }) : super(isDeletable: isDeletable);
@@ -41,8 +42,8 @@ class Client extends ModelBase {
   }
 
   @override
-  String getDisplayDescriptionAdditional() {
-    return "$device";
+  String getDisplayDescriptionSuffix() {
+    return "$deviceIdentifier";
   }
 
   @override

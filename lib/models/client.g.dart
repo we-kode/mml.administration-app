@@ -9,7 +9,7 @@ part of 'client.dart';
 Client _$ClientFromJson(Map<String, dynamic> json) => Client(
       clientId: json['clientId'] as String?,
       displayName: json['displayName'] as String?,
-      device: json['device'] as String?,
+      deviceIdentifier: json['deviceIdentifier'] as String?,
       lastTokenRefreshDate: json['lastTokenRefreshDate'] == null
           ? null
           : DateTime.parse(json['lastTokenRefreshDate'] as String),
@@ -29,7 +29,7 @@ Map<String, dynamic> _$ClientToJson(Client instance) {
 
   writeNotNull('clientId', instance.clientId);
   writeNotNull('displayName', instance.displayName);
-  writeNotNull('device', instance.device);
+  writeNotNull('deviceIdentifier', instance.deviceIdentifier);
   writeNotNull(
       'lastTokenRefreshDate', instance.lastTokenRefreshDate?.toIso8601String());
   return val;
