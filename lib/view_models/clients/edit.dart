@@ -72,7 +72,7 @@ class ClientsEditViewModel extends ChangeNotifier {
   /// the [deviceName] is valid.
   String? validateDeviceName(String? deviceName) {
     var error =
-        (client.device ?? '').isNotEmpty ? null : locales.invalidDeviceName;
+        (client.deviceIdentifier ?? '').isNotEmpty ? null : locales.invalidDeviceName;
     return _addBackendErrors(deviceNameField, error);
   }
 

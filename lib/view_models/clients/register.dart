@@ -136,7 +136,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   /// Validates the given [deviceName] and returns an error message or null if
   /// the [deviceName] is valid.
   String? validateDeviceName(String? deviceName) {
-    return (client?.device ?? '').isNotEmpty ? null : locales.invalidDeviceName;
+    return (client?.deviceIdentifier ?? '').isNotEmpty ? null : locales.invalidDeviceName;
   }
 
   /// Updates the [ClientRegistration] information if the token was updated.
@@ -149,7 +149,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   void registerClient(String clientId) async {
     try {
       client = await _service.getClient(clientId);
-      _state = RegistrationState.register;
+      _state = RegistrationState.success;
       notifyListeners();
     } catch (e) {
       if (e is DioError && e.response?.statusCode == HttpStatus.notFound) {
@@ -163,7 +163,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
 
   /// Stops the playing animation.
   Future stopAnimation() async {
-    _state = RegistrationState.success;
+    _state = RegistrationState.register;
     notifyListeners();
   }
 

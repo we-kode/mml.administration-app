@@ -423,7 +423,7 @@ class _AsyncListViewState extends State<AsyncListView> {
       title: Row(
         children: [
           Text(item.getDisplayDescription()),
-          _additionalTitle(item),
+          _createTitleSuffix(item),
         ],
       ),
       subtitle: item.getSubtitle(context) != null
@@ -460,7 +460,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     );
   }
 
-  Widget _additionalTitle(ModelBase? item) {
+  Widget _createTitleSuffix(ModelBase? item) {
     if (item!.getDisplayDescriptionSuffix() != null) {
       return Text(
         " (${item.getDisplayDescriptionSuffix()})",
