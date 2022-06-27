@@ -20,6 +20,9 @@ class ClientsEditViewModel extends ChangeNotifier {
   /// Name of display name field in the errors response.
   final String displayNameField = 'DisplayName';
 
+  /// Name of device name field in the errors response.
+  final String deviceNameField = 'Device';
+
   /// Current build context.
   late BuildContext _context;
 
@@ -63,6 +66,14 @@ class ClientsEditViewModel extends ChangeNotifier {
         ? null
         : locales.invalidDisplayName;
     return _addBackendErrors(displayNameField, error);
+  }
+
+  /// Validates the given [deviceIdentifier] and returns an error message or null if
+  /// the [deviceIdentifier] is valid.
+  String? validateDeviceIdentifier(String? deviceIdentifier) {
+    var error =
+        (client.deviceIdentifier ?? '').isNotEmpty ? null : locales.invalidDeviceName;
+    return _addBackendErrors(deviceNameField, error);
   }
 
   /// Clears the errors from the backend for the field with the passed

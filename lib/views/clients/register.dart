@@ -1,6 +1,8 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/check_animation.dart';
+import 'package:mml_admin/components/error_animation.dart';
+import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/clients/register.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -68,74 +70,100 @@ class ClientRegisterDialog extends StatelessWidget {
   }
 
   Widget _actualState(BuildContext context, ClientsRegisterViewModel vm) {
-    if (!vm.isClientConfirmed && !vm.playAnimation) {
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          BarcodeWidget(
-            barcode: Barcode.qrCode(),
-            color: Theme.of(context).colorScheme.primary,
-            height: 256,
-            width: 256,
-            data: vm.registration.toString(),
-            errorBuilder: (context, error) => Center(
-              child: Text(error),
+    switch (vm.state) {
+      case RegistrationState.scan:
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            BarcodeWidget(
+              barcode: Barcode.qrCode(),
+              color: Theme.of(context).colorScheme.primary,
+              height: 256,
+              width: 256,
+              data: vm.registration.toString(),
+              errorBuilder: (context, error) => Center(
+                child: Text(error),
+              ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              shape: BoxShape.circle,
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                shape: BoxShape.circle,
+              ),
+              margin: const EdgeInsets.all(100.0),
+              width: 50,
+              height: 50,
+              child: Image.asset(
+                'assets/images/logo.png',
+                scale: 20,
+              ),
             ),
-            margin: const EdgeInsets.all(100.0),
-            width: 50,
-            height: 50,
-            child: Image.asset(
-              'assets/images/logo.png',
-              scale: 20,
-            ),
-          ),
-        ],
-      );
-    }
-
-    if (vm.playAnimation) {
-      return Container(
-        alignment: Alignment.center,
-        height: 256,
-        width: 256,
-        child: CheckAnimation(
-          onStop: () async {
-            await vm.stopAnimation();
-          },
-        ),
-      );
-    }
-
-    return Form(
-      key: vm.formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextFormField(
-            initialValue: vm.client!.displayName,
-            decoration: InputDecoration(
-              labelText: vm.locales.displayName,
-              errorMaxLines: 5,
-            ),
-            onSaved: (String? displayName) {
-              vm.client!.displayName = displayName!;
+          ],
+        );
+      case RegistrationState.success:
+        return Container(
+          alignment: Alignment.center,
+          height: 256,
+          width: 256,
+          child: CheckAnimation(
+            onStop: () async {
+              await vm.stopAnimation();
             },
-            onChanged: (String? displayName) {
-              vm.client!.displayName = displayName;
-            },
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: vm.validateDisplayName,
           ),
-        ],
-      ),
-    );
+        );
+      case RegistrationState.register:
+        return Form(
+          key: vm.formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                initialValue: vm.client!.displayName,
+                decoration: InputDecoration(
+                  labelText: vm.locales.displayName,
+                  errorMaxLines: 5,
+                ),
+                onSaved: (String? displayName) {
+                  vm.client!.displayName = displayName!;
+                },
+                onChanged: (String? displayName) {
+                  vm.client!.displayName = displayName;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: vm.validateDisplayName,
+              ),
+              verticalSpacer,
+              TextFormField(
+                initialValue: vm.client!.deviceIdentifier,
+                decoration: InputDecoration(
+                  labelText: vm.locales.deviceName,
+                  errorMaxLines: 5,
+                ),
+                onSaved: (String? deviceIdentifier) {
+                  vm.client!.deviceIdentifier = deviceIdentifier!;
+                },
+                onChanged: (String? deviceIdentifier) {
+                  vm.client!.deviceIdentifier = deviceIdentifier;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: vm.validateDeviceIdentifier,
+              ),
+            ],
+          ),
+        );
+      case RegistrationState.error:
+        return Container(
+          alignment: Alignment.center,
+          height: 256,
+          width: 256,
+          child: ErrorAnimation(
+            onStop: () async {
+              vm.stopErrorAnimation();
+            },
+          ),
+        );
+    }
   }
 
   /// Creates a list of action widgets that should be shown at the bottom of the
@@ -150,7 +178,7 @@ class ClientRegisterDialog extends StatelessWidget {
       Consumer<ClientsRegisterViewModel>(
         builder: (context, value, child) {
           return TextButton(
-            onPressed: vm.isClientConfirmed ? null : vm.abort,
+            onPressed: vm.state == RegistrationState.register ? null : vm.abort,
             child: Text(locales.cancel),
           );
         },
@@ -158,7 +186,8 @@ class ClientRegisterDialog extends StatelessWidget {
       Consumer<ClientsRegisterViewModel>(
         builder: (context, value, child) {
           return TextButton(
-            onPressed: value.isClientConfirmed ? vm.saveClient : null,
+            onPressed:
+                vm.state == RegistrationState.register ? vm.saveClient : null,
             child: Text(locales.save),
           );
         },

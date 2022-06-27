@@ -44,12 +44,15 @@
   "editClient": "Edit device",
   "registerClient": "Register client",
   "displayName": "Name",
-  "invalidDisplayName": "Please enter your name!",
+  "invalidDisplayName": "Please enter a name!",
   "noData": "No records were found!",
   "deleteConfirmation": "Are you really want to delete the selected records?",
   "yes": "Yes",
   "createUser": "Create admin",
   "editUser": "Edit admin",
   "notFound": "The requested record wasn't found!",
-  "retrieveTokenFailed": "A token could not be retrieved!"
+  "retrieveTokenFailed": "A token could not be retrieved!",
+  "invalidDeviceName": "Please enter a device name!",
+  "deviceName": "Device name",
+  "lastTokenRefresh": "Last activity: {date}"
 }

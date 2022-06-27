@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Base model with abstract methods that should be implemented by all models.
 abstract class ModelBase {
   /// Indicates whether the model object is deletable.
@@ -13,6 +15,17 @@ abstract class ModelBase {
   /// can be used in widgets, e.g. lists.
   String getDisplayDescription();
 
+  /// Returns an additional text, which will be shown in the display description of the model object, that
+  /// can be used in widgets, e.g. lists.
+  String? getDisplayDescriptionSuffix(BuildContext context) {
+    return null;
+  }
+
   /// Returns the unique identifier of the model object.
   dynamic getIdentifier();
+
+  /// Returns a subtitle of the model object or null if no subtitle was set.
+  String? getSubtitle(BuildContext context) {
+    return null;
+  }
 }
