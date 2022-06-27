@@ -461,9 +461,9 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   Widget _createTitleSuffix(ModelBase? item) {
-    if (item!.getDisplayDescriptionSuffix() != null) {
+    if (item!.getDisplayDescriptionSuffix(context) != null) {
       return Text(
-        " (${item.getDisplayDescriptionSuffix()})",
+        " (${item.getDisplayDescriptionSuffix(context)})",
         style: Theme.of(context).textTheme.subtitle1,
       );
     }

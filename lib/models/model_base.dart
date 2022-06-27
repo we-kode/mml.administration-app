@@ -17,7 +17,7 @@ abstract class ModelBase {
 
   /// Returns an additional text, which will be shown in the display description of the model object, that
   /// can be used in widgets, e.g. lists.
-  String? getDisplayDescriptionSuffix() {
+  String? getDisplayDescriptionSuffix(BuildContext context) {
     return null;
   }
 
