@@ -140,14 +140,14 @@ class ClientRegisterDialog extends StatelessWidget {
                   labelText: vm.locales.deviceName,
                   errorMaxLines: 5,
                 ),
-                onSaved: (String? deviceName) {
-                  vm.client!.deviceIdentifier = deviceName!;
+                onSaved: (String? deviceIdentifier) {
+                  vm.client!.deviceIdentifier = deviceIdentifier!;
                 },
-                onChanged: (String? deviceName) {
-                  vm.client!.deviceIdentifier = deviceName;
+                onChanged: (String? deviceIdentifier) {
+                  vm.client!.deviceIdentifier = deviceIdentifier;
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: vm.validateDeviceName,
+                validator: vm.validateDeviceIdentifier,
               ),
             ],
           ),

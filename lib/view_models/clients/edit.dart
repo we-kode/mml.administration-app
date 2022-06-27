@@ -68,9 +68,9 @@ class ClientsEditViewModel extends ChangeNotifier {
     return _addBackendErrors(displayNameField, error);
   }
 
-  /// Validates the given [deviceName] and returns an error message or null if
-  /// the [deviceName] is valid.
-  String? validateDeviceName(String? deviceName) {
+  /// Validates the given [deviceIdentifier] and returns an error message or null if
+  /// the [deviceIdentifier] is valid.
+  String? validateDeviceIdentifier(String? deviceIdentifier) {
     var error =
         (client.deviceIdentifier ?? '').isNotEmpty ? null : locales.invalidDeviceName;
     return _addBackendErrors(deviceNameField, error);

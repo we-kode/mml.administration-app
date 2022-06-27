@@ -78,16 +78,16 @@ class ClientEditDialog extends StatelessWidget {
               labelText: vm.locales.deviceName,
               errorMaxLines: 5,
             ),
-            onSaved: (String? deviceName) {
+            onSaved: (String? deviceIdentifier) {
               vm.clearBackendErrors(vm.deviceNameField);
-              vm.client.deviceIdentifier = deviceName!;
+              vm.client.deviceIdentifier = deviceIdentifier!;
             },
-            onChanged: (String? deviceName) {
+            onChanged: (String? deviceIdentifier) {
               vm.clearBackendErrors(vm.deviceNameField);
-              vm.client.deviceIdentifier = deviceName;
+              vm.client.deviceIdentifier = deviceIdentifier;
             },
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: vm.validateDeviceName,
+            validator: vm.validateDeviceIdentifier,
           ),
         ],
       ),

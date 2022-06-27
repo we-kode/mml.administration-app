@@ -42,7 +42,7 @@ class Client extends ModelBase {
   }
 
   @override
-  String getDisplayDescriptionSuffix() {
+  String getDisplayDescriptionSuffix(BuildContext context) {
     return "$deviceIdentifier";
   }
 

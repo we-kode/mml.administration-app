@@ -133,9 +133,9 @@ class ClientsRegisterViewModel extends ChangeNotifier {
         : locales.invalidDisplayName;
   }
 
-  /// Validates the given [deviceName] and returns an error message or null if
-  /// the [deviceName] is valid.
-  String? validateDeviceName(String? deviceName) {
+  /// Validates the given [deviceIdentifier] and returns an error message or null if
+  /// the [deviceIdentifier] is valid.
+  String? validateDeviceIdentifier(String? deviceIdentifier) {
     return (client?.deviceIdentifier ?? '').isNotEmpty ? null : locales.invalidDeviceName;
   }
 
