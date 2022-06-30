@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/view_models/change_password.dart';
 import 'package:mml_admin/view_models/clients/overview.dart';
+import 'package:mml_admin/view_models/groups/overview.dart';
 import 'package:mml_admin/view_models/login.dart';
 import 'package:mml_admin/view_models/records.dart';
 import 'package:mml_admin/view_models/settings.dart';
 import 'package:mml_admin/view_models/users/overview.dart';
 import 'package:mml_admin/views/change_password.dart';
 import 'package:mml_admin/views/clients/overview.dart';
+import 'package:mml_admin/views/groups/overview.dart';
 import 'package:mml_admin/views/login.dart';
 import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/views/main.dart';
@@ -53,6 +55,11 @@ class RouterService {
       ),
       ClientsViewModel.route: PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => const ClientsScreen(),
+        transitionDuration: const Duration(seconds: 0),
+      ),
+      GroupsOverviewViewModel.route: PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            const GroupsOverviewScreen(),
         transitionDuration: const Duration(seconds: 0),
       ),
       UsersOverviewViewModel.route: PageRouteBuilder(

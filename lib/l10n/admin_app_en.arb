@@ -54,5 +54,13 @@
   "retrieveTokenFailed": "A token could not be retrieved!",
   "invalidDeviceName": "Please enter a device name!",
   "deviceName": "Device name",
-  "lastTokenRefresh": "Last activity: {date}"
+  "lastTokenRefresh": "Last activity: {date}",
+  "groups": "Groups",
+  "createGroup": "Create group",
+  "editGroup": "Edit group",
+  "groupName": "Group name",
+  "groupIsDefault": "Default group",
+  "groupIsDefaultHint": "Group will be assigned per default on client creation.",
+  "invalidGroupName": "Please enter a name!",
+  "invalidGroupIsDefault": "Please specify, whether the group is a default group or not!"
 }

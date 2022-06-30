@@ -464,7 +464,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     if (item!.getDisplayDescriptionSuffix(context) != null) {
       return Text(
         " (${item.getDisplayDescriptionSuffix(context)})",
-        style: Theme.of(context).textTheme.subtitle1,
+        style: Theme.of(context).textTheme.bodySmall,
       );
     }
     return const Text('');
