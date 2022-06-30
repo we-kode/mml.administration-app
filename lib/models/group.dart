@@ -38,4 +38,12 @@ class Group extends ModelBase {
   dynamic getIdentifier() {
     return id;
   }
+
+  @override
+  bool operator==(Object other) {
+    return other is Group && other.id != null && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

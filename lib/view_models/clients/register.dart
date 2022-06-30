@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/client_registration.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/services/clients.dart';
+import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/registration.dart';
@@ -17,6 +19,8 @@ import 'package:signalr_pure/signalr_pure.dart';
 class ClientsRegisterViewModel extends ChangeNotifier {
   /// [ClientService] used to load data for the client registration dialog.
   final ClientService _service = ClientService.getInstance();
+
+  final GroupService _groupService = GroupService.getInstance();
 
   /// Key of the user edit form.
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -114,6 +118,10 @@ class ClientsRegisterViewModel extends ChangeNotifier {
         nav.pop(true);
       }
     }
+  }
+
+  Future<List<Group>> getGroups(String filter) async {
+    return List.from(await _groupService.getGroups(filter, 0, -1));
   }
 
   /// Closes the view if user aborts registration view.

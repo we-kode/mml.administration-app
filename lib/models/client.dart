@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/models/tag.dart';
 
 part 'client.g.dart';
 
@@ -62,5 +63,10 @@ class Client extends ModelBase {
   String? getSubtitle(BuildContext context) {
     var locales = AppLocalizations.of(context)!;
     return locales.lastTokenRefresh(DateFormat().format(lastTokenRefreshDate!.toLocal()));
+  }
+
+  @override
+  List<Tag>? getTags() {
+    return groups.map((g) => Tag(name: g.name ?? "")).toList();
   }
 }

@@ -429,6 +429,22 @@ class _AsyncListViewState extends State<AsyncListView> {
       subtitle: item.getSubtitle(context) != null
           ? Text(item.getSubtitle(context)!)
           : null,
+      trailing: item.getTags() != null
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: item
+                  .getTags()!
+                  .map(
+                    (tag) => Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Chip(
+                        label: Text(tag.name),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            )
+          : null,
       onTap: () {
         if (!item.isDeletable && _isInMultiSelectMode) {
           return;

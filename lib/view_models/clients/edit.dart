@@ -4,8 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
 
@@ -13,6 +15,8 @@ import 'package:mml_admin/services/router.dart';
 class ClientsEditViewModel extends ChangeNotifier {
   /// [ClientService] used to load data for the client editing screen.
   final ClientService _service = ClientService.getInstance();
+
+  final GroupService _groupService = GroupService.getInstance();
 
   /// Key of the user edit form.
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -22,6 +26,8 @@ class ClientsEditViewModel extends ChangeNotifier {
 
   /// Name of device name field in the errors response.
   final String deviceNameField = 'Device';
+
+  final String groupsField = 'Groups';
 
   /// Current build context.
   late BuildContext _context;
@@ -71,9 +77,15 @@ class ClientsEditViewModel extends ChangeNotifier {
   /// Validates the given [deviceIdentifier] and returns an error message or null if
   /// the [deviceIdentifier] is valid.
   String? validateDeviceIdentifier(String? deviceIdentifier) {
-    var error =
-        (client.deviceIdentifier ?? '').isNotEmpty ? null : locales.invalidDeviceName;
+    var error = (client.deviceIdentifier ?? '').isNotEmpty
+        ? null
+        : locales.invalidDeviceName;
     return _addBackendErrors(deviceNameField, error);
+  }
+
+  String? validateGroups(List<Group>? groups) {
+    String? error;
+    return _addBackendErrors(groupsField, error);
   }
 
   /// Clears the errors from the backend for the field with the passed
@@ -121,6 +133,10 @@ class ClientsEditViewModel extends ChangeNotifier {
         nav.pop(true);
       }
     }
+  }
+
+  Future<List<Group>> getGroups(String filter) async {
+    return List.from(await _groupService.getGroups(filter, 0, -1));
   }
 
   /// Adds errors from backend for passed [fieldName] to the [error] string
