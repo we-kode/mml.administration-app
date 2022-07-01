@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/route_arguments/change_password.dart';
+import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/user.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -30,6 +31,7 @@ class SettingsViewModel extends ChangeNotifier {
       locales = AppLocalizations.of(_context)!;
       try {
         user = await _userService.getUserInfo();
+        print(await RecordService.getInstance().getCompressionRate());
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
       }
