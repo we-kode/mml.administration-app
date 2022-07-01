@@ -429,6 +429,23 @@ class _AsyncListViewState extends State<AsyncListView> {
       subtitle: item.getSubtitle(context) != null
           ? Text(item.getSubtitle(context)!)
           : null,
+      trailing: item.getTags() != null
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: item
+                  .getTags()!
+                  .map(
+                    (tag) => Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Chip(
+                        backgroundColor: tag.color,
+                        label: Text(tag.name),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            )
+          : null,
       onTap: () {
         if (!item.isDeletable && _isInMultiSelectMode) {
           return;
@@ -464,7 +481,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     if (item!.getDisplayDescriptionSuffix(context) != null) {
       return Text(
         " (${item.getDisplayDescriptionSuffix(context)})",
-        style: Theme.of(context).textTheme.subtitle1,
+        style: Theme.of(context).textTheme.bodySmall,
       );
     }
     return const Text('');

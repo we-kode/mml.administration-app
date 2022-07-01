@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/models/tag.dart';
 
 part 'client.g.dart';
 
 /// Client model that holds all information of a client.
-@JsonSerializable(includeIfNull: false)
+@JsonSerializable(includeIfNull: false, explicitToJson: true)
 class Client extends ModelBase {
   /// Id of the client.
   final String? clientId;
@@ -21,6 +23,9 @@ class Client extends ModelBase {
   /// The date and time the client requested a new token.
   DateTime? lastTokenRefreshDate;
 
+  /// List of groups the client is assigned to.
+  List<Group> groups = [];
+
   /// Creates a new client instance with the given values.
   Client({
     required this.clientId,
@@ -28,7 +33,10 @@ class Client extends ModelBase {
     this.deviceIdentifier,
     this.lastTokenRefreshDate,
     bool isDeletable = true,
-  }) : super(isDeletable: isDeletable);
+    List<Group>? groups,
+  }) : super(isDeletable: isDeletable) {
+    this.groups = groups ?? [];
+  }
 
   /// Converts a json object/map to the client model.
   factory Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);
@@ -55,5 +63,10 @@ class Client extends ModelBase {
   String? getSubtitle(BuildContext context) {
     var locales = AppLocalizations.of(context)!;
     return locales.lastTokenRefresh(DateFormat().format(lastTokenRefreshDate!.toLocal()));
+  }
+
+  @override
+  List<Tag>? getTags() {
+    return groups.map((g) => Tag(name: g.name ?? "")).toList();
   }
 }

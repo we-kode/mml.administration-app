@@ -69,5 +69,13 @@
         "type": "String"
       }
     }
-  }
+  },
+  "groups": "Gruppen",
+  "groupName": "Gruppenname",
+  "createGroup": "Gruppe erstellen",
+  "editGroup": "Gruppe bearbeiten",
+  "groupIsDefault": "Standardgruppe",
+  "groupIsDefaultHint": "Gruppe wird beim Erstellen neuer Geräte automatisch zugewiesen.",
+  "invalidGroupName": "Bitte geben Sie einen Namen an!",
+  "invalidGroupIsDefault": "Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!"
 }

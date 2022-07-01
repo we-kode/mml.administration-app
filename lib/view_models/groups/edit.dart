@@ -3,59 +3,61 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
-import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/group.dart';
-import 'package:mml_admin/services/clients.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
 
-/// View model for the edit client screen.
-class ClientsEditViewModel extends ChangeNotifier {
-  /// [ClientService] used to load data for the client editing screen.
-  final ClientService _service = ClientService.getInstance();
-
-  /// [GroupService] used to load data for the groups of the client editing
-  /// screen.
+/// View model for the group edit and create dialog.
+class GroupEditDialogViewModel extends ChangeNotifier {
+  /// [GroupService] used to load data for the group edit and create dialog.
   final GroupService _groupService = GroupService.getInstance();
 
-  /// Key of the user edit form.
+  /// Key of the group edit form.
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  /// Name of display name field in the errors response.
-  final String displayNameField = 'DisplayName';
-
-  /// Name of device name field in the errors response.
-  final String deviceNameField = 'Device';
-
-  /// Name of the groups field in the errors response.
-  final String groupsField = 'Groups';
 
   /// Current build context.
   late BuildContext _context;
 
+  /// The group to be created or edited.
+  late Group group;
+
   /// Locales of the application.
   late AppLocalizations locales;
 
-  /// The client to be edited
-  late Client client;
+  /// Flag that indicates whether the group is successful loaded.
+  bool groupLoadedSuccessfully = false;
 
-  /// Flag that indicates whether the client is successful loaded.
-  bool clientLoadedSuccessfully = false;
+  /// Name of the group name field in the errors response.
+  final String nameField = 'Name';
+
+  /// Name of the is default flag field in the errors response.
+  final String isDefaultField = 'IsDefault';
 
   /// Map of errors from the server.
   Map<String, List<String>> errors = {};
 
-  /// Initialize the edit client view model.
-  Future<bool> init(BuildContext context, String? clientId) async {
-    _context = context;
+
+  /// Initializes the ViewModel and loads the group with the given [groupId] or
+  /// creates an new group model if the id is not passed.
+  Future<bool> init(BuildContext context, String? groupId) async {
     locales = AppLocalizations.of(context)!;
+    _context = context;
+
+    if (groupId == null) {
+      return Future.microtask(() {
+        group = Group();
+        groupLoadedSuccessfully = true;
+        notifyListeners();
+        return true;
+      });
+    }
+
     try {
-      client = await _service.getClient(clientId!);
-      clientLoadedSuccessfully = true;
+      group = await _groupService.getGroup(groupId);
+      groupLoadedSuccessfully = true;
       notifyListeners();
-      return true;
     } catch (e) {
       if (e is DioError && e.response?.statusCode == HttpStatus.notFound) {
         var messenger = MessengerService.getInstance();
@@ -66,31 +68,24 @@ class ClientsEditViewModel extends ChangeNotifier {
       Navigator.pop(context, true);
       return false;
     }
+
+    return true;
   }
 
-  /// Validates the given [displayName] and returns an error message or null if
-  /// the [displayName] is valid.
-  String? validateDisplayName(String? displayName) {
-    var error = (client.displayName ?? '').isNotEmpty
-        ? null
-        : locales.invalidDisplayName;
-    return _addBackendErrors(displayNameField, error);
+  /// Validates the given [groupName] and returns an error message or null if
+  /// the [groupName] is valid.
+  String? validateGroupName(String? groupName) {
+    var error = (groupName ?? '').isNotEmpty ? null : locales.invalidGroupName;
+
+    return _addBackendErrors(nameField, error);
   }
 
-  /// Validates the given [deviceIdentifier] and returns an error message or
-  /// null if the [deviceIdentifier] is valid.
-  String? validateDeviceIdentifier(String? deviceIdentifier) {
-    var error = (client.deviceIdentifier ?? '').isNotEmpty
-        ? null
-        : locales.invalidDeviceName;
-    return _addBackendErrors(deviceNameField, error);
-  }
+  /// Validates the given [isDefault] flag and returns an error message or null
+  /// if the [isDefault] flag is valid.
+  String? validateIsDefault(bool? isDefault) {
+    var error = isDefault == null ? locales.invalidGroupIsDefault : null;
 
-  /// Returns the backend errors for the group field or null if there are no
-  /// validation errors.
-  String? validateGroups(List<Group>? groups) {
-    String? error;
-    return _addBackendErrors(groupsField, error);
+    return _addBackendErrors(isDefaultField, error);
   }
 
   /// Clears the errors from the backend for the field with the passed
@@ -99,13 +94,14 @@ class ClientsEditViewModel extends ChangeNotifier {
     errors.remove(fieldName);
   }
 
-  /// Updates the client or aborts, if the user cancels the operation.
-  void saveClient() async {
+  /// Saves (creates or updates) the group and closes the group dialog on
+  /// success.
+  void saveGroup() async {
     var nav = Navigator.of(_context);
 
     showProgressIndicator();
 
-    if (!clientLoadedSuccessfully || !formKey.currentState!.validate()) {
+    if (!groupLoadedSuccessfully || !formKey.currentState!.validate()) {
       RouterService.getInstance().navigatorKey.currentState!.pop();
       return;
     }
@@ -115,7 +111,9 @@ class ClientsEditViewModel extends ChangeNotifier {
     var shouldClose = false;
 
     try {
-      await _service.updateClient(client);
+      await (group.id != null
+          ? _groupService.updateGroup(group)
+          : _groupService.createGroup(group));
       shouldClose = true;
     } on DioError catch (e) {
       var statusCode = e.response?.statusCode;
@@ -138,11 +136,6 @@ class ClientsEditViewModel extends ChangeNotifier {
         nav.pop(true);
       }
     }
-  }
-
-  /// Loads all groups from the server with the given [filter].
-  Future<List<Group>> getGroups(String filter) async {
-    return List.from(await _groupService.getGroups(filter, 0, -1));
   }
 
   /// Adds errors from backend for passed [fieldName] to the [error] string

@@ -50,6 +50,10 @@ class MainScreen extends StatelessWidget {
                                 Icons.phone_android_rounded,
                                 vm.locales.devices,
                               ),
+                              _navItem(
+                                Icons.vibration,
+                                vm.locales.groups,
+                              ),
                               _navItem(Icons.person, vm.locales.adminUsers),
                               _navItem(Icons.settings, vm.locales.settings),
                             ],

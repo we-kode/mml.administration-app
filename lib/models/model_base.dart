@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/models/tag.dart';
 
 /// Base model with abstract methods that should be implemented by all models.
 abstract class ModelBase {
@@ -26,6 +27,11 @@ abstract class ModelBase {
 
   /// Returns a subtitle of the model object or null if no subtitle was set.
   String? getSubtitle(BuildContext context) {
+    return null;
+  }
+
+  /// Returns a list of tags that should be shown in the list view.
+  List<Tag>? getTags() {
     return null;
   }
 }

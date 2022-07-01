@@ -54,5 +54,13 @@
   "retrieveTokenFailed": "Не удалось загрузить токен!",
   "invalidDeviceName": "Пожалуйста, введите название устройства!",
   "deviceName": "Название устройства",
-  "lastTokenRefresh": "Последняя активность: {date}"
+  "lastTokenRefresh": "Последняя активность: {date}",
+  "groups": "Группы",
+  "createGroup": "Добавить группу",
+  "editGroup": "Изменить группу",
+  "groupName": "Название группы",
+  "groupIsDefault": "Стандартная группа",
+  "groupIsDefaultHint": "Группа будет назначена по умолчанию при создании клиента.",
+  "invalidGroupName": "Пожалуйста, введите название группы!",
+  "invalidGroupIsDefault": "Пожалуйста, укажите, является ли группа стандартной или нет!"
 }

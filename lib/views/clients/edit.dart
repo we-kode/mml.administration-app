@@ -1,5 +1,7 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/clients/edit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -89,6 +91,31 @@ class ClientEditDialog extends StatelessWidget {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: vm.validateDeviceIdentifier,
           ),
+          verticalSpacer,
+          DropdownSearch<Group>.multiSelection(
+            selectedItems: vm.client.groups,
+            asyncItems: vm.getGroups,
+            itemAsString: (Group group) => group.getDisplayDescription(),
+            popupProps: const PopupPropsMultiSelection.menu(
+              showSearchBox: true,
+            ),
+            dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                labelText: vm.locales.groups,
+                errorMaxLines: 5,
+              ),
+            ),
+            onSaved: (List<Group>? groups) {
+              vm.clearBackendErrors(vm.groupsField);
+              vm.client.groups = groups!;
+            },
+            onChanged: (List<Group> groups) {
+              vm.clearBackendErrors(vm.groupsField);
+              vm.client.groups = groups;
+            },
+            autoValidateMode: AutovalidateMode.onUserInteraction,
+            validator: vm.validateGroups,
+          )
         ],
       ),
     );
