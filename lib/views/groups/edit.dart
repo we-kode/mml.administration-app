@@ -4,14 +4,18 @@ import 'package:mml_admin/view_models/groups/edit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
+/// View of the create/edit dialog for groups.
 class GroupEditDialog extends StatelessWidget {
+  /// Id of the group to edit or null if a new group should be created.
   final String? groupId;
 
+  /// Initializes the view for the group create/edit dialog.
   const GroupEditDialog({
     Key? key,
     required this.groupId,
   }) : super(key: key);
 
+  /// Builds the group create/edit dialog.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GroupEditDialogViewModel>(

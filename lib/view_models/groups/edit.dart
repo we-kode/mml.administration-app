@@ -9,7 +9,9 @@ import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
 
+/// View model for the group edit and create dialog.
 class GroupEditDialogViewModel extends ChangeNotifier {
+  /// [GroupService] used to load data for the group edit and create dialog.
   final GroupService _groupService = GroupService.getInstance();
 
   /// Key of the group edit form.
@@ -18,14 +20,19 @@ class GroupEditDialogViewModel extends ChangeNotifier {
   /// Current build context.
   late BuildContext _context;
 
+  /// The group to be created or edited.
   late Group group;
 
+  /// Locales of the application.
   late AppLocalizations locales;
 
+  /// Flag that indicates whether the group is successful loaded.
   bool groupLoadedSuccessfully = false;
 
+  /// Name of the group name field in the errors response.
   final String nameField = 'Name';
 
+  /// Name of the is default flag field in the errors response.
   final String isDefaultField = 'IsDefault';
 
   /// Map of errors from the server.
@@ -65,12 +72,16 @@ class GroupEditDialogViewModel extends ChangeNotifier {
     return true;
   }
 
+  /// Validates the given [groupName] and returns an error message or null if
+  /// the [groupName] is valid.
   String? validateGroupName(String? groupName) {
     var error = (groupName ?? '').isNotEmpty ? null : locales.invalidGroupName;
 
     return _addBackendErrors(nameField, error);
   }
 
+  /// Validates the given [isDefault] flag and returns an error message or null
+  /// if the [isDefault] flag is valid.
   String? validateIsDefault(bool? isDefault) {
     var error = isDefault == null ? locales.invalidGroupIsDefault : null;
 
@@ -83,7 +94,8 @@ class GroupEditDialogViewModel extends ChangeNotifier {
     errors.remove(fieldName);
   }
 
-  /// Saves (creates or updates) the user and closes the user dialog on success.
+  /// Saves (creates or updates) the group and closes the group dialog on
+  /// success.
   void saveGroup() async {
     var nav = Navigator.of(_context);
 

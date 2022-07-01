@@ -3,19 +3,19 @@ import 'package:mml_admin/models/model_base.dart';
 
 part 'group.g.dart';
 
-///
+/// Group model that holds all informations of a client group.
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
 class Group extends ModelBase {
-  ///
+  /// Id of the group.
   final String? id;
 
-  ///
+  /// Name of the group.
   String? name;
 
-  ///
+  /// Flag, that indicates, whether the client group is a default group or not.
   bool isDefault;
 
-  ///
+  /// Initializes the group model.
   Group({
     this.id,
     this.name,

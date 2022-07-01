@@ -438,6 +438,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                     (tag) => Padding(
                       padding: const EdgeInsets.all(5),
                       child: Chip(
+                        backgroundColor: tag.color,
                         label: Text(tag.name),
                       ),
                     ),

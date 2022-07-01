@@ -23,7 +23,7 @@ class Client extends ModelBase {
   /// The date and time the client requested a new token.
   DateTime? lastTokenRefreshDate;
 
-  ///
+  /// List of groups the client is assigned to.
   List<Group> groups = [];
 
   /// Creates a new client instance with the given values.

@@ -3,17 +3,24 @@ import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/api.dart';
 
+/// Service that handles the groups data of the server.
 class GroupService {
+  /// Instance of the group service.
   static final GroupService _instance = GroupService._();
 
+  /// Instance of the [ApiService] to access the server with.
   final ApiService _apiService = ApiService.getInstance();
 
+  /// Private constructor of the service.
   GroupService._();
 
+  /// Returns the singleton instance of the [GroupService].
   static GroupService getInstance() {
     return _instance;
   }
 
+  /// Returns a list of groups with the amount of [take] that match the given
+  /// [filter] starting from the [offset].
   Future<ModelList> getGroups(String? filter, int? offset, int? take) async {
     var response = await _apiService.request(
       '/identity/group',
@@ -32,6 +39,7 @@ class GroupService {
     );
   }
 
+  /// Deletes the groups with the given [groupIds] on the server.
   Future<void> deleteGroups<String>(List<String> groupIds) async {
     await _apiService.request(
       '/identity/group/deleteList',
@@ -42,6 +50,7 @@ class GroupService {
     );
   }
 
+  /// Updates the given [Group] on the server.
   Future<void> updateGroup(Group group) async {
     await _apiService.request(
       '/identity/group/${group.id}',
@@ -52,6 +61,7 @@ class GroupService {
     );
   }
 
+  /// Creates the given [Group] on the server.
   Future<void> createGroup(Group group) async {
     await _apiService.request(
       '/identity/group',
@@ -62,6 +72,7 @@ class GroupService {
     );
   }
 
+  /// Loads the group with the given [id] from the server.
   Future<Group> getGroup(String id) async {
     var response = await _apiService.request(
       '/identity/group/$id',

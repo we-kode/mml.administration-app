@@ -6,7 +6,7 @@ import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/views/groups/edit.dart';
 import 'package:provider/provider.dart';
 
-///
+/// Overview screen of the client groups.
 class GroupsOverviewScreen extends StatelessWidget {
   /// Initializes the instance.
   const GroupsOverviewScreen({Key? key}) : super(key: key);

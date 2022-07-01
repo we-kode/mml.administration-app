@@ -30,6 +30,7 @@ abstract class ModelBase {
     return null;
   }
 
+  /// Returns a list of tags that should be shown in the list view.
   List<Tag>? getTags() {
     return null;
   }

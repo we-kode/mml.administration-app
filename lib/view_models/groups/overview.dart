@@ -5,12 +5,12 @@ import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/services/router.dart';
 
-///
+/// View model for the client groups overview screen.
 class GroupsOverviewViewModel extends ChangeNotifier {
-  ///
+  /// Route for the client groups overview screen.
   static String route = '/groups';
 
-  ///
+  /// [GroupService] used to load data for the groups overview screen.
   final GroupService _groupService = GroupService.getInstance();
 
   /// Loads the groups with the passed [filter] starting at [offset] and

@@ -20,6 +20,8 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   /// [ClientService] used to load data for the client registration dialog.
   final ClientService _service = ClientService.getInstance();
 
+  /// [GroupService] used to load data for the groups of the client register
+  /// screen.
   final GroupService _groupService = GroupService.getInstance();
 
   /// Key of the user edit form.
@@ -120,6 +122,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     }
   }
 
+  /// Loads all groups from the server with the given [filter].
   Future<List<Group>> getGroups(String filter) async {
     return List.from(await _groupService.getGroups(filter, 0, -1));
   }

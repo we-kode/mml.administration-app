@@ -16,6 +16,8 @@ class ClientsEditViewModel extends ChangeNotifier {
   /// [ClientService] used to load data for the client editing screen.
   final ClientService _service = ClientService.getInstance();
 
+  /// [GroupService] used to load data for the groups of the client editing
+  /// screen.
   final GroupService _groupService = GroupService.getInstance();
 
   /// Key of the user edit form.
@@ -27,6 +29,7 @@ class ClientsEditViewModel extends ChangeNotifier {
   /// Name of device name field in the errors response.
   final String deviceNameField = 'Device';
 
+  /// Name of the groups field in the errors response.
   final String groupsField = 'Groups';
 
   /// Current build context.
@@ -35,7 +38,7 @@ class ClientsEditViewModel extends ChangeNotifier {
   /// Locales of the application.
   late AppLocalizations locales;
 
-  /// The clientto be edited
+  /// The client to be edited
   late Client client;
 
   /// Flag that indicates whether the client is successful loaded.
@@ -74,8 +77,8 @@ class ClientsEditViewModel extends ChangeNotifier {
     return _addBackendErrors(displayNameField, error);
   }
 
-  /// Validates the given [deviceIdentifier] and returns an error message or null if
-  /// the [deviceIdentifier] is valid.
+  /// Validates the given [deviceIdentifier] and returns an error message or
+  /// null if the [deviceIdentifier] is valid.
   String? validateDeviceIdentifier(String? deviceIdentifier) {
     var error = (client.deviceIdentifier ?? '').isNotEmpty
         ? null
@@ -83,6 +86,8 @@ class ClientsEditViewModel extends ChangeNotifier {
     return _addBackendErrors(deviceNameField, error);
   }
 
+  /// Returns the backend errors for the group field or null if there are no
+  /// validation errors.
   String? validateGroups(List<Group>? groups) {
     String? error;
     return _addBackendErrors(groupsField, error);
@@ -135,6 +140,7 @@ class ClientsEditViewModel extends ChangeNotifier {
     }
   }
 
+  /// Loads all groups from the server with the given [filter].
   Future<List<Group>> getGroups(String filter) async {
     return List.from(await _groupService.getGroups(filter, 0, -1));
   }
