@@ -1,6 +1,5 @@
 {
   "@@locale": "de",
-
   "appTitle": "Meine Mediathek Administration",
   "serverName": "Server (Domain:Port)",
   "serverNameUnchanged": "Server (Domain:Port) (unverändert)",
@@ -77,5 +76,7 @@
   "groupIsDefault": "Standardgruppe",
   "groupIsDefaultHint": "Gruppe wird beim Erstellen neuer Geräte automatisch zugewiesen.",
   "invalidGroupName": "Bitte geben Sie einen Namen an!",
-  "invalidGroupIsDefault": "Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!"
+  "invalidGroupIsDefault": "Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!",
+  "uploading": "Dateien werden hochgeladen.",
+  "toLargeFile": "Datei ist zu groß."
 }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:mml_admin/extensions/multipartfile.dart';
 import 'package:mml_admin/services/api.dart';
 
 class RecordService {
@@ -26,5 +29,27 @@ class RecordService {
     );
 
     return response.data;
+  }
+
+  /// Uploads a [file] with the given [fileName] to the server.
+  Future upload(File file, String fileName) async {
+    final lastModified = await file.lastModified();
+    FormData formData = FormData.fromMap(
+      {
+        "file":
+            MultipartFileExtended.fromFileSync(file.path, filename: fileName)
+      },
+    );
+    formData.fields.add(
+      MapEntry(
+        'LastModifiedDate',
+        lastModified.toString(),
+      ),
+    );
+    await _apiService.request(
+      '/media/upload',
+      data: formData,
+      options: Options(method: 'POST'),
+    );
   }
 }

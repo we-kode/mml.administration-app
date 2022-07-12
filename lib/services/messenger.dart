@@ -55,4 +55,9 @@ class MessengerService {
   String get relogin {
     return AppLocalizations.of(snackbarKey.currentContext!)!.relogin;
   }
+
+   /// Translated string for to large file errors.
+  String get fileToLarge {
+    return AppLocalizations.of(snackbarKey.currentContext!)!.toLargeFile;
+  }
 }
