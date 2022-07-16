@@ -15,7 +15,7 @@ class GroupsOverviewViewModel extends ChangeNotifier {
 
   /// Loads the groups with the passed [filter] starting at [offset] and
   /// loading [take] data.
-  Future<ModelList> loadGroups({String? filter, int? offset, int? take}) async {
+  Future<ModelList> loadGroups({String? filter, int? offset, int? take, dynamic subfilter}) async {
     return await _groupService.getGroups(filter, offset, take);
   }
 

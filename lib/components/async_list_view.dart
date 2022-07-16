@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
+import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/router.dart';
@@ -14,6 +15,7 @@ typedef LoadDataFunction = Future<ModelList> Function({
   String? filter,
   int? offset,
   int? take,
+  dynamic subfilter
 });
 
 /// Function that deletes the items with the passed [itemIdentifiers].
@@ -76,16 +78,20 @@ class AsyncListView extends StatefulWidget {
   /// Subaction buttons which can be used to add multiple sub actions to the main add button
   final List<ActionButton>? subactions;
 
+  /// A subfilter widget which can be used to add subfilters like chips for more filter posibilities.
+  final Widget? subfilter;
+
   /// Initializes the list view.
-  const AsyncListView({
-    Key? key,
-    required this.loadData,
-    required this.deleteItems,
-    required this.editItem,
-    this.showAddButton = true,
-    this.subactions,
-    this.addItem,
-  }) : super(key: key);
+  const AsyncListView(
+      {Key? key,
+      required this.loadData,
+      required this.deleteItems,
+      required this.editItem,
+      this.addItem,
+      this.showAddButton = true,
+      this.subactions,
+      this.subfilter})
+      : super(key: key);
 
   @override
   State<AsyncListView> createState() => _AsyncListViewState();
@@ -124,6 +130,9 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Indicates, whether data is loading and an loading indicator should be
   /// shown.
   bool _isLoadingData = true;
+
+  /// The actual item group if list items should be grouped.
+  String? _actualGroup;
 
   @override
   void initState() {
@@ -186,7 +195,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Shows a loading indicator instead of the list during load, if
   /// [showLoadingOverlay] is true.
   /// Otherwhise the data will be loaded lazy in the background.
-  void _loadData({bool showLoadingOverlay = true}) {
+  void _loadData({bool showLoadingOverlay = true, dynamic subfilter}) {
     if (showLoadingOverlay) {
       setState(() {
         _isLoadingData = true;
@@ -197,6 +206,7 @@ class _AsyncListViewState extends State<AsyncListView> {
       filter: _filter,
       offset: _offset,
       take: _take,
+      subfilter: subfilter
     );
 
     dataFuture.then((value) {
@@ -221,7 +231,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   /// Show a floating action button or an expanding fab.
-  /// 
+  ///
   /// When no sub action buttons given, only the add action button is shown, when [widget.showAddButton] is true.
   /// When a list of sub action buttons is provided, an expandable action button will be shown.
   Widget _createActionButton() {
@@ -261,18 +271,24 @@ class _AsyncListViewState extends State<AsyncListView> {
           Visibility(
             visible: !_isInMultiSelectMode,
             child: Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.filter,
-                  icon: const Icon(Icons.filter_list_alt),
-                ),
-                onChanged: (String filterText) {
-                  setState(() {
-                    _filter = filterText;
-                  });
+              child: Column(
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.filter,
+                      icon: const Icon(Icons.filter_list_alt),
+                    ),
+                    onChanged: (String filterText) {
+                      setState(() {
+                        _filter = filterText;
+                      });
 
-                  _reloadData();
-                },
+                      _reloadData();
+                    },
+                  ),
+                  if (widget.subfilter != null) verticalSpacer,
+                  if (widget.subfilter != null) widget.subfilter!,
+                ],
               ),
             ),
           ),
@@ -423,7 +439,7 @@ class _AsyncListViewState extends State<AsyncListView> {
       return _createLoadingTile();
     }
 
-    var ledingTile = !_isInMultiSelectMode
+    var leadingTile = !_isInMultiSelectMode
         ? null
         : Visibility(
             visible: item.isDeletable,
@@ -435,9 +451,37 @@ class _AsyncListViewState extends State<AsyncListView> {
             ),
           );
 
+    var itemGroup = item.getGroup(context) ?? '';
+    if (itemGroup.isEmpty) {
+      return _listTile(leadingTile, item, index);
+    }
+
+    // Grouping if first element or
+    // group is a new one and the predecessor has another group
+    if (index == 0 ||
+        (itemGroup != _actualGroup &&
+            _items![index - 1]?.getGroup(context) != itemGroup)) {
+      _actualGroup = itemGroup;
+      return Column(
+        children: [
+          Chip(
+            label: Text(
+              item.getGroup(context)!,
+            ),
+          ),
+          _listTile(leadingTile, item, index),
+        ],
+      );
+    }
+
+    return _listTile(leadingTile, item, index);
+  }
+
+  ListTile _listTile(Visibility? leadingTile, ModelBase item, int index) {
     return ListTile(
-      leading: ledingTile,
+      leading: leadingTile,
       minVerticalPadding: 0,
+      visualDensity: const VisualDensity(vertical: 0),
       title: Row(
         children: [
           Text(item.getDisplayDescription()),
@@ -447,23 +491,17 @@ class _AsyncListViewState extends State<AsyncListView> {
       subtitle: item.getSubtitle(context) != null
           ? Text(item.getSubtitle(context)!)
           : null,
-      trailing: item.getTags() != null
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: item
-                  .getTags()!
-                  .map(
-                    (tag) => Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Chip(
-                        backgroundColor: tag.color,
-                        label: Text(tag.name),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            )
-          : null,
+      trailing: Column(
+        children: [
+          item.getTimeInfo(context) != null
+              ? Text(
+                  item.getTimeInfo(context)!,
+                  style: Theme.of(context).textTheme.bodySmall,
+                )
+              : const SizedBox.shrink(),
+          _getGroupTags(item) ?? const SizedBox.shrink(),
+        ],
+      ),
       onTap: () {
         if (!item.isDeletable && _isInMultiSelectMode) {
           return;
@@ -493,6 +531,26 @@ class _AsyncListViewState extends State<AsyncListView> {
         _onItemChecked(index);
       },
     );
+  }
+
+  Row? _getGroupTags(ModelBase item) {
+    return item.getTags() != null
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: item
+                .getTags()!
+                .map(
+                  (tag) => Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Chip(
+                      backgroundColor: tag.color,
+                      label: Text(tag.name),
+                    ),
+                  ),
+                )
+                .toList(),
+          )
+        : null;
   }
 
   Widget _createTitleSuffix(ModelBase? item) {

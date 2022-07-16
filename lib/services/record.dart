@@ -2,6 +2,12 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:mml_admin/extensions/multipartfile.dart';
+import 'package:mml_admin/models/album.dart';
+import 'package:mml_admin/models/artist.dart';
+import 'package:mml_admin/models/genre.dart';
+import 'package:mml_admin/models/id3_tag_filter.dart';
+import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/models/record.dart';
 import 'package:mml_admin/services/api.dart';
 
 class RecordService {
@@ -17,18 +23,6 @@ class RecordService {
   /// Returns the singleton instance of the [RecordService].
   static RecordService getInstance() {
     return _instance;
-  }
-
-  /// Loads the compression rate.
-  Future<String> getCompressionRate() async {
-    var response = await _apiService.request(
-      '/media/settings/compressionRate',
-      options: Options(
-        method: 'GET',
-      ),
-    );
-
-    return response.data;
   }
 
   /// Uploads a [file] with the given [fileName] to the server.
@@ -50,6 +44,99 @@ class RecordService {
       '/media/upload',
       data: formData,
       options: Options(method: 'POST'),
+    );
+  }
+
+  /// Returns a list of records with the amount of [take] that match the given
+  /// [filter] starting from the [offset].
+  Future<ModelList> getRecords(
+      String? filter, int? offset, int? take, ID3TagFilter? tagFilter) async {
+    var params = <String, String?>{};
+
+    if (filter != null) {
+      params['filter'] = filter;
+    }
+
+    if (offset != null) {
+      params['offset'] = offset.toString();
+    }
+
+    if (take != null) {
+      params['take'] = take.toString();
+    }
+
+    var response = await _apiService.request(
+      '/media/record/list',
+      queryParameters: params,
+      data: tagFilter != null ? tagFilter.toJson() : {},
+      options: Options(
+        method: 'POST',
+      ),
+    );
+
+    return ModelList(
+      List<Record>.from(
+        response.data['items'].map((item) => Record.fromJson(item)),
+      ),
+      offset ?? 0,
+      response.data["totalCount"],
+    );
+  }
+
+  /// Returns a list of artists with the amount of [take] starting from the [offset].
+  Future<ModelList> getArtists(int? offset, int? take) async {
+    var response = await _apiService.request(
+      '/media/record/artists',
+      queryParameters: {"skip": offset, "take": take},
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return ModelList(
+      List<Artist>.from(
+        response.data['items'].map((item) => Artist.fromJson(item)),
+      ),
+      offset ?? 0,
+      response.data["totalCount"],
+    );
+  }
+
+  /// Returns a list of albums with the amount of [take] starting from the [offset].
+  Future<ModelList> getAlbums(int? offset, int? take) async {
+    var response = await _apiService.request(
+      '/media/record/albums',
+      queryParameters: {"skip": offset, "take": take},
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return ModelList(
+      List<Album>.from(
+        response.data['items'].map((item) => Album.fromJson(item)),
+      ),
+      offset ?? 0,
+      response.data["totalCount"],
+    );
+  }
+
+  /// Returns a list of genres with the amount of [take] starting from the [offset].
+  Future<ModelList> getGenres(int? offset, int? take) async {
+    var response = await _apiService.request(
+      '/media/record/genres',
+      queryParameters: {"skip": offset, "take": take},
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return ModelList(
+      List<Genre>.from(
+        response.data['items'].map((item) => Genre.fromJson(item)),
+      ),
+      offset ?? 0,
+      response.data["totalCount"],
     );
   }
 }

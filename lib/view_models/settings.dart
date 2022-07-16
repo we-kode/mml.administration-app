@@ -31,7 +31,6 @@ class SettingsViewModel extends ChangeNotifier {
       locales = AppLocalizations.of(_context)!;
       try {
         user = await _userService.getUserInfo();
-        print(await RecordService.getInstance().getCompressionRate());
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
       }

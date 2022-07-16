@@ -19,6 +19,7 @@ class ClientsViewModel {
     String? filter,
     int? offset,
     int? take,
+    dynamic subfilter,
   }) async {
     return await _service.getClients(filter, offset, take);
   }

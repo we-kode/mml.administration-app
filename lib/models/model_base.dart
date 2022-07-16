@@ -30,6 +30,16 @@ abstract class ModelBase {
     return null;
   }
 
+  /// Returns a time information like duration.
+  String? getTimeInfo(BuildContext context) {
+    return null;
+  }
+
+  /// Returns the group this item belongs to.
+  String? getGroup(BuildContext context) {
+    return null;
+  }
+
   /// Returns a list of tags that should be shown in the list view.
   List<Tag>? getTags() {
     return null;
