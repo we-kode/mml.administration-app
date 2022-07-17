@@ -78,5 +78,5 @@
   "groupIsDefaultHint": "Gruppe wird beim Erstellen neuer Geräte automatisch zugewiesen.",
   "invalidGroupName": "Bitte geben Sie einen Namen an!",
   "invalidGroupIsDefault": "Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!",
-  "actualConnectionSettings": "Aktuelle Verbidungseinstellungen"
+  "actualConnectionSettings": "Aktuelle Verbindungseinstellungen"
 }
