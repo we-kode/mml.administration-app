@@ -9,7 +9,8 @@ part of 'album.dart';
 Album _$AlbumFromJson(Map<String, dynamic> json) => Album(
       albumId: json['albumId'] as String?,
       albumName: json['albumName'] as String?,
-    )..isDeletable = json['isDeletable'] as bool;
+      isDeletable: json['isDeletable'] as bool? ?? false,
+    );
 
 Map<String, dynamic> _$AlbumToJson(Album instance) {
   final val = <String, dynamic>{

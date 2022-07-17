@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
@@ -14,17 +16,19 @@ class RecordsViewModel extends ChangeNotifier {
   /// [RecordService] used to load data for the records uplaod dialog.
   final RecordService _service = RecordService.getInstance();
 
-  final ID3TagFilter tagFilter = ID3TagFilter();
+  /// [StreamController] to stream events on.
+  final StreamController filterChangedStreamController = StreamController();
 
   /// Loads the records with the passing [filter] starting at [offset] and loading
   /// [take] data.
-  Future<ModelList> load({
-    String? filter,
-    int? offset,
-    int? take,
-    dynamic subfilter
-  }) async {
+  Future<ModelList> load(
+      {String? filter, int? offset, int? take, dynamic subfilter}) async {
     return _service.getRecords(filter, offset, take, subfilter);
+  }
+
+  /// Gets called when [ID3TagFilter] changes.
+  void filterChanged(ID3TagFilter filter) {
+    filterChangedStreamController.add(filter);
   }
 
   /// Deletes the records with the passed [recordIds] or or aborts, if the user

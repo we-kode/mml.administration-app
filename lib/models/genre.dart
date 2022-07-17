@@ -13,19 +13,23 @@ class Genre extends ModelBase {
   final String? name;
 
   /// Initializes the model.
-  Genre({this.genreId, this.name}) : super(isDeletable: false);
+  Genre({
+    this.genreId,
+    this.name,
+    bool isDeletable = false,
+  }) : super(isDeletable: isDeletable);
 
   /// Converts a json object/map to the model.
   factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
 
   /// Converts the current model to a json object/map.
   Map<String, dynamic> toJson() => _$GenreToJson(this);
-  
+
   @override
   String getDisplayDescription() {
     return "$name";
   }
-  
+
   @override
   getIdentifier() {
     return "$genreId";

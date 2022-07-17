@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
@@ -10,13 +12,9 @@ import 'package:mml_admin/services/router.dart';
 import 'package:shimmer/shimmer.dart';
 
 /// Function to load data with the passed [filter], starting from [offset] and
-/// loading an amount of [take] data.
-typedef LoadDataFunction = Future<ModelList> Function({
-  String? filter,
-  int? offset,
-  int? take,
-  dynamic subfilter
-});
+/// loading an amount of [take] data. Also a [subfilter] can be added to filter the list more specific.
+typedef LoadDataFunction = Future<ModelList> Function(
+    {String? filter, int? offset, int? take, dynamic subfilter});
 
 /// Function that deletes the items with the passed [itemIdentifiers].
 ///
@@ -81,6 +79,11 @@ class AsyncListView extends StatefulWidget {
   /// A subfilter widget which can be used to add subfilters like chips for more filter posibilities.
   final Widget? subfilter;
 
+  /// Event listener of type [StreamController] which listen on DataChanges from extern.
+  ///
+  /// If no [StreamController] is provided, data will not be relaoded, when data chnaged extern.
+  final StreamController<dynamic>? onDataChanged;
+
   /// Initializes the list view.
   const AsyncListView(
       {Key? key,
@@ -90,7 +93,8 @@ class AsyncListView extends StatefulWidget {
       this.addItem,
       this.showAddButton = true,
       this.subactions,
-      this.subfilter})
+      this.subfilter,
+      this.onDataChanged})
       : super(key: key);
 
   @override
@@ -134,10 +138,36 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// The actual item group if list items should be grouped.
   String? _actualGroup;
 
+  /// [StreamSubscription] of the actual stream controller or null if no stream controller is provided.
+  StreamSubscription? _streamSubscription;
+
+  /// The actual set subfilter on which the list will be filtered on data loading.
+  dynamic _subfilterData;
+
   @override
   void initState() {
     _reloadData();
+    if (widget.onDataChanged != null) {
+      _streamSubscription = widget.onDataChanged!.stream.listen(
+        (event) {
+          _subfilterData = event;
+          _reloadData();
+        },
+      );
+    }
     super.initState();
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    if (widget.onDataChanged != null) {
+      await widget.onDataChanged!.close();
+    }
+
+    if (_streamSubscription != null) {
+      await _streamSubscription!.cancel();
+    }
   }
 
   @override
@@ -187,7 +217,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     _offset = _initialOffset;
     _take = _initialTake;
 
-    _loadData();
+    _loadData(subfilter: _subfilterData);
   }
 
   /// Loads the data for the [_offset] and [_take] with the [_filter].
@@ -203,11 +233,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     }
 
     var dataFuture = widget.loadData(
-      filter: _filter,
-      offset: _offset,
-      take: _take,
-      subfilter: subfilter
-    );
+        filter: _filter, offset: _offset, take: _take, subfilter: subfilter);
 
     dataFuture.then((value) {
       if (!mounted) {
@@ -286,6 +312,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                       _reloadData();
                     },
                   ),
+                  // add subfilter if one is provided.
                   if (widget.subfilter != null) verticalSpacer,
                   if (widget.subfilter != null) widget.subfilter!,
                 ],
@@ -422,7 +449,7 @@ class _AsyncListViewState extends State<AsyncListView> {
           Text(AppLocalizations.of(context)!.noData),
           horizontalSpacer,
           TextButton.icon(
-            onPressed: _loadData,
+            onPressed: () => _loadData(subfilter: _subfilterData),
             icon: const Icon(Icons.refresh),
             label: Text(AppLocalizations.of(context)!.reload),
           ),
@@ -431,7 +458,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     );
   }
 
-  /// Creates a tile widget for one list item at the given [index].
+  /// Creates a tile widget for one list item at the given [index] or a group widget.
   Widget _createListTile(int index) {
     var item = _items![index];
 
@@ -477,6 +504,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     return _listTile(leadingTile, item, index);
   }
 
+  /// Creates a tile widget for one list [item] at the given [index].
   ListTile _listTile(Visibility? leadingTile, ModelBase item, int index) {
     return ListTile(
       leading: leadingTile,
@@ -533,6 +561,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     );
   }
 
+  /// Creates Tags in the list if some tags exists.
   Row? _getGroupTags(ModelBase item) {
     return item.getTags() != null
         ? Row(
@@ -553,6 +582,7 @@ class _AsyncListViewState extends State<AsyncListView> {
         : null;
   }
 
+  /// Cretaes a suffix widget of the title if suffix exists.
   Widget _createTitleSuffix(ModelBase? item) {
     if (item!.getDisplayDescriptionSuffix(context) != null) {
       return Text(

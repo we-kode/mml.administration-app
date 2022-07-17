@@ -1,14 +1,13 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
-import 'package:mml_admin/components/chip_filter.dart';
+import 'package:mml_admin/views/records/record_tag_filter.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:mml_admin/views/records/upload.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 /// Overview screen of the uploaded records to the music lib.
 class RecordsScreen extends StatelessWidget {
@@ -22,12 +21,11 @@ class RecordsScreen extends StatelessWidget {
       create: (context) => RecordsViewModel(),
       builder: (context, _) {
         var vm = Provider.of<RecordsViewModel>(context, listen: false);
-        var locales = AppLocalizations.of(context)!;
 
         return AsyncListView(
-          subfilter: ChipFilterView(
+          subfilter: RecordTagFilter(
             onFilterChanged: (ID3TagFilter filter) async {
-              print("sadas");
+              vm.filterChanged(filter);
               return true;
             },
           ),
@@ -94,6 +92,7 @@ class RecordsScreen extends StatelessWidget {
             );
           },
           loadData: vm.load,
+          onDataChanged: vm.filterChangedStreamController,
         );
       },
     );

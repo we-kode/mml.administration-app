@@ -9,7 +9,8 @@ part of 'artist.dart';
 Artist _$ArtistFromJson(Map<String, dynamic> json) => Artist(
       artistId: json['artistId'] as String?,
       name: json['name'] as String?,
-    )..isDeletable = json['isDeletable'] as bool;
+      isDeletable: json['isDeletable'] as bool? ?? false,
+    );
 
 Map<String, dynamic> _$ArtistToJson(Artist instance) {
   final val = <String, dynamic>{
