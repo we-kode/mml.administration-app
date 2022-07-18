@@ -21,8 +21,12 @@ class RecordsViewModel extends ChangeNotifier {
 
   /// Loads the records with the passing [filter] starting at [offset] and loading
   /// [take] data.
-  Future<ModelList> load(
-      {String? filter, int? offset, int? take, dynamic subfilter}) async {
+  Future<ModelList> load({
+    String? filter,
+    int? offset,
+    int? take,
+    dynamic subfilter,
+  }) async {
     return _service.getRecords(filter, offset, take, subfilter);
   }
 
