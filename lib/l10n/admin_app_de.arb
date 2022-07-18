@@ -78,5 +78,6 @@
   "invalidGroupName": "Bitte geben Sie einen Namen an!",
   "invalidGroupIsDefault": "Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!",
   "uploading": "Dateien werden hochgeladen.",
-  "toLargeFile": "Datei ist zu groß."
+  "toLargeFile": "Datei ist zu groß.",
+  "actualConnectionSettings": "Aktuelle Verbindungseinstellungen"
 }

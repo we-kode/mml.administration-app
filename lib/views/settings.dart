@@ -1,5 +1,5 @@
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/settings.dart';
 import 'package:provider/provider.dart';
 
@@ -11,8 +11,8 @@ class SettingsScreen extends StatelessWidget {
   /// Builds the settings screen.
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: ChangeNotifierProvider<SettingsViewModel>(
+    return Scaffold(
+      body: ChangeNotifierProvider<SettingsViewModel>(
         create: (context) => SettingsViewModel(),
         builder: (context, _) {
           var vm = Provider.of<SettingsViewModel>(context, listen: false);
@@ -25,29 +25,85 @@ class SettingsScreen extends StatelessWidget {
                 );
               }
 
-              return Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.person),
-                        Text(' ${vm.locales.actualUser}: ${vm.user!.name!}'),
-                      ],
-                    ),
-                    verticalSpacer,
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        vm.changePassword();
-                      },
-                      icon: const Icon(Icons.lock),
-                      label: Text(vm.locales.changePassword),
-                    ),
-                    verticalSpacer,
-                    const Divider(),
-                  ],
-                ),
+              return Column(
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: Card(
+                          child: ListTile(
+                            leading: const Icon(Icons.person),
+                            trailing: ElevatedButton.icon(
+                              onPressed: () {
+                                vm.changePassword();
+                              },
+                              icon: const Icon(Icons.lock),
+                              label: Text(vm.locales.changePassword),
+                            ),
+                            title: Text(
+                              '${vm.locales.actualUser}: ${vm.user!.name!}',
+                            ),
+                          ),
+                        ),
+                      ),
+                      // TODO: Implement
+                      const Expanded(
+                        child: Card(
+                          child: ListTile(
+                            title: Text("TODO: Upload settings"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: Card(
+                          child: ListTile(
+                            title: Text(
+                              vm.locales.actualConnectionSettings,
+                              textAlign: TextAlign.center,
+                            ),
+                            subtitle: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                BarcodeWidget(
+                                  padding: const EdgeInsets.all(15),
+                                  barcode: Barcode.qrCode(),
+                                  color: Theme.of(context).colorScheme.primary,
+                                  height: 256,
+                                  width: 256,
+                                  data: vm.connectionSettings.toString(),
+                                  errorBuilder: (context, error) => Center(
+                                    child: Text(error),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).cardColor,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  margin: const EdgeInsets.all(100.0),
+                                  width: 50,
+                                  height: 50,
+                                  child: Image.asset(
+                                    'assets/images/logo.png',
+                                    scale: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               );
             },
           );

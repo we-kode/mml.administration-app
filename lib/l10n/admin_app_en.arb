@@ -64,5 +64,6 @@
   "invalidGroupName": "Please enter a name!",
   "invalidGroupIsDefault": "Please specify, whether the group is a default group or not!",
   "uploading": "Uploading files.",
-  "toLargeFile": "File is to large."
+  "toLargeFile": "File is to large.",
+  "actualConnectionSettings": "Actual connection settings"
 }

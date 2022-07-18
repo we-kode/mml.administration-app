@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:mml_admin/models/client.dart';
+import 'package:mml_admin/models/connection_settings.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/api.dart';
+import 'package:mml_admin/services/secure_storage.dart';
 
 /// Service that handles the clients data of the server.
 class ClientService {
@@ -73,5 +75,21 @@ class ClientService {
     );
 
     return Client.fromJson(response.data);
+  }
+
+  /// Loads the connection settings for a client app.
+  Future<ConnectionSettings> getConnectionSettings() async {
+    var response = await _apiService.request(
+      '/identity/client/connection_settings',
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    response.data['serverName'] = await SecureStorageService.getInstance().get(
+      SecureStorageService.serverNameStorageKey,
+    );
+
+    return ConnectionSettings.fromJson(response.data);
   }
 }
