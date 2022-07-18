@@ -70,10 +70,12 @@ class RecordsScreen extends StatelessWidget {
               },
             ),
           ],
+          //TODO deleting of items
           deleteItems: <String>(List<String> recordIds) => vm.delete(
             recordIds,
             context,
           ),
+          // TODO edit dialog
           editItem: (ModelBase client) async {
             return await showDialog(
               barrierDismissible: false,

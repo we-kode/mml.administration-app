@@ -64,6 +64,9 @@
   "invalidGroupName": "Пожалуйста, введите название группы!",
   "invalidGroupIsDefault": "Пожалуйста, укажите, является ли группа стандартной или нет!",
   "uploading": "Загрузка файлов.",
-  "toLargeFile": "Файл слишком большой.",
+  "toLargeFile": "Файл {fileName} слишком большой.",
+  "uploadingFileFailed": "Произошла ошибка при загрузке файла {fileName}: {error}",
+  "invalidMp3File": "Файл не является допустимым файлом MP3.",
+  "invalidFileNoContent": "В файле нет содержимого.",
   "actualConnectionSettings": "Текущие настройки подключения"
 }

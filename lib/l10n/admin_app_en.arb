@@ -64,6 +64,9 @@
   "invalidGroupName": "Please enter a name!",
   "invalidGroupIsDefault": "Please specify, whether the group is a default group or not!",
   "uploading": "Uploading files.",
-  "toLargeFile": "File is to large.",
+  "toLargeFile": "File {fileName} is to large.",
+  "uploadingFileFailed": "An error occurred while uploading the file {fileName}: {error}",
+  "invalidMp3File": "File is not a valid MP3 file.",
+  "invalidFileNoContent": "File has no content.",
   "actualConnectionSettings": "Actual connection settings"
 }

@@ -4,8 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:mml_admin/extensions/multipartfile.dart';
 import 'package:mml_admin/services/api.dart';
 
+/// Service that handles the records data of the server.
 class RecordService {
-  /// Instance of the group service.
+  /// Instance of the record service.
   static final RecordService _instance = RecordService._();
 
   /// Instance of the [ApiService] to access the server with.
@@ -36,8 +37,10 @@ class RecordService {
     final lastModified = await file.lastModified();
     FormData formData = FormData.fromMap(
       {
-        "file":
-            MultipartFileExtended.fromFileSync(file.path, filename: fileName)
+        "file": MultipartFileExtended.fromFileSync(
+          file.path,
+          filename: fileName,
+        )
       },
     );
     formData.fields.add(

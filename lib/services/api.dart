@@ -175,8 +175,10 @@ class ApiService {
       formData.files.add(
         MapEntry(
           mapFile.key,
-          MultipartFileExtended.fromFileSync(mapFile.value.filePath,
-              filename: mapFile.value.filename),
+          MultipartFileExtended.fromFileSync(
+            mapFile.value.filePath,
+            filename: mapFile.value.filename,
+          ),
         ),
       );
     }
