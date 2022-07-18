@@ -63,5 +63,12 @@
   "groupIsDefaultHint": "Группа будет назначена по умолчанию при создании клиента.",
   "invalidGroupName": "Пожалуйста, введите название группы!",
   "invalidGroupIsDefault": "Пожалуйста, укажите, является ли группа стандартной или нет!",
+  "uploading": "Загрузка файлов.",
+  "toLargeFile": "Файл {fileName} слишком большой.",
+  "uploadingFileFailed": "Произошла ошибка при загрузке файла {fileName}: {error}",
+  "invalidMp3File": "Файл не является допустимым файлом MP3.",
+  "invalidFileNoContent": "В файле нет содержимого.",
+  "uploadFolder":"Загрузить папку",
+  "uploadFiles": "Загрузить файлы",
   "actualConnectionSettings": "Текущие настройки подключения"
 }

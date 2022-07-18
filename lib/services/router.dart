@@ -3,7 +3,7 @@ import 'package:mml_admin/view_models/change_password.dart';
 import 'package:mml_admin/view_models/clients/overview.dart';
 import 'package:mml_admin/view_models/groups/overview.dart';
 import 'package:mml_admin/view_models/login.dart';
-import 'package:mml_admin/view_models/records.dart';
+import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:mml_admin/view_models/settings.dart';
 import 'package:mml_admin/view_models/users/overview.dart';
 import 'package:mml_admin/views/change_password.dart';
@@ -12,7 +12,7 @@ import 'package:mml_admin/views/groups/overview.dart';
 import 'package:mml_admin/views/login.dart';
 import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/views/main.dart';
-import 'package:mml_admin/views/records.dart';
+import 'package:mml_admin/views/records/overview.dart';
 import 'package:mml_admin/views/settings.dart';
 import 'package:mml_admin/views/users/overview.dart';
 

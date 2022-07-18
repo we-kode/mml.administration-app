@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+import 'package:mml_admin/extensions/multipartfile.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:mml_admin/services/user.dart';
@@ -130,7 +131,9 @@ class ApiService {
                   cancelToken: requestOptions.cancelToken,
                   onReceiveProgress: requestOptions.onReceiveProgress,
                   options: options,
-                  data: requestOptions.data,
+                  data: requestOptions.data is FormData
+                      ? _reinitFormData(requestOptions.data)
+                      : requestOptions.data,
                   queryParameters: requestOptions.queryParameters,
                 );
 
@@ -162,5 +165,23 @@ class ApiService {
         return handler.reject(e);
       }),
     );
+  }
+
+  /// Reinitialize the form data when token was refreshed.
+  FormData _reinitFormData(data) {
+    FormData formData = FormData();
+    formData.fields.addAll(data.fields);
+    for (MapEntry mapFile in data.files) {
+      formData.files.add(
+        MapEntry(
+          mapFile.key,
+          MultipartFileExtended.fromFileSync(
+            mapFile.value.filePath,
+            filename: mapFile.value.filename,
+          ),
+        ),
+      );
+    }
+    return formData;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/model_base.dart';
@@ -72,6 +73,9 @@ class AsyncListView extends StatefulWidget {
   /// returned.
   final EditFunction editItem;
 
+  /// Subaction buttons which can be used to add multiple sub actions to the main add button
+  final List<ActionButton>? subactions;
+
   /// Initializes the list view.
   const AsyncListView({
     Key? key,
@@ -79,6 +83,7 @@ class AsyncListView extends StatefulWidget {
     required this.deleteItems,
     required this.editItem,
     this.showAddButton = true,
+    this.subactions,
     this.addItem,
   }) : super(key: key);
 
@@ -146,24 +151,7 @@ class _AsyncListViewState extends State<AsyncListView> {
       ),
 
       // Floating button.
-      floatingActionButton: Visibility(
-        visible: widget.showAddButton,
-        child: FloatingActionButton(
-          onPressed: () {
-            if (widget.addItem == null) {
-              return;
-            }
-
-            widget.addItem!().then((value) {
-              if (value) {
-                _reloadData();
-              }
-            });
-          },
-          tooltip: AppLocalizations.of(context)!.add,
-          child: const Icon(Icons.add),
-        ),
-      ),
+      floatingActionButton: _createActionButton(),
     );
   }
 
@@ -230,6 +218,36 @@ class _AsyncListViewState extends State<AsyncListView> {
         _items = ModelList([], _initialOffset, 0);
       });
     });
+  }
+
+  /// Show a floating action button or an expanding fab.
+  /// 
+  /// When no sub action buttons given, only the add action button is shown, when [widget.showAddButton] is true.
+  /// When a list of sub action buttons is provided, an expandable action button will be shown.
+  Widget _createActionButton() {
+    return Visibility(
+      visible: widget.showAddButton,
+      child: widget.subactions != null && widget.subactions!.isNotEmpty
+          ? ExpandableFab(
+              distance: 96.0,
+              children: widget.subactions!,
+            )
+          : FloatingActionButton(
+              onPressed: () {
+                if (widget.addItem == null) {
+                  return;
+                }
+
+                widget.addItem!().then((value) {
+                  if (value) {
+                    _reloadData();
+                  }
+                });
+              },
+              tooltip: AppLocalizations.of(context)!.add,
+              child: const Icon(Icons.add),
+            ),
+    );
   }
 
   /// Creates the list header widget with filter and remove action buttons.

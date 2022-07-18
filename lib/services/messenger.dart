@@ -55,4 +55,16 @@ class MessengerService {
   String get relogin {
     return AppLocalizations.of(snackbarKey.currentContext!)!.relogin;
   }
+
+  /// Translated string for to large file errors for [fileName].
+  String fileToLarge(String fileName) {
+    return AppLocalizations.of(snackbarKey.currentContext!)!
+        .toLargeFile(fileName);
+  }
+
+  /// Translated string for [error] accured on [fileName].
+  String uploadingFileFailed(String fileName, String error) {
+    return AppLocalizations.of(snackbarKey.currentContext!)!
+        .uploadingFileFailed(fileName, error);
+  }
 }

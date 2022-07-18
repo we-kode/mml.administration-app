@@ -63,5 +63,12 @@
   "groupIsDefaultHint": "Group will be assigned per default on client creation.",
   "invalidGroupName": "Please enter a name!",
   "invalidGroupIsDefault": "Please specify, whether the group is a default group or not!",
+  "uploading": "Uploading files.",
+  "toLargeFile": "File {fileName} is to large.",
+  "uploadingFileFailed": "An error occurred while uploading the file {fileName}: {error}",
+  "invalidMp3File": "File is not a valid MP3 file.",
+  "invalidFileNoContent": "File has no content.",
+  "uploadFolder":"Upload folder",
+  "uploadFiles": "Upload files",
   "actualConnectionSettings": "Actual connection settings"
 }

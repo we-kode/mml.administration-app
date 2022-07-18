@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/view_models/main.dart';
-import 'package:mml_admin/view_models/records.dart';
+import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:provider/provider.dart';
 
 /// Main view with nested navigation element.

@@ -1,6 +1,5 @@
 {
   "@@locale": "de",
-
   "appTitle": "Meine Mediathek Administration",
   "serverName": "Server (Domain:Port)",
   "serverNameUnchanged": "Server (Domain:Port) (unverändert)",
@@ -78,5 +77,29 @@
   "groupIsDefaultHint": "Gruppe wird beim Erstellen neuer Geräte automatisch zugewiesen.",
   "invalidGroupName": "Bitte geben Sie einen Namen an!",
   "invalidGroupIsDefault": "Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!",
+  "uploading": "Dateien werden hochgeladen.",
+  "toLargeFile": "Datei {fileName} ist zu groß.",
+  "@toLargeFile": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadingFileFailed": "Beim Hochladen der Datei {fileName} ist ein Fehler aufgetreten: {error}",
+  "@uploadingFileFailed": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      },
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "invalidMp3File": "Datei ist keine gültige MP3-Datei.",
+  "invalidFileNoContent": "Datei hat keinen Inhalt.",
+  "uploadFolder":"Ordner hochladen",
+  "uploadFiles": "Dateien hochladen",
   "actualConnectionSettings": "Aktuelle Verbindungseinstellungen"
 }
