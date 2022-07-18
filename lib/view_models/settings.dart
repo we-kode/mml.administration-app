@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/models/connection_settings.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/route_arguments/change_password.dart';
+import 'package:mml_admin/services/clients.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/user.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -13,6 +15,9 @@ class SettingsViewModel extends ChangeNotifier {
 
   /// [UserService] used to load data of the current user.
   final UserService _userService = UserService.getInstance();
+
+  /// Actual connection settings for client apps.
+  late ConnectionSettings? connectionSettings;
 
   /// Current user
   late User? user;
@@ -30,6 +35,8 @@ class SettingsViewModel extends ChangeNotifier {
       locales = AppLocalizations.of(_context)!;
       try {
         user = await _userService.getUserInfo();
+        connectionSettings =
+            await ClientService.getInstance().getConnectionSettings();
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
       }

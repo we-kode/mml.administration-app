@@ -78,10 +78,33 @@
   "invalidGroupName": "Bitte geben Sie einen Namen an!",
   "invalidGroupIsDefault": "Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!",
   "uploading": "Dateien werden hochgeladen.",
-  "toLargeFile": "Datei ist zu groß.",
   "unknown": "Unbekannt",
   "date": "Datum",
   "artist": "Interpret",
   "genre": "Genre",
-  "album": "Album"
+  "album": "Album",
+  "toLargeFile": "Datei {fileName} ist zu groß.",
+  "@toLargeFile": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadingFileFailed": "Beim Hochladen der Datei {fileName} ist ein Fehler aufgetreten: {error}",
+  "@uploadingFileFailed": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      },
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "invalidMp3File": "Datei ist keine gültige MP3-Datei.",
+  "invalidFileNoContent": "Datei hat keinen Inhalt.",
+  "uploadFolder": "Ordner hochladen",
+  "uploadFiles": "Dateien hochladen",
+  "actualConnectionSettings": "Aktuelle Verbindungseinstellungen"
 }

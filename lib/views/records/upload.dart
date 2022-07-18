@@ -4,12 +4,12 @@ import 'package:mml_admin/view_models/records/upload.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
-/// View of the uplaod dialog for records.
+/// View of the upload dialog for records.
 class RecordUploadDialog extends StatelessWidget {
   /// The path of the folder from where files should be uploaded or null if single files will be uplaoded.
   final String? folderPath;
 
-  /// List of files which should be uplaoded or null if files from a whole folder will be uplaoded.
+  /// List of files which should be uploaded or null if files from a whole folder will be uploaded.
   final List<PlatformFile>? files;
 
   /// Initializes the view for the records upload dialog.
@@ -19,7 +19,7 @@ class RecordUploadDialog extends StatelessWidget {
     required this.files,
   }) : super(key: key);
 
-  /// Builds the records uplaod dialog.
+  /// Builds the records upload dialog.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RecordsUploadDialogViewModel>(
@@ -46,7 +46,7 @@ class RecordUploadDialog extends StatelessWidget {
               }
 
               return snapshot.data!
-                  ? _createUploadForm(context, vm)
+                  ? _createUploadContent(context, vm)
                   : Container();
             },
           ),
@@ -56,30 +56,27 @@ class RecordUploadDialog extends StatelessWidget {
     );
   }
 
-  /// Creates the uplaod form that should be shown in the dialog.
-  Widget _createUploadForm(
+  /// Creates the upload content that should be shown in the dialog.
+  Widget _createUploadContent(
       BuildContext context, RecordsUploadDialogViewModel vm) {
-    return Form(
-      key: vm.formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Consumer<RecordsUploadDialogViewModel>(
-            builder: (context, value, child) {
-              return Row(
-                children: [
-                  Text(vm.uploadingFileName),
-                  const Spacer(),
-                  Text(vm.uploadedFiles.toString()),
-                  const Text("/"),
-                  Text(vm.fileCount.toString())
-                ],
-              );
-            },
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Consumer<RecordsUploadDialogViewModel>(
+          builder: (context, value, child) {
+            return Row(
+              children: [
+                Text(vm.uploadingFileName),
+                const Spacer(),
+                Text(vm.uploadedFiles.toString()),
+                const Text("/"),
+                Text(vm.fileCount.toString())
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -91,13 +88,9 @@ class RecordUploadDialog extends StatelessWidget {
     var locales = AppLocalizations.of(context)!;
 
     return [
-      Consumer<RecordsUploadDialogViewModel>(
-        builder: (context, value, child) {
-          return TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(locales.cancel),
-          );
-        },
+      TextButton(
+        onPressed: () => Navigator.pop(context, false),
+        child: Text(locales.cancel),
       ),
     ];
   }

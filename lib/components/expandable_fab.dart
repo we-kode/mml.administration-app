@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-/// Expandable FAB action button
+/// Expandable FAB action button.
+/// 
+/// A floationg action button whcih has muliple sub action buttons, 
+/// which will be expandeed when clicked on the button.
 @immutable
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
@@ -24,6 +27,7 @@ class ExpandableFab extends StatefulWidget {
   State<ExpandableFab> createState() => _ExpandableFabState();
 }
 
+/// State of the [ExpandableFab].
 class _ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
   /// Animation controller of the FAB.
@@ -31,6 +35,10 @@ class _ExpandableFabState extends State<ExpandableFab>
 
   /// The expand animation when the button is expanding or collapsing.
   late final Animation<double> _expandAnimation;
+
+  /// State of the [ExpandableFab].
+  /// 
+  /// true if [ExpandableFab] is expanded, false otherwise.
   bool _open = false;
 
   @override
@@ -156,8 +164,12 @@ class _ExpandableFabState extends State<ExpandableFab>
   }
 }
 
+/// Trasnisiton widget of the [ExpandableFab], which is performed when the button changes from collapsed to expand 
+/// state and in the other direction.
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
+
+  /// Initializes the [_ExpandingActionButton].
   const _ExpandingActionButton({
     required this.directionInDegrees,
     required this.maxDistance,

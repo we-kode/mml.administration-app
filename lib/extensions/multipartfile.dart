@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 
 /// An extended [MultipartFile]. Includes the file path.
 class MultipartFileExtended extends MultipartFile {
-  /// File path of the file to be uplaoded.
+  /// File path of the file to be uploaded.
   final String? filePath;
 
   MultipartFileExtended(
@@ -21,7 +21,12 @@ class MultipartFileExtended extends MultipartFile {
     String filePath, {
     String? filename,
     MediaType? contentType,
-  }) => multipartFileFromPathSync(filePath, filename: filename, contentType: contentType);
+  }) =>
+      multipartFileFromPathSync(
+        filePath,
+        filename: filename,
+        contentType: contentType,
+      );
 }
 
 /// Creates a [MultipartFileExtended] from a file.

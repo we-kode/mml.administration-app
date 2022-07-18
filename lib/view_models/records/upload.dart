@@ -10,9 +10,6 @@ import 'package:mml_admin/services/record.dart';
 
 /// ViewModel of the uplaod dialog for records.
 class RecordsUploadDialogViewModel extends ChangeNotifier {
-  /// Key of the upload form.
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
   /// Current build context.
   late BuildContext _context;
 
@@ -22,7 +19,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   /// [RecordService] used to load data for the records uplaod dialog.
   final RecordService _service = RecordService.getInstance();
 
-  /// Number of files to be uplaoded.
+  /// Number of files to be uploaded.
   int fileCount = 0;
 
   /// Number of files already uploaded.
@@ -31,7 +28,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   /// Name of the file which is uploading.
   String uploadingFileName = '';
 
-  /// Initializes the ViewModel and starts the uplaod process.
+  /// Initializes the ViewModel and starts the upload process.
   ///
   /// If no [folderPath] is provided, files from the [fileList] will be uploaded, else
   /// all files from the [folderPath] will be uploaded recursive.
@@ -69,12 +66,12 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     nav.pop(true);
   }
 
-  /// Uplaods all files in the [fileList].
+  /// Uploads all files in the [fileList].
   Future _uploadFiles(List<PlatformFile> fileList) async {
     final nav = Navigator.of(_context);
     fileCount = fileList.length;
     for (var element in fileList) {
-      var file = File(element.name);
+      var file = File(element.path!);
       await _upload(file);
     }
     nav.pop(true);
@@ -86,15 +83,35 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
       return;
     }
     try {
-      uploadedFiles++;
       uploadingFileName = file.path.split(Platform.pathSeparator).last;
-      await _service.upload(file, uploadingFileName);
       notifyListeners();
-    } catch (e) {
-      if (e is DioError &&
-          e.response?.statusCode == HttpStatus.requestEntityTooLarge) {
+      await _service.upload(file, uploadingFileName);
+      uploadedFiles++;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == HttpStatus.requestEntityTooLarge) {
         var messenger = MessengerService.getInstance();
-        messenger.showMessage(messenger.fileToLarge);
+        messenger.showMessage(messenger.fileToLarge(uploadingFileName));
+        return;
+      }
+
+      if (e.response?.statusCode == HttpStatus.badRequest) {
+        var messenger = MessengerService.getInstance();
+        var uploadError = "";
+        final errorData = e.response?.data;
+        if (errorData is String) {
+          if (errorData == 'INVALID_FORMAT_MP3') {
+            uploadError = locales.invalidMp3File;
+          } else if (errorData == 'INVALID_FILE_EMPTY') {
+            uploadError = locales.invalidFileNoContent;
+          }
+        }
+        messenger.showMessage(
+          messenger.uploadingFileFailed(
+            uploadingFileName,
+            uploadError,
+          ),
+        );
+        return;
       }
     }
   }
