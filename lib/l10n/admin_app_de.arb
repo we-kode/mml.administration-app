@@ -99,5 +99,7 @@
   },
   "invalidMp3File": "Datei ist keine gültige MP3-Datei.",
   "invalidFileNoContent": "Datei hat keinen Inhalt.",
+  "uploadFolder":"Ordner hochladen",
+  "uploadFiles": "Dateien hochladen",
   "actualConnectionSettings": "Aktuelle Verbindungseinstellungen"
 }

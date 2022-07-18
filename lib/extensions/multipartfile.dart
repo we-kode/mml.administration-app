@@ -22,8 +22,11 @@ class MultipartFileExtended extends MultipartFile {
     String? filename,
     MediaType? contentType,
   }) =>
-      multipartFileFromPathSync(filePath,
-          filename: filename, contentType: contentType);
+      multipartFileFromPathSync(
+        filePath,
+        filename: filename,
+        contentType: contentType,
+      );
 }
 
 /// Creates a [MultipartFileExtended] from a file.

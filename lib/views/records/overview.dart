@@ -6,6 +6,7 @@ import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:mml_admin/views/records/upload.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 /// Overview screen of the uploaded records to the music lib.
 class RecordsScreen extends StatelessWidget {
@@ -19,14 +20,17 @@ class RecordsScreen extends StatelessWidget {
       create: (context) => RecordsViewModel(),
       builder: (context, _) {
         var vm = Provider.of<RecordsViewModel>(context, listen: false);
+        var locales = AppLocalizations.of(context)!;
 
         return AsyncListView(
           subactions: [
             ActionButton(
               icon: const Icon(Icons.drive_folder_upload),
               onPressed: () async {
-                String? selected = await FilePicker.platform
-                    .getDirectoryPath(lockParentWindow: true);
+                String? selected = await FilePicker.platform.getDirectoryPath(
+                  lockParentWindow: true,
+                  dialogTitle: locales.uploadFolder
+                );
                 if (selected == null) {
                   return;
                 }
@@ -51,6 +55,7 @@ class RecordsScreen extends StatelessWidget {
                   allowMultiple: true,
                   type: FileType.custom,
                   allowedExtensions: ['mp3'],
+                  dialogTitle: locales.uploadFiles,
                 );
 
                 if (selected == null) {

@@ -68,5 +68,7 @@
   "uploadingFileFailed": "An error occurred while uploading the file {fileName}: {error}",
   "invalidMp3File": "File is not a valid MP3 file.",
   "invalidFileNoContent": "File has no content.",
+  "uploadFolder":"Upload folder",
+  "uploadFiles": "Upload files",
   "actualConnectionSettings": "Actual connection settings"
 }

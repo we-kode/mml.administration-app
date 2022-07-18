@@ -66,12 +66,12 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     nav.pop(true);
   }
 
-  /// Uplaods all files in the [fileList].
+  /// Uploads all files in the [fileList].
   Future _uploadFiles(List<PlatformFile> fileList) async {
     final nav = Navigator.of(_context);
     fileCount = fileList.length;
     for (var element in fileList) {
-      var file = File(element.name);
+      var file = File(element.path!);
       await _upload(file);
     }
     nav.pop(true);
