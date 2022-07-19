@@ -36,9 +36,7 @@ class RecordsScreen extends StatelessWidget {
               icon: const Icon(Icons.drive_folder_upload),
               onPressed: () async {
                 String? selected = await FilePicker.platform.getDirectoryPath(
-                  lockParentWindow: true,
-                  dialogTitle: locales.uploadFolder
-                );
+                    lockParentWindow: true, dialogTitle: locales.uploadFolder);
                 if (selected == null) {
                   return;
                 }
@@ -83,7 +81,6 @@ class RecordsScreen extends StatelessWidget {
               },
             ),
           ],
-          //TODO deleting of items
           deleteItems: <String>(List<String> recordIds) => vm.delete(
             recordIds,
             context,

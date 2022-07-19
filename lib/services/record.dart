@@ -142,4 +142,15 @@ class RecordService {
       response.data["totalCount"],
     );
   }
+
+  /// Deletes the records with the given [recordIds] on the server.
+  Future<void> delete<String>(List<String> recordIds) async {
+    await _apiService.request(
+      '/media/record/deleteList',
+      data: recordIds,
+      options: Options(
+        method: 'POST',
+      ),
+    );
+  }
 }
