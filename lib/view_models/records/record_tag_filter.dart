@@ -25,16 +25,17 @@ class RecordTagFilterViewModel extends ChangeNotifier {
   /// Loads data by [identifier] function.
   Future<ModelList> load(
     String identifier, {
+    String? filter,
     int? offset,
     int? take,
   }) async {
     switch (identifier) {
       case ID3TagFilters.artists:
-        return _service.getArtists(offset, take);
+        return _service.getArtists(filter, offset, take);
       case ID3TagFilters.genres:
-        return _service.getGenres(offset, take);
+        return _service.getGenres(filter, offset, take);
       case ID3TagFilters.albums:
-        return _service.getAlbums(offset, take);
+        return _service.getAlbums(filter, offset, take);
     }
 
     throw UnimplementedError();

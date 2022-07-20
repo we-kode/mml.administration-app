@@ -120,8 +120,9 @@ class RecordTagFilter extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AsyncSelectListDialog(
-          loadData: ({offset, take}) => vm.load(
+          loadData: ({filter, offset, take}) => vm.load(
             identifier,
+            filter: filter,
             offset: offset,
             take: take,
           ),
