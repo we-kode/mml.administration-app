@@ -31,7 +31,7 @@ class RecordsViewModel extends ChangeNotifier {
   }
 
   /// Gets called when [ID3TagFilter] changes.
-  void filterChanged(ID3TagFilter filter) {
+  void filterChanged(ID3TagFilter? filter) {
     filterChangedStreamController.add(filter);
   }
 

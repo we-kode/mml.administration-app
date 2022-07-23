@@ -150,7 +150,9 @@ class _AsyncListViewState extends State<AsyncListView> {
     if (widget.onDataChanged != null) {
       _streamSubscription = widget.onDataChanged!.stream.listen(
         (event) {
-          _subfilterData = event;
+          if (event != null) {
+            _subfilterData = event;
+          }
           _reloadData();
         },
       );

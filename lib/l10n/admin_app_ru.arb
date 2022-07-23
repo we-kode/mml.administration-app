@@ -73,7 +73,11 @@
   "uploadingFileFailed": "Произошла ошибка при загрузке файла {fileName}: {error}",
   "invalidMp3File": "Файл не является допустимым файлом MP3.",
   "invalidFileNoContent": "В файле нет содержимого.",
-  "uploadFolder":"Загрузить папку",
+  "uploadFolder": "Загрузить папку",
   "uploadFiles": "Загрузить файлы",
-  "actualConnectionSettings": "Текущие настройки подключения"
+  "actualConnectionSettings": "Текущие настройки подключения",
+  "editRecord": "Изменить запись",
+  "title": "Название",
+  "invalidTitle": "Необходимо указать название.",
+  "uploadFinished": "Загрузка завершена"
 }

@@ -153,4 +153,29 @@ class RecordService {
       ),
     );
   }
+
+  /// Loads the record with the given [id] from the server.
+  ///
+  /// Returns the [Record] instance or null if the record was not found.
+  Future<Record> getRecord(String id) async {
+    var response = await _apiService.request(
+      '/media/record/$id',
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return Record.fromJson(response.data);
+  }
+
+  /// Updates the given [Record] on the server.
+  updateRecord(Record record) async {
+    await _apiService.request(
+      '/media/record',
+      data: record.toJson(),
+      options: Options(
+        method: 'POST',
+      ),
+    );
+  }
 }

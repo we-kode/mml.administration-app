@@ -75,5 +75,9 @@
   "invalidFileNoContent": "File has no content.",
   "uploadFolder":"Upload folder",
   "uploadFiles": "Upload files",
-  "actualConnectionSettings": "Actual connection settings"
+  "actualConnectionSettings": "Actual connection settings",
+  "editRecord": "Edit record",
+  "title": "Title",
+  "invalidTitle": "A title must be specified.",
+  "uploadFinished": "Upload finished."
 }

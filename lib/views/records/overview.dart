@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
+import 'package:mml_admin/models/record.dart';
+import 'package:mml_admin/views/records/edit.dart';
 import 'package:mml_admin/views/records/record_tag_filter.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
@@ -41,7 +43,7 @@ class RecordsScreen extends StatelessWidget {
                   return;
                 }
 
-                return await showDialog(
+                final reload = await showDialog(
                   barrierDismissible: false,
                   context: context,
                   builder: (BuildContext context) {
@@ -51,6 +53,10 @@ class RecordsScreen extends StatelessWidget {
                     );
                   },
                 );
+
+                if (reload) {
+                  vm.filterChanged(null);
+                }
               },
             ),
             ActionButton(
@@ -68,7 +74,7 @@ class RecordsScreen extends StatelessWidget {
                   return;
                 }
 
-                return await showDialog(
+                final reload = await showDialog(
                   barrierDismissible: false,
                   context: context,
                   builder: (BuildContext context) {
@@ -78,6 +84,10 @@ class RecordsScreen extends StatelessWidget {
                     );
                   },
                 );
+
+                if (reload) {
+                  vm.filterChanged(null);
+                }
               },
             ),
           ],
@@ -85,13 +95,12 @@ class RecordsScreen extends StatelessWidget {
             recordIds,
             context,
           ),
-          // TODO edit dialog
-          editItem: (ModelBase client) async {
+          editItem: (ModelBase record) async {
             return await showDialog(
               barrierDismissible: false,
               context: context,
               builder: (BuildContext context) {
-                return Container();
+                return RecordEditDialog(recordId: (record as Record).recordId);
               },
             );
           },

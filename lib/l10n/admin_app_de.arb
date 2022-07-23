@@ -106,5 +106,9 @@
   "invalidFileNoContent": "Datei hat keinen Inhalt.",
   "uploadFolder": "Ordner hochladen",
   "uploadFiles": "Dateien hochladen",
-  "actualConnectionSettings": "Aktuelle Verbindungseinstellungen"
+  "actualConnectionSettings": "Aktuelle Verbindungseinstellungen",
+  "editRecord": "Aufnahme bearbeiten",
+  "title": "Titel",
+  "invalidTitle": "Ein Titlel muss angegeben werden.",
+  "uploadFinished": "Upload abgeschlossen."
 }
