@@ -6,11 +6,19 @@ import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/view_models/records/record_tag_filter.dart';
 import 'package:provider/provider.dart';
 
-typedef FilterChangedFunction = Future<bool> Function(ID3TagFilter filter);
+/// Function that notifies that a selected filter has changed and passes [filter].
+///
+/// This function should return a [Future].
+typedef FilterChangedFunction = Future Function(ID3TagFilter filter);
 
+/// Tag filters for the records view.
 class RecordTagFilter extends StatelessWidget {
+  /// Function that notifies that a selected filter has changed and passes [filter].
+  ///
+  /// This function should return a [Future].
   final FilterChangedFunction onFilterChanged;
 
+  /// Initializes the [RecordTagFilter].
   const RecordTagFilter({
     required this.onFilterChanged,
     Key? key,

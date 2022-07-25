@@ -3,6 +3,7 @@ import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/record.dart';
 
+/// View model for the records tag filter.
 class RecordTagFilterViewModel extends ChangeNotifier {
   /// The active [ID3TagFilter].
   final tagFilter = ID3TagFilter();

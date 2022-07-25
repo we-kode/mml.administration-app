@@ -53,7 +53,11 @@ class RecordService {
   /// Returns a list of records with the amount of [take] that match the given
   /// [filter] starting from the [offset].
   Future<ModelList> getRecords(
-      String? filter, int? offset, int? take, ID3TagFilter? tagFilter) async {
+    String? filter,
+    int? offset,
+    int? take,
+    ID3TagFilter? tagFilter,
+  ) async {
     var params = <String, String?>{};
 
     if (filter != null) {
@@ -106,7 +110,7 @@ class RecordService {
   }
 
   /// Returns a list of albums with the amount of [take] starting from the [offset] and with the passed [filter],
-  Future<ModelList> getAlbums(String? filter,int? offset, int? take) async {
+  Future<ModelList> getAlbums(String? filter, int? offset, int? take) async {
     var response = await _apiService.request(
       '/media/record/albums',
       queryParameters: {"filter": filter, "skip": offset, "take": take},

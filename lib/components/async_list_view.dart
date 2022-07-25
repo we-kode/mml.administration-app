@@ -13,8 +13,12 @@ import 'package:shimmer/shimmer.dart';
 
 /// Function to load data with the passed [filter], starting from [offset] and
 /// loading an amount of [take] data. Also a [subfilter] can be added to filter the list more specific.
-typedef LoadDataFunction = Future<ModelList> Function(
-    {String? filter, int? offset, int? take, dynamic subfilter});
+typedef LoadDataFunction = Future<ModelList> Function({
+  String? filter,
+  int? offset,
+  int? take,
+  dynamic subfilter,
+});
 
 /// Function that deletes the items with the passed [itemIdentifiers].
 ///
@@ -79,9 +83,9 @@ class AsyncListView extends StatefulWidget {
   /// A subfilter widget which can be used to add subfilters like chips for more filter posibilities.
   final Widget? subfilter;
 
-  /// Event listener of type [StreamController] which listen on DataChanges from extern.
+  /// Event listener of type [StreamController] which listen on data changes from extern.
   ///
-  /// If no [StreamController] is provided, data will not be relaoded, when data chnaged extern.
+  /// If no [StreamController] is provided, data will not be relaoded, when data changed extern.
   final StreamController<dynamic>? onDataChanged;
 
   /// Initializes the list view.
@@ -225,7 +229,10 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Shows a loading indicator instead of the list during load, if
   /// [showLoadingOverlay] is true.
   /// Otherwhise the data will be loaded lazy in the background.
-  void _loadData({bool showLoadingOverlay = true, dynamic subfilter}) {
+  void _loadData({
+    bool showLoadingOverlay = true,
+    dynamic subfilter,
+  }) {
     if (showLoadingOverlay) {
       setState(() {
         _isLoadingData = true;
@@ -233,7 +240,11 @@ class _AsyncListViewState extends State<AsyncListView> {
     }
 
     var dataFuture = widget.loadData(
-        filter: _filter, offset: _offset, take: _take, subfilter: subfilter);
+      filter: _filter,
+      offset: _offset,
+      take: _take,
+      subfilter: subfilter,
+    );
 
     dataFuture.then((value) {
       if (!mounted) {
