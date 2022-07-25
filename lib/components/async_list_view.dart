@@ -6,6 +6,7 @@ import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
+import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/router.dart';
@@ -17,7 +18,7 @@ typedef LoadDataFunction = Future<ModelList> Function({
   String? filter,
   int? offset,
   int? take,
-  dynamic subfilter,
+  ID3TagFilter? subfilter,
 });
 
 /// Function that deletes the items with the passed [itemIdentifiers].
@@ -146,7 +147,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   StreamSubscription? _streamSubscription;
 
   /// The actual set subfilter on which the list will be filtered on data loading.
-  dynamic _subfilterData;
+  ID3TagFilter? _subfilterData;
 
   @override
   void initState() {
@@ -231,7 +232,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Otherwhise the data will be loaded lazy in the background.
   void _loadData({
     bool showLoadingOverlay = true,
-    dynamic subfilter,
+    ID3TagFilter? subfilter,
   }) {
     if (showLoadingOverlay) {
       setState(() {
