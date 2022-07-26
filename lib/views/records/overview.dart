@@ -5,7 +5,6 @@ import 'package:mml_admin/models/record.dart';
 import 'package:mml_admin/views/records/edit.dart';
 import 'package:mml_admin/views/records/record_tag_filter.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
-import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:mml_admin/views/records/upload.dart';
@@ -27,12 +26,7 @@ class RecordsScreen extends StatelessWidget {
         var locales = AppLocalizations.of(context)!;
 
         return AsyncListView(
-          subfilter: RecordTagFilter(
-            onFilterChanged: (ID3TagFilter filter) async {
-              vm.filterChanged(filter);
-              return true;
-            },
-          ),
+          subfilter: RecordTagFilter(),
           subactions: [
             ActionButton(
               icon: const Icon(Icons.drive_folder_upload),
@@ -105,7 +99,6 @@ class RecordsScreen extends StatelessWidget {
             );
           },
           loadData: vm.load,
-          onDataChanged: vm.filterChangedStreamController,
         );
       },
     );

@@ -4,17 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
+import 'package:mml_admin/components/list_subfilter_view.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:shimmer/shimmer.dart';
 
 /// Function to load data with the passed [filter], starting from [offset] and
 /// loading an amount of [take] data. Also a [subfilter] can be added to filter the list more specific.
-typedef LoadDataFunction = Future<ModelList> Function(
-    {String? filter, int? offset, int? take, dynamic subfilter});
+typedef LoadDataFunction = Future<ModelList> Function({
+  String? filter,
+  int? offset,
+  int? take,
+  Subfilter? subfilter,
+});
 
 /// Function that deletes the items with the passed [itemIdentifiers].
 ///
@@ -77,25 +83,19 @@ class AsyncListView extends StatefulWidget {
   final List<ActionButton>? subactions;
 
   /// A subfilter widget which can be used to add subfilters like chips for more filter posibilities.
-  final Widget? subfilter;
-
-  /// Event listener of type [StreamController] which listen on DataChanges from extern.
-  ///
-  /// If no [StreamController] is provided, data will not be relaoded, when data chnaged extern.
-  final StreamController<dynamic>? onDataChanged;
+  final ListSubfilterView? subfilter;
 
   /// Initializes the list view.
-  const AsyncListView(
-      {Key? key,
-      required this.loadData,
-      required this.deleteItems,
-      required this.editItem,
-      this.addItem,
-      this.showAddButton = true,
-      this.subactions,
-      this.subfilter,
-      this.onDataChanged})
-      : super(key: key);
+  const AsyncListView({
+    Key? key,
+    required this.loadData,
+    required this.deleteItems,
+    required this.editItem,
+    this.addItem,
+    this.showAddButton = true,
+    this.subactions,
+    this.subfilter,
+  }) : super(key: key);
 
   @override
   State<AsyncListView> createState() => _AsyncListViewState();
@@ -138,38 +138,21 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// The actual item group if list items should be grouped.
   String? _actualGroup;
 
-  /// [StreamSubscription] of the actual stream controller or null if no stream controller is provided.
-  StreamSubscription? _streamSubscription;
-
-  /// The actual set subfilter on which the list will be filtered on data loading.
-  dynamic _subfilterData;
-
   @override
   void initState() {
     _reloadData();
-    if (widget.onDataChanged != null) {
-      _streamSubscription = widget.onDataChanged!.stream.listen(
-        (event) {
-          if (event != null) {
-            _subfilterData = event;
-          }
-          _reloadData();
-        },
-      );
+    if (widget.subfilter != null) {
+      widget.subfilter!.filter.addListener(() {
+        _reloadData();
+      });
     }
     super.initState();
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     super.dispose();
-    if (widget.onDataChanged != null) {
-      await widget.onDataChanged!.close();
-    }
-
-    if (_streamSubscription != null) {
-      await _streamSubscription!.cancel();
-    }
+    widget.subfilter?.filter.removeListener(() {});
   }
 
   @override
@@ -219,7 +202,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     _offset = _initialOffset;
     _take = _initialTake;
 
-    _loadData(subfilter: _subfilterData);
+    _loadData(subfilter: widget.subfilter?.filter);
   }
 
   /// Loads the data for the [_offset] and [_take] with the [_filter].
@@ -227,7 +210,10 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Shows a loading indicator instead of the list during load, if
   /// [showLoadingOverlay] is true.
   /// Otherwhise the data will be loaded lazy in the background.
-  void _loadData({bool showLoadingOverlay = true, dynamic subfilter}) {
+  void _loadData({
+    bool showLoadingOverlay = true,
+    Subfilter? subfilter,
+  }) {
     if (showLoadingOverlay) {
       setState(() {
         _isLoadingData = true;
@@ -235,7 +221,11 @@ class _AsyncListViewState extends State<AsyncListView> {
     }
 
     var dataFuture = widget.loadData(
-        filter: _filter, offset: _offset, take: _take, subfilter: subfilter);
+      filter: _filter,
+      offset: _offset,
+      take: _take,
+      subfilter: subfilter,
+    );
 
     dataFuture.then((value) {
       if (!mounted) {
@@ -451,7 +441,7 @@ class _AsyncListViewState extends State<AsyncListView> {
           Text(AppLocalizations.of(context)!.noData),
           horizontalSpacer,
           TextButton.icon(
-            onPressed: () => _loadData(subfilter: _subfilterData),
+            onPressed: () => _loadData(subfilter: widget.subfilter?.filter),
             icon: const Icon(Icons.refresh),
             label: Text(AppLocalizations.of(context)!.reload),
           ),
@@ -523,9 +513,9 @@ class _AsyncListViewState extends State<AsyncListView> {
           : null,
       trailing: Column(
         children: [
-          item.getTimeInfo(context) != null
+          item.getMetadata(context) != null
               ? Text(
-                  item.getTimeInfo(context)!,
+                  item.getMetadata(context)!,
                   style: Theme.of(context).textTheme.bodySmall,
                 )
               : const SizedBox.shrink(),

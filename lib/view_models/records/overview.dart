@@ -5,6 +5,7 @@ import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
 
@@ -16,23 +17,20 @@ class RecordsViewModel extends ChangeNotifier {
   /// [RecordService] used to load data for the records uplaod dialog.
   final RecordService _service = RecordService.getInstance();
 
-  /// [StreamController] to stream events on.
-  final StreamController filterChangedStreamController = StreamController();
-
   /// Loads the records with the passing [filter] starting at [offset] and loading
   /// [take] data.
   Future<ModelList> load({
     String? filter,
     int? offset,
     int? take,
-    dynamic subfilter,
+    Subfilter? subfilter,
   }) async {
-    return _service.getRecords(filter, offset, take, subfilter);
-  }
-
-  /// Gets called when [ID3TagFilter] changes.
-  void filterChanged(ID3TagFilter? filter) {
-    filterChangedStreamController.add(filter);
+    return _service.getRecords(
+      filter,
+      offset,
+      take,
+      subfilter as ID3TagFilter?,
+    );
   }
 
   /// Deletes the records with the passed [recordIds] or or aborts, if the user

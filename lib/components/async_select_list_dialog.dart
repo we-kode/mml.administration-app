@@ -4,18 +4,19 @@ import 'package:mml_admin/models/model_list.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:shimmer/shimmer.dart';
 
-/// Function to load data starting from [offset] and
+/// Function to load data with the passed [filter] starting from [offset] and
 /// loading an amount of [take] data.
 typedef LoadDataFunction = Future<ModelList> Function({
+  String? filter,
   int? offset,
   int? take,
 });
 
 /// A dialog inlcuding a selection list.
-/// 
+///
 /// The list supports async loading of data, when necessary in chunks.
 class AsyncSelectListDialog extends StatefulWidget {
-  /// Function to load data starting from [offset] and
+  /// Function to load data with the passed [filter], starting from [offset] and
   /// loading an amount of [take] data.
   final LoadDataFunction loadData;
 
@@ -47,6 +48,9 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
   /// List of lazy loaded items.
   ModelList? _items;
 
+  /// Filter to send to the sever.
+  String? _filter;
+
   /// Offset to start loading data from.
   int _offset = 0;
 
@@ -75,6 +79,9 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
         width: MediaQuery.of(context).size.width * 0.2,
         child: Column(
           children: [
+            // List header with filter and action buttons.
+            _createListHeaderWidget(),
+
             // List, loading indicator or no data widget.
             Expanded(
               child: _isLoadingData
@@ -129,6 +136,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
     }
 
     var dataFuture = widget.loadData(
+      filter: _filter,
       offset: _offset,
       take: _take,
     );
@@ -178,6 +186,35 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
         ],
       ),
     );
+  }
+
+  /// Creates the list header widget with filter and remove action buttons.
+  Widget _createListHeaderWidget() {
+    return Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          // Filter input.
+          Expanded(
+            child: Column(
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.filter,
+                    icon: const Icon(Icons.filter_list_alt),
+                  ),
+                  onChanged: (String filterText) {
+                    setState(() {
+                      _filter = filterText;
+                    });
+
+                    _reloadData();
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
   }
 
   /// Creates the list view widget.

@@ -53,7 +53,11 @@ class RecordService {
   /// Returns a list of records with the amount of [take] that match the given
   /// [filter] starting from the [offset].
   Future<ModelList> getRecords(
-      String? filter, int? offset, int? take, ID3TagFilter? tagFilter) async {
+    String? filter,
+    int? offset,
+    int? take,
+    ID3TagFilter? tagFilter,
+  ) async {
     var params = <String, String?>{};
 
     if (filter != null) {
@@ -61,7 +65,7 @@ class RecordService {
     }
 
     if (offset != null) {
-      params['offset'] = offset.toString();
+      params['skip'] = offset.toString();
     }
 
     if (take != null) {
@@ -86,11 +90,11 @@ class RecordService {
     );
   }
 
-  /// Returns a list of artists with the amount of [take] starting from the [offset].
-  Future<ModelList> getArtists(int? offset, int? take) async {
+  /// Returns a list of artists with the amount of [take] starting from the [offset] and with the passed [filter],
+  Future<ModelList> getArtists(String? filter, int? offset, int? take) async {
     var response = await _apiService.request(
       '/media/record/artists',
-      queryParameters: {"skip": offset, "take": take},
+      queryParameters: {"filter": filter, "skip": offset, "take": take},
       options: Options(
         method: 'GET',
       ),
@@ -105,11 +109,11 @@ class RecordService {
     );
   }
 
-  /// Returns a list of albums with the amount of [take] starting from the [offset].
-  Future<ModelList> getAlbums(int? offset, int? take) async {
+  /// Returns a list of albums with the amount of [take] starting from the [offset] and with the passed [filter],
+  Future<ModelList> getAlbums(String? filter, int? offset, int? take) async {
     var response = await _apiService.request(
       '/media/record/albums',
-      queryParameters: {"skip": offset, "take": take},
+      queryParameters: {"filter": filter, "skip": offset, "take": take},
       options: Options(
         method: 'GET',
       ),
@@ -124,11 +128,11 @@ class RecordService {
     );
   }
 
-  /// Returns a list of genres with the amount of [take] starting from the [offset].
-  Future<ModelList> getGenres(int? offset, int? take) async {
+  /// Returns a list of genres with the amount of [take] starting from the [offset] with the passed [filter],
+  Future<ModelList> getGenres(String? filter, int? offset, int? take) async {
     var response = await _apiService.request(
       '/media/record/genres',
-      queryParameters: {"skip": offset, "take": take},
+      queryParameters: {"filter": filter, "skip": offset, "take": take},
       options: Options(
         method: 'GET',
       ),
