@@ -150,6 +150,12 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    widget.subfilter?.filter.removeListener(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -507,9 +513,9 @@ class _AsyncListViewState extends State<AsyncListView> {
           : null,
       trailing: Column(
         children: [
-          item.getTimeInfo(context) != null
+          item.getMetadata(context) != null
               ? Text(
-                  item.getTimeInfo(context)!,
+                  item.getMetadata(context)!,
                   style: Theme.of(context).textTheme.bodySmall,
                 )
               : const SizedBox.shrink(),
