@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
+import 'package:mml_admin/views/records/record_tag_filter.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/view_models/records/overview.dart';
@@ -23,6 +24,7 @@ class RecordsScreen extends StatelessWidget {
         var locales = AppLocalizations.of(context)!;
 
         return AsyncListView(
+          subfilter: RecordTagFilter(),
           subactions: [
             ActionButton(
               icon: const Icon(Icons.drive_folder_upload),

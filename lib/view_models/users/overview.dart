@@ -15,7 +15,7 @@ class UsersOverviewViewModel extends ChangeNotifier {
 
   /// Loads the user with the passing [filter] starting at [offset] and loading
   /// [take] data.
-  Future<ModelList> loadUsers({String? filter, int? offset, int? take}) async {
+  Future<ModelList> loadUsers({String? filter, int? offset, int? take, dynamic subfilter}) async {
     return await _userService.getUsers(filter, offset, take);
   }
 
