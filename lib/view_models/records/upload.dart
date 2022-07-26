@@ -10,9 +10,6 @@ import 'package:mml_admin/services/record.dart';
 
 /// ViewModel of the uplaod dialog for records.
 class RecordsUploadDialogViewModel extends ChangeNotifier {
-  /// Current build context.
-  late BuildContext _context;
-
   /// Locales of the application.
   late AppLocalizations locales;
 
@@ -38,7 +35,6 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     List<PlatformFile>? fileList,
   ) async {
     locales = AppLocalizations.of(context)!;
-    _context = context;
     return Future<bool>.microtask(
       () {
         (folderPath ?? '').isNotEmpty

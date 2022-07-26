@@ -37,7 +37,7 @@ class RecordsScreen extends StatelessWidget {
                   return;
                 }
 
-                final reload = await showDialog(
+                return await showDialog(
                   barrierDismissible: false,
                   context: context,
                   builder: (BuildContext context) {
@@ -47,10 +47,6 @@ class RecordsScreen extends StatelessWidget {
                     );
                   },
                 );
-
-                if (reload) {
-                  vm.filterChanged(null);
-                }
               },
             ),
             ActionButton(
@@ -68,7 +64,7 @@ class RecordsScreen extends StatelessWidget {
                   return;
                 }
 
-                final reload = await showDialog(
+                return await showDialog(
                   barrierDismissible: false,
                   context: context,
                   builder: (BuildContext context) {
@@ -78,10 +74,6 @@ class RecordsScreen extends StatelessWidget {
                     );
                   },
                 );
-
-                if (reload) {
-                  vm.filterChanged(null);
-                }
               },
             ),
           ],
