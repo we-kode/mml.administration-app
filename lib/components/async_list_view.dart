@@ -86,16 +86,16 @@ class AsyncListView extends StatefulWidget {
   final ListSubfilterView? subfilter;
 
   /// Initializes the list view.
-  const AsyncListView(
-      {Key? key,
-      required this.loadData,
-      required this.deleteItems,
-      required this.editItem,
-      this.addItem,
-      this.showAddButton = true,
-      this.subactions,
-      this.subfilter,})
-      : super(key: key);
+  const AsyncListView({
+    Key? key,
+    required this.loadData,
+    required this.deleteItems,
+    required this.editItem,
+    this.addItem,
+    this.showAddButton = true,
+    this.subactions,
+    this.subfilter,
+  }) : super(key: key);
 
   @override
   State<AsyncListView> createState() => _AsyncListViewState();
