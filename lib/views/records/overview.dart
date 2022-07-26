@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
+import 'package:mml_admin/models/record.dart';
+import 'package:mml_admin/views/records/edit.dart';
 import 'package:mml_admin/views/records/record_tag_filter.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/models/model_base.dart';
@@ -31,7 +33,7 @@ class RecordsScreen extends StatelessWidget {
               onPressed: () async {
                 String? selected = await FilePicker.platform.getDirectoryPath(
                   lockParentWindow: true,
-                  dialogTitle: locales.uploadFolder
+                  dialogTitle: locales.uploadFolder,
                 );
                 if (selected == null) {
                   return;
@@ -77,18 +79,18 @@ class RecordsScreen extends StatelessWidget {
               },
             ),
           ],
-          //TODO deleting of items
           deleteItems: <String>(List<String> recordIds) => vm.delete(
             recordIds,
             context,
           ),
-          // TODO edit dialog
-          editItem: (ModelBase client) async {
+          editItem: (ModelBase record) async {
             return await showDialog(
               barrierDismissible: false,
               context: context,
               builder: (BuildContext context) {
-                return Container();
+                return RecordEditDialog(
+                  recordId: (record as Record).recordId,
+                );
               },
             );
           },

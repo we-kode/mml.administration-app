@@ -10,9 +10,6 @@ import 'package:mml_admin/services/record.dart';
 
 /// ViewModel of the uplaod dialog for records.
 class RecordsUploadDialogViewModel extends ChangeNotifier {
-  /// Current build context.
-  late BuildContext _context;
-
   /// Locales of the application.
   late AppLocalizations locales;
 
@@ -38,7 +35,6 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     List<PlatformFile>? fileList,
   ) async {
     locales = AppLocalizations.of(context)!;
-    _context = context;
     return Future<bool>.microtask(
       () {
         (folderPath ?? '').isNotEmpty
@@ -51,7 +47,6 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
 
   /// Uploads all file given in the [folderPath]. All files in subfolders will be uplaoded also.
   Future _uploadFolder(String folderPath) async {
-    final nav = Navigator.of(_context);
     final files = await Directory(folderPath).list(recursive: true).toList();
     fileCount = files
         .where(
@@ -63,18 +58,15 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
         await _upload(element);
       }
     }
-    nav.pop(true);
   }
 
   /// Uploads all files in the [fileList].
   Future _uploadFiles(List<PlatformFile> fileList) async {
-    final nav = Navigator.of(_context);
     fileCount = fileList.length;
     for (var element in fileList) {
       var file = File(element.path!);
       await _upload(file);
     }
-    nav.pop(true);
   }
 
   /// Uplaods the given [file].
@@ -87,6 +79,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
       notifyListeners();
       await _service.upload(file, uploadingFileName);
       uploadedFiles++;
+      notifyListeners();
     } on DioError catch (e) {
       if (e.response?.statusCode == HttpStatus.requestEntityTooLarge) {
         var messenger = MessengerService.getInstance();

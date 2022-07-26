@@ -66,13 +66,9 @@ class RecordUploadDialog extends StatelessWidget {
         Consumer<RecordsUploadDialogViewModel>(
           builder: (context, value, child) {
             return Row(
-              children: [
-                Text(vm.uploadingFileName),
-                const Spacer(),
-                Text(vm.uploadedFiles.toString()),
-                const Text("/"),
-                Text(vm.fileCount.toString())
-              ],
+              children: value.uploadedFiles == value.fileCount
+                  ? [Text(vm.locales.uploadFinished)]
+                  : _uploadProgressTile(value),
             );
           },
         ),
@@ -88,10 +84,37 @@ class RecordUploadDialog extends StatelessWidget {
     var locales = AppLocalizations.of(context)!;
 
     return [
-      TextButton(
-        onPressed: () => Navigator.pop(context, false),
-        child: Text(locales.cancel),
+      Consumer<RecordsUploadDialogViewModel>(
+        builder: (context, value, child) {
+          return TextButton(
+            onPressed: value.uploadedFiles == value.fileCount
+                ? null
+                : () => Navigator.pop(context, false),
+            child: Text(locales.cancel),
+          );
+        },
       ),
+      Consumer<RecordsUploadDialogViewModel>(
+        builder: (context, value, child) {
+          return TextButton(
+            onPressed: value.uploadedFiles == value.fileCount
+                ? () => Navigator.pop(context, true)
+                : null,
+            child: Text(locales.save),
+          );
+        },
+      ),
+    ];
+  }
+
+  /// Returns the uplaoding progress content.
+  List<Widget> _uploadProgressTile(RecordsUploadDialogViewModel vm) {
+    return [
+      Text(vm.uploadingFileName),
+      const Spacer(),
+      Text(vm.uploadedFiles.toString()),
+      const Text("/"),
+      Text(vm.fileCount.toString())
     ];
   }
 }

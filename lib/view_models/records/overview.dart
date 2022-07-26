@@ -39,13 +39,12 @@ class RecordsViewModel extends ChangeNotifier {
     List<String> recordIds,
     BuildContext context,
   ) async {
-    // TODO
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete) {
       try {
         showProgressIndicator();
-        // await _service.deleteClients(clientIds);
+        await _service.delete(recordIds);
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();
