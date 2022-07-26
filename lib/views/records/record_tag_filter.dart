@@ -2,32 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_select_list_dialog.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/components/list_subfilter_view.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/view_models/records/record_tag_filter.dart';
 import 'package:provider/provider.dart';
 
-/// Function that notifies that a selected filter has changed and passes [filter].
-///
-/// This function should return a [Future].
-typedef FilterChangedFunction = Future Function(ID3TagFilter filter);
-
 /// Tag filters for the records view.
-class RecordTagFilter extends StatelessWidget {
-  /// Function that notifies that a selected filter has changed and passes [filter].
-  ///
-  /// This function should return a [Future].
-  final FilterChangedFunction onFilterChanged;
-
+class RecordTagFilter extends ListSubfilterView {
   /// Initializes the [RecordTagFilter].
-  const RecordTagFilter({
-    required this.onFilterChanged,
+  RecordTagFilter({
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key, filter: ID3TagFilter());
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RecordTagFilterViewModel>(
-      create: (context) => RecordTagFilterViewModel(),
+      create: (context) => RecordTagFilterViewModel(filter as ID3TagFilter),
       builder: (context, _) {
         var locales = AppLocalizations.of(context)!;
 
@@ -89,7 +79,6 @@ class RecordTagFilter extends StatelessWidget {
           onDeleted: vm.tagFilter.isNotEmpty(identifier)
               ? () => {
                     vm.clear(identifier),
-                    onFilterChanged(vm.tagFilter),
                   }
               : null,
         );
@@ -114,7 +103,6 @@ class RecordTagFilter extends StatelessWidget {
     }
 
     vm.updateFilter(ID3TagFilters.date, dateUpdated);
-    onFilterChanged(vm.tagFilter);
   }
 
   /// Creates an [AsyncSelectListDialog] to handle list filters.
@@ -143,6 +131,5 @@ class RecordTagFilter extends StatelessWidget {
     }
 
     vm.updateFilter(identifier, selectedValues);
-    onFilterChanged(vm.tagFilter);
   }
 }

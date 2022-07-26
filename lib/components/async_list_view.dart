@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
+import 'package:mml_admin/components/list_subfilter_view.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
-import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -18,7 +19,7 @@ typedef LoadDataFunction = Future<ModelList> Function({
   String? filter,
   int? offset,
   int? take,
-  ID3TagFilter? subfilter,
+  Subfilter? subfilter,
 });
 
 /// Function that deletes the items with the passed [itemIdentifiers].
@@ -82,12 +83,7 @@ class AsyncListView extends StatefulWidget {
   final List<ActionButton>? subactions;
 
   /// A subfilter widget which can be used to add subfilters like chips for more filter posibilities.
-  final Widget? subfilter;
-
-  /// Event listener of type [StreamController] which listen on data changes from extern.
-  ///
-  /// If no [StreamController] is provided, data will not be relaoded, when data changed extern.
-  final StreamController<dynamic>? onDataChanged;
+  final ListSubfilterView? subfilter;
 
   /// Initializes the list view.
   const AsyncListView(
@@ -98,8 +94,7 @@ class AsyncListView extends StatefulWidget {
       this.addItem,
       this.showAddButton = true,
       this.subactions,
-      this.subfilter,
-      this.onDataChanged})
+      this.subfilter,})
       : super(key: key);
 
   @override
@@ -143,36 +138,15 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// The actual item group if list items should be grouped.
   String? _actualGroup;
 
-  /// [StreamSubscription] of the actual stream controller or null if no stream controller is provided.
-  StreamSubscription? _streamSubscription;
-
-  /// The actual set subfilter on which the list will be filtered on data loading.
-  ID3TagFilter? _subfilterData;
-
   @override
   void initState() {
     _reloadData();
-    if (widget.onDataChanged != null) {
-      _streamSubscription = widget.onDataChanged!.stream.listen(
-        (event) {
-          _subfilterData = event;
-          _reloadData();
-        },
-      );
+    if (widget.subfilter != null) {
+      widget.subfilter!.filter.addListener(() {
+        _reloadData();
+      });
     }
     super.initState();
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    if (widget.onDataChanged != null) {
-      await widget.onDataChanged!.close();
-    }
-
-    if (_streamSubscription != null) {
-      await _streamSubscription!.cancel();
-    }
   }
 
   @override
@@ -222,7 +196,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     _offset = _initialOffset;
     _take = _initialTake;
 
-    _loadData(subfilter: _subfilterData);
+    _loadData(subfilter: widget.subfilter?.filter);
   }
 
   /// Loads the data for the [_offset] and [_take] with the [_filter].
@@ -232,7 +206,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Otherwhise the data will be loaded lazy in the background.
   void _loadData({
     bool showLoadingOverlay = true,
-    ID3TagFilter? subfilter,
+    Subfilter? subfilter,
   }) {
     if (showLoadingOverlay) {
       setState(() {
@@ -461,7 +435,7 @@ class _AsyncListViewState extends State<AsyncListView> {
           Text(AppLocalizations.of(context)!.noData),
           horizontalSpacer,
           TextButton.icon(
-            onPressed: () => _loadData(subfilter: _subfilterData),
+            onPressed: () => _loadData(subfilter: widget.subfilter?.filter),
             icon: const Icon(Icons.refresh),
             label: Text(AppLocalizations.of(context)!.reload),
           ),
