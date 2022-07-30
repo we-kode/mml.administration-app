@@ -79,5 +79,8 @@
   "editRecord": "Edit record",
   "title": "Title",
   "invalidTitle": "A title must be specified.",
-  "uploadFinished": "Upload finished."
+  "uploadFinished": "Upload finished.",
+  "uploadSettings": "Upload settings",
+  "compressionRate": "Compression rate in kbit/s",
+  "invalidCompressionRate": "The value must be greater than zero."
 }

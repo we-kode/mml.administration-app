@@ -1,5 +1,7 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/settings.dart';
 import 'package:provider/provider.dart';
 
@@ -48,11 +50,67 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // TODO: Implement
-                      const Expanded(
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
                         child: Card(
                           child: ListTile(
-                            title: Text("TODO: Upload settings"),
+                            title: Text(
+                              vm.locales.uploadSettings,
+                              textAlign: TextAlign.center,
+                            ),
+                            subtitle: Form(
+                              key: vm.uploadSettingsKey,
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    textAlign: TextAlign.right,
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 4,
+                                    decoration: InputDecoration(
+                                      labelText: vm.locales.compressionRate,
+                                    ),
+                                    initialValue: vm.settings.compressionRate
+                                            ?.toString() ??
+                                        '',
+                                    onSaved: (String? compressionRate) {
+                                      vm.clearBackendErrors(
+                                          vm.compressionField);
+                                      vm.settings.compressionRate =
+                                          int.tryParse(
+                                              (compressionRate ?? '0'));
+                                    },
+                                    onChanged: (String? compressionRate) {
+                                      vm.clearBackendErrors(
+                                          vm.compressionField);
+                                      vm.settings.compressionRate =
+                                          int.tryParse(
+                                              (compressionRate ?? '0'));
+                                    },
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    validator: vm.validateCompressionRate,
+                                  ),
+                                  verticalSpacer,
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        vm.saveSettings();
+                                      },
+                                      child: Text(vm.locales.save),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),

@@ -79,5 +79,8 @@
   "editRecord": "Изменить запись",
   "title": "Название",
   "invalidTitle": "Необходимо указать название.",
-  "uploadFinished": "Загрузка завершена"
+  "uploadFinished": "Загрузка завершена",
+  "uploadSettings": "Параметры загрузки",
+  "compressionRate": "Скорость сжатия в кбит/с",
+  "invalidCompressionRate": "Значение должно быть больше нуля."
 }
