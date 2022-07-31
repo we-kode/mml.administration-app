@@ -8,6 +8,7 @@ import 'package:mml_admin/models/genre.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/record.dart';
+import 'package:mml_admin/models/settings.dart';
 import 'package:mml_admin/services/api.dart';
 
 /// Service that handles the records data of the server.
@@ -177,6 +178,29 @@ class RecordService {
     await _apiService.request(
       '/media/record',
       data: record.toJson(),
+      options: Options(
+        method: 'POST',
+      ),
+    );
+  }
+
+  /// Loads the settings for records
+  Future<Settings> getSettings() async{
+    var response = await _apiService.request(
+      '/media/settings',
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return Settings.fromJson(response.data);
+  }
+
+  /// Saves the record settings
+  saveSettings(Settings settings) async{
+    await _apiService.request(
+      '/media/settings',
+      data: settings.toJson(),
       options: Options(
         method: 'POST',
       ),

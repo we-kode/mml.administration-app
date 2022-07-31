@@ -110,5 +110,9 @@
   "editRecord": "Aufnahme bearbeiten",
   "title": "Titel",
   "invalidTitle": "Ein Titlel muss angegeben werden.",
-  "uploadFinished": "Upload abgeschlossen."
+  "uploadFinished": "Upload abgeschlossen.",
+  "uploadSettings": "Upload Einstellungen",
+  "compressionRate": "Bitrate in kbit/s",
+  "compressionInfo": "Kompression erfolgt beim nächsten Upload. Bei leerer Bitrate erfolgt keine Kompression.",
+  "invalidCompressionRate": "Der Wert muss größer als Null sein."
 }
