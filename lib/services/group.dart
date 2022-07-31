@@ -39,6 +39,26 @@ class GroupService {
     );
   }
 
+  /// Returns a list of groups in the media service with the amount of [take]
+  /// that match the given [filter] starting from the [offset].
+  Future<ModelList> getMediaGroups(String? filter, int? offset, int? take) async {
+    var response = await _apiService.request(
+      '/media/group',
+      queryParameters: {"filter": filter, "skip": offset, "take": take},
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return ModelList(
+      List<Group>.from(
+        response.data['items'].map((item) => Group.fromJson(item)),
+      ),
+      offset ?? 0,
+      response.data["totalCount"],
+    );
+  }
+
   /// Deletes the groups with the given [groupIds] on the server.
   Future<void> deleteGroups<String>(List<String> groupIds) async {
     await _apiService.request(

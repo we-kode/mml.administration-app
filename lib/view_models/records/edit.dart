@@ -101,6 +101,6 @@ class RecordEditViewModel extends ChangeNotifier {
 
    /// Loads all groups from the server with the given [filter].
   Future<List<Group>> getGroups(String filter) async {
-    return List.from(await _groupService.getGroups(filter, 0, -1));
+    return List.from(await _groupService.getMediaGroups(filter, 0, -1));
   }
 }
