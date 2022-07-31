@@ -81,6 +81,7 @@
   "invalidTitle": "A title must be specified.",
   "uploadFinished": "Upload finished.",
   "uploadSettings": "Upload settings",
-  "compressionRate": "Compression rate in kbit/s",
+  "compressionRate": "Bitrate in kbit/s",
+  "compressionInfo": "Compression occurs at the next upload. With an empty bitrate, there is no compression.",
   "invalidCompressionRate": "The value must be greater than zero."
 }

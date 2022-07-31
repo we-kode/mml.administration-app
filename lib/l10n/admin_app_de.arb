@@ -112,6 +112,7 @@
   "invalidTitle": "Ein Titlel muss angegeben werden.",
   "uploadFinished": "Upload abgeschlossen.",
   "uploadSettings": "Upload Einstellungen",
-  "compressionRate": "Kompressionsrate in kbit/s",
+  "compressionRate": "Bitrate in kbit/s",
+  "compressionInfo": "Kompression erfolgt beim nächsten Upload. Bei leerer Bitrate erfolgt keine Kompression.",
   "invalidCompressionRate": "Der Wert muss größer als Null sein."
 }

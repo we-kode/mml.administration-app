@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'settings.g.dart';
 
-/// Settings model that holds all information of the Uplaod settinmgs.
+/// Settings model that holds all information of the Uplaod settings.
 @JsonSerializable(includeIfNull: false)
 class Settings {
   /// The compression rate of one record in kbit/s.

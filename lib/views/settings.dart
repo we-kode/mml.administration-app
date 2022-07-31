@@ -76,23 +76,28 @@ class SettingsScreen extends StatelessWidget {
                                     maxLength: 4,
                                     decoration: InputDecoration(
                                       labelText: vm.locales.compressionRate,
+                                      hintText: vm.locales.compressionInfo,
                                     ),
                                     initialValue: vm.settings.compressionRate
                                             ?.toString() ??
                                         '',
                                     onSaved: (String? compressionRate) {
                                       vm.clearBackendErrors(
-                                          vm.compressionField);
+                                        vm.compressionField,
+                                      );
                                       vm.settings.compressionRate =
                                           int.tryParse(
-                                              (compressionRate ?? '0'));
+                                        (compressionRate ?? '0'),
+                                      );
                                     },
                                     onChanged: (String? compressionRate) {
                                       vm.clearBackendErrors(
-                                          vm.compressionField);
+                                        vm.compressionField,
+                                      );
                                       vm.settings.compressionRate =
                                           int.tryParse(
-                                              (compressionRate ?? '0'));
+                                        (compressionRate ?? '0'),
+                                      );
                                     },
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,

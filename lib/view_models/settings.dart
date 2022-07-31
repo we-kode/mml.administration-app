@@ -77,7 +77,8 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   String? validateCompressionRate(String? compressionRate) {
-    var error = (int.tryParse((compressionRate ?? '0')) ?? 0) > 0
+    var compression = int?.tryParse(compressionRate ?? '0');
+    var error = compression == null || compression > 0
         ? null
         : locales.invalidCompressionRate;
 
