@@ -25,6 +25,9 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   /// Name of the file which is uploading.
   String uploadingFileName = '';
 
+  /// List with files, which were not uploaded due errors.
+  List<String> notUploadedFiles = [];
+
   /// Initializes the ViewModel and starts the upload process.
   ///
   /// If no [folderPath] is provided, files from the [fileList] will be uploaded, else
@@ -35,6 +38,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     List<PlatformFile>? fileList,
   ) async {
     locales = AppLocalizations.of(context)!;
+    notUploadedFiles = [];
     return Future<bool>.microtask(
       () {
         (folderPath ?? '').isNotEmpty
@@ -81,6 +85,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
       uploadedFiles++;
       notifyListeners();
     } on DioError catch (e) {
+      notUploadedFiles.add(uploadingFileName);
       if (e.response?.statusCode == HttpStatus.requestEntityTooLarge) {
         var messenger = MessengerService.getInstance();
         messenger.showMessage(messenger.fileToLarge(uploadingFileName));

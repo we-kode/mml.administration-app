@@ -79,5 +79,6 @@
   "editRecord": "Edit record",
   "title": "Title",
   "invalidTitle": "A title must be specified.",
-  "uploadFinished": "Upload finished."
+  "uploadFinished": "Upload finished.",
+  "notUploadedFiles": "Following files were not uploaded."
 }

@@ -79,5 +79,6 @@
   "editRecord": "Изменить запись",
   "title": "Название",
   "invalidTitle": "Необходимо указать название.",
-  "uploadFinished": "Загрузка завершена"
+  "uploadFinished": "Загрузка завершена",
+  "notUploadedFiles": "Следующие файлы не были загружены."
 }

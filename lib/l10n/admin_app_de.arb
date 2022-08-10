@@ -110,5 +110,6 @@
   "editRecord": "Aufnahme bearbeiten",
   "title": "Titel",
   "invalidTitle": "Ein Titlel muss angegeben werden.",
-  "uploadFinished": "Upload abgeschlossen."
+  "uploadFinished": "Upload abgeschlossen.",
+  "notUploadedFiles": "Folgende Dateien wurden nicht hochgeladen."
 }
