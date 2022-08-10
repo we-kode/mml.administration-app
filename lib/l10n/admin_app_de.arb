@@ -109,7 +109,11 @@
   "actualConnectionSettings": "Aktuelle Verbindungseinstellungen",
   "editRecord": "Aufnahme bearbeiten",
   "title": "Titel",
-  "invalidTitle": "Ein Titlel muss angegeben werden.",
+  "invalidTitle": "Ein Titel muss angegeben werden.",
   "uploadFinished": "Upload abgeschlossen.",
-  "notUploadedFiles": "Folgende Dateien wurden nicht hochgeladen."
+  "notUploadedFiles": "Folgende Dateien wurden nicht hochgeladen.",
+  "uploadSettings": "Upload Einstellungen",
+  "compressionRate": "Bitrate in kbit/s",
+  "compressionInfo": "Kompression erfolgt beim nächsten Upload. Bei leerer Bitrate erfolgt keine Kompression.",
+  "invalidCompressionRate": "Der Wert muss größer als Null sein."
 }
