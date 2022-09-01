@@ -80,6 +80,7 @@
   "title": "Title",
   "invalidTitle": "A title must be specified.",
   "uploadFinished": "Upload finished.",
+  "notUploadedFiles": "Following files were not uploaded.",
   "uploadSettings": "Upload settings",
   "compressionRate": "Bitrate in kbit/s",
   "compressionInfo": "Compression occurs at the next upload. With an empty bitrate, there is no compression.",

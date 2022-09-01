@@ -1,5 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/uploading_animation.dart';
+import 'package:mml_admin/components/vertical_spacer.dart';
+import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:mml_admin/view_models/records/upload.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -65,10 +68,15 @@ class RecordUploadDialog extends StatelessWidget {
       children: [
         Consumer<RecordsUploadDialogViewModel>(
           builder: (context, value, child) {
-            return Row(
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: value.uploadedFiles == value.fileCount
-                  ? [Text(vm.locales.uploadFinished)]
-                  : _uploadProgressTile(value),
+                  ? _uploadFinishedTile(value)
+                  : _uploadProgressTile(
+                      value,
+                      context,
+                    ),
             );
           },
         ),
@@ -108,13 +116,61 @@ class RecordUploadDialog extends StatelessWidget {
   }
 
   /// Returns the uplaoding progress content.
-  List<Widget> _uploadProgressTile(RecordsUploadDialogViewModel vm) {
+  List<Widget> _uploadProgressTile(
+    RecordsUploadDialogViewModel vm,
+    BuildContext context,
+  ) {
     return [
-      Text(vm.uploadingFileName),
-      const Spacer(),
-      Text(vm.uploadedFiles.toString()),
-      const Text("/"),
-      Text(vm.fileCount.toString())
+      const SizedBox(
+        height: 256,
+        width: 256,
+        child: UploadAnimation(),
+      ),
+      Row(
+        children: [
+          Text(
+            vm.uploadingFileName,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const Spacer(),
+          Text(
+            vm.uploadedFiles.toString(),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          Text(
+            '/',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          Text(
+            vm.fileCount.toString(),
+            style: Theme.of(context).textTheme.bodySmall,
+          )
+        ],
+      ),
+    ];
+  }
+
+  /// Returns the result text when uplaod finished.
+  List<Widget> _uploadFinishedTile(RecordsUploadDialogViewModel vm) {
+    return [
+      Text(vm.locales.uploadFinished),
+      verticalSpacer,
+      if (vm.notUploadedFiles.isNotEmpty) Text(vm.locales.notUploadedFiles),
+      if (vm.notUploadedFiles.isNotEmpty)
+        SizedBox(
+          height: 500,
+          width: 500, // Constrain height.
+          child: ListView.separated(
+            itemCount: vm.notUploadedFiles.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                title: Text(vm.notUploadedFiles[index]),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(),
+          ),
+        ),
     ];
   }
 }
