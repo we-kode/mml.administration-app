@@ -1,0 +1,119 @@
+{
+  "@@locale": "de",
+  "appTitle": "Meine Mediathek Administration",
+  "serverName": "Server (Domain:Port)",
+  "serverNameUnchanged": "Server (Domain:Port) (unverändert)",
+  "invalidServerName": "Eine korrekte Serveradresse muss angegeben werden!",
+  "login": "Anmelden",
+  "username": "Benutzername",
+  "password": "Passwort",
+  "passwordUnchanged": "Passwort (unverändert)",
+  "clientId": "Client-ID",
+  "clientIdUnchanged": "Client-ID (unverändert)",
+  "appKey": "App-Schlüssel",
+  "appKeyUnchanged": "App-Schlüssel (unverändert)",
+  "invalidClientId": "Eine korrekte Client-ID muss angegeben werden!",
+  "invalidAppKey": "Ein korrekter App-Schlüssel muss angegeben werden!",
+  "invalidUsername": "Bitte geben Sie Ihren Benutzernamen an!",
+  "invalidPassword": "Bitte geben Sie Ihr Passwort an!",
+  "badCertificate": "Es ist ein Zertifikatfehler aufgetreten!",
+  "unexpectedError": "Es ist ein unerwarterter Fehler aufgetreten: {message}",
+  "@unexpectedError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "forbidden": "Sie haben nicht die notwendigen Rechte, die Aktion auszuführen!",
+  "incorrectCredentials": "Anmeldung fehlgeschlagen!",
+  "records": "Aufnahmen",
+  "adminUsers": "Admins",
+  "devices": "Geräte",
+  "settings": "Einstellungen",
+  "logout": "Abmelden",
+  "relogin": "Sie wurden automatisch abgemeldet! Bitte melden Sie sich neu an!",
+  "advanced": "Erweitert",
+  "add": "Hinzufügen",
+  "remove": "Löschen",
+  "cancel": "Abbrechen",
+  "filter": "Filter",
+  "save": "Speichern",
+  "confirmAccount": "Bitte aktualisieren Sie Ihr Passwort, um fortzufahren.",
+  "actualPassword": "Aktuelles Passwort",
+  "newPassword": "Neues Passwort",
+  "confirmNewPassword": "Passwort bestätigen",
+  "invalidConfirmPasswords": "Neues Passwort stimmt mit Überprüfung nicht überein.",
+  "updatePasswordFailed": "Passwortaktualisierung fehlgeschlagen!",
+  "actualUser": "Aktueller Benutzer",
+  "changePassword": "Passwort ändern",
+  "noData": "Keine Datensätze wurden gefunden!",
+  "reload": "Neu laden",
+  "editClient": "Gerät bearbeiten",
+  "registerClient": "Gerät registrieren",
+  "displayName": "Name",
+  "invalidDisplayName": "Bitte geben Sie einen Namen an!",
+  "deleteConfirmation": "Möchten Sie tatsächlich die gewählten Datensätze löschen?",
+  "yes": "Ja",
+  "createUser": "Admin hinzufügen",
+  "editUser": "Admin bearbeiten",
+  "notFound": "Der aufgerufene Datensatz wurde nicht gefunden!",
+  "retrieveTokenFailed": "Es konnte kein Token geladen werden!",
+  "invalidDeviceName": "Bitte geben Sie eine Gerätebezeichnung an!",
+  "deviceName": "Gerätebezeichnung",
+  "lastTokenRefresh": "Letzte Aktivität: {date}",
+  "@lastTokenRefresh": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "groups": "Gruppen",
+  "groupName": "Gruppenname",
+  "createGroup": "Gruppe erstellen",
+  "editGroup": "Gruppe bearbeiten",
+  "groupIsDefault": "Standardgruppe",
+  "groupIsDefaultHint": "Gruppe wird beim Erstellen neuer Geräte automatisch zugewiesen.",
+  "invalidGroupName": "Bitte geben Sie einen Namen an!",
+  "invalidGroupIsDefault": "Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!",
+  "uploading": "Dateien werden hochgeladen.",
+  "unknown": "Unbekannt",
+  "date": "Datum",
+  "artist": "Interpret",
+  "genre": "Genre",
+  "album": "Album",
+  "toLargeFile": "Datei {fileName} ist zu groß.",
+  "@toLargeFile": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadingFileFailed": "Beim Hochladen der Datei {fileName} ist ein Fehler aufgetreten: {error}",
+  "@uploadingFileFailed": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      },
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "invalidMp3File": "Datei ist keine gültige MP3-Datei.",
+  "invalidFileNoContent": "Datei hat keinen Inhalt.",
+  "uploadFolder": "Ordner hochladen",
+  "uploadFiles": "Dateien hochladen",
+  "actualConnectionSettings": "Aktuelle Verbindungseinstellungen",
+  "editRecord": "Aufnahme bearbeiten",
+  "title": "Titel",
+  "invalidTitle": "Ein Titel muss angegeben werden.",
+  "uploadFinished": "Upload abgeschlossen.",
+  "notUploadedFiles": "Folgende Dateien wurden nicht hochgeladen.",
+  "uploadSettings": "Upload Einstellungen",
+  "compressionRate": "Bitrate in kbit/s",
+  "compressionInfo": "Kompression erfolgt beim nächsten Upload. Bei leerer Bitrate erfolgt keine Kompression.",
+  "invalidCompressionRate": "Der Wert muss größer als Null sein."
+}
