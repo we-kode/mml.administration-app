@@ -44,7 +44,7 @@ dependencies:
   shimmer: ^2.0.0
   window_manager: ^0.2.5
   barcode_widget: ^2.0.2
-  signalr_pure: ^1.0.0+3
+  signalr_pure: ^1.1.0
   rive: ^0.9.0
   dropdown_search: ^5.0.2
   file_picker: ^5.0.1
