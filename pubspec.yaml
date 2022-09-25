@@ -63,6 +63,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   build_runner: ^2.1.10
   json_serializable: ^6.2.0
+  msix: ^2.8.18
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -106,3 +107,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+msix_config:
+  display_name: My Media Lib
+  logo_path: ./assets/images/logo.png
+  publisher_display_name: WeKoDe
+  identity_name: de.wekode.mml
+  publisher: CN=My Media Lib, O=WeKoDe, C=DE
