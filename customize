@@ -33,12 +33,12 @@ do
 		sed -i -E "s/    gtk_header_bar_set_title\(header_bar, \".*\"\);/    gtk_header_bar_set_title\(header_bar, \"$value\"\);/" "./linux/my_application.cc"
 		sed -i -E "s/    gtk_window_set_title\(window, \".*\"\);/    gtk_window_set_title\(window, \"$value\"\);/" "./linux/my_application.cc"
 		sed -i -E "s/PRODUCT_NAME = .*/PRODUCT_NAME = $value/" "./macos/Runner/Configs/AppInfo.xcconfig"
-		sed -i -E "s/set\(BINARY_NAME \".*\"\)/set\(BINARY_NAME \"$value\"\)/" "./windows/CMakeLists.txt"
-		sed -i -E "s/set\(BINARY_NAME \".*\"\)/set\(BINARY_NAME \"$value\"\)/" "./linux/CMakeLists.txt"
+		sed -i -E "s/  display_name: .*/  display_name: $value/" "pubspec.yaml"
 		;;
 	appId)
 		sed -i -E "s/PRODUCT_BUNDLE_IDENTIFIER = .*/PRODUCT_BUNDLE_IDENTIFIER = $value/" "./macos/Runner/Configs/AppInfo.xcconfig"
 		sed -i -E "s/set\(APPLICATION_ID \".*\"\)/set\(APPLICATION_ID \"$value\"\)/" "./linux/CMakeLists.txt"
+		sed -i -E "s/  identity_name: .*/  identity_name: $value/" "pubspec.yaml"
 		;;
 	*)
 		echo "Not known key: $key"
