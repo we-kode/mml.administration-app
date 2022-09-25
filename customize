@@ -35,7 +35,6 @@ do
 		sed -i -E "s/    gtk_window_set_title\(window, \".*\"\);/    gtk_window_set_title\(window, \"$value\"\);/" "./linux/my_application.cc"
 		sed -i -E "s/PRODUCT_NAME = .*/PRODUCT_NAME = $value/" "./macos/Runner/Configs/AppInfo.xcconfig"
 		sed -i -E "s/  display_name: .*/  display_name: $value/" "pubspec.yaml"
-		sed -i -E "s/  Package: .*/  Package: $value/" "./debian/debian.yaml"
 		;;
 	appId)
 		sed -i -E "s/PRODUCT_BUNDLE_IDENTIFIER = .*/PRODUCT_BUNDLE_IDENTIFIER = $value/" "./macos/Runner/Configs/AppInfo.xcconfig"
