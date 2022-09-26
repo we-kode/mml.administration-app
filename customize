@@ -1,17 +1,24 @@
 #!/bin/bash
-
+DIR="mml.administration-app"
+if [ -d "$DIR" ]; then
+  cd $DIR
+  git pull
+  cd ..
+else
+  git clone --branch master https://github.com/we-kode/mml.administration-app.git
+fi
 # replace icons
 echo "Replacing icons"
-cp -a "./config/icons/assets/." "./assets/images/"
-cp -a "./config/icons/windows/." "./windows/runner/resources"
-cp -a "./config/icons/macos/." "./macos/Runner/Assets.xcassets/AppIcon.appiconset"
-cp -a "./config/debian/." "./debian"
+cp -a "./config/icons/assets/." "$DIR/assets/images/"
+cp -a "./config/icons/windows/." "$DIR/windows/runner/resources"
+cp -a "./config/icons/macos/." "$DIR/macos/Runner/Assets.xcassets/AppIcon.appiconset"
+cp -a "./config/debian/." "$DIR/debian"
 
 # replace color schema
 COLOR_SCHEME=./config/lib_color_schemes.g.dart
 if test -f "$COLOR_SCHEME"; then
     echo "Replacing color scheme"
-    cp "$COLOR_SCHEME" "./lib/lib_color_schemes.g.dart"
+    cp "$COLOR_SCHEME" "$DIR/lib/lib_color_schemes.g.dart"
 fi
 
 # replace titles
@@ -21,25 +28,25 @@ while IFS='=' read -r key value
 do
   case $key in
 	appTitle_en)
-		sed -i -E "s/\"appTitle\": .*/\"appTitle\": \"$value\",/" "./lib/l10n/admin_app_en.arb"
+		sed -i -E "s/\"appTitle\": .*/\"appTitle\": \"$value\",/" "$DIR/lib/l10n/admin_app_en.arb"
 		;;
 	appTitle_ru)
-		sed -i -E "s/\"appTitle\": .*/\"appTitle\": \"$value\",/" "./lib/l10n/admin_app_ru.arb"
+		sed -i -E "s/\"appTitle\": .*/\"appTitle\": \"$value\",/" "$DIR/lib/l10n/admin_app_ru.arb"
 		;;
 	appTitle_de)
-		sed -i -E "s/\"appTitle\": .*/\"appTitle\": \"$value\",/" "./lib/l10n/admin_app_de.arb"
+		sed -i -E "s/\"appTitle\": .*/\"appTitle\": \"$value\",/" "$DIR/lib/l10n/admin_app_de.arb"
 		;;
 	appTitle)
-		sed -i -E "s/  if \(!window.CreateAndShow\(L\".*\", origin, size\)\) \{/  if \(!window.CreateAndShow\(L\"$value\", origin, size\)\) \{/" "./windows/runner/main.cpp"
-		sed -i -E "s/    gtk_header_bar_set_title\(header_bar, \".*\"\);/    gtk_header_bar_set_title\(header_bar, \"$value\"\);/" "./linux/my_application.cc"
-		sed -i -E "s/    gtk_window_set_title\(window, \".*\"\);/    gtk_window_set_title\(window, \"$value\"\);/" "./linux/my_application.cc"
-		sed -i -E "s/PRODUCT_NAME = .*/PRODUCT_NAME = $value/" "./macos/Runner/Configs/AppInfo.xcconfig"
-		sed -i -E "s/  display_name: .*/  display_name: $value/" "pubspec.yaml"
+		sed -i -E "s/  if \(!window.CreateAndShow\(L\".*\", origin, size\)\) \{/  if \(!window.CreateAndShow\(L\"$value\", origin, size\)\) \{/" "$DIR/windows/runner/main.cpp"
+		sed -i -E "s/    gtk_header_bar_set_title\(header_bar, \".*\"\);/    gtk_header_bar_set_title\(header_bar, \"$value\"\);/" "$DIR/linux/my_application.cc"
+		sed -i -E "s/    gtk_window_set_title\(window, \".*\"\);/    gtk_window_set_title\(window, \"$value\"\);/" "$DIR/linux/my_application.cc"
+		sed -i -E "s/PRODUCT_NAME = .*/PRODUCT_NAME = $value/" "$DIR/macos/Runner/Configs/AppInfo.xcconfig"
+		sed -i -E "s/  display_name: .*/  display_name: $value/" "$DIR/pubspec.yaml"
 		;;
 	appId)
-		sed -i -E "s/PRODUCT_BUNDLE_IDENTIFIER = .*/PRODUCT_BUNDLE_IDENTIFIER = $value/" "./macos/Runner/Configs/AppInfo.xcconfig"
-		sed -i -E "s/set\(APPLICATION_ID \".*\"\)/set\(APPLICATION_ID \"$value\"\)/" "./linux/CMakeLists.txt"
-		sed -i -E "s/  identity_name: .*/  identity_name: $value/" "pubspec.yaml"
+		sed -i -E "s/PRODUCT_BUNDLE_IDENTIFIER = .*/PRODUCT_BUNDLE_IDENTIFIER = $value/" "$DIR/macos/Runner/Configs/AppInfo.xcconfig"
+		sed -i -E "s/set\(APPLICATION_ID \".*\"\)/set\(APPLICATION_ID \"$value\"\)/" "$DIR/linux/CMakeLists.txt"
+		sed -i -E "s/  identity_name: .*/  identity_name: $value/" "$DIR/pubspec.yaml"
 		;;
 	*)
 		echo "Not known key: $key"
