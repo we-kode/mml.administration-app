@@ -62,7 +62,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
   build_runner: ^2.1.10
-  json_serializable: ^6.2.0
+  json_serializable: ^6.4.1
   msix: ^2.8.18
 
 # For information on the generic Dart part of this file, see the
@@ -113,4 +113,3 @@ msix_config:
   logo_path: ./assets/images/logo.png
   publisher_display_name: WeKoDe
   identity_name: de.wekode.mml
-  publisher: CN=My Media Lib, O=WeKoDe, C=DE
