@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
@@ -157,25 +158,32 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          // List header with filter and action buttons.
-          _createListHeaderWidget(),
+    return RawKeyboardListener(
+      autofocus: true,
+      focusNode: FocusNode(),
+      onKey: (event) => {
+        if (event.isKeyPressed(LogicalKeyboardKey.f5)) {_reloadData()}
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            // List header with filter and action buttons.
+            _createListHeaderWidget(),
 
-          // List, loading indicator or no data widget.
-          Expanded(
-            child: _isLoadingData
-                ? _createLoadingWidget()
-                : (_items!.totalCount > 0
-                    ? _createListViewWidget()
-                    : _createNoDataWidget()),
-          ),
-        ],
+            // List, loading indicator or no data widget.
+            Expanded(
+              child: _isLoadingData
+                  ? _createLoadingWidget()
+                  : (_items!.totalCount > 0
+                      ? _createListViewWidget()
+                      : _createNoDataWidget()),
+            ),
+          ],
+        ),
+
+        // Floating button.
+        floatingActionButton: _createActionButton(),
       ),
-
-      // Floating button.
-      floatingActionButton: _createActionButton(),
     );
   }
 
@@ -305,9 +313,28 @@ class _AsyncListViewState extends State<AsyncListView> {
                     },
                   ),
                   // add subfilter if one is provided.
-                  if (widget.subfilter != null) verticalSpacer,
+                  verticalSpacer,
                   if (widget.subfilter != null) widget.subfilter!,
+                  if (widget.subfilter == null)
+                    Row(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                        ),
+                      ],
+                    ),
                 ],
+              ),
+            ),
+          ),
+
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Visibility(
+              visible: !_isInMultiSelectMode,
+              child: IconButton(
+                onPressed: () => _reloadData(),
+                icon: const Icon(Icons.refresh),
               ),
             ),
           ),
