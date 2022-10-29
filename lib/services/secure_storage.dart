@@ -24,6 +24,9 @@ class SecureStorageService {
   /// Key under which the refresh token is persisted.
   static const String refreshTokenStorageKey = 'r';
 
+  /// Key under which the hierarchical folder view flag is stored.
+  static const String folderViewStorageKey = 'isFolderView';
+
   /// Private constructor of the service.
   SecureStorageService._();
 
