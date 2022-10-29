@@ -99,9 +99,8 @@ class RecordsScreen extends StatelessWidget {
                   },
                 ),
               ],
-              // TODO delete items should also delete folders
-              deleteItems: <String>(List<String> recordIds) => vm.delete(
-                recordIds,
+              deleteItems: <ModelBase>(List<ModelBase> items) => vm.delete(
+                items,
                 context,
               ),
               editItem: (ModelBase item, Subfilter? subfilter) async {

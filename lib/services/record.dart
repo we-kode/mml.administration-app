@@ -186,7 +186,7 @@ class RecordService {
   }
 
   /// Loads the settings for records
-  Future<Settings> getSettings() async{
+  Future<Settings> getSettings() async {
     var response = await _apiService.request(
       '/media/settings',
       options: Options(
@@ -198,7 +198,7 @@ class RecordService {
   }
 
   /// Saves the record settings
-  saveSettings(Settings settings) async{
+  saveSettings(Settings settings) async {
     await _apiService.request(
       '/media/settings',
       data: settings.toJson(),
@@ -208,7 +208,7 @@ class RecordService {
     );
   }
 
-   /// Returns a list of record folder group with the amount of [take] that match the given
+  /// Returns a list of record folder group with the amount of [take] that match the given
   /// [filter] starting from the [offset].
   Future<ModelList> getRecordsFolder(
     String? filter,
@@ -247,6 +247,17 @@ class RecordService {
       ),
       offset ?? 0,
       response.data["totalCount"],
+    );
+  }
+
+  /// Deletes all records within the given folders in [list].
+  Future<void> deleteFolder(List<RecordFolder> list) async {
+    await _apiService.request(
+      '/media/record/deleteFolders',
+      data: list,
+      options: Options(
+        method: 'POST',
+      ),
     );
   }
 }

@@ -6,6 +6,8 @@ import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/navigation_state.dart';
+import 'package:mml_admin/models/record.dart';
+import 'package:mml_admin/models/record_folder.dart';
 import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
@@ -62,16 +64,20 @@ class RecordsViewModel extends ChangeNotifier {
 
   /// Deletes the records with the passed [recordIds] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> delete<String>(
-    List<String> recordIds,
+  Future<bool> delete<ModelBase>(
+    List<ModelBase> items,
     BuildContext context,
   ) async {
     var shouldDelete = await showDeleteDialog(context);
 
-    if (shouldDelete) {
+    if (shouldDelete && items.isNotEmpty) {
       try {
         showProgressIndicator();
-        await _service.delete(recordIds);
+        if (items.first is Record) {
+          await _service.delete(items.map<String>((ModelBase e) => (e as Record).getIdentifier()).toList());
+        } else {
+          await _service.deleteFolder(items.map<RecordFolder>((ModelBase e) => (e as RecordFolder)).toList());
+        }
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();

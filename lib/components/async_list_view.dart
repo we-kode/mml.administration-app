@@ -221,10 +221,10 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Stores the identifer of the item at the [index] or removes it, when
   /// the identifier was in the list of selected items.
   void _onItemChecked(int index) {
-    if (_selectedItems.contains(_items![index]?.getIdentifier())) {
-      _selectedItems.remove(_items![index]?.getIdentifier());
+    if (_selectedItems.any((item) => item.getIdentifier() == _items![index]?.getIdentifier())) {
+      _selectedItems.remove(_items![index]);
     } else if (_items![index] != null) {
-      _selectedItems.add(_items![index]!.getIdentifier());
+      _selectedItems.add(_items![index]!);
     }
 
     setState(() {
@@ -532,7 +532,7 @@ class _AsyncListViewState extends State<AsyncListView> {
             onChanged: (_) {
               _onItemChecked(index);
             },
-            value: _selectedItems.contains(item.getIdentifier()),
+            value: _selectedItems.any((elem) => elem.getIdentifier() == item.getIdentifier()),
           );
 
     var itemGroup = item.getGroup(context) ?? '';
