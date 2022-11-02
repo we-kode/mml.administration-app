@@ -12,7 +12,17 @@ class RecordTagFilter extends ListSubfilterView {
   /// Initializes the [RecordTagFilter].
   RecordTagFilter({
     Key? key,
-  }) : super(key: key, filter: ID3TagFilter());
+    DateTime? startDate,
+    DateTime? endDate,
+    bool isFolderView = false,
+  }) : super(
+          key: key,
+          filter: ID3TagFilter(
+            startDate: startDate,
+            endDate: endDate,
+            isFolderView: isFolderView,
+          ),
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +33,18 @@ class RecordTagFilter extends ListSubfilterView {
 
         return Row(
           children: [
+            _createTagFilter(
+              ID3TagFilters.folderView,
+              locales.folder,
+              const Icon(Icons.folder),
+              Colors.indigoAccent,
+            ),
+            Consumer<RecordTagFilterViewModel>(
+              builder: (context, vm, child) {
+                var isFolderView = (filter as ID3TagFilter).isGrouped;
+                return !isFolderView ? horizontalSpacer : Container();
+              },
+            ),
             _createTagFilter(
               ID3TagFilters.date,
               locales.date,
@@ -68,22 +90,37 @@ class RecordTagFilter extends ListSubfilterView {
   ) {
     return Consumer<RecordTagFilterViewModel>(
       builder: (context, vm, child) {
-        return InputChip(
-          label: Text(label),
-          avatar: icon,
-          backgroundColor:
-              vm.tagFilter.isNotEmpty(identifier) ? activeBGColor : null,
-          onPressed: () => identifier == ID3TagFilters.date
-              ? _handleDateFilter(context, vm)
-              : _handleFilter(identifier, context, vm),
-          onDeleted: vm.tagFilter.isNotEmpty(identifier)
-              ? () => {
-                    vm.clear(identifier),
-                  }
-              : null,
-        );
+        var isFolderView = identifier == ID3TagFilters.date &&
+            (filter as ID3TagFilter).isGrouped;
+        return isFolderView
+            ? Container()
+            : InputChip(
+                label: Text(label),
+                avatar: icon,
+                backgroundColor:
+                    vm.tagFilter.isNotEmpty(identifier) ? activeBGColor : null,
+                onPressed: () => identifier == ID3TagFilters.date
+                    ? _handleDateFilter(context, vm)
+                    : identifier == ID3TagFilters.folderView
+                        ? _handleFolderFilter(context, vm)
+                        : _handleFilter(identifier, context, vm),
+                onDeleted: vm.tagFilter.isNotEmpty(identifier)
+                    ? () => {
+                          vm.clear(identifier),
+                        }
+                    : null,
+              );
       },
     );
+  }
+
+  /// Updates the folder view tag.
+  Future _handleFolderFilter(
+    BuildContext context,
+    RecordTagFilterViewModel vm,
+  ) async {
+    var isFolderView = !(filter as ID3TagFilter).isGrouped;
+    await vm.updateFilter(ID3TagFilters.folderView, isFolderView);
   }
 
   /// Creates a [showDateRangePicker] to handle the date filter.

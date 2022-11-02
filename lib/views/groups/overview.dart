@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/models/group.dart';
+import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/view_models/groups/overview.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/views/groups/edit.dart';
@@ -33,7 +34,7 @@ class GroupsOverviewScreen extends StatelessWidget {
               },
             );
           },
-          editItem: (ModelBase group) async {
+          editItem: (ModelBase group, Subfilter? subfilter) async {
             return await showDialog(
               barrierDismissible: false,
               context: context,

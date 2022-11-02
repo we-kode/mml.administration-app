@@ -8,6 +8,7 @@ import 'package:mml_admin/models/genre.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/record.dart';
+import 'package:mml_admin/models/record_folder.dart';
 import 'package:mml_admin/models/settings.dart';
 import 'package:mml_admin/services/api.dart';
 
@@ -185,7 +186,7 @@ class RecordService {
   }
 
   /// Loads the settings for records
-  Future<Settings> getSettings() async{
+  Future<Settings> getSettings() async {
     var response = await _apiService.request(
       '/media/settings',
       options: Options(
@@ -197,10 +198,63 @@ class RecordService {
   }
 
   /// Saves the record settings
-  saveSettings(Settings settings) async{
+  saveSettings(Settings settings) async {
     await _apiService.request(
       '/media/settings',
       data: settings.toJson(),
+      options: Options(
+        method: 'POST',
+      ),
+    );
+  }
+
+  /// Returns a list of record folder group with the amount of [take] that match the given
+  /// [filter] starting from the [offset].
+  Future<ModelList> getRecordsFolder(
+    String? filter,
+    int? offset,
+    int? take,
+    ID3TagFilter subfilter,
+  ) async {
+    var params = <String, String?>{};
+
+    if (filter != null) {
+      params['filter'] = filter;
+    }
+
+    if (offset != null) {
+      params['skip'] = offset.toString();
+    }
+
+    if (take != null) {
+      params['take'] = take.toString();
+    }
+
+    var response = await _apiService.request(
+      '/media/record/listFolder',
+      queryParameters: params,
+      data: subfilter.toJson(),
+      options: Options(
+        method: 'POST',
+      ),
+    );
+
+    return ModelList(
+      List<RecordFolder>.from(
+        response.data['items'].map(
+          (item) => RecordFolder.fromJson(item),
+        ),
+      ),
+      offset ?? 0,
+      response.data["totalCount"],
+    );
+  }
+
+  /// Deletes all records within the given folders in [list].
+  Future<void> deleteFolder(List<RecordFolder> list) async {
+    await _apiService.request(
+      '/media/record/deleteFolders',
+      data: list,
       options: Options(
         method: 'POST',
       ),

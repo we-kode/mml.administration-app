@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
+import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/view_models/users/overview.dart';
 import 'package:mml_admin/views/users/edit.dart';
 import 'package:mml_admin/models/model_base.dart';
@@ -33,7 +34,7 @@ class UsersOverviewScreen extends StatelessWidget {
               },
             );
           },
-          editItem: (ModelBase user) async {
+          editItem: (ModelBase user, Subfilter? subfilter) async {
             return await showDialog(
               barrierDismissible: false,
               context: context,
