@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/model_base.dart';
+import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/view_models/clients/overview.dart';
 import 'package:mml_admin/views/clients/edit.dart';
 import 'package:mml_admin/views/clients/register.dart';
@@ -34,7 +35,7 @@ class ClientsScreen extends StatelessWidget {
               },
             );
           },
-          editItem: (ModelBase client) async {
+          editItem: (ModelBase client, Subfilter? subfilter) async {
             return await showDialog(
               barrierDismissible: false,
               context: context,

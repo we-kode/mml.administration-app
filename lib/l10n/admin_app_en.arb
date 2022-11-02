@@ -84,5 +84,8 @@
   "uploadSettings": "Upload settings",
   "compressionRate": "Bitrate in kbit/s",
   "compressionInfo": "Compression occurs at the next upload. With an empty bitrate, there is no compression.",
-  "invalidCompressionRate": "The value must be greater than zero."
+  "invalidCompressionRate": "The value must be greater than zero.",
+  "version":"Version",
+  "back":"back",
+  "folder":"Folder"
 }

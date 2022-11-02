@@ -13,6 +13,7 @@ import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/user.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mml_admin/view_models/change_password.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// View model for the settings screen.
 class SettingsViewModel extends ChangeNotifier {
@@ -51,11 +52,16 @@ class SettingsViewModel extends ChangeNotifier {
   /// Name of compression rate field in the errors response.
   final String compressionField = 'CompressionRate';
 
+  /// version of the running app.
+  late String version;
+
   /// Initialize the settings view model.
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
       locales = AppLocalizations.of(_context)!;
+      var pkgInfo = await PackageInfo.fromPlatform();
+      version = pkgInfo.version;
       try {
         user = await _userService.getUserInfo();
         connectionSettings =
@@ -77,7 +83,7 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   String? validateCompressionRate(String? compressionRate) {
-    var compression = int?.tryParse(compressionRate ?? '0');
+    var compression = int.tryParse(compressionRate ?? '0');
     var error = compression == null || compression > 0
         ? null
         : locales.invalidCompressionRate;

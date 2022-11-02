@@ -19,10 +19,11 @@ ID3TagFilter _$ID3TagFilterFromJson(Map<String, dynamic> json) => ID3TagFilter(
       endDate: json['endDate'] == null
           ? null
           : DateTime.parse(json['endDate'] as String),
-    );
+    )..isGrouped = json['isGrouped'] as bool;
 
 Map<String, dynamic> _$ID3TagFilterToJson(ID3TagFilter instance) {
   final val = <String, dynamic>{
+    'isGrouped': instance.isGrouped,
     'artists': instance.artists,
     'genres': instance.genres,
     'albums': instance.albums,

@@ -115,5 +115,8 @@
   "uploadSettings": "Upload Einstellungen",
   "compressionRate": "Bitrate in kbit/s",
   "compressionInfo": "Kompression erfolgt beim nächsten Upload. Bei leerer Bitrate erfolgt keine Kompression.",
-  "invalidCompressionRate": "Der Wert muss größer als Null sein."
+  "invalidCompressionRate": "Der Wert muss größer als Null sein.",
+  "version":"Version",
+  "back":"zurück",
+  "folder":"Ordner"
 }

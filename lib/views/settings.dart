@@ -166,6 +166,22 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: Card(
+                          child: ListTile(
+                            leading: Text(
+                              vm.locales.version,
+                            ),
+                            title: Text(vm.version),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               );
             },
