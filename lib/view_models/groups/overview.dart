@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
@@ -19,18 +20,18 @@ class GroupsOverviewViewModel extends ChangeNotifier {
     return await _groupService.getGroups(filter, offset, take);
   }
 
-  /// Deletes the groups with the passed [groupIds] or or aborts, if the user
+  /// Deletes the groups with the passed [groups] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> deleteGroups<String>(
+  Future<bool> deleteGroups<ModelBase>(
     BuildContext context,
-    List<String> groupIds,
+    List<ModelBase> groups,
   ) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete) {
       try {
         showProgressIndicator();
-        await _groupService.deleteGroups(groupIds);
+        await _groupService.deleteGroups(groups.map<String>((ModelBase e) => (e as Group).getIdentifier()).toList());
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();

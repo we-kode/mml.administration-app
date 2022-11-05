@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
+import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:mml_admin/services/router.dart';
@@ -24,10 +25,10 @@ class ClientsViewModel {
     return await _service.getClients(filter, offset, take);
   }
 
-  /// Deletes the clients with the passed [clientIds] or or aborts, if the user
+  /// Deletes the clients with the passed [clients] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> deleteClients<String>(
-    List<String> clientIds,
+  Future<bool> deleteClients<ModelBase>(
+    List<ModelBase> clients,
     BuildContext context,
   ) async {
     var shouldDelete = await showDeleteDialog(context);
@@ -35,7 +36,7 @@ class ClientsViewModel {
     if (shouldDelete) {
       try {
         showProgressIndicator();
-        await _service.deleteClients(clientIds);
+        await _service.deleteClients(clients.map<String>((ModelBase e) => (e as Client).getIdentifier()).toList());
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();

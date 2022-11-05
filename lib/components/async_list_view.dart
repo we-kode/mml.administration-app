@@ -345,7 +345,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width *
-                            ((widget.subfilter?.filter.isGrouped ?? false)
+                            (widget.navState != null
                                 ? 0.855
                                 : 0.88),
                         child: TextField(

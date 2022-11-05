@@ -22,8 +22,8 @@ class ClientsScreen extends StatelessWidget {
         var vm = Provider.of<ClientsViewModel>(context, listen: false);
 
         return AsyncListView(
-          deleteItems: <String>(List<String> clientIds) => vm.deleteClients(
-            clientIds,
+          deleteItems: <ModelBase>(List<ModelBase> items) => vm.deleteClients(
+            items,
             context,
           ),
           addItem: () async {
