@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/user.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
@@ -19,15 +20,15 @@ class UsersOverviewViewModel extends ChangeNotifier {
     return await _userService.getUsers(filter, offset, take);
   }
 
-  /// Deletes the users with the passed [userIds] or or aborts, if the user
+  /// Deletes the users with the passed [users] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> deleteUsers<int>(BuildContext context, List<int> userIds) async {
+  Future<bool> deleteUsers<ModelBase>(BuildContext context, List<ModelBase> users) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete) {
       try {
         showProgressIndicator();
-        await _userService.deleteUsers(userIds);
+        await _userService.deleteUsers(users.map<int>((ModelBase e) => (e as User).getIdentifier()).toList());
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();
