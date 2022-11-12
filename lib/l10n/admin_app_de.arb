@@ -118,5 +118,6 @@
   "invalidCompressionRate": "Der Wert muss größer als Null sein.",
   "version":"Version",
   "back":"zurück",
-  "folder":"Ordner"
+  "folder":"Ordner",
+  "selectGroups":"Wählen Sie die Gruppen für die Aufnahmen aus"
 }

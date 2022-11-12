@@ -1,7 +1,9 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/uploading_animation.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/records/upload.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -67,16 +69,39 @@ class RecordUploadDialog extends StatelessWidget {
       children: [
         Consumer<RecordsUploadDialogViewModel>(
           builder: (context, value, child) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: value.uploadedFiles == value.fileCount
-                  ? _uploadFinishedTile(value)
-                  : _uploadProgressTile(
-                      value,
-                      context,
+            return value.state == UploadProcessState.groups
+                ? DropdownSearch<Group>.multiSelection(
+                    selectedItems: vm.selectedGroups,
+                    asyncItems: vm.getGroups,
+                    itemAsString: (Group group) =>
+                        group.getDisplayDescription(),
+                    popupProps: const PopupPropsMultiSelection.menu(
+                      showSearchBox: true,
                     ),
-            );
+                    dropdownDecoratorProps: DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        labelText: vm.locales.selectGroups,
+                        errorMaxLines: 5,
+                      ),
+                    ),
+                    onSaved: (List<Group>? groups) {
+                      vm.selectedGroups = groups!;
+                    },
+                    onChanged: (List<Group> groups) {
+                      vm.selectedGroups = groups;
+                    },
+                    autoValidateMode: AutovalidateMode.onUserInteraction,
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: value.uploadedFiles == value.fileCount
+                        ? _uploadFinishedTile(value)
+                        : _uploadProgressTile(
+                            value,
+                            context,
+                          ),
+                  );
           },
         ),
       ],
@@ -94,7 +119,8 @@ class RecordUploadDialog extends StatelessWidget {
       Consumer<RecordsUploadDialogViewModel>(
         builder: (context, value, child) {
           return TextButton(
-            onPressed: value.uploadedFiles == value.fileCount
+            onPressed: value.state != UploadProcessState.groups &&
+                    value.uploadedFiles == value.fileCount
                 ? null
                 : () => Navigator.pop(context, false),
             child: Text(locales.cancel),
@@ -104,9 +130,11 @@ class RecordUploadDialog extends StatelessWidget {
       Consumer<RecordsUploadDialogViewModel>(
         builder: (context, value, child) {
           return TextButton(
-            onPressed: value.uploadedFiles == value.fileCount
-                ? () => Navigator.pop(context, true)
-                : null,
+            onPressed: value.state == UploadProcessState.groups
+                ? value.initUpload
+                : value.uploadedFiles == value.fileCount
+                    ? () => Navigator.pop(context, true)
+                    : null,
             child: Text(locales.save),
           );
         },
