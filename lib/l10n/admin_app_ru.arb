@@ -87,5 +87,6 @@
   "invalidCompressionRate": "Значение должно быть больше нуля.",
   "version":"Версия",
   "back":"назад",
-  "folder":"Папка"
+  "folder":"Папка",
+  "selectGroups":"Выберите группы для записи"
 }
