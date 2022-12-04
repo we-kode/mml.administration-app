@@ -28,8 +28,8 @@ class RecordService {
     return _instance;
   }
 
-  /// Uploads a [file] with the given [fileName] to the server.
-  Future upload(File file, String fileName) async {
+  /// Uploads a [file] with the given [fileName] and associated [groups] to the server.
+  Future upload(File file, String fileName, List<String> groups) async {
     final lastModified = await file.lastModified();
     FormData formData = FormData.fromMap(
       {
@@ -45,6 +45,14 @@ class RecordService {
         lastModified.toString(),
       ),
     );
+    for (String group in groups) {
+      formData.fields.add(
+        MapEntry(
+        'Groups',
+        group,
+      ),
+      );
+    }
     await _apiService.request(
       '/media/upload',
       data: formData,

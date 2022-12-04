@@ -5,6 +5,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mime/mime.dart';
+import 'package:mml_admin/models/group.dart';
+import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/record.dart';
 
@@ -15,6 +17,10 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
 
   /// [RecordService] used to load data for the records uplaod dialog.
   final RecordService _service = RecordService.getInstance();
+
+  /// [GroupService] used to load data for the groups of the client editing
+  /// screen.
+  final GroupService _groupService = GroupService.getInstance();
 
   /// Number of files to be uploaded.
   int fileCount = 0;
@@ -28,6 +34,18 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   /// List with files, which were not uploaded due errors.
   List<String> notUploadedFiles = [];
 
+  /// Groups to which the uploaded records will be added.
+  List<Group> selectedGroups = [];
+
+  /// [UploadProcessState] of the current process.
+  UploadProcessState _state = UploadProcessState.groups;
+
+  /// Folder to be uploaded or null if only files will be uploaded.
+  late String? folder;
+
+  /// Files to be uploaded or null if folder will be uploaded.
+  late List<PlatformFile>? files;
+
   /// Initializes the ViewModel and starts the upload process.
   ///
   /// If no [folderPath] is provided, files from the [fileList] will be uploaded, else
@@ -39,14 +57,32 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   ) async {
     locales = AppLocalizations.of(context)!;
     notUploadedFiles = [];
+    folder = folderPath;
+    files = fileList;
     return Future<bool>.microtask(
-      () {
-        (folderPath ?? '').isNotEmpty
-            ? _uploadFolder(folderPath!)
-            : _uploadFiles(fileList!);
+      () async {
+        if (_state == UploadProcessState.upload) {
+          initUpload();
+        } else if (_state == UploadProcessState.groups) {
+          final groups = await getGroups('');
+          selectedGroups =
+              groups.where((element) => element.isDefault).toList();
+        }
         return true;
       },
     );
+  }
+
+  /// Loads all groups from the server with the given [filter].
+  Future<List<Group>> getGroups(String filter) async {
+    return List.from(await _groupService.getGroups(filter, 0, -1));
+  }
+
+  /// Determines whether to upload files or folder and start uploading.
+  Future initUpload() async {
+    _state = UploadProcessState.upload;
+    notifyListeners();
+    (folder ?? '').isNotEmpty ? _uploadFolder(folder!) : _uploadFiles(files!);
   }
 
   /// Uploads all file given in the [folderPath]. All files in subfolders will be uplaoded also.
@@ -81,7 +117,11 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     try {
       uploadingFileName = file.path.split(Platform.pathSeparator).last;
       notifyListeners();
-      await _service.upload(file, uploadingFileName);
+      await _service.upload(
+        file,
+        uploadingFileName,
+        selectedGroups.map((e) => e.id!).toList(),
+      );
       uploadedFiles++;
       notifyListeners();
     } on DioError catch (e) {
@@ -119,4 +159,16 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     final mimeType = lookupMimeType(file.path);
     return mimeType == 'audio/mpeg';
   }
+
+  /// Returns the current [state] of the upload process.
+  UploadProcessState get state {
+    return _state;
+  }
+}
+
+/// State of the upload process.
+enum UploadProcessState {
+  groups,
+  upload,
+  success,
 }

@@ -38,7 +38,7 @@
   "remove": "Löschen",
   "cancel": "Abbrechen",
   "filter": "Filter",
-  "save": "Speichern",
+  "save": "Anwenden",
   "confirmAccount": "Bitte aktualisieren Sie Ihr Passwort, um fortzufahren.",
   "actualPassword": "Aktuelles Passwort",
   "newPassword": "Neues Passwort",
@@ -118,5 +118,6 @@
   "invalidCompressionRate": "Der Wert muss größer als Null sein.",
   "version":"Version",
   "back":"zurück",
-  "folder":"Ordner"
+  "folder":"Ordner",
+  "selectGroups":"Wählen Sie die Gruppen für die Aufnahmen aus"
 }

@@ -577,6 +577,7 @@ class _AsyncListViewState extends State<AsyncListView> {
           ? Text(item.getSubtitle(context)!)
           : null,
       trailing: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           item.getMetadata(context) != null
               ? Text(
