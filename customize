@@ -46,6 +46,9 @@ do
 	appId)
 		sed -i -E "s/PRODUCT_BUNDLE_IDENTIFIER = .*/PRODUCT_BUNDLE_IDENTIFIER = $value/" "$DIR/macos/Runner/Configs/AppInfo.xcconfig"
 		sed -i -E "s/set\(APPLICATION_ID \".*\"\)/set\(APPLICATION_ID \"$value\"\)/" "$DIR/linux/CMakeLists.txt"
+		sed -i -E "s/		<string>\$(AppIdentifierPrefix)de.wekode.mmlAdmin<\/string>/		<string>\$(AppIdentifierPrefix)$value<\/string>/" "$DIR/macos/Runner/DebugProfile.entitlements"
+		sed -i -E "s/		<string>\$(AppIdentifierPrefix)de.wekode.mmlAdmin<\/string>/		<string>\$(AppIdentifierPrefix)$value<\/string>/" "$DIR/macos/Runner/Release.entitlements"
+		sed -i -E "s/		<string>\$(AppIdentifierPrefix)de.wekode.mmlAdmin<\/string>/		<string>\$(AppIdentifierPrefix)$value<\/string>/" "$DIR/macos/Runner/RunnerDebug.entitlements"
 		sed -i -E "s/  identity_name: .*/  identity_name: $value/" "$DIR/pubspec.yaml"
 		;;
 	*)
