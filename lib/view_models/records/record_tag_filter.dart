@@ -56,6 +56,8 @@ class RecordTagFilterViewModel extends ChangeNotifier {
         return _service.getGenres(filter, offset, take);
       case ID3TagFilters.albums:
         return _service.getAlbums(filter, offset, take);
+      case ID3TagFilters.languages:
+        return _service.getLanguages(filter, offset, take);
     }
 
     throw UnimplementedError();

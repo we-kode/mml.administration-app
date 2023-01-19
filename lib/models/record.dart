@@ -32,6 +32,9 @@ class Record extends ModelBase {
   /// Album of the record or null if no one provided.
   String? album;
 
+  /// Language of the record or null if no one provided.
+  String? language;
+
   /// List of groups the client is assigned to.
   List<Group> groups = [];
 
@@ -44,6 +47,7 @@ class Record extends ModelBase {
     this.album,
     this.artist,
     this.genre,
+    this.language,
     bool isDeletable = true,
     List<Group>? groups,
   }) : super(isDeletable: isDeletable) {

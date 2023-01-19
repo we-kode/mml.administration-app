@@ -15,6 +15,7 @@ Record _$RecordFromJson(Map<String, dynamic> json) => Record(
       album: json['album'] as String?,
       artist: json['artist'] as String?,
       genre: json['genre'] as String?,
+      language: json['language'] as String?,
       isDeletable: json['isDeletable'] as bool? ?? true,
       groups: (json['groups'] as List<dynamic>?)
           ?.map((e) => Group.fromJson(e as Map<String, dynamic>))
@@ -39,6 +40,7 @@ Map<String, dynamic> _$RecordToJson(Record instance) {
   writeNotNull('artist', instance.artist);
   writeNotNull('genre', instance.genre);
   writeNotNull('album', instance.album);
+  writeNotNull('language', instance.language);
   val['groups'] = instance.groups.map((e) => e.toJson()).toList();
   return val;
 }
