@@ -433,7 +433,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                               .pop();
                         });
                       },
-                      icon: const Icon(Icons.remove),
+                      icon: const Icon(Icons.delete),
                       tooltip: AppLocalizations.of(context)!.remove,
                     ),
                   ],
