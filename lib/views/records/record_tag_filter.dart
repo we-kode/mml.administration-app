@@ -80,7 +80,7 @@ class RecordTagFilter extends ListSubfilterView {
               const Icon(Icons.translate),
               Colors.deepOrange,
             ),
-            horizontalSpacer
+            horizontalSpacer,
           ],
         );
       },
