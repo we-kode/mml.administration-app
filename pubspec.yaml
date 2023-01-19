@@ -42,16 +42,16 @@ dependencies:
   dio: ^4.0.6
   json_annotation: ^4.5.0
   shimmer: ^2.0.0
-  window_manager: ^0.2.5
+  window_manager: ^0.3.0
   barcode_widget: ^2.0.2
   signalr_pure: ^1.1.0
   rive: ^0.9.0
-  dropdown_search: ^5.0.2
-  file_picker: ^5.2.2
-  mime: ^1.0.2
+  dropdown_search: ^5.0.5
+  file_picker: ^5.2.5
+  mime: ^1.0.4
   http_parser: ^4.0.2
   package_info_plus: ^3.0.2
-  calendar_date_picker2: ^0.3.3
+  calendar_date_picker2: ^0.3.6
 
 dev_dependencies:
   flutter_test:
