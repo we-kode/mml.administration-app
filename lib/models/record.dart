@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/tag.dart';
@@ -91,7 +92,7 @@ class Record extends ModelBase {
 
   @override
   String? getGroup(BuildContext context) {
-    return DateFormat.yMd().format(date!);
+    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}';
   }
 
   /// Adds a 0 before [value] if [value] is smaller than ten.
