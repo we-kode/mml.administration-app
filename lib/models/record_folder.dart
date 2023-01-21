@@ -30,7 +30,7 @@ class RecordFolder extends ModelBase {
   @override
   String getDisplayDescription() {
     if (day != null) {
-      return "$day - ${DateTime(year, month!, day!).weekdayName()}";
+      return "$day ${DateTime(year, month!, day!).weekdayName()}";
     }
 
     if (month != null) {
@@ -44,7 +44,7 @@ class RecordFolder extends ModelBase {
   getIdentifier() {
     final m = month != null ? "-$month" : "";
     final d = day != null
-        ? "-$day - ${DateTime(year, month!, day!).weekdayName()}"
+        ? "-$day ${DateTime(year, month!, day!).weekdayName()}"
         : "";
     return "$year$m$d";
   }
