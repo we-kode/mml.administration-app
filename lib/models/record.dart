@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/tag.dart';
@@ -32,6 +33,9 @@ class Record extends ModelBase {
   /// Album of the record or null if no one provided.
   String? album;
 
+  /// Language of the record or null if no one provided.
+  String? language;
+
   /// List of groups the client is assigned to.
   List<Group> groups = [];
 
@@ -44,6 +48,7 @@ class Record extends ModelBase {
     this.album,
     this.artist,
     this.genre,
+    this.language,
     bool isDeletable = true,
     List<Group>? groups,
   }) : super(isDeletable: isDeletable) {
@@ -87,7 +92,7 @@ class Record extends ModelBase {
 
   @override
   String? getGroup(BuildContext context) {
-    return DateFormat.yMd().format(date!);
+    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}';
   }
 
   /// Adds a 0 before [value] if [value] is smaller than ten.

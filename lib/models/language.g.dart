@@ -1,22 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'record_folder.dart';
+part of 'language.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-RecordFolder _$RecordFolderFromJson(Map<String, dynamic> json) => RecordFolder(
-      year: json['year'] as int,
-      month: json['month'] as int?,
-      day: json['day'] as int?,
-      isDeletable: json['isDeletable'] as bool? ?? true,
+Language _$LanguageFromJson(Map<String, dynamic> json) => Language(
+      languageId: json['languageId'] as String?,
+      name: json['name'] as String?,
+      isDeletable: json['isDeletable'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$RecordFolderToJson(RecordFolder instance) {
+Map<String, dynamic> _$LanguageToJson(Language instance) {
   final val = <String, dynamic>{
     'isDeletable': instance.isDeletable,
-    'year': instance.year,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -25,7 +23,7 @@ Map<String, dynamic> _$RecordFolderToJson(RecordFolder instance) {
     }
   }
 
-  writeNotNull('month', instance.month);
-  writeNotNull('day', instance.day);
+  writeNotNull('languageId', instance.languageId);
+  writeNotNull('name', instance.name);
   return val;
 }

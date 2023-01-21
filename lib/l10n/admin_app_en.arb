@@ -88,5 +88,6 @@
   "version":"Version",
   "back":"back",
   "folder":"Folder",
-  "selectGroups":"Select the groups for the records"
+  "selectGroups":"Select the groups for the records",
+  "language": "Language"
 }
