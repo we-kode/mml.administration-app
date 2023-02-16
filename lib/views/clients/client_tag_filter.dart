@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/components/list_subfilter_view.dart';
 import 'package:mml_admin/models/default_subfilter.dart';
-import 'package:mml_admin/models/subfilter.dart';
 
 /// Tag filters for the records view.
 class ClientTagFilter extends ListSubfilterView {

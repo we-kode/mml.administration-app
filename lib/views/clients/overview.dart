@@ -20,7 +20,7 @@ class ClientsScreen extends StatelessWidget {
     return ChangeNotifierProvider<ClientsViewModel>(
       create: (context) => ClientsViewModel(),
       builder: (context, _) {
-        var vm = Provider.of<ClientsViewModel>(context, listen: false);
+        Provider.of<ClientsViewModel>(context, listen: false);
 
         return Consumer<ClientsViewModel>(
           builder: (context, vm, child) {

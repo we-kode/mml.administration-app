@@ -1,8 +1,10 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/settings.dart';
+import 'package:mml_admin/views/settings_genre_bitrate.dart';
 import 'package:provider/provider.dart';
 
 /// Screen to modify own app settings.
@@ -75,7 +77,8 @@ class SettingsScreen extends StatelessWidget {
                                     keyboardType: TextInputType.number,
                                     maxLength: 4,
                                     decoration: InputDecoration(
-                                      labelText: vm.locales.compressionRate,
+                                      labelText:
+                                          '${vm.locales.defaults} ${vm.locales.compressionRate}',
                                       hintText: vm.locales.compressionInfo,
                                     ),
                                     initialValue: vm.settings.compressionRate
@@ -106,11 +109,29 @@ class SettingsScreen extends StatelessWidget {
                                   verticalSpacer,
                                   Align(
                                     alignment: Alignment.bottomRight,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        vm.saveSettings();
-                                      },
-                                      child: Text(vm.locales.save),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            await showDialog(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return const SettingsGenreBitrate();
+                                              },
+                                            );
+                                          },
+                                          child: Text(vm.locales.editBitrates),
+                                        ),
+                                        horizontalSpacer,
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            vm.saveSettings();
+                                          },
+                                          child: Text(vm.locales.save),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],

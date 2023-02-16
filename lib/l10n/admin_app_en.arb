@@ -89,5 +89,8 @@
   "back":"back",
   "folder":"Folder",
   "selectGroups":"Select the groups for the records",
-  "language": "Language"
+  "language": "Language",
+  "defaults": "Default",
+  "editBitrates": "Edit bitrates",
+  "bitrates": "Bitrates"
 }
