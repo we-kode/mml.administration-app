@@ -92,5 +92,8 @@
   "language": "Language",
   "defaults": "Default",
   "editBitrates": "Edit bitrates",
-  "bitrates": "Bitrates"
+  "bitrates": "Bitrates",
+  "bitrate": "Bitrate",
+  "info": "Info",
+  "ok": "Ok"
 }

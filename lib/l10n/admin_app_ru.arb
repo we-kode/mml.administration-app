@@ -92,5 +92,8 @@
   "language": "Язык",
   "defaults": "По умолчанию",
   "editBitrates": "Редактировать битрейты",
-  "Bitrates": "Битрейты"
+  "Bitrates": "Битрейты",
+  "Bitrate": "Битрейт",
+  "info": "Инфо",
+  "ok": "OK"
 }

@@ -123,5 +123,8 @@
   "language": "Sprache",
   "defaults": "Standard",
   "editBitrates": "Bitraten verwalten",
-  "bitrates": "Bitraten"
+  "bitrates": "Bitraten",
+  "bitrate": "Bitrate",
+  "info": "Info",
+  "ok": "Ok"
 }
