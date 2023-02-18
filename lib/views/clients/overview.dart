@@ -4,6 +4,7 @@ import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/view_models/clients/overview.dart';
+import 'package:mml_admin/views/clients/client_tag_filter.dart';
 import 'package:mml_admin/views/clients/edit.dart';
 import 'package:mml_admin/views/clients/register.dart';
 import 'package:provider/provider.dart';
@@ -16,35 +17,44 @@ class ClientsScreen extends StatelessWidget {
   /// Builds the clients overview screen.
   @override
   Widget build(BuildContext context) {
-    return Provider<ClientsViewModel>(
+    return ChangeNotifierProvider<ClientsViewModel>(
       create: (context) => ClientsViewModel(),
       builder: (context, _) {
-        var vm = Provider.of<ClientsViewModel>(context, listen: false);
+        Provider.of<ClientsViewModel>(context, listen: false);
 
-        return AsyncListView(
-          deleteItems: <ModelBase>(List<ModelBase> items) => vm.deleteClients(
-            items,
-            context,
-          ),
-          addItem: () async {
-            return await showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) {
-                return const ClientRegisterDialog();
+        return Consumer<ClientsViewModel>(
+          builder: (context, vm, child) {
+            return AsyncListView(
+              subfilter: ClientTagFilter(
+                clients: vm.clientCount,
+              ),
+              deleteItems: <ModelBase>(List<ModelBase> items) =>
+                  vm.deleteClients(
+                items,
+                context,
+              ),
+              addItem: () async {
+                return await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const ClientRegisterDialog();
+                  },
+                );
               },
+              editItem: (ModelBase client, Subfilter? subfilter) async {
+                return await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ClientEditDialog(
+                        clientId: (client as Client).clientId);
+                  },
+                );
+              },
+              loadData: vm.loadClients,
             );
           },
-          editItem: (ModelBase client, Subfilter? subfilter) async {
-            return await showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) {
-                return ClientEditDialog(clientId: (client as Client).clientId);
-              },
-            );
-          },
-          loadData: vm.loadClients,
         );
       },
     );
