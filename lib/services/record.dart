@@ -5,6 +5,7 @@ import 'package:mml_admin/extensions/multipartfile.dart';
 import 'package:mml_admin/models/album.dart';
 import 'package:mml_admin/models/artist.dart';
 import 'package:mml_admin/models/genre.dart';
+import 'package:mml_admin/models/genre_bitrate.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/language.dart';
 import 'package:mml_admin/models/model_list.dart';
@@ -49,9 +50,9 @@ class RecordService {
     for (String group in groups) {
       formData.fields.add(
         MapEntry(
-        'Groups',
-        group,
-      ),
+          'Groups',
+          group,
+        ),
       );
     }
     await _apiService.request(
@@ -285,6 +286,44 @@ class RecordService {
       data: list,
       options: Options(
         method: 'POST',
+      ),
+    );
+  }
+
+  /// Load all existing [GenreBitrate].
+  Future<List<GenreBitrate>> loadBitrates() async {
+    var response = await _apiService.request(
+      '/media/record/bitrates',
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    return List<GenreBitrate>.from(
+      response.data['items'].map((item) => GenreBitrate.fromJson(item)),
+    );
+  }
+
+  /// Load all existing [GenreBitrate].
+  Future<void> updateBitrates(List<GenreBitrate> bitrates) async {
+    await _apiService.request(
+      '/media/record/bitrates',
+      data: bitrates,
+      options: Options(
+        method: 'POST',
+      ),
+    );
+  }
+
+  /// Deletes one [GenreBitrate].
+  Future<void> deleteBitrate(GenreBitrate bitrate) async {
+    if (bitrate.genreId == null || bitrate.genreId!.isEmpty) {
+      return;
+    }
+    await _apiService.request(
+      '/media/record/bitrate/${bitrate.genreId}',
+      options: Options(
+        method: 'DELETE',
       ),
     );
   }

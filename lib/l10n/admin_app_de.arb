@@ -120,5 +120,11 @@
   "back": "zurück",
   "folder": "Ordner",
   "selectGroups": "Wählen Sie die Gruppen für die Aufnahmen aus",
-  "language": "Sprache"
+  "language": "Sprache",
+  "defaults": "Standard",
+  "editBitrates": "Bitraten verwalten",
+  "bitrates": "Bitraten",
+  "bitrate": "Bitrate",
+  "info": "Info",
+  "ok": "Ok"
 }

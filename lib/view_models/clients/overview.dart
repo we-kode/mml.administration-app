@@ -7,12 +7,14 @@ import 'package:mml_admin/services/clients.dart';
 import 'package:mml_admin/services/router.dart';
 
 /// View model for the app clients overview screen.
-class ClientsViewModel {
+class ClientsViewModel extends ChangeNotifier {
   /// Route for the app clients overview screen.
   static String route = '/clients';
 
   /// [ClientService] used to load data for the client overview screen.
   final ClientService _service = ClientService.getInstance();
+
+  int clientCount = 0;
 
   /// Loads the clients with the passing [filter] starting at [offset] and loading
   /// [take] data.
@@ -22,7 +24,10 @@ class ClientsViewModel {
     int? take,
     dynamic subfilter,
   }) async {
-    return await _service.getClients(filter, offset, take);
+    final clients = await _service.getClients(filter, offset, take);
+    clientCount = clients.totalCount;
+    notifyListeners();
+    return clients;
   }
 
   /// Deletes the clients with the passed [clients] or or aborts, if the user
@@ -36,7 +41,9 @@ class ClientsViewModel {
     if (shouldDelete) {
       try {
         showProgressIndicator();
-        await _service.deleteClients(clients.map<String>((ModelBase e) => (e as Client).getIdentifier()).toList());
+        await _service.deleteClients(clients
+            .map<String>((ModelBase e) => (e as Client).getIdentifier())
+            .toList());
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();
