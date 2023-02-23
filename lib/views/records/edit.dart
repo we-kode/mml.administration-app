@@ -113,6 +113,20 @@ class RecordEditDialog extends StatelessWidget {
             },
           ),
           verticalSpacer,
+          TextFormField(
+            initialValue: vm.record.language,
+            decoration: InputDecoration(
+              labelText: vm.locales.language,
+              errorMaxLines: 5,
+            ),
+            onSaved: (String? language) {
+              vm.record.language = language;
+            },
+            onChanged: (String? language) {
+              vm.record.language = language;
+            },
+          ),
+          verticalSpacer,
           DropdownSearch<Group>.multiSelection(
             selectedItems: vm.record.groups,
             asyncItems: vm.getGroups,
