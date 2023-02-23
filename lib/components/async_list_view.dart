@@ -221,7 +221,8 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Stores the identifer of the item at the [index] or removes it, when
   /// the identifier was in the list of selected items.
   void _onItemChecked(int index) {
-    if (_selectedItems.any((item) => item.getIdentifier() == _items![index]?.getIdentifier())) {
+    if (_selectedItems.any(
+        (item) => item.getIdentifier() == _items![index]?.getIdentifier())) {
       _selectedItems.remove(_items![index]);
     } else if (_items![index] != null) {
       _selectedItems.add(_items![index]!);
@@ -345,9 +346,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width *
-                            (widget.navState != null
-                                ? 0.855
-                                : 0.88),
+                            (widget.navState != null ? 0.855 : 0.88),
                         child: TextField(
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.filter,
@@ -369,6 +368,11 @@ class _AsyncListViewState extends State<AsyncListView> {
                   if (widget.subfilter != null) widget.subfilter!,
                   if (widget.navState?.path != null)
                     Chip(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
                       label: Text(
                         widget.navState!.path!,
                       ),
@@ -532,7 +536,8 @@ class _AsyncListViewState extends State<AsyncListView> {
             onChanged: (_) {
               _onItemChecked(index);
             },
-            value: _selectedItems.any((elem) => elem.getIdentifier() == item.getIdentifier()),
+            value: _selectedItems
+                .any((elem) => elem.getIdentifier() == item.getIdentifier()),
           );
 
     var itemGroup = item.getGroup(context) ?? '';
@@ -549,6 +554,11 @@ class _AsyncListViewState extends State<AsyncListView> {
       return Column(
         children: [
           Chip(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
             label: Text(
               item.getGroup(context)!,
             ),
@@ -630,6 +640,11 @@ class _AsyncListViewState extends State<AsyncListView> {
                   (tag) => Padding(
                     padding: const EdgeInsets.all(5),
                     child: Chip(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
                       backgroundColor: tag.color,
                       label: Text(tag.name),
                     ),
