@@ -35,6 +35,11 @@ class ClientTagFilter extends ListSubfilterView {
   ) {
     return Chip(
       label: Text(label),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
       avatar: Icon(
         icon,
       ),
