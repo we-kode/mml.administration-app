@@ -9,6 +9,7 @@ part of 'record.dart';
 Record _$RecordFromJson(Map<String, dynamic> json) => Record(
       recordId: json['recordId'] as String?,
       title: json['title'] as String?,
+      trackNumber: json['trackNumber'] as int?,
       date:
           json['date'] == null ? null : DateTime.parse(json['date'] as String),
       duration: (json['duration'] as num?)?.toDouble() ?? 0,
@@ -35,6 +36,7 @@ Map<String, dynamic> _$RecordToJson(Record instance) {
 
   writeNotNull('recordId', instance.recordId);
   writeNotNull('title', instance.title);
+  writeNotNull('trackNumber', instance.trackNumber);
   writeNotNull('date', instance.date?.toIso8601String());
   val['duration'] = instance.duration;
   writeNotNull('artist', instance.artist);
