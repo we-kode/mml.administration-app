@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mml_admin/extensions/datetime.dart';
+import 'package:mml_admin/extensions/flag.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/tag.dart';
@@ -17,6 +18,9 @@ class Record extends ModelBase {
 
   /// Title of the record.
   String? title;
+
+  /// Track number of the record.
+  int? trackNumber;
 
   /// The date the record was created..
   DateTime? date;
@@ -43,6 +47,7 @@ class Record extends ModelBase {
   Record({
     required this.recordId,
     this.title,
+    this.trackNumber,
     this.date,
     this.duration = 0,
     this.album,
@@ -63,7 +68,8 @@ class Record extends ModelBase {
 
   @override
   String getDisplayDescription() {
-    return "$title";
+    final tn = trackNumber != null ? '$trackNumber - ' : '';
+    return "$tn$title";
   }
 
   @override
@@ -83,6 +89,18 @@ class Record extends ModelBase {
     int minutes = ((duration / (1000 * 60)) % 60).toInt();
     int hours = ((duration / (1000 * 60 * 60)) % 24).toInt();
     return "${_valueString(hours)}:${_valueString(minutes)}:${_valueString(seconds)}";
+  }
+
+  @override
+  String? getSubMetadata(BuildContext context) {
+    var g = genre ?? '';
+
+    var lang = '';
+    if (language != null) {
+      lang = "${language?.asFlag().join(' ')}";
+    }
+
+    return "$g${lang.isEmpty ? '' : ' '}$lang";
   }
 
   @override

@@ -221,7 +221,8 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Stores the identifer of the item at the [index] or removes it, when
   /// the identifier was in the list of selected items.
   void _onItemChecked(int index) {
-    if (_selectedItems.any((item) => item.getIdentifier() == _items![index]?.getIdentifier())) {
+    if (_selectedItems.any(
+        (item) => item.getIdentifier() == _items![index]?.getIdentifier())) {
       _selectedItems.remove(_items![index]);
     } else if (_items![index] != null) {
       _selectedItems.add(_items![index]!);
@@ -345,9 +346,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width *
-                            (widget.navState != null
-                                ? 0.855
-                                : 0.88),
+                            (widget.navState != null ? 0.855 : 0.88),
                         child: TextField(
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.filter,
@@ -369,6 +368,11 @@ class _AsyncListViewState extends State<AsyncListView> {
                   if (widget.subfilter != null) widget.subfilter!,
                   if (widget.navState?.path != null)
                     Chip(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
                       label: Text(
                         widget.navState!.path!,
                       ),
@@ -470,14 +474,20 @@ class _AsyncListViewState extends State<AsyncListView> {
             _take = _initialTake + _offsetDelta;
 
             Future.microtask(() {
-              _loadData(showLoadingOverlay: false);
+              _loadData(
+                showLoadingOverlay: false,
+                subfilter: widget.subfilter?.filter,
+              );
             });
           } else if (beginNotReached && loadPreviuousIndexReached) {
             _offset = _offset - _offsetDelta;
             _take = _initialTake + _offsetDelta;
 
             Future.microtask(() {
-              _loadData(showLoadingOverlay: false);
+              _loadData(
+                showLoadingOverlay: false,
+                subfilter: widget.subfilter?.filter,
+              );
             });
           }
 
@@ -532,7 +542,8 @@ class _AsyncListViewState extends State<AsyncListView> {
             onChanged: (_) {
               _onItemChecked(index);
             },
-            value: _selectedItems.any((elem) => elem.getIdentifier() == item.getIdentifier()),
+            value: _selectedItems
+                .any((elem) => elem.getIdentifier() == item.getIdentifier()),
           );
 
     var itemGroup = item.getGroup(context) ?? '';
@@ -544,11 +555,17 @@ class _AsyncListViewState extends State<AsyncListView> {
     // group is a new one and the predecessor has another group
     if (index == 0 ||
         (itemGroup != _actualGroup &&
-            _items![index - 1]?.getGroup(context) != itemGroup)) {
+            _items![index - 1]?.getGroup(context) != itemGroup) ||
+        _items![index - 1]?.getGroup(context) != itemGroup) {
       _actualGroup = itemGroup;
       return Column(
         children: [
           Chip(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
             label: Text(
               item.getGroup(context)!,
             ),
@@ -563,31 +580,72 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   /// Creates a tile widget for one list [item] at the given [index].
   ListTile _listTile(Widget? leadingTile, ModelBase item, int index) {
+    final trailingSubStyle = Theme.of(context).textTheme.bodyMedium;
     return ListTile(
       leading: leadingTile,
-      minVerticalPadding: 0,
+      minVerticalPadding: 10,
       visualDensity: const VisualDensity(vertical: 0),
-      title: Row(
+      title: Wrap(
         children: [
-          Text(item.getDisplayDescription()),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              item.getDisplayDescription(),
+              overflow: TextOverflow.fade,
+              maxLines: 1,
+              softWrap: false,
+            ),
+          ),
           _createTitleSuffix(item),
         ],
       ),
-      subtitle: item.getSubtitle(context) != null
-          ? Text(item.getSubtitle(context)!)
+      subtitle: (item.getTags() != null || item.getSubtitle(context) != null)
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (item.getSubtitle(context) != null)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Text(
+                      item.getSubtitle(context)!,
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      softWrap: false,
+                    ),
+                  ),
+                _getGroupTags(item) ?? const SizedBox.shrink(),
+              ],
+            )
           : null,
-      trailing: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          item.getMetadata(context) != null
-              ? Text(
-                  item.getMetadata(context)!,
-                  style: Theme.of(context).textTheme.bodySmall,
-                )
-              : const SizedBox.shrink(),
-          _getGroupTags(item) ?? const SizedBox.shrink(),
-        ],
-      ),
+      trailing: (item.getMetadata(context) != null ||
+              item.getSubMetadata(context) != null)
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SizedBox(
+                  height: 3,
+                ),
+                item.getMetadata(context) != null
+                    ? Text(
+                        item.getMetadata(context)!,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      )
+                    : const SizedBox.shrink(),
+                const SizedBox(
+                  height: 5,
+                ),
+                item.getSubMetadata(context) != null
+                    ? Text(
+                        item.getSubMetadata(context)!,
+                        style: trailingSubStyle!.copyWith(
+                          color: Theme.of(context).textTheme.bodySmall!.color,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            )
+          : null,
       onTap: () {
         if (!item.isDeletable && _isInMultiSelectMode) {
           return;
@@ -630,6 +688,11 @@ class _AsyncListViewState extends State<AsyncListView> {
                   (tag) => Padding(
                     padding: const EdgeInsets.all(5),
                     child: Chip(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
                       backgroundColor: tag.color,
                       label: Text(tag.name),
                     ),
