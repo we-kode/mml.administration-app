@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/view_models/change_password.dart';
 import 'package:mml_admin/view_models/clients/overview.dart';
 import 'package:mml_admin/view_models/groups/overview.dart';
+import 'package:mml_admin/view_models/livestreams/overview.dart';
 import 'package:mml_admin/view_models/login.dart';
 import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
@@ -9,6 +10,7 @@ import 'package:mml_admin/view_models/users/overview.dart';
 import 'package:mml_admin/views/change_password.dart';
 import 'package:mml_admin/views/clients/overview.dart';
 import 'package:mml_admin/views/groups/overview.dart';
+import 'package:mml_admin/views/livestreams/overview.dart';
 import 'package:mml_admin/views/login.dart';
 import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/views/main.dart';
@@ -51,6 +53,10 @@ class RouterService {
     return {
       RecordsViewModel.route: PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => const RecordsScreen(),
+        transitionDuration: const Duration(seconds: 0),
+      ),
+      LiveStreamsViewModel.route: PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => const LiveStreamsScreen(),
         transitionDuration: const Duration(seconds: 0),
       ),
       ClientsViewModel.route: PageRouteBuilder(

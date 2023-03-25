@@ -159,7 +159,7 @@ class ApiService {
 
         // All other errors except certificate errors!
         if (e.type is! HandshakeException) {
-          _messenger.showMessage(_messenger.unexpectedError(e.message));
+          _messenger.showMessage(_messenger.unexpectedError(e.message ?? ""));
         }
 
         return handler.reject(e);
