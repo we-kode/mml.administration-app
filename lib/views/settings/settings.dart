@@ -35,7 +35,7 @@ class SettingsScreen extends StatelessWidget {
                     visualDensity: const VisualDensity(vertical: -4),
                     title: Text(
                       vm.locales.settings,
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
                   ListTile(
@@ -71,7 +71,7 @@ class SettingsScreen extends StatelessWidget {
                     visualDensity: const VisualDensity(vertical: -4),
                     title: Text(
                       vm.locales.uploadSettings,
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
                   ListTile(
@@ -103,7 +103,7 @@ class SettingsScreen extends StatelessWidget {
                     visualDensity: const VisualDensity(vertical: -4),
                     title: Text(
                       vm.locales.info,
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
                   ListTile(

@@ -92,7 +92,7 @@ class GroupEditDialog extends StatelessWidget {
                     style: state.isValid
                         ? null
                         : TextStyle(
-                            color: Theme.of(context).errorColor,
+                            color: Theme.of(context).colorScheme.error,
                           ),
                   ),
                   subtitle: Text(
@@ -100,7 +100,7 @@ class GroupEditDialog extends StatelessWidget {
                     style: state.isValid
                         ? null
                         : TextStyle(
-                            color: Theme.of(context).errorColor,
+                            color: Theme.of(context).colorScheme.error,
                           ),
                   ),
                   value: state.value ?? false,

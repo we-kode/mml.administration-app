@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 
@@ -58,6 +59,8 @@ class RecordTagFilterViewModel extends ChangeNotifier {
         return _service.getAlbums(filter, offset, take);
       case ID3TagFilters.languages:
         return _service.getLanguages(filter, offset, take);
+      case ID3TagFilters.groups:
+        return GroupService.getInstance().getGroups(filter, offset, take);
     }
 
     throw UnimplementedError();
