@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mml_admin/models/client.dart';
+import 'package:mml_admin/models/client_tag_filter.dart';
 import 'package:mml_admin/models/connection_settings.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/api.dart';
@@ -23,12 +24,18 @@ class ClientService {
 
   /// Returns a list of clients with the amount of [take] that match the given
   /// [filter] starting from the [offset].
-  Future<ModelList> getClients(String? filter, int? offset, int? take) async {
+  Future<ModelList> getClients(
+    String? filter,
+    int? offset,
+    int? take,
+    ClientTagFilter? tagfilter,
+  ) async {
     var response = await _apiService.request(
       '/identity/client/list',
       queryParameters: {"filter": filter, "skip": offset, "take": take},
+      data: tagfilter != null ? tagfilter.toJson() : {},
       options: Options(
-        method: 'GET',
+        method: 'POST',
       ),
     );
 

@@ -25,8 +25,9 @@ class ClientsScreen extends StatelessWidget {
         return Consumer<ClientsViewModel>(
           builder: (context, vm, child) {
             return AsyncListView(
-              subfilter: ClientTagFilter(
+              subfilter: ClientTagFilterView(
                 clients: vm.clientCount,
+                tagFilter: vm.tagFilter,
               ),
               deleteItems: <ModelBase>(List<ModelBase> items) =>
                   vm.deleteClients(

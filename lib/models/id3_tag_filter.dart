@@ -19,6 +19,9 @@ class ID3TagFilter extends Subfilter {
   /// Ids of language tags.
   List<String> languages = [];
 
+  /// Ids of groups tags.
+  List<String> groups = [];
+
   /// Start date of a date interval or null if not set.
   DateTime? startDate;
 
@@ -31,6 +34,7 @@ class ID3TagFilter extends Subfilter {
     List<String>? genres,
     List<String>? albums,
     List<String>? languages,
+    List<String>? groups,
     this.startDate,
     this.endDate,
     isFolderView = false,
@@ -39,6 +43,7 @@ class ID3TagFilter extends Subfilter {
     this.genres = genres ?? [];
     this.albums = albums ?? [];
     this.languages = languages ?? [];
+    this.groups = groups ?? [];
     isGrouped = isFolderView;
   }
 
@@ -63,6 +68,9 @@ class ID3TagFilter extends Subfilter {
         break;
       case ID3TagFilters.languages:
         languages = value as List<String>;
+        break;
+       case ID3TagFilters.groups:
+        groups = value as List<String>;
         break;
       case ID3TagFilters.date:
         var range = value as DateTimeRange;
@@ -89,6 +97,8 @@ class ID3TagFilter extends Subfilter {
         return albums;
       case ID3TagFilters.languages:
         return languages;
+       case ID3TagFilters.groups:
+        return groups;
       case ID3TagFilters.date:
         return startDate != null && endDate != null
             ? DateTimeRange(start: startDate!, end: endDate!)
@@ -112,6 +122,9 @@ class ID3TagFilter extends Subfilter {
         break;
       case ID3TagFilters.languages:
         languages.clear();
+        break;
+      case ID3TagFilters.groups:
+        groups.clear();
         break;
       case ID3TagFilters.date:
         startDate = null;
@@ -137,6 +150,8 @@ class ID3TagFilter extends Subfilter {
         return albums.isNotEmpty;
       case ID3TagFilters.languages:
         return languages.isNotEmpty;
+       case ID3TagFilters.groups:
+        return groups.isNotEmpty;
       case ID3TagFilters.date:
         return startDate != null;
       case ID3TagFilters.folderView:
@@ -166,4 +181,7 @@ abstract class ID3TagFilters {
 
   /// Languages tag identifier.
   static const String languages = "languages";
+
+  /// Group tag identifier.
+  static const String groups = "groups";
 }

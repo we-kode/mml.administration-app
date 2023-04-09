@@ -75,6 +75,12 @@ class RecordTagFilter extends ListSubfilterView {
               Icons.translate,
             ),
             horizontalSpacer,
+            _createTagFilter(
+              ID3TagFilters.groups,
+              locales.groups,
+              Icons.vibration,
+            ),
+            horizontalSpacer,
           ],
         );
       },

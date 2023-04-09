@@ -173,10 +173,13 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
   /// occured during loading of data.
   Widget _createNoDataWidget() {
     return Center(
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(AppLocalizations.of(context)!.noData),
+          Text(
+            AppLocalizations.of(context)!.noData,
+            softWrap: true,
+          ),
           horizontalSpacer,
           TextButton.icon(
             onPressed: _loadData,
@@ -191,30 +194,30 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
   /// Creates the list header widget with filter and remove action buttons.
   Widget _createListHeaderWidget() {
     return Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          // Filter input.
-          Expanded(
-            child: Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.filter,
-                    icon: const Icon(Icons.filter_list_alt),
-                  ),
-                  onChanged: (String filterText) {
-                    setState(() {
-                      _filter = filterText;
-                    });
-
-                    _reloadData();
-                  },
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        // Filter input.
+        Expanded(
+          child: Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.filter,
+                  icon: const Icon(Icons.filter_list_alt),
                 ),
-              ],
-            ),
+                onChanged: (String filterText) {
+                  setState(() {
+                    _filter = filterText;
+                  });
+
+                  _reloadData();
+                },
+              ),
+            ],
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 
   /// Creates the list view widget.
