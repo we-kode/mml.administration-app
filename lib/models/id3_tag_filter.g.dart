@@ -16,6 +16,8 @@ ID3TagFilter _$ID3TagFilterFromJson(Map<String, dynamic> json) => ID3TagFilter(
       languages: (json['languages'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      groups:
+          (json['groups'] as List<dynamic>?)?.map((e) => e as String).toList(),
       startDate: json['startDate'] == null
           ? null
           : DateTime.parse(json['startDate'] as String),
@@ -31,6 +33,7 @@ Map<String, dynamic> _$ID3TagFilterToJson(ID3TagFilter instance) {
     'genres': instance.genres,
     'albums': instance.albums,
     'languages': instance.languages,
+    'groups': instance.groups,
   };
 
   void writeNotNull(String key, dynamic value) {
