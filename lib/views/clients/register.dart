@@ -23,7 +23,13 @@ class ClientRegisterDialog extends StatelessWidget {
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
-          title: Text(locales.registerClient),
+          title: Consumer<ClientsRegisterViewModel>(
+            builder: (context, vm, child) {
+              return vm.state != RegistrationState.preCheck
+                  ? Text(locales.registerClient)
+                  : Text(locales.similiarClients);
+            },
+          ),
           content: FutureBuilder(
             future: vm.init(context),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -80,8 +86,8 @@ class ClientRegisterDialog extends StatelessWidget {
             BarcodeWidget(
               barcode: Barcode.qrCode(),
               color: Theme.of(context).colorScheme.primary,
-              height: 256,
-              width: 256,
+              height: 264,
+              width: 264,
               data: vm.registration.toString(),
               errorBuilder: (context, error) => Center(
                 child: Text(error),
@@ -105,11 +111,74 @@ class ClientRegisterDialog extends StatelessWidget {
       case RegistrationState.success:
         return Container(
           alignment: Alignment.center,
-          height: 256,
-          width: 256,
+          height: 264,
+          width: 264,
           child: CheckAnimation(
             onStop: () async {
               await vm.stopAnimation();
+            },
+          ),
+        );
+      case RegistrationState.preCheck:
+        return SizedBox(
+          height: 400,
+          width: 400,
+          child: Consumer<ClientsRegisterViewModel>(
+            builder: (context, value, child) {
+              return ListView.separated(
+                separatorBuilder: (context, index) {
+                  return const Divider(
+                    height: 1,
+                  );
+                },
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Wrap(
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            vm.similiarClients[index]!.getDisplayDescription(),
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
+                          ),
+                        ),
+                        Text(
+                          " (${vm.similiarClients[index]!.getDisplayDescriptionSuffix(context)})",
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            vm.similiarClients[index]!.getSubtitle(context)!,
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        vm.deleteClient(
+                          index,
+                          context,
+                        );
+                      },
+                      icon: const Icon(Icons.delete),
+                      tooltip: AppLocalizations.of(context)!.remove,
+                    ),
+                  );
+                },
+                itemCount: vm.similiarClients.length,
+              );
             },
           ),
         );
@@ -178,8 +247,8 @@ class ClientRegisterDialog extends StatelessWidget {
       case RegistrationState.error:
         return Container(
           alignment: Alignment.center,
-          height: 256,
-          width: 256,
+          height: 264,
+          width: 264,
           child: ErrorAnimation(
             onStop: () async {
               vm.stopErrorAnimation();
@@ -200,17 +269,23 @@ class ClientRegisterDialog extends StatelessWidget {
     return [
       Consumer<ClientsRegisterViewModel>(
         builder: (context, value, child) {
-          return TextButton(
-            onPressed: vm.state == RegistrationState.register ? null : vm.abort,
-            child: Text(locales.cancel),
-          );
+          return vm.state == RegistrationState.scan
+              ? TextButton(
+                  onPressed:
+                      vm.state == RegistrationState.register ? null : vm.abort,
+                  child: Text(locales.cancel),
+                )
+              : const SizedBox.shrink();
         },
       ),
       Consumer<ClientsRegisterViewModel>(
         builder: (context, value, child) {
           return TextButton(
-            onPressed:
-                vm.state == RegistrationState.register ? vm.saveClient : null,
+            onPressed: vm.state == RegistrationState.register
+                ? vm.saveClient
+                : vm.state == RegistrationState.preCheck
+                    ? vm.preCheckFinished
+                    : null,
             child: Text(locales.save),
           );
         },

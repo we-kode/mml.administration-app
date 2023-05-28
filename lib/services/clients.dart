@@ -30,9 +30,22 @@ class ClientService {
     int? take,
     ClientTagFilter? tagfilter,
   ) async {
+    var params = <String, String?>{};
+    if (filter != null) {
+      params['filter'] = filter;
+    }
+
+    if (offset != null) {
+      params['skip'] = offset.toString();
+    }
+
+    if (take != null) {
+      params['take'] = take.toString();
+    }
+
     var response = await _apiService.request(
       '/identity/client/list',
-      queryParameters: {"filter": filter, "skip": offset, "take": take},
+      queryParameters: params,
       data: tagfilter != null ? tagfilter.toJson() : {},
       options: Options(
         method: 'POST',

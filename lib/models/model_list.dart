@@ -29,7 +29,8 @@ class ModelList extends ListBase<ModelBase?> {
 
   @override
   set length(int newLength) {
-    throw UnimplementedError();
+    _l.length = newLength;
+    totalCount = newLength;
   }
 
   @override
@@ -40,6 +41,6 @@ class ModelList extends ListBase<ModelBase?> {
 
   @override
   void operator []=(int index, ModelBase? value) {
-    throw UnimplementedError();
+    _l[index] = value;
   }
 }
