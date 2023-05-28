@@ -126,5 +126,6 @@
   "bitrates": "Bitraten",
   "bitrate": "Bitrate",
   "info": "Info",
-  "ok": "Ok"
+  "ok": "Ok",
+  "similiarClients": "Ähnliche Geräte"
 }
