@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/client_registration.dart';
-import 'package:mml_admin/models/group.dart';
+import 'package:mml_admin/models/model_base.dart';
+import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/messenger.dart';
@@ -46,6 +48,9 @@ class ClientsRegisterViewModel extends ChangeNotifier {
 
   /// [ClientRegistration] Information needed by the user to register a new client.
   ClientRegistration? registration;
+
+  /// Clients with similiar display name.
+  ModelList similiarClients = ModelList(List.empty(growable: true), 0, 0);
 
   /// Initialize the registration client view model.
   Future<bool> init(BuildContext context) async {
@@ -122,9 +127,9 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     }
   }
 
-  /// Loads all groups from the server with the given [filter].
-  Future<List<Group>> getGroups(String filter) async {
-    return List.from(await _groupService.getGroups(filter, 0, -1));
+  /// Loads all groups from the server.
+  Future<ModelList> getGroups() async {
+    return await _groupService.getGroups(null, 0, -1);
   }
 
   /// Closes the view if user aborts registration view.
@@ -147,7 +152,9 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   /// Validates the given [deviceIdentifier] and returns an error message or null if
   /// the [deviceIdentifier] is valid.
   String? validateDeviceIdentifier(String? deviceIdentifier) {
-    return (client?.deviceIdentifier ?? '').isNotEmpty ? null : locales.invalidDeviceName;
+    return (client?.deviceIdentifier ?? '').isNotEmpty
+        ? null
+        : locales.invalidDeviceName;
   }
 
   /// Updates the [ClientRegistration] information if the token was updated.
@@ -174,6 +181,21 @@ class ClientsRegisterViewModel extends ChangeNotifier {
 
   /// Stops the playing animation.
   Future stopAnimation() async {
+    similiarClients = await _service.getClients(
+      client!.displayName,
+      0,
+      null,
+      null,
+    );
+    similiarClients.removeWhere(
+      (element) => element!.getIdentifier() == client!.clientId,
+    );
+    _state = similiarClients.isNotEmpty ? RegistrationState.preCheck : RegistrationState.register;
+    notifyListeners();
+  }
+
+  /// Next screen when precheck of existing clients finished.
+  Future preCheckFinished() async {
     _state = RegistrationState.register;
     notifyListeners();
   }
@@ -187,6 +209,33 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   RegistrationState get state {
     return _state;
   }
+
+  /// Deletes one client from list.
+  Future<bool> deleteClient(
+    int index,
+    BuildContext context,
+  ) async {
+    var shouldDelete = await showDeleteDialog(context);
+
+    if (shouldDelete) {
+      try {
+        showProgressIndicator();
+        var client = similiarClients[index];
+        await _service.deleteClients(List<ModelBase>.of({client!})
+            .map<String>((ModelBase e) => (e as Client).getIdentifier())
+            .toList());
+        similiarClients.removeAt(index);
+        RouterService.getInstance().navigatorKey.currentState!.pop();
+      } catch (e) {
+        RouterService.getInstance().navigatorKey.currentState!.pop();
+        // Do not reload list on error!
+        return false;
+      }
+    }
+
+    notifyListeners();
+    return shouldDelete;
+  }
 }
 
 /// State of the registration process.
@@ -195,4 +244,5 @@ enum RegistrationState {
   register,
   error,
   success,
+  preCheck,
 }

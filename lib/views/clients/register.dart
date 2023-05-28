@@ -1,7 +1,7 @@
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/check_animation.dart';
+import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/error_animation.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
@@ -23,7 +23,13 @@ class ClientRegisterDialog extends StatelessWidget {
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
-          title: Text(locales.registerClient),
+          title: Consumer<ClientsRegisterViewModel>(
+            builder: (context, vm, child) {
+              return vm.state != RegistrationState.preCheck
+                  ? Text(locales.registerClient)
+                  : Text(locales.similiarClients);
+            },
+          ),
           content: FutureBuilder(
             future: vm.init(context),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -80,8 +86,8 @@ class ClientRegisterDialog extends StatelessWidget {
             BarcodeWidget(
               barcode: Barcode.qrCode(),
               color: Theme.of(context).colorScheme.primary,
-              height: 256,
-              width: 256,
+              height: 264,
+              width: 264,
               data: vm.registration.toString(),
               errorBuilder: (context, error) => Center(
                 child: Text(error),
@@ -105,11 +111,74 @@ class ClientRegisterDialog extends StatelessWidget {
       case RegistrationState.success:
         return Container(
           alignment: Alignment.center,
-          height: 256,
-          width: 256,
+          height: 264,
+          width: 264,
           child: CheckAnimation(
             onStop: () async {
               await vm.stopAnimation();
+            },
+          ),
+        );
+      case RegistrationState.preCheck:
+        return SizedBox(
+          height: 400,
+          width: 400,
+          child: Consumer<ClientsRegisterViewModel>(
+            builder: (context, value, child) {
+              return ListView.separated(
+                separatorBuilder: (context, index) {
+                  return const Divider(
+                    height: 1,
+                  );
+                },
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Wrap(
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            vm.similiarClients[index]!.getDisplayDescription(),
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
+                          ),
+                        ),
+                        Text(
+                          " (${vm.similiarClients[index]!.getDisplayDescriptionSuffix(context)})",
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            vm.similiarClients[index]!.getSubtitle(context)!,
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        vm.deleteClient(
+                          index,
+                          context,
+                        );
+                      },
+                      icon: const Icon(Icons.delete),
+                      tooltip: AppLocalizations.of(context)!.remove,
+                    ),
+                  );
+                },
+                itemCount: vm.similiarClients.length,
+              );
             },
           ),
         );
@@ -152,34 +221,29 @@ class ClientRegisterDialog extends StatelessWidget {
                 validator: vm.validateDeviceIdentifier,
               ),
               verticalSpacer,
-              DropdownSearch<Group>.multiSelection(
-                selectedItems: vm.client!.groups,
-                asyncItems: vm.getGroups,
-                itemAsString: (Group group) => group.getDisplayDescription(),
-                popupProps: const PopupPropsMultiSelection.menu(
-                  showSearchBox: true,
-                ),
-                dropdownDecoratorProps: DropDownDecoratorProps(
-                  dropdownSearchDecoration: InputDecoration(
-                    labelText: vm.locales.groups,
-                    errorMaxLines: 5,
-                  ),
-                ),
-                onSaved: (List<Group>? groups) {
-                  vm.client!.groups = groups!;
-                },
-                onChanged: (List<Group> groups) {
-                  vm.client!.groups = groups;
-                },
-              )
+              Text(
+                vm.locales.groups,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              verticalSpacer,
+              ChipChoices(
+                loadData: vm.getGroups,
+                initialSelectedItems: vm.client!.groups,
+                onSelectionChanged: (selecteItems) =>
+                    vm.client!.groups = selecteItems
+                        .map(
+                          (e) => e as Group,
+                        )
+                        .toList(),
+              ),
             ],
           ),
         );
       case RegistrationState.error:
         return Container(
           alignment: Alignment.center,
-          height: 256,
-          width: 256,
+          height: 264,
+          width: 264,
           child: ErrorAnimation(
             onStop: () async {
               vm.stopErrorAnimation();
@@ -200,17 +264,23 @@ class ClientRegisterDialog extends StatelessWidget {
     return [
       Consumer<ClientsRegisterViewModel>(
         builder: (context, value, child) {
-          return TextButton(
-            onPressed: vm.state == RegistrationState.register ? null : vm.abort,
-            child: Text(locales.cancel),
-          );
+          return vm.state == RegistrationState.scan
+              ? TextButton(
+                  onPressed:
+                      vm.state == RegistrationState.register ? null : vm.abort,
+                  child: Text(locales.cancel),
+                )
+              : const SizedBox.shrink();
         },
       ),
       Consumer<ClientsRegisterViewModel>(
         builder: (context, value, child) {
           return TextButton(
-            onPressed:
-                vm.state == RegistrationState.register ? vm.saveClient : null,
+            onPressed: vm.state == RegistrationState.register
+                ? vm.saveClient
+                : vm.state == RegistrationState.preCheck
+                    ? vm.preCheckFinished
+                    : null,
             child: Text(locales.save),
           );
         },
