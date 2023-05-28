@@ -1,6 +1,6 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/uploading_animation.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
@@ -70,27 +70,24 @@ class RecordUploadDialog extends StatelessWidget {
         Consumer<RecordsUploadDialogViewModel>(
           builder: (context, value, child) {
             return value.state == UploadProcessState.groups
-                ? DropdownSearch<Group>.multiSelection(
-                    selectedItems: vm.selectedGroups,
-                    asyncItems: vm.getGroups,
-                    itemAsString: (Group group) =>
-                        group.getDisplayDescription(),
-                    popupProps: const PopupPropsMultiSelection.menu(
-                      showSearchBox: true,
-                    ),
-                    dropdownDecoratorProps: DropDownDecoratorProps(
-                      dropdownSearchDecoration: InputDecoration(
-                        labelText: vm.locales.selectGroups,
-                        errorMaxLines: 5,
+                ? Column(
+                    children: [
+                      Text(
+                        vm.locales.selectGroups,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                    ),
-                    onSaved: (List<Group>? groups) {
-                      vm.selectedGroups = groups!;
-                    },
-                    onChanged: (List<Group> groups) {
-                      vm.selectedGroups = groups;
-                    },
-                    autoValidateMode: AutovalidateMode.onUserInteraction,
+                      verticalSpacer,
+                      ChipChoices(
+                        loadData: vm.getGroups,
+                        initialSelectedItems: vm.selectedGroups,
+                        onSelectionChanged: (selecteItems) =>
+                            vm.selectedGroups = selecteItems
+                                .map(
+                                  (e) => e as Group,
+                                )
+                                .toList(),
+                      ),
+                    ],
                   )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
