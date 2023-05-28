@@ -34,9 +34,9 @@ class ClientRegisterDialog extends StatelessWidget {
             future: vm.init(context),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
-                return Column(
+                return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     CircularProgressIndicator(),
                   ],
                 );
@@ -64,9 +64,9 @@ class ClientRegisterDialog extends StatelessWidget {
         Consumer<ClientsRegisterViewModel>(
           builder: (context, value, child) {
             return value.registration == null
-                ? Column(
+                ? const Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       CircularProgressIndicator(),
                     ],
                   )
