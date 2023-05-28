@@ -46,10 +46,10 @@ dependencies:
   barcode_widget: ^2.0.2
   signalr_pure: ^1.1.0
   rive: ^0.9.0
-  file_picker: ^5.2.5
+  file_picker: ^5.3.2
   mime: ^1.0.4
   http_parser: ^4.0.2
-  package_info_plus: ^3.0.2
+  package_info_plus: ^4.0.1
   calendar_date_picker2: ^0.3.6
 
 dev_dependencies:
