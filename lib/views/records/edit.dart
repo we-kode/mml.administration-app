@@ -1,5 +1,5 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/records/edit.dart';
@@ -127,26 +127,21 @@ class RecordEditDialog extends StatelessWidget {
             },
           ),
           verticalSpacer,
-          DropdownSearch<Group>.multiSelection(
-            selectedItems: vm.record.groups,
-            asyncItems: vm.getGroups,
-            itemAsString: (Group group) => group.getDisplayDescription(),
-            popupProps: const PopupPropsMultiSelection.menu(
-              showSearchBox: true,
-            ),
-            dropdownDecoratorProps: DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
-                labelText: vm.locales.groups,
-                errorMaxLines: 5,
-              ),
-            ),
-            onSaved: (List<Group>? groups) {
-              vm.record.groups = groups!;
-            },
-            onChanged: (List<Group> groups) {
-              vm.record.groups = groups;
-            },
-          )
+          Text(
+            vm.locales.groups,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          verticalSpacer,
+          ChipChoices(
+            loadData: vm.getGroups,
+            initialSelectedItems: vm.record.groups,
+            onSelectionChanged: (selecteItems) =>
+                vm.record.groups = selecteItems
+                    .map(
+                      (e) => e as Group,
+                    )
+                    .toList(),
+          ),
         ],
       ),
     );

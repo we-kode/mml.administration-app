@@ -1,5 +1,5 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/clients/edit.dart';
@@ -92,30 +92,21 @@ class ClientEditDialog extends StatelessWidget {
             validator: vm.validateDeviceIdentifier,
           ),
           verticalSpacer,
-          DropdownSearch<Group>.multiSelection(
-            selectedItems: vm.client.groups,
-            asyncItems: vm.getGroups,
-            itemAsString: (Group group) => group.getDisplayDescription(),
-            popupProps: const PopupPropsMultiSelection.menu(
-              showSearchBox: true,
-            ),
-            dropdownDecoratorProps: DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
-                labelText: vm.locales.groups,
-                errorMaxLines: 5,
-              ),
-            ),
-            onSaved: (List<Group>? groups) {
-              vm.clearBackendErrors(vm.groupsField);
-              vm.client.groups = groups!;
-            },
-            onChanged: (List<Group> groups) {
-              vm.clearBackendErrors(vm.groupsField);
-              vm.client.groups = groups;
-            },
-            autoValidateMode: AutovalidateMode.onUserInteraction,
-            validator: vm.validateGroups,
-          )
+          Text(
+            vm.locales.groups,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          verticalSpacer,
+          ChipChoices(
+            loadData: vm.getGroups,
+            initialSelectedItems: vm.client.groups,
+            onSelectionChanged: (selecteItems) =>
+                vm.client.groups = selecteItems
+                    .map(
+                      (e) => e as Group,
+                    )
+                    .toList(),
+          ),
         ],
       ),
     );
