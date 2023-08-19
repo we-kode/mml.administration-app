@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/livestream.dart';
+import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/livestreams.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
@@ -131,9 +132,9 @@ class LivestreamEditDialogViewModel extends ChangeNotifier {
     return _addBackendErrors(groupsField, error);
   }
 
-  /// Loads all groups from the server with the given [filter].
-  Future<List<Group>> getGroups(String filter) async {
-    return List.from(await _groupService.getGroups(filter, 0, -1));
+  /// Loads all groups from the server
+  Future<ModelList> getGroups() async {
+    return await _groupService.getGroups(null, 0, -1);
   }
 
   /// Clears the errors from the backend for the field with the passed

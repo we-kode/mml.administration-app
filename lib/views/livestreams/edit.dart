@@ -1,5 +1,5 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/livestreams/edit.dart';
@@ -33,9 +33,9 @@ class LivestreamEditDialog extends StatelessWidget {
             future: vm.init(context, id),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
-                return Column(
+                return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     CircularProgressIndicator(),
                   ],
                 );
@@ -94,30 +94,16 @@ class LivestreamEditDialog extends StatelessWidget {
             autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
           verticalSpacer,
-          DropdownSearch<Group>.multiSelection(
-            selectedItems: vm.stream.groups,
-            asyncItems: vm.getGroups,
-            itemAsString: (Group group) => group.getDisplayDescription(),
-            popupProps: const PopupPropsMultiSelection.menu(
-              showSearchBox: true,
-            ),
-            dropdownDecoratorProps: DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
-                labelText: vm.locales.groups,
-                errorMaxLines: 5,
-              ),
-            ),
-            onSaved: (List<Group>? groups) {
-              vm.clearBackendErrors(vm.groupsField);
-              vm.stream.groups = groups!;
-            },
-            onChanged: (List<Group> groups) {
-              vm.clearBackendErrors(vm.groupsField);
-              vm.stream.groups = groups;
-            },
-            autoValidateMode: AutovalidateMode.onUserInteraction,
-            validator: vm.validateGroups,
-          )
+          ChipChoices(
+            loadData: vm.getGroups,
+            initialSelectedItems: vm.stream.groups,
+            onSelectionChanged: (selecteItems) =>
+                vm.stream.groups = selecteItems
+                    .map(
+                      (e) => e as Group,
+                    )
+                    .toList(),
+          ),
         ],
       ),
     );
