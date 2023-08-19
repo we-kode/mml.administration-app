@@ -38,18 +38,18 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.0.5
   flutter_secure_storage: ^8.0.0
-  http: ^0.13.4
+  http: ^1.1.0
   dio: ^5.0.3
   json_annotation: ^4.8.1
   shimmer: ^2.0.0
   window_manager: ^0.3.0
   barcode_widget: ^2.0.2
   signalr_pure: ^1.1.0
-  rive: ^0.10.3
+  rive: ^0.11.14
   file_picker: ^5.2.5
   mime: ^1.0.4
   http_parser: ^4.0.2
-  package_info_plus: ^3.0.3
+  package_info_plus: ^4.1.0
   calendar_date_picker2: ^0.4.6
 
 dev_dependencies:
