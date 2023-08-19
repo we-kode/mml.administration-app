@@ -41,7 +41,7 @@ class LiveStreamsScreen extends StatelessWidget {
               context: context,
               builder: (BuildContext context) {
                 return LivestreamEditDialog(
-                  id: (stream as Livestream).livestreamId,
+                  id: (stream as Livestream).recordId,
                 );
               },
             );

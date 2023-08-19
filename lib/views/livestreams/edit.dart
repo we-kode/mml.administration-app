@@ -61,18 +61,18 @@ class LivestreamEditDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
-            initialValue: vm.stream.displayName,
+            initialValue: vm.stream.title,
             decoration: InputDecoration(
               labelText: vm.locales.displayName,
               errorMaxLines: 5,
             ),
             onSaved: (String? name) {
               vm.clearBackendErrors(vm.nameField);
-              vm.stream.displayName = name;
+              vm.stream.title = name;
             },
             onChanged: (String? name) {
               vm.clearBackendErrors(vm.nameField);
-              vm.stream.displayName = name;
+              vm.stream.title = name;
             },
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: vm.validateDisplayName,

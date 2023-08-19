@@ -9,10 +9,10 @@ part 'livestream.g.dart';
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
 class Livestream extends ModelBase {
   /// Id of the livestream.
-  final String? livestreamId;
+  final String? recordId;
 
   /// Name to be displayed.
-  String? displayName;
+  String? title;
 
   /// The internal url of the streaming provider endpoint.
   String? url;
@@ -22,8 +22,8 @@ class Livestream extends ModelBase {
 
   /// Initializes the model.
   Livestream({
-    this.livestreamId,
-    this.displayName,
+    this.recordId,
+    this.title,
     this.url,
     List<Group>? groups,
     bool isDeletable = true,
@@ -40,12 +40,12 @@ class Livestream extends ModelBase {
 
   @override
   String getDisplayDescription() {
-    return displayName ?? "";
+    return title ?? "";
   }
 
   @override
   getIdentifier() {
-    return livestreamId ?? "";
+    return recordId ?? "";
   }
 
   @override

@@ -7,8 +7,8 @@ part of 'livestream.dart';
 // **************************************************************************
 
 Livestream _$LivestreamFromJson(Map<String, dynamic> json) => Livestream(
-      livestreamId: json['livestreamId'] as String?,
-      displayName: json['displayName'] as String?,
+      recordId: json['recordId'] as String?,
+      title: json['title'] as String?,
       url: json['url'] as String?,
       groups: (json['groups'] as List<dynamic>?)
           ?.map((e) => Group.fromJson(e as Map<String, dynamic>))
@@ -27,8 +27,8 @@ Map<String, dynamic> _$LivestreamToJson(Livestream instance) {
     }
   }
 
-  writeNotNull('livestreamId', instance.livestreamId);
-  writeNotNull('displayName', instance.displayName);
+  writeNotNull('recordId', instance.recordId);
+  writeNotNull('title', instance.title);
   writeNotNull('url', instance.url);
   val['groups'] = instance.groups.map((e) => e.toJson()).toList();
   return val;
