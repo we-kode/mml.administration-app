@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
+import 'package:mml_admin/models/client_tag_filter.dart';
 import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:mml_admin/services/router.dart';
 
@@ -14,7 +16,11 @@ class ClientsViewModel extends ChangeNotifier {
   /// [ClientService] used to load data for the client overview screen.
   final ClientService _service = ClientService.getInstance();
 
+  /// Count of clients matching filters.
   int clientCount = 0;
+
+  /// filters set for clients.
+  ClientTagFilter tagFilter = ClientTagFilter();
 
   /// Loads the clients with the passing [filter] starting at [offset] and loading
   /// [take] data.
@@ -22,10 +28,16 @@ class ClientsViewModel extends ChangeNotifier {
     String? filter,
     int? offset,
     int? take,
-    dynamic subfilter,
+    Subfilter? subfilter,
   }) async {
-    final clients = await _service.getClients(filter, offset, take);
+    final clients = await _service.getClients(
+      filter,
+      offset,
+      take,
+      subfilter as ClientTagFilter?,
+    );
     clientCount = clients.totalCount;
+    tagFilter = subfilter!;
     notifyListeners();
     return clients;
   }

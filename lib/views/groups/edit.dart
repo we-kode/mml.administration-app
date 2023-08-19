@@ -32,9 +32,9 @@ class GroupEditDialog extends StatelessWidget {
             future: vm.init(context, groupId),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
-                return Column(
+                return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     CircularProgressIndicator(),
                   ],
                 );

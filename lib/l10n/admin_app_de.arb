@@ -131,5 +131,6 @@
   "editLivestream": "Livestream bearbeiten",
   "createLivestream": "Livestream erstellen",
   "streamUrl": "Url zum Livestream",
-  "streamUrlHint": "Interne Url zum Streamingendpunkt: http://<adresse>:<port>"
+  "streamUrlHint": "Interne Url zum Streamingendpunkt: http://<adresse>:<port>",
+  "similiarClients": "Ähnliche Geräte"
 }
