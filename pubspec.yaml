@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.10.2"
+  sdk: ">=2.16.2 <3.10.6"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -38,19 +38,19 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.0.5
   flutter_secure_storage: ^8.0.0
-  http: ^0.13.4
-  dio: ^4.0.6
+  http: ^1.1.0
+  dio: ^5.0.3
   json_annotation: ^4.8.1
   shimmer: ^2.0.0
   window_manager: ^0.3.0
   barcode_widget: ^2.0.2
   signalr_pure: ^1.1.0
-  rive: ^0.9.0
+  rive: ^0.11.14
   file_picker: ^5.2.5
   mime: ^1.0.4
   http_parser: ^4.0.2
-  package_info_plus: ^3.0.2
-  calendar_date_picker2: ^0.3.6
+  package_info_plus: ^4.1.0
+  calendar_date_picker2: ^0.4.6
 
 dev_dependencies:
   flutter_test:
@@ -62,9 +62,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
-  build_runner: ^2.3.3
+  build_runner: ^2.4.2
   json_serializable: ^6.5.3
-  msix: ^3.6.6
+  msix: ^3.9.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

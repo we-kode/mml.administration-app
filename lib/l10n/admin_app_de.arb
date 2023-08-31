@@ -127,5 +127,10 @@
   "bitrate": "Bitrate",
   "info": "Info",
   "ok": "Ok",
+  "livestreams": "Livestreams",
+  "editLivestream": "Livestream bearbeiten",
+  "createLivestream": "Livestream erstellen",
+  "streamUrl": "Url zum Livestream",
+  "streamUrlHint": "Interne Url zum Streamingendpunkt: http://<adresse>:<port>",
   "similiarClients": "Ähnliche Geräte"
 }

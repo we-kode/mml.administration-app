@@ -96,5 +96,10 @@
   "bitrate": "Bitrate",
   "info": "Info",
   "ok": "Ok",
+  "livestreams": "Livestreams",
+  "editLivestream": "Edit livestream",
+  "createLivestream": "Create livestream",
+  "streamUrl": "Url to livestream",
+  "streamUrlHint": "Internal url to streaming endpoint: http://<address>:<port>",
   "similiarClients": "Similiar Devices"
 }
