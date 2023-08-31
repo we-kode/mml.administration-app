@@ -96,5 +96,10 @@
   "Bitrate": "Битрейт",
   "info": "Инфо",
   "ok": "OK",
+  "livestreams": "Tрансляции",
+  "editLivestream": "Редактировать трансляцию",
+  "createLivestream": "Добавить трансляцию",
+  "streamUrl": "Ссылка на трансляцию",
+  "streamUrlHint": "Внутренний url-адрес конечной точки трансляции: http://<адрес>:<порт>",
   "similiarClients": "Похожее устройство"
 }

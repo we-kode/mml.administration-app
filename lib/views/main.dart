@@ -47,6 +47,10 @@ class MainScreen extends StatelessWidget {
                                 vm.locales.records,
                               ),
                               _navItem(
+                                Icons.sensors,
+                                vm.locales.livestreams,
+                              ),
+                              _navItem(
                                 Icons.phone_android_rounded,
                                 vm.locales.devices,
                               ),
