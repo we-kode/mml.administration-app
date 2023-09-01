@@ -62,6 +62,7 @@ class LivestreamService {
       data: ids,
       options: Options(
         method: 'POST',
+        contentType: 'application/json',
       ),
     );
   }
