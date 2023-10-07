@@ -76,7 +76,10 @@ class UserService {
     await _apiService.request(
       '/identity/user/deleteList',
       data: userIds,
-      options: Options(method: 'POST'),
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
     );
   }
 
@@ -189,7 +192,8 @@ class UserService {
 
     try {
       // Get new tokens.
-      var clientId = await _storage.get(SecureStorageService.clientIdStorageKey);
+      var clientId =
+          await _storage.get(SecureStorageService.clientIdStorageKey);
       var refreshToken = await _storage.get(
         SecureStorageService.refreshTokenStorageKey,
       );
