@@ -185,6 +185,7 @@ class RecordService {
       data: recordIds,
       options: Options(
         method: 'POST',
+        contentType: Headers.jsonContentType,
       ),
     );
   }

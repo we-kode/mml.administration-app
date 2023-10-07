@@ -66,6 +66,7 @@ class GroupService {
       data: groupIds,
       options: Options(
         method: 'POST',
+        contentType: Headers.jsonContentType,
       ),
     );
   }

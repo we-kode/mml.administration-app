@@ -68,6 +68,7 @@ class ClientService {
       data: clientIds,
       options: Options(
         method: 'POST',
+        contentType: Headers.jsonContentType,
       ),
     );
   }
