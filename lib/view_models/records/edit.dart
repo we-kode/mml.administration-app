@@ -45,13 +45,13 @@ class RecordEditViewModel extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      if (e is DioError && e.response?.statusCode == HttpStatus.notFound) {
+      if (e is DioException && e.response?.statusCode == HttpStatus.notFound) {
         var messenger = MessengerService.getInstance();
 
         messenger.showMessage(messenger.notFound);
       }
 
-      Navigator.pop(context, true);
+      if (context.mounted) Navigator.pop(context, true);
       return false;
     }
   }
@@ -82,7 +82,7 @@ class RecordEditViewModel extends ChangeNotifier {
     try {
       await _service.updateRecord(record);
       shouldClose = true;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       var statusCode = e.response?.statusCode;
 
       if (statusCode == HttpStatus.notFound) {

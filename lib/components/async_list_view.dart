@@ -368,11 +368,9 @@ class _AsyncListViewState extends State<AsyncListView> {
                   if (widget.subfilter != null) widget.subfilter!,
                   if (widget.navState?.path != null)
                     Chip(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
+                      side: BorderSide.none,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.outlineVariant,
                       label: Text(
                         widget.navState!.path!,
                       ),
@@ -535,9 +533,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     }
 
     var leadingTile = !_isInMultiSelectMode
-        ? item.getPrefixIcon(context) != null
-            ? item.getPrefixIcon(context)!
-            : null
+        ? item.getPrefixIcon(context)
         : Checkbox(
             onChanged: (_) {
               _onItemChecked(index);
@@ -561,11 +557,8 @@ class _AsyncListViewState extends State<AsyncListView> {
       return Column(
         children: [
           Chip(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
+            side: BorderSide.none,
+            backgroundColor: Theme.of(context).colorScheme.outlineVariant,
             label: Text(
               item.getGroup(context)!,
             ),
@@ -688,12 +681,9 @@ class _AsyncListViewState extends State<AsyncListView> {
                   (tag) => Padding(
                     padding: const EdgeInsets.all(5),
                     child: Chip(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      backgroundColor: tag.color,
+                      side: BorderSide.none,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.outlineVariant,
                       label: Text(tag.name),
                     ),
                   ),

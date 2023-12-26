@@ -72,15 +72,13 @@ class _ChipChoicesState extends State<ChipChoices> {
         (index) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: ChoiceChip(
+            backgroundColor: Theme.of(context).colorScheme.outlineVariant,
+            side: BorderSide.none,
+            showCheckmark: false,
             label: Text(_items[index]!.getDisplayDescription()),
             labelStyle: _isActive(_items[index]!)
                 ? TextStyle(color: activeColor)
                 : null,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
             selected: _isActive(_items[index]!),
             selectedColor: _isActive(_items[index]!)
                 ? Theme.of(context).colorScheme.secondary

@@ -74,7 +74,7 @@ class SettingsCompressionViewModel extends ChangeNotifier {
 
     try {
       await _recordService.saveSettings(settings);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       var statusCode = e.response?.statusCode;
       if (statusCode == HttpStatus.badRequest) {
         errors = ((e.response!.data as Map)['errors'] as Map).map((key, value) {

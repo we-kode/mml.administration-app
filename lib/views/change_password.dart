@@ -35,7 +35,7 @@ class ChangePasswordScreen extends StatelessWidget {
                         Center(
                           child: Text(
                             vm.locales.confirmAccount,
-                            textScaleFactor: 1.5,
+                            textScaler: const TextScaler.linear(1.5),
                           ),
                         ),
                         verticalSpacer,
