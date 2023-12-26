@@ -125,7 +125,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
       );
       uploadedFiles++;
       notifyListeners();
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       notUploadedFiles.add(uploadingFileName);
       if (e.response?.statusCode == HttpStatus.requestEntityTooLarge) {
         var messenger = MessengerService.getInstance();

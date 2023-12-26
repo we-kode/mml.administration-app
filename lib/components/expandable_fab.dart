@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 /// Expandable FAB action button.
-/// 
-/// A floationg action button whcih has muliple sub action buttons, 
+///
+/// A floationg action button whcih has muliple sub action buttons,
 /// which will be expandeed when clicked on the button.
 @immutable
 class ExpandableFab extends StatefulWidget {
@@ -37,7 +37,7 @@ class _ExpandableFabState extends State<ExpandableFab>
   late final Animation<double> _expandAnimation;
 
   /// State of the [ExpandableFab].
-  /// 
+  ///
   /// true if [ExpandableFab] is expanded, false otherwise.
   bool _open = false;
 
@@ -99,16 +99,21 @@ class _ExpandableFabState extends State<ExpandableFab>
       height: 56.0,
       child: Center(
         child: Material(
-          shape: const CircleBorder(),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+          ),
           clipBehavior: Clip.antiAlias,
           elevation: 4.0,
+          color: Theme.of(context).colorScheme.primaryContainer,
           child: InkWell(
             onTap: _toggle,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(
                 Icons.close,
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -164,11 +169,10 @@ class _ExpandableFabState extends State<ExpandableFab>
   }
 }
 
-/// Trasnisiton widget of the [ExpandableFab], which is performed when the button changes from collapsed to expand 
+/// Trasnisiton widget of the [ExpandableFab], which is performed when the button changes from collapsed to expand
 /// state and in the other direction.
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
-
   /// Initializes the [_ExpandingActionButton].
   const _ExpandingActionButton({
     required this.directionInDegrees,
@@ -234,14 +238,18 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Material(
-      shape: const CircleBorder(),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
       clipBehavior: Clip.antiAlias,
-      color: theme.colorScheme.secondary,
+      color: theme.colorScheme.primary,
       elevation: 4.0,
       child: IconButton(
         onPressed: onPressed,
         icon: icon,
-        color: theme.colorScheme.onSecondary,
+        color: theme.colorScheme.onPrimary,
       ),
     );
   }

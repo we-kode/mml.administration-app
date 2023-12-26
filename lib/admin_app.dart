@@ -23,9 +23,15 @@ class AdminApp extends StatelessWidget {
       scaffoldMessengerKey: MessengerService.getInstance().snackbarKey,
 
       // Configure theme data.
-      theme: ThemeData(colorScheme: lightColorScheme),
-      darkTheme: ThemeData(colorScheme: darkColorScheme),
-      themeMode: ThemeMode.system,
+      theme: ThemeData(
+        colorScheme: lightColorScheme,
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData(
+        colorScheme: darkColorScheme,
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.dark,
 
       // Configure the main navigator of the app.
       navigatorKey: RouterService.getInstance().navigatorKey,
