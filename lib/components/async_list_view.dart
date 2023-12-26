@@ -599,7 +599,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                 if (item.getSubtitle(context) != null)
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.only(top: 5),
+                    padding: const EdgeInsets.only(top: 2),
                     child: Text(
                       item.getSubtitle(context)!,
                       overflow: TextOverflow.fade,
@@ -679,7 +679,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                 .getTags()!
                 .map(
                   (tag) => Padding(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.only(top: 2, right: 5),
                     child: Chip(
                       side: BorderSide.none,
                       backgroundColor:
