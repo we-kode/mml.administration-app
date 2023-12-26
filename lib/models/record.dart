@@ -40,6 +40,9 @@ class Record extends ModelBase {
   /// Language of the record or null if no one provided.
   String? language;
 
+  /// The bitrate in kbit/s of the record.
+  int? bitrate;
+
   /// List of groups the client is assigned to.
   List<Group> groups = [];
 
@@ -54,6 +57,7 @@ class Record extends ModelBase {
     this.artist,
     this.genre,
     this.language,
+    this.bitrate,
     bool isDeletable = true,
     List<Group>? groups,
   }) : super(isDeletable: isDeletable) {
@@ -111,6 +115,11 @@ class Record extends ModelBase {
   @override
   String? getGroup(BuildContext context) {
     return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}';
+  }
+
+  @override
+  String? getDisplayDescriptionSuffix(BuildContext context) {
+    return bitrate != null ? "$bitrate kbit/s" : null;
   }
 
   /// Adds a 0 before [value] if [value] is smaller than ten.
