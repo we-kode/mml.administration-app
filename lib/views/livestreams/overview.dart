@@ -47,6 +47,9 @@ class LiveStreamsScreen extends StatelessWidget {
             );
           },
           loadData: vm.load,
+          loadAvailableTags: vm.getGroups,
+          onChangedAvailableTags: (item, changedTags) =>
+              vm.groupsChanged(item, changedTags),
         );
       },
     );

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/components/list_subfilter_view.dart';
@@ -54,6 +55,13 @@ typedef EditFunction = Future<bool> Function(
 /// returned.
 typedef AddFunction = Future<bool> Function();
 
+/// Function to load all availabe tags which can be selected in list group view.
+typedef LoadAvailableTagsFunction = Future<ModelList> Function();
+
+/// Function called if selectable tags of [item] changed.
+typedef AvailableTagsChangedFunction = void Function(
+    ModelBase item, List<ModelBase> changedTags);
+
 /// List that supports async loading of data, when necessary in chunks.
 class AsyncListView extends StatefulWidget {
   /// Function to load data with the passed [filter], starting from [offset] and
@@ -99,6 +107,13 @@ class AsyncListView extends StatefulWidget {
   /// Function to be called when the back button is pressed. And the list should navigate up in folder structure.
   final MoveUpFunction? moveUp;
 
+  /// Function to load all availabe tags which can be selected in list group view.
+  /// If group tags in list exists this function should not be null.
+  final LoadAvailableTagsFunction? loadAvailableTags;
+
+  /// Function called if selectable tags of [item] changed. If tags in [item] exists this function should not be null.
+  final AvailableTagsChangedFunction? onChangedAvailableTags;
+
   /// Initializes the list view.
   const AsyncListView({
     Key? key,
@@ -111,6 +126,8 @@ class AsyncListView extends StatefulWidget {
     this.subfilter,
     this.navState,
     this.moveUp,
+    this.loadAvailableTags,
+    this.onChangedAvailableTags,
   }) : super(key: key);
 
   @override
@@ -533,14 +550,63 @@ class _AsyncListViewState extends State<AsyncListView> {
     }
 
     var leadingTile = !_isInMultiSelectMode
-        ? item.getPrefixIcon(context)
-        : Checkbox(
-            onChanged: (_) {
-              _onItemChecked(index);
-            },
-            value: _selectedItems
-                .any((elem) => elem.getIdentifier() == item.getIdentifier()),
+        // ? item.getPrefixIcon(context)
+        ? ClipRRect(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+            child: Container(
+              height: 56,
+              width: 56,
+              color: Theme.of(context).colorScheme.surfaceVariant,
+              child: const Icon(Icons.music_note_outlined),
+            ),
+          )
+        : Stack(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+                child: Container(
+                  height: 56,
+                  width: 56,
+                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  child: const Icon(Icons.music_note_outlined),
+                ),
+              ),
+              Positioned(
+                top: -6,
+                right: -6,
+                child: Checkbox(
+                  splashRadius: 0,
+                  side: BorderSide.none,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(5.0),
+                    ),
+                  ),
+                  onChanged: (_) {
+                    _onItemChecked(index);
+                  },
+                  value: _selectedItems.any(
+                      (elem) => elem.getIdentifier() == item.getIdentifier()),
+                ),
+              ),
+              Positioned(
+                bottom: 0.5,
+                left: 6,
+                right: 6,
+                child: Text(
+                  "${item.getDisplayDescriptionSuffix(context)}",
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textScaler: TextScaler.linear(0.75),
+                ),
+              ),
+            ],
           );
+
+    // TODO: icons je nach Art, sollte vom item kommen, Wenn Ordern zeige Ordner icon, Gruppen, Livestreams und Nutzer haben kein Icon. Zeige normales Checkbox
 
     var itemGroup = item.getGroup(context) ?? '';
     if (itemGroup.isEmpty || (widget.subfilter?.filter.isGrouped ?? false)) {
@@ -589,7 +655,7 @@ class _AsyncListViewState extends State<AsyncListView> {
               softWrap: false,
             ),
           ),
-          _createTitleSuffix(item),
+          // _createTitleSuffix(item),
         ],
       ),
       subtitle: (item.getTags() != null || item.getSubtitle(context) != null)
@@ -607,7 +673,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                       softWrap: false,
                     ),
                   ),
-                _getGroupTags(item) ?? const SizedBox.shrink(),
+                _getGroupTags(item) ?? const SizedBox.shrink()
               ],
             )
           : null,
@@ -671,25 +737,19 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   /// Creates Tags in the list if some tags exists.
-  Row? _getGroupTags(ModelBase item) {
+  Widget? _getGroupTags(ModelBase item) {
     return item.getTags() != null
-        ? Row(
-            mainAxisSize: MainAxisSize.min,
-            children: item
-                .getTags()!
-                .map(
-                  (tag) => Padding(
-                    padding: const EdgeInsets.only(top: 2, right: 5),
-                    child: Chip(
-                      side: BorderSide.none,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.outlineVariant,
-                      label: Text(tag.name),
-                    ),
-                  ),
-                )
-                .toList(),
-          )
+        ? Padding(
+            padding: const EdgeInsets.only(top: 5, right: 5),
+            child: ChipChoices(
+              loadData: widget.loadAvailableTags!,
+              initialSelectedItems: item.getTags()!,
+              onSelectionChanged: (selectedItems) =>
+                  widget.onChangedAvailableTags!(
+                item,
+                selectedItems,
+              ),
+            ))
         : null;
   }
 

@@ -3,12 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
+import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/navigation_state.dart';
 import 'package:mml_admin/models/record.dart';
 import 'package:mml_admin/models/record_folder.dart';
 import 'package:mml_admin/models/subfilter.dart';
+import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
@@ -26,6 +29,13 @@ class RecordsViewModel extends ChangeNotifier {
 
   /// The navigation state of the actual view.
   final navigationState = NavigationState();
+
+  /// [GroupService] used to load data for the groups of the client editing
+  /// screen.
+  final GroupService _groupService = GroupService.getInstance();
+
+  /// Available groups.
+  ModelList? _groups;
 
   /// Initializes the view model.
   Future<bool> init(BuildContext context) {
@@ -74,9 +84,13 @@ class RecordsViewModel extends ChangeNotifier {
       try {
         showProgressIndicator();
         if (items.first is Record) {
-          await _service.delete(items.map<String>((ModelBase e) => (e as Record).getIdentifier()).toList());
+          await _service.delete(items
+              .map<String>((ModelBase e) => (e as Record).getIdentifier())
+              .toList());
         } else {
-          await _service.deleteFolder(items.map<RecordFolder>((ModelBase e) => (e as RecordFolder)).toList());
+          await _service.deleteFolder(items
+              .map<RecordFolder>((ModelBase e) => (e as RecordFolder))
+              .toList());
         }
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
@@ -124,5 +138,21 @@ class RecordsViewModel extends ChangeNotifier {
     } else {
       subFilter.clear(ID3TagFilters.date);
     }
+  }
+
+  /// Loads all groups from the server.
+  Future<ModelList> getGroups() async {
+    _groups ??= await _groupService.getMediaGroups(null, 0, -1);
+    return _groups!;
+  }
+
+  /// Updates the groups of the [item].
+  void groupsChanged(ModelBase item, List<ModelBase> changedGroups) async {
+    (item as Record).groups = changedGroups
+        .map(
+          (e) => e as Group,
+        )
+        .toList();
+    _service.updateRecord(item);
   }
 }

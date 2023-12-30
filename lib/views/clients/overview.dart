@@ -54,6 +54,9 @@ class ClientsScreen extends StatelessWidget {
                 );
               },
               loadData: vm.loadClients,
+              loadAvailableTags: vm.getGroups,
+              onChangedAvailableTags: (item, changedTags) =>
+                  vm.groupsChanged(item, changedTags),
             );
           },
         );

@@ -5,7 +5,6 @@ import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/extensions/flag.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
-import 'package:mml_admin/models/tag.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 part 'record.g.dart';
@@ -108,8 +107,8 @@ class Record extends ModelBase {
   }
 
   @override
-  List<Tag>? getTags() {
-    return groups.map((g) => Tag(name: g.name ?? "")).toList();
+  List<ModelBase>? getTags() {
+    return groups;
   }
 
   @override
