@@ -60,42 +60,38 @@ class _ChipChoicesState extends State<ChipChoices> {
     final brightness = Theme.of(context).brightness;
     final isDarkMode = brightness == Brightness.dark;
     activeColor = isDarkMode ? Colors.black54 : Colors.white;
-    return Wrap(
-      alignment: WrapAlignment.start,
-      crossAxisAlignment: WrapCrossAlignment.start,
-      direction: Axis.horizontal,
-      runAlignment: WrapAlignment.start,
-      runSpacing: 0.0,
-      spacing: 0.0,
-      children: List.generate(
-        _items.length,
-        (index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: ChoiceChip(
-            backgroundColor: Theme.of(context).colorScheme.outlineVariant,
-            side: BorderSide.none,
-            showCheckmark: false,
-            label: Text(_items[index]!.getDisplayDescription()),
-            labelStyle: _isActive(_items[index]!)
-                ? TextStyle(color: activeColor)
-                : null,
-            selected: _isActive(_items[index]!),
-            selectedColor: _isActive(_items[index]!)
-                ? Theme.of(context).colorScheme.secondary
-                : null,
-            onSelected: (val) {
-              final item = _items[index]!;
-              if (_isActive(item)) {
-                _selectedValues.remove(item);
-              } else {
-                _selectedValues.add(item);
-              }
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(
+          _items.length,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+            child: ChoiceChip(
+              showCheckmark: true,
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.surfaceVariant,
+              ),
+              label: Text(_items[index]!.getDisplayDescription()),
+              labelStyle: _isActive(_items[index]!)
+                  ? TextStyle(color: Theme.of(context).colorScheme.secondary)
+                  : null,
+              selected: _isActive(_items[index]!),
+              selectedColor: Theme.of(context).colorScheme.background,
+              onSelected: (val) {
+                final item = _items[index]!;
+                if (_isActive(item)) {
+                  _selectedValues.remove(item);
+                } else {
+                  _selectedValues.add(item);
+                }
 
-              widget.onSelectionChanged(_selectedValues);
+                widget.onSelectionChanged(_selectedValues);
 
-              // update UI
-              setState(() {});
-            },
+                // update UI
+                setState(() {});
+              },
+            ),
           ),
         ),
       ),

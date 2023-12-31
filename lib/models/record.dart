@@ -5,7 +5,6 @@ import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/extensions/flag.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
-import 'package:mml_admin/models/tag.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 part 'record.g.dart';
@@ -108,8 +107,8 @@ class Record extends ModelBase {
   }
 
   @override
-  List<Tag>? getTags() {
-    return groups.map((g) => Tag(name: g.name ?? "")).toList();
+  List<ModelBase>? getTags() {
+    return groups;
   }
 
   @override
@@ -120,6 +119,11 @@ class Record extends ModelBase {
   @override
   String? getDisplayDescriptionSuffix(BuildContext context) {
     return bitrate != null ? "$bitrate kbit/s" : null;
+  }
+
+  @override
+  Widget? getAvatar(BuildContext context) {
+    return const Icon(Icons.music_note_outlined);
   }
 
   /// Adds a 0 before [value] if [value] is smaller than ten.

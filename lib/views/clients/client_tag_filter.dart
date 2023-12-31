@@ -35,15 +35,15 @@ class ClientTagFilterView extends ListSubfilterView {
             ),
             horizontalSpacer,
             _createActiveTagFilter(
-              ClientTagFilters.onlyNew,
-              locales.onlyNew,
-              Icons.qr_code_2,
-            ),
-            horizontalSpacer,
-            _createActiveTagFilter(
               ClientTagFilters.groups,
               locales.groups,
               Icons.vibration,
+            ),
+            horizontalSpacer,
+            _createActiveTagFilter(
+              ClientTagFilters.onlyNew,
+              locales.onlyNew,
+              Icons.qr_code_2,
             ),
             horizontalSpacer,
           ],
