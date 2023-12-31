@@ -22,7 +22,15 @@ class LiveStreamsViewModel extends ChangeNotifier {
   final GroupService _groupService = GroupService.getInstance();
 
   /// Available groups.
-  ModelList? _groups;
+  late ModelList groups;
+
+ /// Initializes the view model.
+  Future<bool> init(BuildContext context) {
+    return Future.microtask(() async {
+      groups = await _groupService.getMediaGroups(null, 0, -1);
+      return true;
+    });
+  }
 
   Future<ModelList> load({
     String? filter,
@@ -59,12 +67,6 @@ class LiveStreamsViewModel extends ChangeNotifier {
     }
 
     return shouldDelete;
-  }
-
-  /// Loads all groups from the server.
-  Future<ModelList> getGroups() async {
-    _groups ??= await _groupService.getMediaGroups(null, 0, -1);
-    return _groups!;
   }
 
   /// Updates the groups of the [item].

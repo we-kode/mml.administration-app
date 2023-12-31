@@ -19,37 +19,45 @@ class LiveStreamsScreen extends StatelessWidget {
       builder: (context, _) {
         var vm = Provider.of<LiveStreamsViewModel>(context, listen: false);
 
-        return AsyncListView(
-          deleteItems: <ModelBase>(List<ModelBase> items) => vm.delete(
-            context,
-            items,
-          ),
-          addItem: () async {
-            return await showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) {
-                return const LivestreamEditDialog(
-                  id: null,
+        return FutureBuilder(
+          future: vm.init(context),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return AsyncListView(
+              deleteItems: <ModelBase>(List<ModelBase> items) => vm.delete(
+                context,
+                items,
+              ),
+              addItem: () async {
+                return await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const LivestreamEditDialog(
+                      id: null,
+                    );
+                  },
                 );
               },
-            );
-          },
-          editItem: (ModelBase stream, Subfilter? subfilter) async {
-            return await showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) {
-                return LivestreamEditDialog(
-                  id: (stream as Livestream).recordId,
+              editItem: (ModelBase stream, Subfilter? subfilter) async {
+                return await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return LivestreamEditDialog(
+                      id: (stream as Livestream).recordId,
+                    );
+                  },
                 );
               },
+              loadData: vm.load,
+              availableTags: vm.groups,
+              onChangedAvailableTags: (item, changedTags) =>
+                  vm.groupsChanged(item, changedTags),
             );
           },
-          loadData: vm.load,
-          loadAvailableTags: vm.getGroups,
-          onChangedAvailableTags: (item, changedTags) =>
-              vm.groupsChanged(item, changedTags),
         );
       },
     );

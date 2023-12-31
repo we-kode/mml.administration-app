@@ -55,9 +55,6 @@ typedef EditFunction = Future<bool> Function(
 /// returned.
 typedef AddFunction = Future<bool> Function();
 
-/// Function to load all availabe tags which can be selected in list group view.
-typedef LoadAvailableTagsFunction = Future<ModelList> Function();
-
 /// Function called if selectable tags of [item] changed.
 typedef AvailableTagsChangedFunction = void Function(
     ModelBase item, List<ModelBase> changedTags);
@@ -109,7 +106,7 @@ class AsyncListView extends StatefulWidget {
 
   /// Function to load all availabe tags which can be selected in list group view.
   /// If group tags in list exists this function should not be null.
-  final LoadAvailableTagsFunction? loadAvailableTags;
+  final ModelList? availableTags;
 
   /// Function called if selectable tags of [item] changed. If tags in [item] exists this function should not be null.
   final AvailableTagsChangedFunction? onChangedAvailableTags;
@@ -126,7 +123,7 @@ class AsyncListView extends StatefulWidget {
     this.subfilter,
     this.navState,
     this.moveUp,
-    this.loadAvailableTags,
+    this.availableTags,
     this.onChangedAvailableTags,
   }) : super(key: key);
 
@@ -717,7 +714,7 @@ class _AsyncListViewState extends State<AsyncListView> {
         ? Padding(
             padding: const EdgeInsets.only(top: 2, right: 5),
             child: ChipChoices(
-              loadData: widget.loadAvailableTags!,
+              selectableItems: widget.availableTags!,
               initialSelectedItems: item.getTags()!,
               onSelectionChanged: (selectedItems) =>
                   widget.onChangedAvailableTags!(

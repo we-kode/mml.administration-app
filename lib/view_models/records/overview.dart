@@ -35,7 +35,7 @@ class RecordsViewModel extends ChangeNotifier {
   final GroupService _groupService = GroupService.getInstance();
 
   /// Available groups.
-  ModelList? _groups;
+  late ModelList groups;
 
   /// Initializes the view model.
   Future<bool> init(BuildContext context) {
@@ -45,6 +45,7 @@ class RecordsViewModel extends ChangeNotifier {
           ))
               ?.toLowerCase() ==
           'true';
+      groups = await _groupService.getMediaGroups(null, 0, -1);
       return true;
     });
   }
@@ -138,12 +139,6 @@ class RecordsViewModel extends ChangeNotifier {
     } else {
       subFilter.clear(ID3TagFilters.date);
     }
-  }
-
-  /// Loads all groups from the server.
-  Future<ModelList> getGroups() async {
-    _groups ??= await _groupService.getMediaGroups(null, 0, -1);
-    return _groups!;
   }
 
   /// Updates the groups of the [item].
