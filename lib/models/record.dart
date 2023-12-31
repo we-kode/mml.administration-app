@@ -121,6 +121,11 @@ class Record extends ModelBase {
     return bitrate != null ? "$bitrate kbit/s" : null;
   }
 
+  @override
+  Widget? getAvatar(BuildContext context) {
+    return const Icon(Icons.music_note_outlined);
+  }
+
   /// Adds a 0 before [value] if [value] is smaller than ten.
   String _valueString(int value) {
     return value < 10 ? "0$value" : "$value";

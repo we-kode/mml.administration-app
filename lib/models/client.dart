@@ -61,11 +61,23 @@ class Client extends ModelBase {
   @override
   String? getSubtitle(BuildContext context) {
     var locales = AppLocalizations.of(context)!;
-    return locales.lastTokenRefresh(DateFormat().format(lastTokenRefreshDate!.toLocal()));
+    return locales
+        .lastTokenRefresh(DateFormat().format(lastTokenRefreshDate!.toLocal()));
   }
 
   @override
   List<ModelBase>? getTags() {
     return groups;
+  }
+
+  @override
+  Widget? getAvatar(BuildContext context) {
+    if (deviceIdentifier!.startsWith(RegExp(r'i[p|P]hone'))) {
+      return const Icon(Icons.phone_iphone);
+    } else if (deviceIdentifier!.startsWith(RegExp(r'i[p|P]ad'))) {
+      return const Icon(Icons.tablet_mac);
+    }
+
+    return const Icon(Icons.phone_android);
   }
 }

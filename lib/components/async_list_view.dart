@@ -549,64 +549,42 @@ class _AsyncListViewState extends State<AsyncListView> {
       return _createLoadingTile();
     }
 
-    var leadingTile = !_isInMultiSelectMode
-        // ? item.getPrefixIcon(context)
-        ? ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(10.0),
-            ),
-            child: Container(
-              height: 56,
-              width: 56,
-              color: Theme.of(context).colorScheme.surfaceVariant,
-              child: const Icon(Icons.music_note_outlined),
-            ),
-          )
-        : Stack(
+    var leadingTile = item.getAvatar(context) == null
+        ? !_isInMultiSelectMode
+            ? item.getPrefixIcon(context)
+            : _selectCheckbox(index, item)
+        : Column(
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-                child: Container(
-                  height: 56,
-                  width: 56,
-                  color: Theme.of(context).colorScheme.surfaceVariant,
-                  child: const Icon(Icons.music_note_outlined),
-                ),
-              ),
-              Positioned(
-                top: -6,
-                right: -6,
-                child: Checkbox(
-                  splashRadius: 0,
-                  side: BorderSide.none,
-                  shape: RoundedRectangleBorder(
+              Stack(
+                children: [
+                  ClipRRect(
                     borderRadius: const BorderRadius.all(
-                      Radius.circular(5.0),
+                      Radius.circular(10.0),
+                    ),
+                    child: Container(
+                      height: 42,
+                      width: 42,
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      child: item.getAvatar(context),
                     ),
                   ),
-                  onChanged: (_) {
-                    _onItemChecked(index);
-                  },
-                  value: _selectedItems.any(
-                      (elem) => elem.getIdentifier() == item.getIdentifier()),
-                ),
+                  Positioned(
+                    bottom: -6,
+                    right: -6,
+                    child: _selectCheckbox(index, item),
+                  ),
+                ],
               ),
-              Positioned(
-                bottom: 0.5,
-                left: 6,
-                right: 6,
-                child: Text(
-                  "${item.getDisplayDescriptionSuffix(context)}",
-                  style: Theme.of(context).textTheme.bodySmall,
-                  textScaler: TextScaler.linear(0.75),
+              if (item.getDisplayDescriptionSuffix(context) != null)
+                SingleChildScrollView(
+                  child: Text(
+                    "${item.getDisplayDescriptionSuffix(context)}",
+                    softWrap: false,
+                    textScaler: const TextScaler.linear(0.8),
+                  ),
                 ),
-              ),
             ],
           );
-
-    // TODO: icons je nach Art, sollte vom item kommen, Wenn Ordern zeige Ordner icon, Gruppen, Livestreams und Nutzer haben kein Icon. Zeige normales Checkbox
 
     var itemGroup = item.getGroup(context) ?? '';
     if (itemGroup.isEmpty || (widget.subfilter?.filter.isGrouped ?? false)) {
@@ -622,11 +600,14 @@ class _AsyncListViewState extends State<AsyncListView> {
       _actualGroup = itemGroup;
       return Column(
         children: [
-          Chip(
-            side: BorderSide.none,
-            backgroundColor: Theme.of(context).colorScheme.outlineVariant,
-            label: Text(
-              item.getGroup(context)!,
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Chip(
+              side: BorderSide.none,
+              backgroundColor: Theme.of(context).colorScheme.outlineVariant,
+              label: Text(
+                item.getGroup(context)!,
+              ),
             ),
           ),
           _listTile(leadingTile, item, index),
@@ -642,8 +623,9 @@ class _AsyncListViewState extends State<AsyncListView> {
     final trailingSubStyle = Theme.of(context).textTheme.bodyMedium;
     return ListTile(
       leading: leadingTile,
-      minVerticalPadding: 10,
+      minVerticalPadding: 5,
       visualDensity: const VisualDensity(vertical: 0),
+      isThreeLine: item.getTags() != null || item.getSubtitle(context) != null,
       title: Wrap(
         children: [
           SingleChildScrollView(
@@ -655,7 +637,6 @@ class _AsyncListViewState extends State<AsyncListView> {
               softWrap: false,
             ),
           ),
-          // _createTitleSuffix(item),
         ],
       ),
       subtitle: (item.getTags() != null || item.getSubtitle(context) != null)
@@ -682,18 +663,12 @@ class _AsyncListViewState extends State<AsyncListView> {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const SizedBox(
-                  height: 3,
-                ),
                 item.getMetadata(context) != null
                     ? Text(
                         item.getMetadata(context)!,
                         style: Theme.of(context).textTheme.titleMedium,
                       )
                     : const SizedBox.shrink(),
-                const SizedBox(
-                  height: 5,
-                ),
                 item.getSubMetadata(context) != null
                     ? Text(
                         item.getSubMetadata(context)!,
@@ -740,7 +715,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   Widget? _getGroupTags(ModelBase item) {
     return item.getTags() != null
         ? Padding(
-            padding: const EdgeInsets.only(top: 5, right: 5),
+            padding: const EdgeInsets.only(top: 2, right: 5),
             child: ChipChoices(
               loadData: widget.loadAvailableTags!,
               initialSelectedItems: item.getTags()!,
@@ -753,15 +728,21 @@ class _AsyncListViewState extends State<AsyncListView> {
         : null;
   }
 
-  /// Cretaes a suffix widget of the title if suffix exists.
-  Widget _createTitleSuffix(ModelBase? item) {
-    if (item!.getDisplayDescriptionSuffix(context) != null) {
-      return Text(
-        " (${item.getDisplayDescriptionSuffix(context)})",
-        style: Theme.of(context).textTheme.bodySmall,
-      );
-    }
-    return const Text('');
+  Widget _selectCheckbox(int index, ModelBase item) {
+    return Checkbox(
+      splashRadius: 0,
+      side: BorderSide.none,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(5.0),
+        ),
+      ),
+      onChanged: (_) {
+        _onItemChecked(index);
+      },
+      value: _selectedItems
+          .any((elem) => elem.getIdentifier() == item.getIdentifier()),
+    );
   }
 
   /// Creates a list tile widget for a not loded list item.
