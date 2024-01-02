@@ -157,7 +157,7 @@ class RecordsScreen extends StatelessWidget {
                   subfilter: subfilter,
                 );
               },
-              loadAvailableTags: vm.getGroups,
+              availableTags: vm.groups,
               onChangedAvailableTags: (item, changedTags) => vm.groupsChanged(item, changedTags),
             );
           },
