@@ -51,6 +51,7 @@ dependencies:
   http_parser: ^4.0.2
   package_info_plus: ^5.0.1
   calendar_date_picker2: ^0.5.3
+  id3tag: ^0.2.0
 
 dev_dependencies:
   flutter_test:
