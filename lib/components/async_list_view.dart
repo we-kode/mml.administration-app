@@ -576,11 +576,16 @@ class _AsyncListViewState extends State<AsyncListView> {
                 ],
               ),
               if (item.getDisplayDescriptionSuffix(context) != null)
-                SingleChildScrollView(
-                  child: Text(
-                    "${item.getDisplayDescriptionSuffix(context)}",
-                    softWrap: false,
-                    textScaler: const TextScaler.linear(0.8),
+                SizedBox(
+                  width: 56,
+                  child: SingleChildScrollView(
+                    child: Center(
+                      child: Text(
+                        "${item.getDisplayDescriptionSuffix(context)}",
+                        softWrap: false,
+                        textScaler: const TextScaler.linear(0.8),
+                      ),
+                    ),
                   ),
                 ),
             ],

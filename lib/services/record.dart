@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -11,6 +12,7 @@ import 'package:mml_admin/models/language.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/record.dart';
 import 'package:mml_admin/models/record_folder.dart';
+import 'package:mml_admin/models/record_validation.dart';
 import 'package:mml_admin/models/settings.dart';
 import 'package:mml_admin/services/api.dart';
 
@@ -234,6 +236,39 @@ class RecordService {
       data: settings.toJson(),
       options: Options(
         method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+  }
+
+  /// Loads the validation settings for records.
+  Future<RecordValidation> getValidationSettings() async {
+    var response = await _apiService.request(
+      '/media/settings/UploadValidation',
+      options: Options(
+        method: 'GET',
+      ),
+    );
+
+    if (response.data == null || response.data.isEmpty) {
+      return RecordValidation();
+    }
+
+    return RecordValidation.fromJson(json.decode(response.data));
+  }
+
+  /// Saves the record validation settings.
+  saveValidationSettings(RecordValidation settings) async {
+    await _apiService.request(
+      '/media/settings/UploadValidation',
+      data: Map<String, String>.from(<String, String>{
+        "value": json.encode(
+          settings.toJson(),
+        ),
+      }),
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
       ),
     );
   }
@@ -312,6 +347,7 @@ class RecordService {
       data: bitrates,
       options: Options(
         method: 'POST',
+        contentType: Headers.jsonContentType,
       ),
     );
   }
@@ -325,6 +361,7 @@ class RecordService {
       '/media/record/bitrate/${bitrate.genreId}',
       options: Options(
         method: 'DELETE',
+        contentType: Headers.jsonContentType,
       ),
     );
   }
