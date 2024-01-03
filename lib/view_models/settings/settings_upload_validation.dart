@@ -38,9 +38,32 @@ class SettingsUploadValidationViewModel extends ChangeNotifier {
   }
 
   /// Updates the view model state
-  void update(String key, bool value) {
-    model[key] = value;
+  void update(String key, int? index) {
+    switch (index) {
+      case 0:
+        model[key] = RecordValidationState.dontvalidate;
+        break;
+      case 1:
+        model[key] = RecordValidationState.validate;
+        break;
+      case 2:
+        model[key] = RecordValidationState.required;
+        break;
+    }
     notifyListeners();
+  }
+
+  /// returns numbered value of validation state
+  int validationState(String key) {
+    final state = model[key];
+    switch (state) {
+      case RecordValidationState.dontvalidate:
+        return 0;
+      case RecordValidationState.validate:
+        return 1;
+      case RecordValidationState.required:
+        return 2;
+    }
   }
 
   /// Updates the registered client or aborts, if the user cancels the operation.
