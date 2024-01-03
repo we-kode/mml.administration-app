@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -42,6 +45,9 @@ class Record extends ModelBase {
   /// The bitrate in kbit/s of the record.
   int? bitrate;
 
+  /// The cover image of the record.
+  String? cover;
+
   /// List of groups the client is assigned to.
   List<Group> groups = [];
 
@@ -57,6 +63,7 @@ class Record extends ModelBase {
     this.genre,
     this.language,
     this.bitrate,
+    this.cover,
     bool isDeletable = true,
     List<Group>? groups,
   }) : super(isDeletable: isDeletable) {
@@ -123,6 +130,13 @@ class Record extends ModelBase {
 
   @override
   Widget? getAvatar(BuildContext context) {
+    if (cover != null && cover!.isNotEmpty) {
+      return Image.memory(
+        Uint8List.fromList(
+          base64.decode(cover!),
+        ),
+      );
+    }
     return const Icon(Icons.music_note_outlined);
   }
 
