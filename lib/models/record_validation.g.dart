@@ -18,7 +18,9 @@ RecordValidation _$RecordValidationFromJson(Map<String, dynamic> json) =>
       isRequiredGenre: json['isRequiredGenre'] as bool?,
       genres: json['genres'] as String?,
       fileNameTemplate: json['fileNameTemplate'] as String?,
-    );
+    )..validationErrors = (json['validationErrors'] as List<dynamic>)
+        .map((e) => e as String)
+        .toList();
 
 Map<String, dynamic> _$RecordValidationToJson(RecordValidation instance) {
   final val = <String, dynamic>{};
@@ -39,5 +41,6 @@ Map<String, dynamic> _$RecordValidationToJson(RecordValidation instance) {
   writeNotNull('isRequiredGenre', instance.isRequiredGenre);
   writeNotNull('genres', instance.genres);
   writeNotNull('fileNameTemplate', instance.fileNameTemplate);
+  val['validationErrors'] = instance.validationErrors;
   return val;
 }
