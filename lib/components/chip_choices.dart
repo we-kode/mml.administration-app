@@ -11,8 +11,8 @@ typedef LoadDataFunction = Future<ModelList> Function();
 /// Creates a list of [ChoiceChips] with
 /// all logic handled.
 class ChipChoices extends StatefulWidget {
-  /// Function to load data.
-  final LoadDataFunction loadData;
+  /// Function to load data. Will be ignored, if [selectedItems] are provided.
+  final LoadDataFunction? loadData;
 
   /// Function called when selected items changed.
   final OnSelectionChanged onSelectionChanged;
@@ -20,12 +20,16 @@ class ChipChoices extends StatefulWidget {
   /// Initial selected ietms.
   final List<ModelBase> initialSelectedItems;
 
+  /// List of selecabel items. Must be provided, if load function is null.
+  final ModelList? selectableItems;
+
   /// Constructor.
   const ChipChoices({
     Key? key,
-    required this.loadData,
     required this.initialSelectedItems,
     required this.onSelectionChanged,
+    this.loadData,
+    this.selectableItems,
   }) : super(key: key);
 
   @override
@@ -104,12 +108,16 @@ class _ChipChoicesState extends State<ChipChoices> {
       return;
     }
 
-    _loadData();
+    if (widget.selectableItems != null) {
+      _items = widget.selectableItems!;
+    } else if (widget.loadData != null) {
+      _loadData();
+    }
   }
 
   /// Loads the data..
   void _loadData() {
-    var dataFuture = widget.loadData();
+    var dataFuture = widget.loadData!();
 
     dataFuture.then((value) {
       if (!mounted) {
