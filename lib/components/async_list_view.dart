@@ -565,11 +565,12 @@ class _AsyncListViewState extends State<AsyncListView> {
                       child: item.getAvatar(context),
                     ),
                   ),
-                  Positioned(
-                    bottom: -6,
-                    right: -6,
-                    child: _selectCheckbox(index, item),
-                  ),
+                  if (_isInMultiSelectMode)
+                    Positioned(
+                      bottom: -6,
+                      right: -6,
+                      child: _selectCheckbox(index, item),
+                    ),
                 ],
               ),
               if (item.getDisplayDescriptionSuffix(context) != null)
