@@ -127,5 +127,8 @@
   "uploadInvalidNumber": "Номер трека не указан.",
   "uploadInvalidCover": "Обложка отсутствует.",
   "uploadInvalidFilenameFormat": "Имя файла не соответствует ожидаемому формату.",
-  "uploadValidFailed": "При загрузке произошла непредвиденная ошибка."
+  "uploadValidFailed": "При загрузке произошла непредвиденная ошибка.",
+  "dontvalidate": "Не проверять",
+  "validate": "Проверить",
+  "required": "Обязательное"
 }
