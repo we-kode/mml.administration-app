@@ -322,6 +322,7 @@ class RecordService {
       data: list,
       options: Options(
         method: 'POST',
+        contentType: Headers.jsonContentType,
       ),
     );
   }
