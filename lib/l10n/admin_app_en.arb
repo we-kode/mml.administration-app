@@ -127,5 +127,8 @@
   "uploadInvalidNumber": "Track number is not set.",
   "uploadInvalidCover": "Cover is not available.",
   "uploadInvalidFilenameFormat": "File name does not match expected format.",
-  "uploadValidFailed": "An unexpected error occurred while uploading."
+  "uploadValidFailed": "An unexpected error occurred while uploading.",
+  "dontvalidate":"Do not validate",
+  "validate":"Validate",
+  "required":"Required"
 }

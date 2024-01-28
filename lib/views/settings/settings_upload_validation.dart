@@ -3,6 +3,7 @@ import 'package:mml_admin/models/record_validation.dart';
 import 'package:mml_admin/view_models/settings/settings_upload_validation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class SettingsUploadValidationScreen extends StatelessWidget {
   /// Initializes the instance.
@@ -80,7 +81,9 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                             Consumer<SettingsUploadValidationViewModel>(
                               builder: (context, vm, _) {
                                 return TextFormField(
-                                  enabled: vm.model.isRequiredAlbum ?? false,
+                                  enabled: vm.model.validateAlbum != null &&
+                                      vm.model.validateAlbum !=
+                                          RecordValidationState.dontvalidate,
                                   decoration: InputDecoration(
                                     labelText: vm.locales.uploadValidAlbums,
                                     hintText: vm.locales.uploadValidAlbumInfo,
@@ -106,8 +109,9 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                             Consumer<SettingsUploadValidationViewModel>(
                               builder: (context, vm, _) {
                                 return TextFormField(
-                                  enabled: vm.model.isRequiredGenre ??
-                                      false, // Only if album active
+                                  enabled: vm.model.validateGenre != null &&
+                                      vm.model.validateGenre !=
+                                          RecordValidationState.dontvalidate,
                                   decoration: InputDecoration(
                                     labelText: vm.locales.uploadValidGenres,
                                     hintText: vm.locales.uploadValidGenreInfo,
@@ -162,11 +166,14 @@ class SettingsUploadValidationScreen extends StatelessWidget {
   }
 
   /// Creates a switch form field
-  FormField<bool> _switchFormField(SettingsUploadValidationViewModel vm,
-      String title, IconData icon, String modelValue) {
-    return FormField<bool>(
+  FormField<RecordValidationState> _switchFormField(
+      SettingsUploadValidationViewModel vm,
+      String title,
+      IconData icon,
+      String modelValue) {
+    return FormField<RecordValidationState>(
       initialValue: vm.model[modelValue],
-      builder: (FormFieldState<bool> field) {
+      builder: (FormFieldState<RecordValidationState> field) {
         return InputDecorator(
           decoration: const InputDecoration(
             border: InputBorder.none,
@@ -176,11 +183,26 @@ class SettingsUploadValidationScreen extends StatelessWidget {
             title: Text(title),
             trailing: Consumer<SettingsUploadValidationViewModel>(
               builder: (context, vm, _) {
-                return Switch(
-                  onChanged: (value) => {
-                    vm.update(modelValue, value),
+                return ToggleSwitch(
+                  minHeight: 32,
+                  initialLabelIndex: vm.validationState(modelValue),
+                  activeFgColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                  activeBgColors: [
+                    [Theme.of(context).colorScheme.tertiaryContainer],
+                    [Theme.of(context).colorScheme.secondaryContainer],
+                    [Theme.of(context).colorScheme.primaryContainer],
+                  ],
+                  inactiveBgColor: Theme.of(context).colorScheme.surface,
+                  inactiveFgColor: Theme.of(context).colorScheme.surfaceVariant,
+                  totalSwitches: 3,
+                  icons: const [
+                    Icons.close,
+                    Icons.check,
+                    Icons.done_all,
+                  ],
+                  onToggle: (index) {
+                    vm.update(modelValue, index);
                   },
-                  value: vm.model[modelValue],
                 );
               },
             ),
