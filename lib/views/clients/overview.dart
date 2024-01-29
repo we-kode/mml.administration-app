@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
+import 'package:mml_admin/components/async_select_list_dialog.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/subfilter.dart';
@@ -63,6 +64,27 @@ class ClientsScreen extends StatelessWidget {
                   availableTags: vm.groups,
                   onChangedAvailableTags: (item, changedTags) =>
                       vm.groupsChanged(item, changedTags),
+                  assignItems: <ModelBase>(List<ModelBase> clients) async {
+                    var selectedGroups = await showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AsyncSelectListDialog(
+                          loadData: ({filter, offset, take}) => vm.loadGroups(),
+                          initialSelected: const [],
+                        );
+                      },
+                    );
+                    if (selectedGroups == null) {
+                      return false;
+                    }
+
+                    await vm.assignGroups(
+                      clients,
+                      List<String>.from(selectedGroups),
+                    );
+                    return true;
+                  },
                 );
               },
             );

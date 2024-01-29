@@ -366,4 +366,37 @@ class RecordService {
       ),
     );
   }
+
+  /// Assigns items to groups.
+  Future assign(List<String> items, List<String> groups) async {
+    await _apiService.request(
+      '/media/record/assign',
+      data: {
+        "items": items,
+        "groups": groups,
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+  }
+
+  /// Assigns folders to selectedGroups.
+  Future assignFolders(
+    List<RecordFolder> list,
+    List<String> selectedGroups,
+  ) async {
+    await _apiService.request(
+      '/media/record/assignFolder',
+      data: {
+        "items": list,
+        "groups": selectedGroups,
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+  }
 }

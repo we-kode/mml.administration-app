@@ -94,4 +94,20 @@ class ClientsViewModel extends ChangeNotifier {
         .toList();
     _service.updateClient(item);
   }
+
+  /// Assigns groups to clients.
+  Future assignGroups<ModelBase>(
+    List<ModelBase> clients,
+    List<String> selectedGroups,
+  ) async {
+    await _service.assignClients(
+      clients.map((e) => (e as Client).clientId!).toList(),
+      selectedGroups,
+    );
+  }
+
+  /// Load available groups.
+  Future<ModelList> loadGroups() async {
+    return groups;
+  }
 }

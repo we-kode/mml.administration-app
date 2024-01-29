@@ -159,7 +159,9 @@
   "uploadInvalidCover": "Cover ist nicht verfügbar.",
   "uploadInvalidFilenameFormat": "Dateiname entspricht nicht erwartetes Format.",
   "uploadValidFailed": "Beim Hochladen ist ein unerwarterter Fehler aufgetreten.",
-  "dontvalidate":"Nicht überprüfen",
-  "validate":"Überprüfen",
-  "required":"Pflichtfeld"
+  "dontvalidate": "Nicht überprüfen",
+  "validate": "Überprüfen",
+  "required": "Pflichtfeld",
+  "assignTo": "Zuordnen",
+  "selectLoaded": "Alle geladenen Elemente auswählen"
 }

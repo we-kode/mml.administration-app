@@ -33,6 +33,14 @@ typedef LoadDataFunction = Future<ModelList> Function({
 /// returned.
 typedef DeleteFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
 
+/// Function that assigns the items with the passed [itemIdentifiers].
+///
+/// This function should return a [Future], that either resolves with true
+/// after successful deletion or false on cancel.
+/// The list will reload the data starting from beginning, if true will be
+/// returned.
+typedef AssignFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
+
 /// Function to be called when the back button is pressed. And the list should navigate up in folder structure.
 typedef MoveUpFunction = Function(
   Subfilter? subFilter,
@@ -72,6 +80,14 @@ class AsyncListView extends StatefulWidget {
   /// The list will reload the data starting from beginning, if true will be
   /// returned.
   final DeleteFunction deleteItems;
+
+  /// Function that assigns the items with the passed [itemIdentifiers].
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful deletion or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
+  final AssignFunction? assignItems;
 
   /// Indicates, whether the add button should be shown or not.
   final bool showAddButton;
@@ -117,6 +133,7 @@ class AsyncListView extends StatefulWidget {
     required this.loadData,
     required this.deleteItems,
     required this.editItem,
+    this.assignItems,
     this.addItem,
     this.showAddButton = true,
     this.subactions,
@@ -415,6 +432,59 @@ class _AsyncListViewState extends State<AsyncListView> {
                     horizontalSpacer,
                     Text("${_selectedItems.length}"),
                     const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        _items!.forEach((element) {
+                          if (!_selectedItems.contains(element)) {
+                            _selectedItems.add(element);
+                          }
+                        });
+
+                        setState(() {
+                          _selectedItems = _selectedItems;
+                        });
+                      },
+                      icon: const Icon(Icons.check_box_outlined),
+                      tooltip: AppLocalizations.of(context)!.selectLoaded,
+                    ),
+                    if (widget.assignItems != null)
+                      IconButton(
+                        onPressed: () {
+                          showProgressIndicator();
+                          widget.assignItems!(_selectedItems).then((value) {
+                            if (!mounted) {
+                              return;
+                            }
+
+                            RouterService.getInstance()
+                                .navigatorKey
+                                .currentState!
+                                .pop();
+
+                            if (!value) {
+                              return;
+                            }
+
+                            setState(() {
+                              _isInMultiSelectMode = false;
+                              _selectedItems = [];
+                            });
+
+                            _reloadData();
+                          }).onError((error, stackTrace) {
+                            if (!mounted) {
+                              return;
+                            }
+
+                            RouterService.getInstance()
+                                .navigatorKey
+                                .currentState!
+                                .pop();
+                          });
+                        },
+                        icon: const Icon(Icons.assignment_add),
+                        tooltip: AppLocalizations.of(context)!.assignTo,
+                      ),
                     IconButton(
                       onPressed: () {
                         showProgressIndicator();

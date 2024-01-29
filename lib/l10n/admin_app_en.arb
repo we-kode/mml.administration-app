@@ -128,7 +128,9 @@
   "uploadInvalidCover": "Cover is not available.",
   "uploadInvalidFilenameFormat": "File name does not match expected format.",
   "uploadValidFailed": "An unexpected error occurred while uploading.",
-  "dontvalidate":"Do not validate",
-  "validate":"Validate",
-  "required":"Required"
+  "dontvalidate": "Do not validate",
+  "validate": "Validate",
+  "required": "Required",
+  "assignTo": "Assign",
+  "selectLoaded": "Select all loaded elements"
 }

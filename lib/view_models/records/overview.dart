@@ -150,4 +150,29 @@ class RecordsViewModel extends ChangeNotifier {
         .toList();
     _service.updateRecord(item);
   }
+
+  /// Assigns groups to records.
+  Future assignGroups<ModelBase>(
+    List<ModelBase> items,
+    List<String> selectedGroups,
+  ) async {
+    var isRecords = items.any((element) => element is Record);
+    if (isRecords) {
+      await _service.assign(
+        items.map((e) => (e as Record).recordId!).toList(),
+        selectedGroups,
+      );
+      return;
+    }
+
+    await _service.assignFolders(
+        items.map((e) => (e as RecordFolder)).toList(),
+        selectedGroups,
+      );
+  }
+
+  /// Load available groups.
+  Future<ModelList> loadGroups() async {
+    return groups;
+  }
 }

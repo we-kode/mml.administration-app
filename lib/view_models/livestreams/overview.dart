@@ -24,7 +24,7 @@ class LiveStreamsViewModel extends ChangeNotifier {
   /// Available groups.
   late ModelList groups;
 
- /// Initializes the view model.
+  /// Initializes the view model.
   Future<bool> init(BuildContext context) {
     return Future.microtask(() async {
       groups = await _groupService.getMediaGroups(null, 0, -1);
@@ -77,5 +77,21 @@ class LiveStreamsViewModel extends ChangeNotifier {
         )
         .toList();
     _service.update(item);
+  }
+
+  /// Assigns groups to records.
+  Future assignGroups<ModelBase>(
+    List<ModelBase> clients,
+    List<String> selectedGroups,
+  ) async {
+    await _service.assign(
+      clients.map((e) => (e as Livestream).recordId!).toList(),
+      selectedGroups,
+    );
+  }
+
+  /// Load available groups.
+  Future<ModelList> loadGroups() async {
+    return groups;
   }
 }

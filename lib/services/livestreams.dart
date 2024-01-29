@@ -89,4 +89,19 @@ class LivestreamService {
       ),
     );
   }
+
+   /// Assigns items to groups.
+  Future assign(List<String> items, List<String> groups) async {
+    await _apiService.request(
+      '/media/livestream/assign',
+      data: {
+        "items": items,
+        "groups": groups,
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+  }
 }
