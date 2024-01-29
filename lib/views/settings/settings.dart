@@ -4,6 +4,7 @@ import 'package:mml_admin/view_models/settings/settings.dart';
 import 'package:mml_admin/views/settings/settings_compression.dart';
 import 'package:mml_admin/views/settings/settings_connection.dart';
 import 'package:mml_admin/views/settings/settings_genre_bitrate.dart';
+import 'package:mml_admin/views/settings/settings_upload_validation.dart';
 import 'package:provider/provider.dart';
 
 /// Screen to modify own app settings.
@@ -93,6 +94,17 @@ class SettingsScreen extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return const SettingsGenreBitrate();
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.rule),
+                    title: Text(vm.locales.uploadValidation),
+                    onTap: () => showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const SettingsUploadValidationScreen();
                       },
                     ),
                   ),

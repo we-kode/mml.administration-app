@@ -113,4 +113,19 @@ class ClientService {
 
     return ConnectionSettings.fromJson(response.data);
   }
+
+  /// Assigns clients to groups.
+  Future assignClients(List<String> clients, List<String> groups) async {
+    await _apiService.request(
+      '/identity/client/assign',
+      data: {
+        "items": clients,
+        "groups": groups,
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+  }
 }

@@ -154,7 +154,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
       );
       RouterService.getInstance().navigatorKey.currentState!.pop();
       await afterConfirmation();
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       RouterService.getInstance().navigatorKey.currentState!.pop();
       var errData = e.response!;
       if (errData.data is String && errData.data == 'USER_UPDATE_FAILED') {

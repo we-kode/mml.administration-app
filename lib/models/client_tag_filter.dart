@@ -9,9 +9,13 @@ class ClientTagFilter extends Subfilter {
   /// Ids of groups tags.
   List<String> groups = [];
 
+  /// Shows only new clients
+  bool onlyNew = false;
+
   /// Initializes the model.
   ClientTagFilter({
     List<String>? groups,
+    this.onlyNew = false,
   }) {
     this.groups = groups ?? [];
   }
@@ -29,6 +33,9 @@ class ClientTagFilter extends Subfilter {
        case ClientTagFilters.groups:
         groups = value as List<String>;
         break;
+       case ClientTagFilters.onlyNew:
+        onlyNew = value as bool;
+        break;
     }
     notifyListeners();
   }
@@ -38,6 +45,8 @@ class ClientTagFilter extends Subfilter {
     switch (identifier) {
        case ClientTagFilters.groups:
         return groups;
+      case ClientTagFilters.onlyNew:
+        return onlyNew;
     }
   }
 
@@ -46,6 +55,9 @@ class ClientTagFilter extends Subfilter {
     switch (identifier) {
       case ClientTagFilters.groups:
         groups.clear();
+        break;
+      case ClientTagFilters.onlyNew:
+        onlyNew = false;
         break;
     }
     notifyListeners();
@@ -56,6 +68,8 @@ class ClientTagFilter extends Subfilter {
     switch (identifier) {
        case ClientTagFilters.groups:
         return groups.isNotEmpty;
+      case ClientTagFilters.onlyNew:
+        return onlyNew;
       default:
         return true;
     }
@@ -66,4 +80,6 @@ class ClientTagFilter extends Subfilter {
 abstract class ClientTagFilters {
   /// Languages tag identifier.
   static const String groups = "groups";
+  /// Only new tag identifier,
+  static const String onlyNew = "onlyNew";
 }

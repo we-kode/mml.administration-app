@@ -68,7 +68,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     } on HttpException catch (e) {
       if (e.statusCode != HttpStatus.unauthorized) {
         messenger.showMessage(messenger.unexpectedError(e.message));
-        Navigator.of(_context).pop(false);
+        if (context.mounted) Navigator.of(_context).pop(false);
       }
 
       await UserService.getInstance().refreshToken();
@@ -110,7 +110,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     try {
       await _service.updateClient(client!);
       shouldClose = true;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       var statusCode = e.response?.statusCode;
 
       if (statusCode == HttpStatus.notFound) {
@@ -170,7 +170,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
       _state = RegistrationState.success;
       notifyListeners();
     } catch (e) {
-      if (e is DioError && e.response?.statusCode == HttpStatus.notFound) {
+      if (e is DioException && e.response?.statusCode == HttpStatus.notFound) {
         var messenger = MessengerService.getInstance();
         messenger.showMessage(messenger.notFound);
       }

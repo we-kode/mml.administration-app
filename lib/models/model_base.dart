@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mml_admin/models/tag.dart';
 
 /// Base model with abstract methods that should be implemented by all models.
 abstract class ModelBase {
@@ -46,12 +45,17 @@ abstract class ModelBase {
   }
 
   /// Returns a list of tags that should be shown in the list view.
-  List<Tag>? getTags() {
+  List<ModelBase>? getTags() {
     return null;
   }
 
   /// Returns an icon which can be used as prefix in list.
   Icon? getPrefixIcon(BuildContext context) {
+    return null;
+  }
+
+  /// Returns the avatar to be shown in list.
+  Widget? getAvatar(BuildContext context) {
     return null;
   }
 }

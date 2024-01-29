@@ -31,12 +31,19 @@ class ClientTagFilterView extends ListSubfilterView {
             _createTagFilter(
               '$clients',
               Icons.phone_android_rounded,
+              context,
             ),
             horizontalSpacer,
             _createActiveTagFilter(
               ClientTagFilters.groups,
               locales.groups,
               Icons.vibration,
+            ),
+            horizontalSpacer,
+            _createActiveTagFilter(
+              ClientTagFilters.onlyNew,
+              locales.onlyNew,
+              Icons.qr_code_2,
             ),
             horizontalSpacer,
           ],
@@ -51,16 +58,15 @@ class ClientTagFilterView extends ListSubfilterView {
   Widget _createTagFilter(
     String label,
     IconData icon,
+    BuildContext context,
   ) {
     return Chip(
+      side: BorderSide.none,
+      backgroundColor: Theme.of(context).colorScheme.outlineVariant,
       label: Text(label),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
-      ),
       avatar: Icon(
         icon,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
   }
@@ -82,16 +88,15 @@ class ClientTagFilterView extends ListSubfilterView {
         return InputChip(
           label: Text(label),
           labelStyle: isActive ? TextStyle(color: activeColor) : null,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          backgroundColor:
-              isActive ? Theme.of(context).colorScheme.secondary : null,
+          side: BorderSide.none,
+          backgroundColor: isActive
+              ? Theme.of(context).colorScheme.secondary
+              : Theme.of(context).colorScheme.outlineVariant,
           avatar: Icon(
             icon,
-            color: isActive ? activeColor : null,
+            color: isActive
+                ? activeColor
+                : Theme.of(context).colorScheme.onSurfaceVariant,
           ),
           deleteIconColor: isActive ? activeColor : null,
           onPressed: () => _handleFilter(identifier, context, vm),
@@ -111,25 +116,30 @@ class ClientTagFilterView extends ListSubfilterView {
     BuildContext context,
     ClientTagFilterViewModel vm,
   ) async {
-    var selectedValues = await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AsyncSelectListDialog(
-          loadData: ({filter, offset, take}) => vm.load(
-            identifier,
-            filter: filter,
-            offset: offset,
-            take: take,
-          ),
-          initialSelected: vm.tagFilter[identifier],
-        );
-      },
-    );
-    if (selectedValues == null) {
-      return;
-    }
+    if (identifier == ClientTagFilters.groups) {
+      var selectedValues = await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AsyncSelectListDialog(
+            loadData: ({filter, offset, take}) => vm.load(
+              identifier,
+              filter: filter,
+              offset: offset,
+              take: take,
+            ),
+            initialSelected: vm.tagFilter[identifier],
+          );
+        },
+      );
+      if (selectedValues == null) {
+        return;
+      }
 
-    vm.updateFilter(identifier, selectedValues);
+      vm.updateFilter(identifier, selectedValues);
+    } else {
+      var value = !vm.tagFilter.onlyNew;
+      vm.updateFilter(identifier, value);
+    }
   }
 }

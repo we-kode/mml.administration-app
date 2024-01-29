@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
-import 'package:mml_admin/models/tag.dart';
 
 part 'livestream.g.dart';
 
@@ -49,7 +48,7 @@ class Livestream extends ModelBase {
   }
 
   @override
-  List<Tag>? getTags() {
-    return groups.map((g) => Tag(name: g.name ?? "")).toList();
+  List<ModelBase>? getTags() {
+    return groups;
   }
 }

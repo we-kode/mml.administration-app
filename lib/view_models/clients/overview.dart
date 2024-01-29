@@ -3,9 +3,12 @@ import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/client_tag_filter.dart';
+import 'package:mml_admin/models/group.dart';
+import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/services/clients.dart';
+import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/router.dart';
 
 /// View model for the app clients overview screen.
@@ -21,6 +24,21 @@ class ClientsViewModel extends ChangeNotifier {
 
   /// filters set for clients.
   ClientTagFilter tagFilter = ClientTagFilter();
+
+  /// [GroupService] used to load data for the groups of the client editing
+  /// screen.
+  final GroupService _groupService = GroupService.getInstance();
+
+  /// Available groups.
+  late ModelList groups;
+
+  /// Initializes the view model.
+  Future<bool> init(BuildContext context) {
+    return Future.microtask(() async {
+      groups = await _groupService.getMediaGroups(null, 0, -1);
+      return true;
+    });
+  }
 
   /// Loads the clients with the passing [filter] starting at [offset] and loading
   /// [take] data.
@@ -65,5 +83,31 @@ class ClientsViewModel extends ChangeNotifier {
     }
 
     return shouldDelete;
+  }
+
+  /// Updates the groups of the [item].
+  void groupsChanged(ModelBase item, List<ModelBase> changedGroups) async {
+    (item as Client).groups = changedGroups
+        .map(
+          (e) => e as Group,
+        )
+        .toList();
+    _service.updateClient(item);
+  }
+
+  /// Assigns groups to clients.
+  Future assignGroups<ModelBase>(
+    List<ModelBase> clients,
+    List<String> selectedGroups,
+  ) async {
+    await _service.assignClients(
+      clients.map((e) => (e as Client).clientId!).toList(),
+      selectedGroups,
+    );
+  }
+
+  /// Load available groups.
+  Future<ModelList> loadGroups() async {
+    return groups;
   }
 }

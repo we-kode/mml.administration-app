@@ -55,6 +55,20 @@ class RecordEditDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Align(
+            alignment: Alignment.center,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+              child: Container(
+                height: 200,
+                width: 200,
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                child: vm.record.getAvatar(context),
+              ),
+            ),
+          ),
           TextFormField(
             initialValue: vm.record.title,
             decoration: InputDecoration(

@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 import 'package:mime/mime.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/models/record_validation.dart';
 import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/record.dart';
@@ -33,7 +34,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   String uploadingFileName = '';
 
   /// List with files, which were not uploaded due errors.
-  List<String> notUploadedFiles = [];
+  Map<String, List<String>> notUploadedFiles = {};
 
   /// Groups to which the uploaded records will be added.
   List<Group> selectedGroups = [];
@@ -47,6 +48,9 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   /// Files to be uploaded or null if folder will be uploaded.
   late List<PlatformFile>? files;
 
+  /// validation settings
+  late RecordValidation _recordValidation;
+
   /// Initializes the ViewModel and starts the upload process.
   ///
   /// If no [folderPath] is provided, files from the [fileList] will be uploaded, else
@@ -57,11 +61,12 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     List<PlatformFile>? fileList,
   ) async {
     locales = AppLocalizations.of(context)!;
-    notUploadedFiles = [];
+    notUploadedFiles = {};
     folder = folderPath;
     files = fileList;
     return Future<bool>.microtask(
       () async {
+        _recordValidation = await _service.getValidationSettings();
         if (_state == UploadProcessState.upload) {
           initUpload();
         } else if (_state == UploadProcessState.groups) {
@@ -118,15 +123,24 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     try {
       uploadingFileName = file.path.split(Platform.pathSeparator).last;
       notifyListeners();
-      await _service.upload(
-        file,
-        uploadingFileName,
-        selectedGroups.map((e) => e.id!).toList(),
-      );
+      // validate file before upload
+      if (!(await _recordValidation.isValid(uploadingFileName, file))) {
+        notUploadedFiles.addAll({
+          uploadingFileName: _recordValidation.validationErrors,
+        });
+      } else {
+        await _service.upload(
+          file,
+          uploadingFileName,
+          selectedGroups.map((e) => e.id!).toList(),
+        );
+      }
       uploadedFiles++;
       notifyListeners();
-    } on DioError catch (e) {
-      notUploadedFiles.add(uploadingFileName);
+    } on DioException catch (e) {
+      notUploadedFiles.addAll({
+        uploadingFileName: List.from(["uploadValidFailed"]),
+      });
       if (e.response?.statusCode == HttpStatus.requestEntityTooLarge) {
         var messenger = MessengerService.getInstance();
         messenger.showMessage(messenger.fileToLarge(uploadingFileName));
@@ -164,6 +178,34 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   /// Returns the current [state] of the upload process.
   UploadProcessState get state {
     return _state;
+  }
+
+  /// Returns localized strings of validation erros.
+  String localizeError(String key) {
+    switch (key) {
+      case RecordValidationErrors.language:
+        return locales.uploadInvalidLanguage;
+      case RecordValidationErrors.album:
+        return locales.uploadInvalidAlbum;
+      case RecordValidationErrors.albums:
+        return locales.uploadInvalidAlbums;
+      case RecordValidationErrors.artist:
+        return locales.uploadInvalidArtist;
+      case RecordValidationErrors.cover:
+        return locales.uploadInvalidCover;
+      case RecordValidationErrors.filename:
+        return locales.uploadInvalidFilenameFormat;
+      case RecordValidationErrors.genre:
+        return locales.uploadInvalidGenre;
+      case RecordValidationErrors.genres:
+        return locales.uploadInvalidGenres;
+      case RecordValidationErrors.title:
+        return locales.uploadInvalidTitle;
+      case RecordValidationErrors.number:
+        return locales.uploadInvalidNumber;
+      default:
+        return locales.uploadValidFailed;
+    }
   }
 }
 

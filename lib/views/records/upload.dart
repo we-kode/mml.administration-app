@@ -187,8 +187,32 @@ class RecordUploadDialog extends StatelessWidget {
           child: ListView.separated(
             itemCount: vm.notUploadedFiles.length,
             itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text(vm.notUploadedFiles[index]),
+              return ExpansionTile(
+                title: Text(
+                  vm.notUploadedFiles.keys.elementAt(index),
+                ),
+                children: [
+                  SizedBox(
+                    height: 100,
+                    width: 400,
+                    child: ListView.builder(
+                      itemBuilder: (BuildContext context, int iIndex) {
+                        return ListTile(
+                          title: Text(
+                            vm.localizeError(
+                              vm.notUploadedFiles[vm.notUploadedFiles.keys
+                                  .elementAt(index)]![iIndex],
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: vm
+                          .notUploadedFiles[
+                              vm.notUploadedFiles.keys.elementAt(index)]
+                          ?.length,
+                    ),
+                  ),
+                ],
               );
             },
             separatorBuilder: (BuildContext context, int index) =>

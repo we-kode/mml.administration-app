@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
+import 'package:mml_admin/components/async_select_list_dialog.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/record.dart';
 import 'package:mml_admin/models/record_folder.dart';
@@ -156,6 +157,30 @@ class RecordsScreen extends StatelessWidget {
                   take: take,
                   subfilter: subfilter,
                 );
+              },
+              availableTags: vm.groups,
+              onChangedAvailableTags: (item, changedTags) =>
+                  vm.groupsChanged(item, changedTags),
+              assignItems: <ModelBase>(List<ModelBase> items) async {
+                var selectedGroups = await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AsyncSelectListDialog(
+                      loadData: ({filter, offset, take}) => vm.loadGroups(),
+                      initialSelected: const [],
+                    );
+                  },
+                );
+                if (selectedGroups == null) {
+                  return false;
+                }
+
+                await vm.assignGroups(
+                  items,
+                  List<String>.from(selectedGroups),
+                );
+                return true;
               },
             );
           },

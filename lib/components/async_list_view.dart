@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/components/list_subfilter_view.dart';
@@ -32,6 +33,14 @@ typedef LoadDataFunction = Future<ModelList> Function({
 /// returned.
 typedef DeleteFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
 
+/// Function that assigns the items with the passed [itemIdentifiers].
+///
+/// This function should return a [Future], that either resolves with true
+/// after successful deletion or false on cancel.
+/// The list will reload the data starting from beginning, if true will be
+/// returned.
+typedef AssignFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
+
 /// Function to be called when the back button is pressed. And the list should navigate up in folder structure.
 typedef MoveUpFunction = Function(
   Subfilter? subFilter,
@@ -54,6 +63,10 @@ typedef EditFunction = Future<bool> Function(
 /// returned.
 typedef AddFunction = Future<bool> Function();
 
+/// Function called if selectable tags of [item] changed.
+typedef AvailableTagsChangedFunction = void Function(
+    ModelBase item, List<ModelBase> changedTags);
+
 /// List that supports async loading of data, when necessary in chunks.
 class AsyncListView extends StatefulWidget {
   /// Function to load data with the passed [filter], starting from [offset] and
@@ -67,6 +80,14 @@ class AsyncListView extends StatefulWidget {
   /// The list will reload the data starting from beginning, if true will be
   /// returned.
   final DeleteFunction deleteItems;
+
+  /// Function that assigns the items with the passed [itemIdentifiers].
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful deletion or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
+  final AssignFunction? assignItems;
 
   /// Indicates, whether the add button should be shown or not.
   final bool showAddButton;
@@ -99,18 +120,28 @@ class AsyncListView extends StatefulWidget {
   /// Function to be called when the back button is pressed. And the list should navigate up in folder structure.
   final MoveUpFunction? moveUp;
 
+  /// Function to load all availabe tags which can be selected in list group view.
+  /// If group tags in list exists this function should not be null.
+  final ModelList? availableTags;
+
+  /// Function called if selectable tags of [item] changed. If tags in [item] exists this function should not be null.
+  final AvailableTagsChangedFunction? onChangedAvailableTags;
+
   /// Initializes the list view.
   const AsyncListView({
     Key? key,
     required this.loadData,
     required this.deleteItems,
     required this.editItem,
+    this.assignItems,
     this.addItem,
     this.showAddButton = true,
     this.subactions,
     this.subfilter,
     this.navState,
     this.moveUp,
+    this.availableTags,
+    this.onChangedAvailableTags,
   }) : super(key: key);
 
   @override
@@ -368,11 +399,9 @@ class _AsyncListViewState extends State<AsyncListView> {
                   if (widget.subfilter != null) widget.subfilter!,
                   if (widget.navState?.path != null)
                     Chip(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
+                      side: BorderSide.none,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.outlineVariant,
                       label: Text(
                         widget.navState!.path!,
                       ),
@@ -403,6 +432,59 @@ class _AsyncListViewState extends State<AsyncListView> {
                     horizontalSpacer,
                     Text("${_selectedItems.length}"),
                     const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        _items!.forEach((element) {
+                          if (!_selectedItems.contains(element)) {
+                            _selectedItems.add(element);
+                          }
+                        });
+
+                        setState(() {
+                          _selectedItems = _selectedItems;
+                        });
+                      },
+                      icon: const Icon(Icons.check_box_outlined),
+                      tooltip: AppLocalizations.of(context)!.selectLoaded,
+                    ),
+                    if (widget.assignItems != null)
+                      IconButton(
+                        onPressed: () {
+                          showProgressIndicator();
+                          widget.assignItems!(_selectedItems).then((value) {
+                            if (!mounted) {
+                              return;
+                            }
+
+                            RouterService.getInstance()
+                                .navigatorKey
+                                .currentState!
+                                .pop();
+
+                            if (!value) {
+                              return;
+                            }
+
+                            setState(() {
+                              _isInMultiSelectMode = false;
+                              _selectedItems = [];
+                            });
+
+                            _reloadData();
+                          }).onError((error, stackTrace) {
+                            if (!mounted) {
+                              return;
+                            }
+
+                            RouterService.getInstance()
+                                .navigatorKey
+                                .currentState!
+                                .pop();
+                          });
+                        },
+                        icon: const Icon(Icons.assignment_add),
+                        tooltip: AppLocalizations.of(context)!.assignTo,
+                      ),
                     IconButton(
                       onPressed: () {
                         showProgressIndicator();
@@ -534,16 +616,47 @@ class _AsyncListViewState extends State<AsyncListView> {
       return _createLoadingTile();
     }
 
-    var leadingTile = !_isInMultiSelectMode
-        ? item.getPrefixIcon(context) != null
-            ? item.getPrefixIcon(context)!
-            : null
-        : Checkbox(
-            onChanged: (_) {
-              _onItemChecked(index);
-            },
-            value: _selectedItems
-                .any((elem) => elem.getIdentifier() == item.getIdentifier()),
+    var leadingTile = item.getAvatar(context) == null
+        ? !_isInMultiSelectMode
+            ? item.getPrefixIcon(context)
+            : _selectCheckbox(index, item)
+        : Column(
+            children: [
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                    child: Container(
+                      height: 42,
+                      width: 42,
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      child: item.getAvatar(context),
+                    ),
+                  ),
+                  if (_isInMultiSelectMode)
+                    Positioned(
+                      bottom: -6,
+                      right: -6,
+                      child: _selectCheckbox(index, item),
+                    ),
+                ],
+              ),
+              if (item.getDisplayDescriptionSuffix(context) != null)
+                SizedBox(
+                  width: 56,
+                  child: SingleChildScrollView(
+                    child: Center(
+                      child: Text(
+                        "${item.getDisplayDescriptionSuffix(context)}",
+                        softWrap: false,
+                        textScaler: const TextScaler.linear(0.8),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           );
 
     var itemGroup = item.getGroup(context) ?? '';
@@ -560,14 +673,14 @@ class _AsyncListViewState extends State<AsyncListView> {
       _actualGroup = itemGroup;
       return Column(
         children: [
-          Chip(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Chip(
+              side: BorderSide.none,
+              backgroundColor: Theme.of(context).colorScheme.outlineVariant,
+              label: Text(
+                item.getGroup(context)!,
               ),
-            ),
-            label: Text(
-              item.getGroup(context)!,
             ),
           ),
           _listTile(leadingTile, item, index),
@@ -583,8 +696,9 @@ class _AsyncListViewState extends State<AsyncListView> {
     final trailingSubStyle = Theme.of(context).textTheme.bodyMedium;
     return ListTile(
       leading: leadingTile,
-      minVerticalPadding: 10,
+      minVerticalPadding: 5,
       visualDensity: const VisualDensity(vertical: 0),
+      isThreeLine: item.getTags() != null || item.getSubtitle(context) != null,
       title: Wrap(
         children: [
           SingleChildScrollView(
@@ -596,7 +710,6 @@ class _AsyncListViewState extends State<AsyncListView> {
               softWrap: false,
             ),
           ),
-          _createTitleSuffix(item),
         ],
       ),
       subtitle: (item.getTags() != null || item.getSubtitle(context) != null)
@@ -606,7 +719,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                 if (item.getSubtitle(context) != null)
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.only(top: 5),
+                    padding: const EdgeInsets.only(top: 2),
                     child: Text(
                       item.getSubtitle(context)!,
                       overflow: TextOverflow.fade,
@@ -614,7 +727,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                       softWrap: false,
                     ),
                   ),
-                _getGroupTags(item) ?? const SizedBox.shrink(),
+                _getGroupTags(item) ?? const SizedBox.shrink()
               ],
             )
           : null,
@@ -623,18 +736,12 @@ class _AsyncListViewState extends State<AsyncListView> {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const SizedBox(
-                  height: 3,
-                ),
                 item.getMetadata(context) != null
                     ? Text(
                         item.getMetadata(context)!,
                         style: Theme.of(context).textTheme.titleMedium,
                       )
                     : const SizedBox.shrink(),
-                const SizedBox(
-                  height: 5,
-                ),
                 item.getSubMetadata(context) != null
                     ? Text(
                         item.getSubMetadata(context)!,
@@ -678,40 +785,37 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   /// Creates Tags in the list if some tags exists.
-  Row? _getGroupTags(ModelBase item) {
+  Widget? _getGroupTags(ModelBase item) {
     return item.getTags() != null
-        ? Row(
-            mainAxisSize: MainAxisSize.min,
-            children: item
-                .getTags()!
-                .map(
-                  (tag) => Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Chip(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      backgroundColor: tag.color,
-                      label: Text(tag.name),
-                    ),
-                  ),
-                )
-                .toList(),
-          )
+        ? Padding(
+            padding: const EdgeInsets.only(top: 2, right: 5),
+            child: ChipChoices(
+              selectableItems: widget.availableTags!,
+              initialSelectedItems: item.getTags()!,
+              onSelectionChanged: (selectedItems) =>
+                  widget.onChangedAvailableTags!(
+                item,
+                selectedItems,
+              ),
+            ))
         : null;
   }
 
-  /// Cretaes a suffix widget of the title if suffix exists.
-  Widget _createTitleSuffix(ModelBase? item) {
-    if (item!.getDisplayDescriptionSuffix(context) != null) {
-      return Text(
-        " (${item.getDisplayDescriptionSuffix(context)})",
-        style: Theme.of(context).textTheme.bodySmall,
-      );
-    }
-    return const Text('');
+  Widget _selectCheckbox(int index, ModelBase item) {
+    return Checkbox(
+      splashRadius: 0,
+      side: BorderSide.none,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(5.0),
+        ),
+      ),
+      onChanged: (_) {
+        _onItemChecked(index);
+      },
+      value: _selectedItems
+          .any((elem) => elem.getIdentifier() == item.getIdentifier()),
+    );
   }
 
   /// Creates a list tile widget for a not loded list item.

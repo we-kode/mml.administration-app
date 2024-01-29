@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -5,7 +8,6 @@ import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/extensions/flag.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
-import 'package:mml_admin/models/tag.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
 
 part 'record.g.dart';
@@ -40,6 +42,12 @@ class Record extends ModelBase {
   /// Language of the record or null if no one provided.
   String? language;
 
+  /// The bitrate in kbit/s of the record.
+  int? bitrate;
+
+  /// The cover image of the record.
+  String? cover;
+
   /// List of groups the client is assigned to.
   List<Group> groups = [];
 
@@ -54,6 +62,8 @@ class Record extends ModelBase {
     this.artist,
     this.genre,
     this.language,
+    this.bitrate,
+    this.cover,
     bool isDeletable = true,
     List<Group>? groups,
   }) : super(isDeletable: isDeletable) {
@@ -104,13 +114,30 @@ class Record extends ModelBase {
   }
 
   @override
-  List<Tag>? getTags() {
-    return groups.map((g) => Tag(name: g.name ?? "")).toList();
+  List<ModelBase>? getTags() {
+    return groups;
   }
 
   @override
   String? getGroup(BuildContext context) {
     return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}';
+  }
+
+  @override
+  String? getDisplayDescriptionSuffix(BuildContext context) {
+    return bitrate != null ? "$bitrate kbit/s" : null;
+  }
+
+  @override
+  Widget? getAvatar(BuildContext context) {
+    if (cover != null && cover!.isNotEmpty) {
+      return Image.memory(
+        Uint8List.fromList(
+          base64.decode(cover!),
+        ),
+      );
+    }
+    return const Icon(Icons.music_note_outlined);
   }
 
   /// Adds a 0 before [value] if [value] is smaller than ten.

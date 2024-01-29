@@ -99,7 +99,7 @@ class ApiService {
   /// during requests send with the passed instance.
   void _addDefaultErrorHandlerInterceptor(Dio dio) {
     dio.interceptors.add(
-      InterceptorsWrapper(onError: (DioError e, handler) async {
+      InterceptorsWrapper(onError: (DioException e, handler) async {
         if (e.response != null) {
           var statusCode = e.response!.statusCode;
           if (statusCode == HttpStatus.unauthorized) {
@@ -139,7 +139,7 @@ class ApiService {
 
                 return handler.resolve(retryResponse);
               } catch (e) {
-                return handler.reject(e as DioError);
+                return handler.reject(e as DioException);
               }
             }
 

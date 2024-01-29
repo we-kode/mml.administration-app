@@ -4,7 +4,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
-import 'package:mml_admin/models/tag.dart';
 
 part 'client.g.dart';
 
@@ -62,11 +61,23 @@ class Client extends ModelBase {
   @override
   String? getSubtitle(BuildContext context) {
     var locales = AppLocalizations.of(context)!;
-    return locales.lastTokenRefresh(DateFormat().format(lastTokenRefreshDate!.toLocal()));
+    return locales
+        .lastTokenRefresh(DateFormat().format(lastTokenRefreshDate!.toLocal()));
   }
 
   @override
-  List<Tag>? getTags() {
-    return groups.map((g) => Tag(name: g.name ?? "")).toList();
+  List<ModelBase>? getTags() {
+    return groups;
+  }
+
+  @override
+  Widget? getAvatar(BuildContext context) {
+    if (deviceIdentifier!.startsWith(RegExp(r'i[p|P]hone'))) {
+      return const Icon(Icons.phone_iphone);
+    } else if (deviceIdentifier!.startsWith(RegExp(r'i[p|P]ad'))) {
+      return const Icon(Icons.tablet_mac);
+    }
+
+    return const Icon(Icons.phone_android);
   }
 }

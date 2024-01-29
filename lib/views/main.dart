@@ -31,6 +31,7 @@ class MainScreen extends StatelessWidget {
                     children: [
                       Consumer<MainViewModel>(
                         builder: (context, vm, _) {
+                          var theme = Theme.of(context);
                           return NavigationRail(
                             selectedIndex: vm.selectedIndex,
                             onDestinationSelected: (int index) {
@@ -41,6 +42,9 @@ class MainScreen extends StatelessWidget {
                               vm.loadPage();
                             },
                             labelType: NavigationRailLabelType.all,
+                            selectedLabelTextStyle: TextStyle(
+                              color: theme.colorScheme.secondary,
+                            ),
                             destinations: [
                               _navItem(
                                 Icons.music_note_outlined,
@@ -58,8 +62,14 @@ class MainScreen extends StatelessWidget {
                                 Icons.vibration,
                                 vm.locales.groups,
                               ),
-                              _navItem(Icons.person, vm.locales.adminUsers),
-                              _navItem(Icons.settings, vm.locales.settings),
+                              _navItem(
+                                Icons.person,
+                                vm.locales.adminUsers,
+                              ),
+                              _navItem(
+                                Icons.settings,
+                                vm.locales.settings,
+                              ),
                             ],
                           );
                         },

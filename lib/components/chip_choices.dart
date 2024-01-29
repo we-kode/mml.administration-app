@@ -11,8 +11,8 @@ typedef LoadDataFunction = Future<ModelList> Function();
 /// Creates a list of [ChoiceChips] with
 /// all logic handled.
 class ChipChoices extends StatefulWidget {
-  /// Function to load data.
-  final LoadDataFunction loadData;
+  /// Function to load data. Will be ignored, if [selectedItems] are provided.
+  final LoadDataFunction? loadData;
 
   /// Function called when selected items changed.
   final OnSelectionChanged onSelectionChanged;
@@ -20,12 +20,16 @@ class ChipChoices extends StatefulWidget {
   /// Initial selected ietms.
   final List<ModelBase> initialSelectedItems;
 
+  /// List of selecabel items. Must be provided, if load function is null.
+  final ModelList? selectableItems;
+
   /// Constructor.
   const ChipChoices({
     Key? key,
-    required this.loadData,
     required this.initialSelectedItems,
     required this.onSelectionChanged,
+    this.loadData,
+    this.selectableItems,
   }) : super(key: key);
 
   @override
@@ -60,44 +64,38 @@ class _ChipChoicesState extends State<ChipChoices> {
     final brightness = Theme.of(context).brightness;
     final isDarkMode = brightness == Brightness.dark;
     activeColor = isDarkMode ? Colors.black54 : Colors.white;
-    return Wrap(
-      alignment: WrapAlignment.start,
-      crossAxisAlignment: WrapCrossAlignment.start,
-      direction: Axis.horizontal,
-      runAlignment: WrapAlignment.start,
-      runSpacing: 0.0,
-      spacing: 0.0,
-      children: List.generate(
-        _items.length,
-        (index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: ChoiceChip(
-            label: Text(_items[index]!.getDisplayDescription()),
-            labelStyle: _isActive(_items[index]!)
-                ? TextStyle(color: activeColor)
-                : null,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(
+          _items.length,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+            child: ChoiceChip(
+              showCheckmark: true,
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.surfaceVariant,
               ),
+              label: Text(_items[index]!.getDisplayDescription()),
+              labelStyle: _isActive(_items[index]!)
+                  ? TextStyle(color: Theme.of(context).colorScheme.secondary)
+                  : null,
+              selected: _isActive(_items[index]!),
+              selectedColor: Theme.of(context).colorScheme.background,
+              onSelected: (val) {
+                final item = _items[index]!;
+                if (_isActive(item)) {
+                  _selectedValues.remove(item);
+                } else {
+                  _selectedValues.add(item);
+                }
+
+                widget.onSelectionChanged(_selectedValues);
+
+                // update UI
+                setState(() {});
+              },
             ),
-            selected: _isActive(_items[index]!),
-            selectedColor: _isActive(_items[index]!)
-                ? Theme.of(context).colorScheme.secondary
-                : null,
-            onSelected: (val) {
-              final item = _items[index]!;
-              if (_isActive(item)) {
-                _selectedValues.remove(item);
-              } else {
-                _selectedValues.add(item);
-              }
-
-              widget.onSelectionChanged(_selectedValues);
-
-              // update UI
-              setState(() {});
-            },
           ),
         ),
       ),
@@ -110,12 +108,16 @@ class _ChipChoicesState extends State<ChipChoices> {
       return;
     }
 
-    _loadData();
+    if (widget.selectableItems != null) {
+      _items = widget.selectableItems!;
+    } else if (widget.loadData != null) {
+      _loadData();
+    }
   }
 
   /// Loads the data..
   void _loadData() {
-    var dataFuture = widget.loadData();
+    var dataFuture = widget.loadData!();
 
     dataFuture.then((value) {
       if (!mounted) {
