@@ -182,6 +182,7 @@ class RecordsScreen extends StatelessWidget {
                 );
                 return true;
               },
+              enableFastActionSwitch: true,
             );
           },
         );
