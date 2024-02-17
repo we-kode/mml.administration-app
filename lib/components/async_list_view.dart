@@ -135,6 +135,9 @@ class AsyncListView extends StatefulWidget {
   /// Function called if selectable tags of [item] changed. If tags in [item] exists this function should not be null.
   final AvailableTagsChangedFunction? onChangedAvailableTags;
 
+  /// Indicates whether to enable fast action siwtch in header or not.
+  final bool enableFastActionSwitch;
+
   /// Initializes the list view.
   const AsyncListView({
     Key? key,
@@ -151,6 +154,7 @@ class AsyncListView extends StatefulWidget {
     this.moveUp,
     this.availableTags,
     this.onChangedAvailableTags,
+    this.enableFastActionSwitch = false,
   }) : super(key: key);
 
   @override
@@ -193,6 +197,9 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   /// The actual item group if list items should be grouped.
   String? _actualGroup;
+
+  /// Idicates whether fast actions are enabled in list items or not.
+  bool fastActionsEnabled = false;
 
   @override
   void initState() {
@@ -386,7 +393,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width *
-                            (widget.navState != null ? 0.855 : 0.88),
+                            (widget.navState != null ? 0.838 : 0.863),
                         child: TextField(
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.filter,
@@ -400,7 +407,17 @@ class _AsyncListViewState extends State<AsyncListView> {
                             _reloadData();
                           },
                         ),
-                      )
+                      ),
+                      widget.enableFastActionSwitch
+                          ? IconButton(
+                              onPressed: () => setState(() {
+                                fastActionsEnabled = !fastActionsEnabled;
+                              }),
+                              icon: Icon(fastActionsEnabled
+                                  ? Icons.edit_off
+                                  : Icons.edit),
+                            )
+                          : const SizedBox.shrink(),
                     ],
                   ),
                   // add subfilter if one is provided.
@@ -443,11 +460,11 @@ class _AsyncListViewState extends State<AsyncListView> {
                     const Spacer(),
                     IconButton(
                       onPressed: () {
-                        _items!.forEach((element) {
+                        for (var element in _items!) {
                           if (!_selectedItems.contains(element)) {
                             _selectedItems.add(element);
                           }
-                        });
+                        }
 
                         setState(() {
                           _selectedItems = _selectedItems;
@@ -727,7 +744,11 @@ class _AsyncListViewState extends State<AsyncListView> {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(
+              top: 10,
+              left: 10,
+              right: 10,
+            ),
             child: Chip(
               side: BorderSide.none,
               backgroundColor: Theme.of(context).colorScheme.outlineVariant,
@@ -850,6 +871,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                 item,
                 selectedItems,
               ),
+              isEditable: fastActionsEnabled,
             ))
         : null;
   }

@@ -23,6 +23,9 @@ class ChipChoices extends StatefulWidget {
   /// List of selecabel items. Must be provided, if load function is null.
   final ModelList? selectableItems;
 
+  /// Indicates whether the chipchoises are editable or not.
+  final bool isEditable;
+
   /// Constructor.
   const ChipChoices({
     Key? key,
@@ -30,6 +33,7 @@ class ChipChoices extends StatefulWidget {
     required this.onSelectionChanged,
     this.loadData,
     this.selectableItems,
+    this.isEditable = true,
   }) : super(key: key);
 
   @override
@@ -45,8 +49,9 @@ class _ChipChoicesState extends State<ChipChoices> {
 
   /// Determines whether [item] is selected.
   bool _isActive(ModelBase item) {
-    return _selectedValues
-        .any((element) => element.getIdentifier() == item.getIdentifier());
+    return _selectedValues.any(
+      (element) => element.getIdentifier() == item.getIdentifier(),
+    );
   }
 
   /// Text color of the active item.
@@ -72,9 +77,11 @@ class _ChipChoicesState extends State<ChipChoices> {
           (index) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
             child: ChoiceChip(
-              showCheckmark: true,
+              showCheckmark: false,
               side: BorderSide(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: _isActive(_items[index]!)
+                    ? Theme.of(context).colorScheme.secondary
+                    : Theme.of(context).colorScheme.surfaceVariant,
               ),
               label: Text(_items[index]!.getDisplayDescription()),
               labelStyle: _isActive(_items[index]!)
@@ -82,19 +89,21 @@ class _ChipChoicesState extends State<ChipChoices> {
                   : null,
               selected: _isActive(_items[index]!),
               selectedColor: Theme.of(context).colorScheme.background,
-              onSelected: (val) {
-                final item = _items[index]!;
-                if (_isActive(item)) {
-                  _selectedValues.remove(item);
-                } else {
-                  _selectedValues.add(item);
-                }
+              onSelected: !widget.isEditable
+                  ? null
+                  : (val) {
+                      final item = _items[index]!;
+                      if (_isActive(item)) {
+                        _selectedValues.remove(item);
+                      } else {
+                        _selectedValues.add(item);
+                      }
 
-                widget.onSelectionChanged(_selectedValues);
+                      widget.onSelectionChanged(_selectedValues);
 
-                // update UI
-                setState(() {});
-              },
+                      // update UI
+                      setState(() {});
+                    },
             ),
           ),
         ),
