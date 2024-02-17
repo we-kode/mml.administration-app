@@ -120,7 +120,7 @@ class Record extends ModelBase {
 
   @override
   String? getGroup(BuildContext context) {
-    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}';
+    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}${album?.isNotEmpty ?? false ? ':' : ''} $album';
   }
 
   @override
