@@ -691,7 +691,11 @@ class _AsyncListViewState extends State<AsyncListView> {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(
+              top: 10,
+              left: 10,
+              right: 10,
+            ),
             child: Chip(
               side: BorderSide.none,
               backgroundColor: Theme.of(context).colorScheme.outlineVariant,
