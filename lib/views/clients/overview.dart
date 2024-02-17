@@ -85,6 +85,7 @@ class ClientsScreen extends StatelessWidget {
                     );
                     return true;
                   },
+                  enableFastActionSwitch: true,
                 );
               },
             );

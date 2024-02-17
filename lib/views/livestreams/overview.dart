@@ -78,6 +78,7 @@ class LiveStreamsScreen extends StatelessWidget {
                 );
                 return true;
               },
+              enableFastActionSwitch: true,
             );
           },
         );
