@@ -182,6 +182,12 @@ class RecordsScreen extends StatelessWidget {
                 );
                 return true;
               },
+              lockItems: <ModelBase>(List<ModelBase> items) async {
+                await vm.lockRecords(
+                  items,
+                );
+                return true;
+              },
               enableFastActionSwitch: true,
             );
           },

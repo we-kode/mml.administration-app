@@ -132,5 +132,7 @@
   "validate": "Validate",
   "required": "Required",
   "assignTo": "Assign",
-  "selectLoaded": "Select all loaded elements"
+  "selectLoaded": "Select all loaded elements",
+  "makeUndeletable": "Not deletable",
+  "lock": "Lock"
 }

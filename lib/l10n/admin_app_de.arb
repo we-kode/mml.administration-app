@@ -163,5 +163,7 @@
   "validate": "Überprüfen",
   "required": "Pflichtfeld",
   "assignTo": "Zuordnen",
-  "selectLoaded": "Alle geladenen Elemente auswählen"
+  "selectLoaded": "Alle geladenen Elemente auswählen",
+  "makeUndeletable": "Nicht löschbar",
+  "lock": "Sperren"
 }

@@ -51,112 +51,126 @@ class RecordEditDialog extends StatelessWidget {
   Widget _createEditForm(BuildContext context, RecordEditViewModel vm) {
     return Form(
       key: vm.formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+                child: Container(
+                  height: 200,
+                  width: 200,
+                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  child: vm.record.getAvatar(context),
+                ),
               ),
-              child: Container(
-                height: 200,
-                width: 200,
-                color: Theme.of(context).colorScheme.surfaceVariant,
-                child: vm.record.getAvatar(context),
+            ),
+            TextFormField(
+              initialValue: vm.record.title,
+              decoration: InputDecoration(
+                labelText: vm.locales.title,
+                errorMaxLines: 5,
+              ),
+              onSaved: (String? title) {
+                vm.record.title = title!;
+              },
+              onChanged: (String? title) {
+                vm.record.title = title;
+              },
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: vm.validateTitle,
+            ),
+            verticalSpacer,
+            TextFormField(
+              initialValue: vm.record.artist,
+              decoration: InputDecoration(
+                labelText: vm.locales.artist,
+                errorMaxLines: 5,
+              ),
+              onSaved: (String? artist) {
+                vm.record.artist = artist;
+              },
+              onChanged: (String? artist) {
+                vm.record.artist = artist;
+              },
+            ),
+            verticalSpacer,
+            TextFormField(
+              initialValue: vm.record.album,
+              decoration: InputDecoration(
+                labelText: vm.locales.album,
+                errorMaxLines: 5,
+              ),
+              onSaved: (String? album) {
+                vm.record.album = album;
+              },
+              onChanged: (String? album) {
+                vm.record.album = album;
+              },
+            ),
+            verticalSpacer,
+            TextFormField(
+              initialValue: vm.record.genre,
+              decoration: InputDecoration(
+                labelText: vm.locales.genre,
+                errorMaxLines: 5,
+              ),
+              onSaved: (String? genre) {
+                vm.record.genre = genre;
+              },
+              onChanged: (String? genre) {
+                vm.record.genre = genre;
+              },
+            ),
+            verticalSpacer,
+            TextFormField(
+              initialValue: vm.record.language,
+              decoration: InputDecoration(
+                labelText: vm.locales.language,
+                errorMaxLines: 5,
+              ),
+              onSaved: (String? language) {
+                vm.record.language = language;
+              },
+              onChanged: (String? language) {
+                vm.record.language = language;
+              },
+            ),
+            verticalSpacer,
+            ListTile(
+              title: Text(vm.locales.makeUndeletable),
+              trailing: Consumer<RecordEditViewModel>(
+                builder: (context, vm, _) {
+                  return Switch(
+                    value: vm.record.locked ?? false,
+                    onChanged: (value) => vm.lock(),
+                  );
+                },
               ),
             ),
-          ),
-          TextFormField(
-            initialValue: vm.record.title,
-            decoration: InputDecoration(
-              labelText: vm.locales.title,
-              errorMaxLines: 5,
+            verticalSpacer,
+            Text(
+              vm.locales.groups,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
-            onSaved: (String? title) {
-              vm.record.title = title!;
-            },
-            onChanged: (String? title) {
-              vm.record.title = title;
-            },
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: vm.validateTitle,
-          ),
-          verticalSpacer,
-          TextFormField(
-            initialValue: vm.record.artist,
-            decoration: InputDecoration(
-              labelText: vm.locales.artist,
-              errorMaxLines: 5,
+            verticalSpacer,
+            ChipChoices(
+              loadData: vm.getGroups,
+              initialSelectedItems: vm.record.groups,
+              onSelectionChanged: (selecteItems) =>
+                  vm.record.groups = selecteItems
+                      .map(
+                        (e) => e as Group,
+                      )
+                      .toList(),
             ),
-            onSaved: (String? artist) {
-              vm.record.artist = artist;
-            },
-            onChanged: (String? artist) {
-              vm.record.artist = artist;
-            },
-          ),
-          verticalSpacer,
-          TextFormField(
-            initialValue: vm.record.album,
-            decoration: InputDecoration(
-              labelText: vm.locales.album,
-              errorMaxLines: 5,
-            ),
-            onSaved: (String? album) {
-              vm.record.album = album;
-            },
-            onChanged: (String? album) {
-              vm.record.album = album;
-            },
-          ),
-          verticalSpacer,
-          TextFormField(
-            initialValue: vm.record.genre,
-            decoration: InputDecoration(
-              labelText: vm.locales.genre,
-              errorMaxLines: 5,
-            ),
-            onSaved: (String? genre) {
-              vm.record.genre = genre;
-            },
-            onChanged: (String? genre) {
-              vm.record.genre = genre;
-            },
-          ),
-          verticalSpacer,
-          TextFormField(
-            initialValue: vm.record.language,
-            decoration: InputDecoration(
-              labelText: vm.locales.language,
-              errorMaxLines: 5,
-            ),
-            onSaved: (String? language) {
-              vm.record.language = language;
-            },
-            onChanged: (String? language) {
-              vm.record.language = language;
-            },
-          ),
-          verticalSpacer,
-          Text(
-            vm.locales.groups,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          verticalSpacer,
-          ChipChoices(
-            loadData: vm.getGroups,
-            initialSelectedItems: vm.record.groups,
-            onSelectionChanged: (selecteItems) =>
-                vm.record.groups = selecteItems
-                    .map(
-                      (e) => e as Group,
-                    )
-                    .toList(),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -32,7 +32,7 @@ class RecordEditViewModel extends ChangeNotifier {
   /// The record to be edited
   late Record record;
 
-    /// Flag that indicates whether the record is successful loaded.
+  /// Flag that indicates whether the record is successful loaded.
   bool loadedSuccessfully = false;
 
   /// Initialize the edit record view model.
@@ -59,12 +59,10 @@ class RecordEditViewModel extends ChangeNotifier {
   /// Validates the given [title] and returns an error message or null if
   /// the [title] is valid.
   String? validateTitle(String? title) {
-    return (record.title ?? '').isNotEmpty
-        ? null
-        : locales.invalidTitle;
+    return (record.title ?? '').isNotEmpty ? null : locales.invalidTitle;
   }
 
-   /// Updates the record or aborts, if the user cancels the operation.
+  /// Updates the record or aborts, if the user cancels the operation.
   void saveRecord() async {
     var nav = Navigator.of(_context);
 
@@ -99,8 +97,14 @@ class RecordEditViewModel extends ChangeNotifier {
     }
   }
 
-   /// Loads all groups from the server.
+  /// Loads all groups from the server.
   Future<ModelList> getGroups() async {
     return await _groupService.getMediaGroups(null, 0, -1);
+  }
+
+  /// Locks the record, so it can not be deleted.
+  void lock() {
+    record.locked = !(record.locked ?? false);
+    notifyListeners();
   }
 }

@@ -166,13 +166,28 @@ class RecordsViewModel extends ChangeNotifier {
     }
 
     await _service.assignFolders(
-        items.map((e) => (e as RecordFolder)).toList(),
-        selectedGroups,
-      );
+      items.map((e) => (e as RecordFolder)).toList(),
+      selectedGroups,
+    );
   }
 
   /// Load available groups.
   Future<ModelList> loadGroups() async {
     return groups;
+  }
+
+  /// Changes the lock state of selected [items].
+  Future lockRecords(List items) async {
+    var isRecords = items.any((element) => element is Record);
+    if (isRecords) {
+      await _service.lock(
+        items.map((e) => (e as Record).recordId!).toList(),
+      );
+      return;
+    }
+
+    await _service.lockFolders(
+      items.map((e) => (e as RecordFolder)).toList(),
+    );
   }
 }
