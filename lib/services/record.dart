@@ -399,4 +399,32 @@ class RecordService {
       ),
     );
   }
+
+  /// Locks or unlocks all records in [list].
+  Future lock(List<String> list) async {
+    await _apiService.request(
+      '/media/record/lock',
+      data: {
+        "items": list,
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+  }
+
+  /// Locks or unlocks all items of the folders [list].
+  Future lockFolders(List<RecordFolder> list) async {
+    await _apiService.request(
+      '/media/record/lockFolder',
+      data: {
+        "items": list,
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+  }
 }

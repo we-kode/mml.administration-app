@@ -58,4 +58,9 @@ abstract class ModelBase {
   Widget? getAvatar(BuildContext context) {
     return null;
   }
+
+  /// Returns some security information of the item.
+  Widget? getSecureState(BuildContext context) {
+    return null;
+  }
 }

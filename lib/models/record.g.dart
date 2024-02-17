@@ -19,6 +19,7 @@ Record _$RecordFromJson(Map<String, dynamic> json) => Record(
       language: json['language'] as String?,
       bitrate: json['bitrate'] as int?,
       cover: json['cover'] as String?,
+      locked: json['locked'] as bool?,
       isDeletable: json['isDeletable'] as bool? ?? true,
       groups: (json['groups'] as List<dynamic>?)
           ?.map((e) => Group.fromJson(e as Map<String, dynamic>))
@@ -47,6 +48,7 @@ Map<String, dynamic> _$RecordToJson(Record instance) {
   writeNotNull('language', instance.language);
   writeNotNull('bitrate', instance.bitrate);
   writeNotNull('cover', instance.cover);
+  writeNotNull('locked', instance.locked);
   val['groups'] = instance.groups.map((e) => e.toJson()).toList();
   return val;
 }
