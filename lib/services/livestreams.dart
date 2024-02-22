@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/livestream.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/api.dart';
@@ -90,18 +91,43 @@ class LivestreamService {
     );
   }
 
-   /// Assigns items to groups.
-  Future assign(List<String> items, List<String> groups) async {
+  /// Assigns items to groups.
+  Future assign(
+    List<String> items,
+    List<String> initGroups,
+    List<String> groups,
+  ) async {
     await _apiService.request(
       '/media/livestream/assign',
       data: {
         "items": items,
         "groups": groups,
+        "initGroups": initGroups,
       },
       options: Options(
         method: 'POST',
         contentType: Headers.jsonContentType,
       ),
+    );
+  }
+
+  /// Loads assigend groups
+  Future<ModelList> assignedGroups(List<String> items) async {
+    var response = await _apiService.request(
+      '/media/livestream/assignedGroups',
+      data: items,
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+
+    return ModelList(
+      List<Group>.from(
+        response.data['items'].map((item) => Group.fromJson(item)),
+      ),
+      0,
+      response.data["totalCount"],
     );
   }
 }

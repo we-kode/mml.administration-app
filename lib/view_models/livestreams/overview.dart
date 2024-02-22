@@ -82,10 +82,12 @@ class LiveStreamsViewModel extends ChangeNotifier {
   /// Assigns groups to records.
   Future assignGroups<ModelBase>(
     List<ModelBase> clients,
+    List<String> initialGroups,
     List<String> selectedGroups,
   ) async {
     await _service.assign(
       clients.map((e) => (e as Livestream).recordId!).toList(),
+      initialGroups,
       selectedGroups,
     );
   }
@@ -93,5 +95,14 @@ class LiveStreamsViewModel extends ChangeNotifier {
   /// Load available groups.
   Future<ModelList> loadGroups() async {
     return groups;
+  }
+
+  /// Loads the assigned groups.
+  Future<List<String>> loadAssignedGroups(List<String> items) async {
+    var groups = await _service.assignedGroups(
+      items,
+    );
+
+    return groups.map((e) => (e as Group).id!).toList();
   }
 }
