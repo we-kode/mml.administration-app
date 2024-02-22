@@ -65,6 +65,10 @@ class LiveStreamsScreen extends StatelessWidget {
                     return AsyncSelectListDialog(
                       loadData: ({filter, offset, take}) => vm.loadGroups(),
                       initialSelected: const [],
+                      threeState: true,
+                      loadInitial: () => vm.loadAssignedGroups(
+                        items.map((e) => (e as Livestream).recordId!).toList(),
+                      ),
                     );
                   },
                 );
@@ -74,10 +78,12 @@ class LiveStreamsScreen extends StatelessWidget {
 
                 await vm.assignGroups(
                   items,
-                  List<String>.from(selectedGroups),
+                  List<String>.from(selectedGroups[0]),
+                  List<String>.from(selectedGroups[1]),
                 );
                 return true;
               },
+              enableFastActionSwitch: true,
             );
           },
         );

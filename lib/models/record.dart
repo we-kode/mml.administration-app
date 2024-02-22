@@ -48,6 +48,9 @@ class Record extends ModelBase {
   /// The cover image of the record.
   String? cover;
 
+  /// Indicates whether the record is locked for some operations on records..
+  bool? locked;
+
   /// List of groups the client is assigned to.
   List<Group> groups = [];
 
@@ -64,6 +67,7 @@ class Record extends ModelBase {
     this.language,
     this.bitrate,
     this.cover,
+    this.locked,
     bool isDeletable = true,
     List<Group>? groups,
   }) : super(isDeletable: isDeletable) {
@@ -120,7 +124,7 @@ class Record extends ModelBase {
 
   @override
   String? getGroup(BuildContext context) {
-    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}';
+    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}${album?.isNotEmpty ?? false ? ':' : ''} $album';
   }
 
   @override
@@ -138,6 +142,15 @@ class Record extends ModelBase {
       );
     }
     return const Icon(Icons.music_note_outlined);
+  }
+
+  @override
+  Widget? getSecureState(BuildContext context) {
+    return Icon(
+      Icons.lock_open_outlined,
+      size: 10,
+      color: (locked ?? false) ? Theme.of(context).colorScheme.secondary : null
+    );
   }
 
   /// Adds a 0 before [value] if [value] is smaller than ten.

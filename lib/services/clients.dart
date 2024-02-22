@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/client_tag_filter.dart';
 import 'package:mml_admin/models/connection_settings.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/api.dart';
 import 'package:mml_admin/services/secure_storage.dart';
@@ -115,17 +116,42 @@ class ClientService {
   }
 
   /// Assigns clients to groups.
-  Future assignClients(List<String> clients, List<String> groups) async {
+  Future assignClients(
+    List<String> clients,
+    List<String> initialGroups,
+    List<String> groups,
+  ) async {
     await _apiService.request(
       '/identity/client/assign',
       data: {
         "items": clients,
         "groups": groups,
+        "initGroups": initialGroups,
       },
       options: Options(
         method: 'POST',
         contentType: Headers.jsonContentType,
       ),
+    );
+  }
+
+  /// Loads assigend groups from clients
+  Future<ModelList> assignedGroups(List<String> clients) async {
+    var response = await _apiService.request(
+      '/identity/client/assignedGroups',
+      data: clients,
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+
+    return ModelList(
+      List<Group>.from(
+        response.data['items'].map((item) => Group.fromJson(item)),
+      ),
+      0,
+      response.data["totalCount"],
     );
   }
 }

@@ -98,10 +98,12 @@ class ClientsViewModel extends ChangeNotifier {
   /// Assigns groups to clients.
   Future assignGroups<ModelBase>(
     List<ModelBase> clients,
+    List<String> initialGroups,
     List<String> selectedGroups,
   ) async {
     await _service.assignClients(
       clients.map((e) => (e as Client).clientId!).toList(),
+      initialGroups,
       selectedGroups,
     );
   }
@@ -109,5 +111,14 @@ class ClientsViewModel extends ChangeNotifier {
   /// Load available groups.
   Future<ModelList> loadGroups() async {
     return groups;
+  }
+
+  /// Loads the assigned groups.
+  Future<List<String>> loadAssignedGroups(List<String> clients) async {
+    var groups = await _service.assignedGroups(
+      clients,
+    );
+
+    return groups.map((e) => (e as Group).id!).toList();
   }
 }

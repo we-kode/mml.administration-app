@@ -169,6 +169,8 @@ class RecordsScreen extends StatelessWidget {
                     return AsyncSelectListDialog(
                       loadData: ({filter, offset, take}) => vm.loadGroups(),
                       initialSelected: const [],
+                      threeState: true,
+                      loadInitial: () => vm.loadAssignedGroups(items),
                     );
                   },
                 );
@@ -178,10 +180,18 @@ class RecordsScreen extends StatelessWidget {
 
                 await vm.assignGroups(
                   items,
-                  List<String>.from(selectedGroups),
+                  List<String>.from(selectedGroups[0]),
+                  List<String>.from(selectedGroups[1]),
                 );
                 return true;
               },
+              lockItems: <ModelBase>(List<ModelBase> items) async {
+                await vm.lockRecords(
+                  items,
+                );
+                return true;
+              },
+              enableFastActionSwitch: true,
             );
           },
         );
