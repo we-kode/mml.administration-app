@@ -154,25 +154,60 @@ class RecordsViewModel extends ChangeNotifier {
   /// Assigns groups to records.
   Future assignGroups<ModelBase>(
     List<ModelBase> items,
+    List<String> initialGroups,
     List<String> selectedGroups,
   ) async {
     var isRecords = items.any((element) => element is Record);
     if (isRecords) {
       await _service.assign(
         items.map((e) => (e as Record).recordId!).toList(),
+        initialGroups,
         selectedGroups,
       );
       return;
     }
 
     await _service.assignFolders(
-        items.map((e) => (e as RecordFolder)).toList(),
-        selectedGroups,
-      );
+      items.map((e) => (e as RecordFolder)).toList(),
+      initialGroups,
+      selectedGroups,
+    );
   }
 
   /// Load available groups.
   Future<ModelList> loadGroups() async {
     return groups;
+  }
+
+  /// Changes the lock state of selected [items].
+  Future lockRecords(List items) async {
+    var isRecords = items.any((element) => element is Record);
+    if (isRecords) {
+      await _service.lock(
+        items.map((e) => (e as Record).recordId!).toList(),
+      );
+      return;
+    }
+
+    await _service.lockFolders(
+      items.map((e) => (e as RecordFolder)).toList(),
+    );
+  }
+
+  /// Loads the assigned groups.
+  Future<List<String>> loadAssignedGroups(List items) async {
+    var isRecords = items.any((element) => element is Record);
+    var groups = List.empty(growable: true);
+    if (isRecords) {
+      groups = await _service.assignedGroups(
+         items.map((e) => (e as Record).recordId!).toList(),
+      );
+    } else {
+      groups = await _service.assignedFolderGroups(
+         items.map((e) => (e as RecordFolder)).toList(),
+      );
+    }
+
+    return groups.map((e) => (e as Group).id!).toList();
   }
 }

@@ -7,6 +7,7 @@ import 'package:mml_admin/models/album.dart';
 import 'package:mml_admin/models/artist.dart';
 import 'package:mml_admin/models/genre.dart';
 import 'package:mml_admin/models/genre_bitrate.dart';
+import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/language.dart';
 import 'package:mml_admin/models/model_list.dart';
@@ -368,12 +369,17 @@ class RecordService {
   }
 
   /// Assigns items to groups.
-  Future assign(List<String> items, List<String> groups) async {
+  Future assign(
+    List<String> items,
+    List<String> initGroups,
+    List<String> groups,
+  ) async {
     await _apiService.request(
       '/media/record/assign',
       data: {
         "items": items,
         "groups": groups,
+        "initGroups": initGroups,
       },
       options: Options(
         method: 'POST',
@@ -385,6 +391,7 @@ class RecordService {
   /// Assigns folders to selectedGroups.
   Future assignFolders(
     List<RecordFolder> list,
+    List<String> initGroups,
     List<String> selectedGroups,
   ) async {
     await _apiService.request(
@@ -392,11 +399,79 @@ class RecordService {
       data: {
         "items": list,
         "groups": selectedGroups,
+        "initGroups": initGroups,
       },
       options: Options(
         method: 'POST',
         contentType: Headers.jsonContentType,
       ),
+    );
+  }
+
+  /// Locks or unlocks all records in [list].
+  Future lock(List<String> list) async {
+    await _apiService.request(
+      '/media/record/lock',
+      data: {
+        "items": list,
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+  }
+
+  /// Locks or unlocks all items of the folders [list].
+  Future lockFolders(List<RecordFolder> list) async {
+    await _apiService.request(
+      '/media/record/lockFolder',
+      data: {
+        "items": list,
+      },
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+  }
+
+  /// Loads assigend groups
+  Future<ModelList> assignedGroups(List<String> items) async {
+    var response = await _apiService.request(
+      '/media/record/assignedGroups',
+      data: items,
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+
+    return ModelList(
+      List<Group>.from(
+        response.data['items'].map((item) => Group.fromJson(item)),
+      ),
+      0,
+      response.data["totalCount"],
+    );
+  }
+
+  Future<ModelList> assignedFolderGroups(List<RecordFolder> items) async {
+    var response = await _apiService.request(
+      '/media/record/assignedFolderGroups',
+      data: items,
+      options: Options(
+        method: 'POST',
+        contentType: Headers.jsonContentType,
+      ),
+    );
+
+    return ModelList(
+      List<Group>.from(
+        response.data['items'].map((item) => Group.fromJson(item)),
+      ),
+      0,
+      response.data["totalCount"],
     );
   }
 }

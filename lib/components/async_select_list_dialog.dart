@@ -12,6 +12,9 @@ typedef LoadDataFunction = Future<ModelList> Function({
   int? take,
 });
 
+/// Function to load initial data.
+typedef LoadInitialDataFunction = Future<List<String>> Function();
+
 /// A dialog inlcuding a selection list.
 ///
 /// The list supports async loading of data, when necessary in chunks.
@@ -23,11 +26,19 @@ class AsyncSelectListDialog extends StatefulWidget {
   /// List of inital selected values.
   final List<dynamic> initialSelected;
 
+  /// Inidcates whether the checkboxes are in three state mode. If used, the loadInitial function must be provided.
+  final bool threeState;
+
+  /// Loads inital data. If set the initialSelected field will be ignored.
+  final LoadInitialDataFunction? loadInitial;
+
   /// Initializes the list view.
   const AsyncSelectListDialog({
     Key? key,
     required this.loadData,
     required this.initialSelected,
+    this.threeState = false,
+    this.loadInitial,
   }) : super(key: key);
 
   @override
@@ -64,9 +75,31 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
   /// Identifiers of the selected items in the list.
   List<dynamic> _selectedValues = [];
 
+  /// Identifiers of the initial selected items in the list.
+  List<dynamic> _initialSelectedValues = [];
+
   @override
   void initState() {
-    _selectedValues = widget.initialSelected.toList();
+    if (widget.threeState && widget.loadInitial == null) {
+      throw Exception("If threeState is set provide ladInitialFunction");
+    }
+
+    if (widget.threeState) {
+      var dataFuture = widget.loadInitial!();
+
+      dataFuture.then((value) {
+        if (!mounted) {
+          return;
+        }
+
+        setState(() {
+          _initialSelectedValues = value;
+        });
+      });
+    } else {
+      _selectedValues = widget.initialSelected.toList();
+    }
+
     _reloadData();
     super.initState();
   }
@@ -102,6 +135,10 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
   void _onItemChecked(int index) {
     if (_selectedValues.contains(_items![index]?.getIdentifier())) {
       _selectedValues.remove(_items![index]?.getIdentifier());
+
+      if (widget.threeState) {
+        _initialSelectedValues.remove(_items![index]?.getIdentifier());
+      }
     } else if (_items![index] != null) {
       _selectedValues.add(_items![index]!.getIdentifier());
     }
@@ -272,13 +309,15 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
       return _createLoadingTile();
     }
 
+    final isOnlyInitial = widget.threeState &&
+        _initialSelectedValues.contains(item.getIdentifier()) &&
+        !_selectedValues.contains(item.getIdentifier());
     var leadingTile = Checkbox(
       onChanged: (_) {
         _onItemChecked(index);
       },
-      value: _selectedValues.contains(
-        item.getIdentifier(),
-      ),
+      value: _selectedValues.contains(item.getIdentifier()) || isOnlyInitial,
+      activeColor: isOnlyInitial ? Colors.grey : null,
     );
 
     return ListTile(
@@ -323,14 +362,19 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
     BuildContext context,
   ) {
     var locales = AppLocalizations.of(context)!;
-
+    var result = widget.threeState
+        ? [_initialSelectedValues, _selectedValues]
+        : _selectedValues;
     return [
       TextButton(
         onPressed: () => Navigator.pop(context, null),
         child: Text(locales.cancel),
       ),
       TextButton(
-        onPressed: () => Navigator.pop(context, _selectedValues),
+        onPressed: () => Navigator.pop(
+          context,
+          result,
+        ),
         child: Text(locales.save),
       )
     ];
