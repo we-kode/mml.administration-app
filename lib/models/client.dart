@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 part 'client.g.dart';
 
@@ -31,9 +32,9 @@ class Client extends ModelBase {
     this.displayName,
     this.deviceIdentifier,
     this.lastTokenRefreshDate,
-    bool isDeletable = true,
+    super.isDeletable,
     List<Group>? groups,
-  }) : super(isDeletable: isDeletable) {
+  }) {
     this.groups = groups ?? [];
   }
 
@@ -73,11 +74,11 @@ class Client extends ModelBase {
   @override
   Widget? getAvatar(BuildContext context) {
     if (deviceIdentifier!.startsWith(RegExp(r'i[p|P]hone'))) {
-      return const Icon(Icons.phone_iphone);
+      return const Icon(Symbols.phone_iphone);
     } else if (deviceIdentifier!.startsWith(RegExp(r'i[p|P]ad'))) {
-      return const Icon(Icons.tablet_mac);
+      return const Icon(Symbols.tablet_mac);
     }
 
-    return const Icon(Icons.phone_android);
+    return const Icon(Symbols.phone_android);
   }
 }

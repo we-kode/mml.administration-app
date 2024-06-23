@@ -3,7 +3,7 @@ import 'package:mml_admin/models/model_base.dart';
 
 part 'artist.g.dart';
 
-/// Artist model that holds all informations of a record artist.
+/// Artist model that holds all information of a record artist.
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
 class Artist extends ModelBase {
   /// Id of the artist.
@@ -16,8 +16,8 @@ class Artist extends ModelBase {
   Artist({
     this.artistId,
     this.name,
-    bool isDeletable = false,
-  }) : super(isDeletable: isDeletable);
+    super.isDeletable = false,
+  });
 
   /// Converts a json object/map to the model.
   factory Artist.fromJson(Map<String, dynamic> json) => _$ArtistFromJson(json);

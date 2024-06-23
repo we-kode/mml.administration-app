@@ -1,12 +1,13 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/gen/assets.gen.dart';
 import 'package:mml_admin/view_models/settings/settings_connection.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 class SettingsConnectionScreen extends StatelessWidget {
   /// Initializes the instance.
-  const SettingsConnectionScreen({Key? key}) : super(key: key);
+  const SettingsConnectionScreen({super.key});
 
   /// Builds the clients overview screen.
   @override
@@ -55,10 +56,7 @@ class SettingsConnectionScreen extends StatelessWidget {
                           margin: const EdgeInsets.all(100.0),
                           width: 50,
                           height: 50,
-                          child: Image.asset(
-                            'assets/images/logo.png',
-                            scale: 20,
-                          ),
+                          child: Assets.images.logo.image(scale: 20),
                         ),
                       ],
                     )

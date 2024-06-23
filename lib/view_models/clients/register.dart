@@ -11,7 +11,7 @@ import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/clients.dart';
 import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/messenger.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/registration.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/user.dart';
@@ -50,7 +50,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   ClientRegistration? registration;
 
   /// Clients with similiar display name.
-  ModelList similiarClients = ModelList(List.empty(growable: true), 0, 0);
+  ModelList similarClients = ModelList(List.empty(growable: true), 0, 0);
 
   /// Initialize the registration client view model.
   Future<bool> init(BuildContext context) async {
@@ -181,16 +181,16 @@ class ClientsRegisterViewModel extends ChangeNotifier {
 
   /// Stops the playing animation.
   Future stopAnimation() async {
-    similiarClients = await _service.getClients(
+    similarClients = await _service.getClients(
       client!.displayName,
       0,
       null,
       null,
     );
-    similiarClients.removeWhere(
+    similarClients.removeWhere(
       (element) => element!.getIdentifier() == client!.clientId,
     );
-    _state = similiarClients.isNotEmpty ? RegistrationState.preCheck : RegistrationState.register;
+    _state = similarClients.isNotEmpty ? RegistrationState.preCheck : RegistrationState.register;
     notifyListeners();
   }
 
@@ -220,11 +220,11 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     if (shouldDelete) {
       try {
         showProgressIndicator();
-        var client = similiarClients[index];
+        var client = similarClients[index];
         await _service.deleteClients(List<ModelBase>.of({client!})
             .map<String>((ModelBase e) => (e as Client).getIdentifier())
             .toList());
-        similiarClients.removeAt(index);
+        similarClients.removeAt(index);
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();

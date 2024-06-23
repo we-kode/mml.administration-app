@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/models/record_validation.dart';
 import 'package:mml_admin/view_models/settings/settings_upload_validation.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class SettingsUploadValidationScreen extends StatelessWidget {
   /// Initializes the instance.
-  const SettingsUploadValidationScreen({Key? key}) : super(key: key);
+  const SettingsUploadValidationScreen({super.key});
 
   /// Builds the clients overview screen.
   @override
@@ -45,37 +46,37 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                             _switchFormField(
                               vm,
                               vm.locales.uploadValidLanguage,
-                              Icons.translate,
+                              Symbols.translate,
                               RecordValidationKeys.language,
                             ),
                             _switchFormField(
                               vm,
                               vm.locales.uploadValidTitle,
-                              Icons.title,
+                              Symbols.title,
                               RecordValidationKeys.title,
                             ),
                             _switchFormField(
                               vm,
                               vm.locales.uploadValidArtist,
-                              Icons.person,
+                              Symbols.person,
                               RecordValidationKeys.artist,
                             ),
                             _switchFormField(
                               vm,
                               vm.locales.uploadValidNumber,
-                              Icons.tag,
+                              Symbols.tag,
                               RecordValidationKeys.number,
                             ),
                             _switchFormField(
                               vm,
                               vm.locales.uploadValidCover,
-                              Icons.image_outlined,
+                              Symbols.image,
                               RecordValidationKeys.cover,
                             ),
                             _switchFormField(
                               vm,
                               vm.locales.uploadValidAlbum,
-                              Icons.library_music,
+                              Symbols.library_music,
                               RecordValidationKeys.album,
                             ),
                             Consumer<SettingsUploadValidationViewModel>(
@@ -83,7 +84,7 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                                 return TextFormField(
                                   enabled: vm.model.validateAlbum != null &&
                                       vm.model.validateAlbum !=
-                                          RecordValidationState.dontvalidate,
+                                          RecordValidationState.doNotValidate,
                                   decoration: InputDecoration(
                                     labelText: vm.locales.uploadValidAlbums,
                                     hintText: vm.locales.uploadValidAlbumInfo,
@@ -103,7 +104,7 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                             _switchFormField(
                               vm,
                               vm.locales.uploadValidGenre,
-                              Icons.discount,
+                              Symbols.genres,
                               RecordValidationKeys.genre,
                             ),
                             Consumer<SettingsUploadValidationViewModel>(
@@ -111,7 +112,7 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                                 return TextFormField(
                                   enabled: vm.model.validateGenre != null &&
                                       vm.model.validateGenre !=
-                                          RecordValidationState.dontvalidate,
+                                          RecordValidationState.doNotValidate,
                                   decoration: InputDecoration(
                                     labelText: vm.locales.uploadValidGenres,
                                     hintText: vm.locales.uploadValidGenreInfo,
@@ -130,7 +131,7 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                             ),
                             TextFormField(
                               decoration: InputDecoration(
-                                labelText: vm.locales.upladValidFilename,
+                                labelText: vm.locales.uploadValidFilename,
                                 hintText: vm.locales.uploadValidFilenameInfo,
                               ),
                               initialValue: vm.model.fileNameTemplate == null ||
@@ -193,12 +194,12 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                     [Theme.of(context).colorScheme.primaryContainer],
                   ],
                   inactiveBgColor: Theme.of(context).colorScheme.surface,
-                  inactiveFgColor: Theme.of(context).colorScheme.surfaceVariant,
+                  inactiveFgColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                   totalSwitches: 3,
                   icons: const [
-                    Icons.close,
-                    Icons.check,
-                    Icons.done_all,
+                    Symbols.close,
+                    Symbols.check,
+                    Symbols.done_all,
                   ],
                   onToggle: (index) {
                     vm.update(modelValue, index);

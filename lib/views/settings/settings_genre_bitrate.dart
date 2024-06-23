@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/view_models/settings/settings_genre_bitrate.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 class SettingsGenreBitrate extends StatelessWidget {
   /// Initializes the instance.
-  const SettingsGenreBitrate({Key? key}) : super(key: key);
+  const SettingsGenreBitrate({super.key});
 
   /// Builds the clients overview screen.
   @override
@@ -25,7 +26,7 @@ class SettingsGenreBitrate extends StatelessWidget {
               Text(locales.bitrates),
               TextButton(
                 onPressed: vm.add,
-                child: const Icon(Icons.add),
+                child: const Icon(Symbols.add),
               ),
             ],
           ),
@@ -110,7 +111,7 @@ class SettingsGenreBitrate extends StatelessWidget {
                                     onPressed: () async {
                                       await vm.remove(index);
                                     },
-                                    child: const Icon(Icons.delete),
+                                    child: const Icon(Symbols.delete),
                                   ),
                                 );
                               },

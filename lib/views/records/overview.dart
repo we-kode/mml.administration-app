@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/components/async_select_list_dialog.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
@@ -13,12 +14,12 @@ import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:mml_admin/views/records/upload.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// Overview screen of the uploaded records to the music lib.
 class RecordsScreen extends StatelessWidget {
   /// Initializes the instance.
-  const RecordsScreen({Key? key}) : super(key: key);
+  const RecordsScreen({super.key});
 
   /// Builds the records overview screen.
   @override
@@ -49,7 +50,7 @@ class RecordsScreen extends StatelessWidget {
               },
               subactions: [
                 ActionButton(
-                  icon: const Icon(Icons.drive_folder_upload),
+                  icon: const Icon(Symbols.drive_folder_upload),
                   onPressed: () async {
                     String? selected =
                         await FilePicker.platform.getDirectoryPath(
@@ -73,7 +74,7 @@ class RecordsScreen extends StatelessWidget {
                   },
                 ),
                 ActionButton(
-                  icon: const Icon(Icons.file_upload),
+                  icon: const Icon(Symbols.file_upload),
                   onPressed: () async {
                     FilePickerResult? selected =
                         await FilePicker.platform.pickFiles(

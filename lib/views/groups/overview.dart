@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 /// Overview screen of the client groups.
 class GroupsOverviewScreen extends StatelessWidget {
   /// Initializes the instance.
-  const GroupsOverviewScreen({Key? key}) : super(key: key);
+  const GroupsOverviewScreen({super.key});
 
   /// Builds the overview screen.
   @override

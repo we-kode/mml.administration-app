@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/async_select_list_dialog.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/components/list_subfilter_view.dart';
 import 'package:mml_admin/models/client_tag_filter.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/view_models/clients/client_tag_filter.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +15,10 @@ class ClientTagFilterView extends ListSubfilterView {
 
   /// Initializes the [ClientTagFilterView].
   const ClientTagFilterView({
-    Key? key,
+    super.key,
     required this.clients,
     required this.tagFilter,
-  }) : super(key: key, filter: tagFilter);
+  }) : super(filter: tagFilter);
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +31,20 @@ class ClientTagFilterView extends ListSubfilterView {
           children: [
             _createTagFilter(
               '$clients',
-              Icons.phone_android_rounded,
+              Symbols.phone_android_rounded,
               context,
             ),
             horizontalSpacer,
             _createActiveTagFilter(
               ClientTagFilters.groups,
               locales.groups,
-              Icons.vibration,
+              Symbols.vibration,
             ),
             horizontalSpacer,
             _createActiveTagFilter(
               ClientTagFilters.onlyNew,
               locales.onlyNew,
-              Icons.qr_code_2,
+              Symbols.qr_code_2,
             ),
             horizontalSpacer,
           ],

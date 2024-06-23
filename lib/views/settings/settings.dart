@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
 import 'package:mml_admin/views/settings/settings_compression.dart';
@@ -10,7 +11,7 @@ import 'package:provider/provider.dart';
 /// Screen to modify own app settings.
 class SettingsScreen extends StatelessWidget {
   /// Initializes the instance.
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   /// Builds the settings screen.
   @override
@@ -40,12 +41,12 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.person),
+                    leading: const Icon(Symbols.person),
                     trailing: ElevatedButton.icon(
                       onPressed: () {
                         vm.changePassword();
                       },
-                      icon: const Icon(Icons.lock),
+                      icon: const Icon(Symbols.lock),
                       label: Text(vm.locales.changePassword),
                     ),
                     title: Text(
@@ -53,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.qr_code_2),
+                    leading: const Icon(Symbols.qr_code_2),
                     title: Text(
                       vm.locales.actualConnectionSettings,
                     ),
@@ -76,7 +77,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.data_thresholding),
+                    leading: const Icon(Symbols.data_thresholding, fill: 1),
                     title: Text('${vm.locales.defaults} ${vm.locales.bitrate}'),
                     onTap: () => showDialog(
                       barrierDismissible: false,
@@ -87,7 +88,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.data_thresholding_outlined),
+                    leading: const Icon(Symbols.data_thresholding),
                     title: Text('${vm.locales.genre} ${vm.locales.bitrates}'),
                     onTap: () => showDialog(
                       barrierDismissible: false,
@@ -98,7 +99,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.rule),
+                    leading: const Icon(Symbols.rule),
                     title: Text(vm.locales.uploadValidation),
                     onTap: () => showDialog(
                       barrierDismissible: false,
@@ -119,7 +120,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.new_releases),
+                    leading: const Icon(Symbols.new_releases),
                     title: Text(vm.version),
                   ),
                 ],

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
-/// Animation for the file uplaoding.
+/// Animation for the file uploading.
 class UploadAnimation extends StatelessWidget {
   /// Initializes the animation.
   const UploadAnimation({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

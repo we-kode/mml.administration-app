@@ -3,7 +3,7 @@ import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/record_validation.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 class SettingsUploadValidationViewModel extends ChangeNotifier {
   /// Global key of the upload settings form.
@@ -41,7 +41,7 @@ class SettingsUploadValidationViewModel extends ChangeNotifier {
   void update(String key, int? index) {
     switch (index) {
       case 0:
-        model[key] = RecordValidationState.dontvalidate;
+        model[key] = RecordValidationState.doNotValidate;
         break;
       case 1:
         model[key] = RecordValidationState.validate;
@@ -57,7 +57,7 @@ class SettingsUploadValidationViewModel extends ChangeNotifier {
   int validationState(String key) {
     final state = model[key];
     switch (state) {
-      case RecordValidationState.dontvalidate:
+      case RecordValidationState.doNotValidate:
         return 0;
       case RecordValidationState.validate:
         return 1;

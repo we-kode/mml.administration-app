@@ -10,9 +10,9 @@ import 'package:provider/provider.dart';
 
 class LiveStreamsScreen extends StatelessWidget {
   /// Initializes the instance.
-  const LiveStreamsScreen({Key? key}) : super(key: key);
+  const LiveStreamsScreen({super.key});
 
-  /// Builds the livestream overview screen.
+  /// Builds the live stream overview screen.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LiveStreamsViewModel>(

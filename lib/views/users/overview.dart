@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 /// Overview screen of the administration users of the music lib.
 class UsersOverviewScreen extends StatelessWidget {
   /// Initializes the instance.
-  const UsersOverviewScreen({Key? key}) : super(key: key);
+  const UsersOverviewScreen({super.key});
 
   /// Builds the overview screen.
   @override

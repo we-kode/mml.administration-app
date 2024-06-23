@@ -17,10 +17,10 @@ class ChipChoices extends StatefulWidget {
   /// Function called when selected items changed.
   final OnSelectionChanged onSelectionChanged;
 
-  /// Initial selected ietms.
+  /// Initial selected items.
   final List<ModelBase> initialSelectedItems;
 
-  /// List of selecabel items. Must be provided, if load function is null.
+  /// List of selectable items. Must be provided, if load function is null.
   final ModelList? selectableItems;
 
   /// Indicates whether the chipchoises are editable or not.
@@ -28,13 +28,13 @@ class ChipChoices extends StatefulWidget {
 
   /// Constructor.
   const ChipChoices({
-    Key? key,
+    super.key,
     required this.initialSelectedItems,
     required this.onSelectionChanged,
     this.loadData,
     this.selectableItems,
     this.isEditable = true,
-  }) : super(key: key);
+  });
 
   @override
   State<ChipChoices> createState() => _ChipChoicesState();
@@ -81,14 +81,14 @@ class _ChipChoicesState extends State<ChipChoices> {
               side: BorderSide(
                 color: _isActive(_items[index]!)
                     ? Theme.of(context).colorScheme.secondary
-                    : Theme.of(context).colorScheme.surfaceVariant,
+                    : Theme.of(context).colorScheme.surfaceContainerHighest,
               ),
               label: Text(_items[index]!.getDisplayDescription()),
               labelStyle: _isActive(_items[index]!)
                   ? TextStyle(color: Theme.of(context).colorScheme.secondary)
                   : null,
               selected: _isActive(_items[index]!),
-              selectedColor: Theme.of(context).colorScheme.background,
+              selectedColor: Theme.of(context).colorScheme.surface,
               onSelected: !widget.isEditable
                   ? null
                   : (val) {

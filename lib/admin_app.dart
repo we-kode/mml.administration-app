@@ -4,9 +4,9 @@ import 'package:mml_admin/lib_color_schemes.g.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'services/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
-/// Scroll behaviour overrides default behaviour, so drag scrolls can be made by mouse on windows system.
+/// Scroll behavior overrides default behavior, so drag scrolls can be made by mouse on windows system.
 class MMLAdminScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
@@ -20,7 +20,7 @@ class MMLAdminScrollBehavior extends MaterialScrollBehavior {
 /// Administration application for My Media Lib.
 class AdminApp extends StatelessWidget {
   /// Initializes the instance.
-  const AdminApp({Key? key}) : super(key: key);
+  const AdminApp({super.key});
 
   /// Creates the app with the necessary configurations.
   @override

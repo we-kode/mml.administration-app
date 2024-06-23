@@ -3,7 +3,7 @@ import 'package:mml_admin/models/model_base.dart';
 
 part 'album.g.dart';
 
-/// Album model that holds all informations of a record album.
+/// Album model that holds all information of a record album.
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
 class Album extends ModelBase {
   /// Id of the album.
@@ -16,8 +16,8 @@ class Album extends ModelBase {
   Album({
     this.albumId,
     this.albumName,
-    bool isDeletable = false,
-  }) : super(isDeletable: isDeletable);
+    super.isDeletable = false,
+  });
 
   /// Converts a json object/map to the model.
   factory Album.fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);

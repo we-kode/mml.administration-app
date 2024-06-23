@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 /// Overview screen of the app clients of the music lib.
 class ClientsScreen extends StatelessWidget {
   /// Initializes the instance.
-  const ClientsScreen({Key? key}) : super(key: key);
+  const ClientsScreen({super.key});
 
   /// Builds the clients overview screen.
   @override
