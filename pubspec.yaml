@@ -45,7 +45,7 @@ dependencies:
   window_manager: ^0.3.7
   barcode_widget: ^2.0.4
   signalr_pure: ^1.1.0
-  rive: ^0.12.4
+  rive: ^0.13.4
   file_picker: ^6.1.1
   mime: ^1.0.4
   http_parser: ^4.0.2
