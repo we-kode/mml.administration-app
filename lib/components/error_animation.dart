@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/gen/assets.gen.dart';
 import 'package:rive/rive.dart';
 
 /// Function called when animation ends.
@@ -11,9 +12,9 @@ class ErrorAnimation extends StatefulWidget {
 
   /// Initializes the animation.
   const ErrorAnimation({
-    Key? key,
+    super.key,
     this.onStop,
-  }) : super(key: key);
+  });
 
   @override
   ErrorAnimationState createState() => ErrorAnimationState();
@@ -38,7 +39,7 @@ class ErrorAnimationState extends State<ErrorAnimation> {
   @override
   Widget build(BuildContext context) {
     return RiveAnimation.asset(
-      'assets/animations/error.riv',
+      Assets.animations.error,
       controllers: [_controller],
     );
   }

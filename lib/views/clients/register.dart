@@ -1,17 +1,19 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/check_animation.dart';
 import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/error_animation.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
+import 'package:mml_admin/gen/assets.gen.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/clients/register.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 class ClientRegisterDialog extends StatelessWidget {
   /// Initializes the instance.
-  const ClientRegisterDialog({Key? key}) : super(key: key);
+  const ClientRegisterDialog({super.key});
 
   /// Builds the clients registration screen.
   @override
@@ -27,7 +29,7 @@ class ClientRegisterDialog extends StatelessWidget {
             builder: (context, vm, child) {
               return vm.state != RegistrationState.preCheck
                   ? Text(locales.registerClient)
-                  : Text(locales.similiarClients);
+                  : Text(locales.similarClients);
             },
           ),
           content: FutureBuilder(
@@ -101,10 +103,7 @@ class ClientRegisterDialog extends StatelessWidget {
               margin: const EdgeInsets.all(100.0),
               width: 50,
               height: 50,
-              child: Image.asset(
-                'assets/images/logo.png',
-                scale: 20,
-              ),
+              child: Assets.images.logo.image(scale: 20),
             ),
           ],
         );
@@ -138,14 +137,14 @@ class ClientRegisterDialog extends StatelessWidget {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Text(
-                            vm.similiarClients[index]!.getDisplayDescription(),
+                            vm.similarClients[index]!.getDisplayDescription(),
                             overflow: TextOverflow.fade,
                             maxLines: 1,
                             softWrap: false,
                           ),
                         ),
                         Text(
-                          " (${vm.similiarClients[index]!.getDisplayDescriptionSuffix(context)})",
+                          " (${vm.similarClients[index]!.getDisplayDescriptionSuffix(context)})",
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -157,7 +156,7 @@ class ClientRegisterDialog extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.only(top: 5),
                           child: Text(
-                            vm.similiarClients[index]!.getSubtitle(context)!,
+                            vm.similarClients[index]!.getSubtitle(context)!,
                             overflow: TextOverflow.fade,
                             maxLines: 1,
                             softWrap: false,
@@ -172,12 +171,12 @@ class ClientRegisterDialog extends StatelessWidget {
                           context,
                         );
                       },
-                      icon: const Icon(Icons.delete),
+                      icon: const Icon(Symbols.delete),
                       tooltip: AppLocalizations.of(context)!.remove,
                     ),
                   );
                 },
-                itemCount: vm.similiarClients.length,
+                itemCount: vm.similarClients.length,
               );
             },
           ),
@@ -229,8 +228,8 @@ class ClientRegisterDialog extends StatelessWidget {
               ChipChoices(
                 loadData: vm.getGroups,
                 initialSelectedItems: vm.client!.groups,
-                onSelectionChanged: (selecteItems) =>
-                    vm.client!.groups = selecteItems
+                onSelectionChanged: (selectableItems) =>
+                    vm.client!.groups = selectableItems
                         .map(
                           (e) => e as Group,
                         )

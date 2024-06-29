@@ -7,7 +7,7 @@ import 'package:mml_admin/services/user.dart';
 import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/services/router.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// View model of the change password screen.
 class ChangePasswordViewModel extends ChangeNotifier {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/users/edit.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// View of the create/edit dialog for users.
 class UsersEditDialog extends StatelessWidget {
@@ -11,9 +11,9 @@ class UsersEditDialog extends StatelessWidget {
 
   /// Initializes the view for the user create/edit dialog.
   const UsersEditDialog({
-    Key? key,
+    super.key,
     required this.userId,
-  }) : super(key: key);
+  });
 
   /// Builds the user create/edit dialog.
   @override

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mml_admin/view_models/settings/settings_compression.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 class SettingsCompressionScreen extends StatelessWidget {
   /// Initializes the instance.
-  const SettingsCompressionScreen({Key? key}) : super(key: key);
+  const SettingsCompressionScreen({super.key});
 
   /// Builds the clients overview screen.
   @override

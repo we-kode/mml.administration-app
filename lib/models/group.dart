@@ -3,7 +3,7 @@ import 'package:mml_admin/models/model_base.dart';
 
 part 'group.g.dart';
 
-/// Group model that holds all informations of a client group.
+/// Group model that holds all information of a client group.
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
 class Group extends ModelBase {
   /// Id of the group.
@@ -20,8 +20,8 @@ class Group extends ModelBase {
     this.id,
     this.name,
     this.isDefault = false,
-    bool isDeletable = true
-  }) : super(isDeletable: isDeletable);
+    super.isDeletable
+  });
 
   /// Converts a json object/map to the group model.
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);

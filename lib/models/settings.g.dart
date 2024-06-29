@@ -7,7 +7,7 @@ part of 'settings.dart';
 // **************************************************************************
 
 Settings _$SettingsFromJson(Map<String, dynamic> json) => Settings(
-      compressionRate: json['compressionRate'] as int?,
+      compressionRate: (json['compressionRate'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$SettingsToJson(Settings instance) {

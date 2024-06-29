@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/models/model_list.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:shimmer/shimmer.dart';
 
 /// Function to load data with the passed [filter] starting from [offset] and
@@ -15,7 +16,7 @@ typedef LoadDataFunction = Future<ModelList> Function({
 /// Function to load initial data.
 typedef LoadInitialDataFunction = Future<List<String>> Function();
 
-/// A dialog inlcuding a selection list.
+/// A dialog including a selection list.
 ///
 /// The list supports async loading of data, when necessary in chunks.
 class AsyncSelectListDialog extends StatefulWidget {
@@ -23,23 +24,23 @@ class AsyncSelectListDialog extends StatefulWidget {
   /// loading an amount of [take] data.
   final LoadDataFunction loadData;
 
-  /// List of inital selected values.
+  /// List of initial selected values.
   final List<dynamic> initialSelected;
 
-  /// Inidcates whether the checkboxes are in three state mode. If used, the loadInitial function must be provided.
+  /// Indicates whether the checkboxes are in three state mode. If used, the loadInitial function must be provided.
   final bool threeState;
 
-  /// Loads inital data. If set the initialSelected field will be ignored.
+  /// Loads initial data. If set the initialSelected field will be ignored.
   final LoadInitialDataFunction? loadInitial;
 
   /// Initializes the list view.
   const AsyncSelectListDialog({
-    Key? key,
+    super.key,
     required this.loadData,
     required this.initialSelected,
     this.threeState = false,
     this.loadInitial,
-  }) : super(key: key);
+  });
 
   @override
   State<AsyncSelectListDialog> createState() => _AsyncSelectListDialogState();
@@ -49,11 +50,11 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
   /// Initial offset to start loading data from.
   final int _initialOffset = 0;
 
-  /// Intial amount of data that should be loaded.
+  /// Initial amount of data that should be loaded.
   final int _initialTake = 100;
 
   /// Delta the [_offset] should be increased or decreased while scrolling and
-  /// lazy loading next/previuous data.
+  /// lazy loading next/previous data.
   final int _offsetDelta = 50;
 
   /// List of lazy loaded items.
@@ -130,7 +131,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
     );
   }
 
-  /// Stores the identifer of the item at the [index] or removes it, when
+  /// Stores the identifier of the item at the [index] or removes it, when
   /// the identifier was in the list of selected items.
   void _onItemChecked(int index) {
     if (_selectedValues.contains(_items![index]?.getIdentifier())) {
@@ -148,7 +149,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
     });
   }
 
-  /// Reloads the data starting from inital offset with inital count.
+  /// Reloads the data starting from initial offset with initial count.
   void _reloadData() {
     if (!mounted) {
       return;
@@ -164,7 +165,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
   ///
   /// Shows a loading indicator instead of the list during load, if
   /// [showLoadingOverlay] is true.
-  /// Otherwhise the data will be loaded lazy in the background.
+  /// Otherwise the data will be loaded lazy in the background.
   void _loadData({bool showLoadingOverlay = true}) {
     if (showLoadingOverlay) {
       setState(() {
@@ -207,7 +208,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
   }
 
   /// Creates a widget that will be shown, if no data were loaded or an error
-  /// occured during loading of data.
+  /// occurred during loading of data.
   Widget _createNoDataWidget() {
     return Center(
       child: Column(
@@ -220,7 +221,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
           horizontalSpacer,
           TextButton.icon(
             onPressed: _loadData,
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Symbols.refresh),
             label: Text(AppLocalizations.of(context)!.reload),
           ),
         ],
@@ -240,7 +241,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
               TextField(
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.filter,
-                  icon: const Icon(Icons.filter_list_alt),
+                  icon: const Icon(Symbols.filter_list_alt),
                 ),
                 onChanged: (String filterText) {
                   setState(() {
@@ -273,7 +274,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
           var endNotReached = (_offset + _take) <= _items!.totalCount;
           var loadNextIndexReached =
               index == (_offset + _take - (_offsetDelta / 2).ceil());
-          var loadPreviuousIndexReached = index == _offset;
+          var loadPreviousIndexReached = index == _offset;
           var beginNotReached = index > 0;
 
           if (endNotReached && loadNextIndexReached) {
@@ -283,7 +284,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
             Future.microtask(() {
               _loadData(showLoadingOverlay: false);
             });
-          } else if (beginNotReached && loadPreviuousIndexReached) {
+          } else if (beginNotReached && loadPreviousIndexReached) {
             _offset = _offset - _offsetDelta;
             _take = _initialTake + _offsetDelta;
 
@@ -335,10 +336,10 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
     );
   }
 
-  /// Creates a list tile widget for a not loded list item.
+  /// Creates a list tile widget for a not loaded list item.
   Widget _createLoadingTile() {
     return Shimmer.fromColors(
-      baseColor: Theme.of(context).colorScheme.surfaceVariant,
+      baseColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       highlightColor: Theme.of(context).colorScheme.surface,
       child: ListTile(
         title: Stack(

@@ -1,8 +1,9 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/async_select_list_dialog.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/list_subfilter_view.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/view_models/records/record_tag_filter.dart';
@@ -12,12 +13,11 @@ import 'package:provider/provider.dart';
 class RecordTagFilter extends ListSubfilterView {
   /// Initializes the [RecordTagFilter].
   RecordTagFilter({
-    Key? key,
+    super.key,
     DateTime? startDate,
     DateTime? endDate,
     bool isFolderView = false,
   }) : super(
-          key: key,
           filter: ID3TagFilter(
             startDate: startDate,
             endDate: endDate,
@@ -37,7 +37,7 @@ class RecordTagFilter extends ListSubfilterView {
             _createTagFilter(
               ID3TagFilters.folderView,
               locales.folder,
-              Icons.folder,
+              Symbols.folder,
             ),
             Consumer<RecordTagFilterViewModel>(
               builder: (context, vm, child) {
@@ -48,37 +48,37 @@ class RecordTagFilter extends ListSubfilterView {
             _createTagFilter(
               ID3TagFilters.date,
               locales.date,
-              Icons.calendar_month,
+              Symbols.calendar_month,
             ),
             horizontalSpacer,
             _createTagFilter(
               ID3TagFilters.artists,
               locales.artist,
-              Icons.person,
+              Symbols.person,
             ),
             horizontalSpacer,
             _createTagFilter(
               ID3TagFilters.genres,
               locales.genre,
-              Icons.discount,
+              Symbols.genres,
             ),
             horizontalSpacer,
             _createTagFilter(
               ID3TagFilters.albums,
               locales.album,
-              Icons.library_music,
+              Symbols.library_music,
             ),
             horizontalSpacer,
             _createTagFilter(
               ID3TagFilters.languages,
               locales.language,
-              Icons.translate,
+              Symbols.translate,
             ),
             horizontalSpacer,
             _createTagFilter(
               ID3TagFilters.groups,
               locales.groups,
-              Icons.vibration,
+              Symbols.vibration,
             ),
             horizontalSpacer,
           ],

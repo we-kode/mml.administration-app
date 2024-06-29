@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/view_models/records/overview.dart';
@@ -7,7 +8,7 @@ import 'package:provider/provider.dart';
 /// Main view with nested navigation element.
 class MainScreen extends StatelessWidget {
   /// Initializes the instance.
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   /// Builds the main screen with the navigator instance.
   @override
@@ -47,27 +48,27 @@ class MainScreen extends StatelessWidget {
                             ),
                             destinations: [
                               _navItem(
-                                Icons.music_note_outlined,
+                                Symbols.music_note,
                                 vm.locales.records,
                               ),
                               _navItem(
-                                Icons.sensors,
+                                Symbols.sensors,
                                 vm.locales.livestreams,
                               ),
                               _navItem(
-                                Icons.phone_android_rounded,
+                                Symbols.phone_android_rounded,
                                 vm.locales.devices,
                               ),
                               _navItem(
-                                Icons.vibration,
+                                Symbols.vibration,
                                 vm.locales.groups,
                               ),
                               _navItem(
-                                Icons.person,
+                                Symbols.person,
                                 vm.locales.adminUsers,
                               ),
                               _navItem(
-                                Icons.settings,
+                                Symbols.settings,
                                 vm.locales.settings,
                               ),
                             ],
@@ -79,7 +80,7 @@ class MainScreen extends StatelessWidget {
                         right: 0,
                         left: 0,
                         child: IconButton(
-                          icon: const Icon(Icons.logout),
+                          icon: const Icon(Symbols.logout),
                           onPressed: vm.logout,
                           tooltip: vm.locales.logout,
                         ),

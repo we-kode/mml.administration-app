@@ -9,7 +9,7 @@ part of 'genre_bitrate.dart';
 GenreBitrate _$GenreBitrateFromJson(Map<String, dynamic> json) => GenreBitrate(
       genreId: json['genreId'] as String?,
       name: json['name'] as String?,
-      bitrate: json['bitrate'] as int?,
+      bitrate: (json['bitrate'] as num?)?.toInt(),
       isDeletable: json['isDeletable'] as bool? ?? true,
     );
 

@@ -6,7 +6,7 @@ import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/settings.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 class SettingsCompressionViewModel extends ChangeNotifier {
   /// [RecordService] used to load data of the record settings.

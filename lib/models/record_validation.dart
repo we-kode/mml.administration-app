@@ -36,7 +36,7 @@ class RecordValidation {
   /// List of acceptable genres.
   String? genres;
 
-  /// Template Regex of file name. Deafult is everything accepted.
+  /// Template Regex of file name. Default is everything accepted.
   String? fileNameTemplate;
 
   List<String> validationErrors = List.empty(growable: true);
@@ -93,25 +93,25 @@ class RecordValidation {
   RecordValidationState operator [](String identifier) {
     switch (identifier) {
       case RecordValidationKeys.artist:
-        return validateArtist ?? RecordValidationState.dontvalidate;
+        return validateArtist ?? RecordValidationState.doNotValidate;
       case RecordValidationKeys.genre:
-        return validateGenre ?? RecordValidationState.dontvalidate;
+        return validateGenre ?? RecordValidationState.doNotValidate;
       case RecordValidationKeys.album:
-        return validateAlbum ?? RecordValidationState.dontvalidate;
+        return validateAlbum ?? RecordValidationState.doNotValidate;
       case RecordValidationKeys.language:
-        return validateLanguage ?? RecordValidationState.dontvalidate;
+        return validateLanguage ?? RecordValidationState.doNotValidate;
       case RecordValidationKeys.title:
-        return validateTitle ?? RecordValidationState.dontvalidate;
+        return validateTitle ?? RecordValidationState.doNotValidate;
       case RecordValidationKeys.number:
-        return validateTrackNumber ?? RecordValidationState.dontvalidate;
+        return validateTrackNumber ?? RecordValidationState.doNotValidate;
       case RecordValidationKeys.cover:
-        return validateCover ?? RecordValidationState.dontvalidate;
+        return validateCover ?? RecordValidationState.doNotValidate;
       default:
-        return RecordValidationState.dontvalidate;
+        return RecordValidationState.doNotValidate;
     }
   }
 
-  /// Validates file by set required propertioes.
+  /// Validates file by set required properties.
   ///
   /// Returns true, if all required properties matches.
   Future<bool> isValid(String fileName, File file) async {
@@ -122,7 +122,7 @@ class RecordValidation {
 
     // Check if language is required and language is part of known languages.
     if (validateLanguage != null &&
-        validateLanguage != RecordValidationState.dontvalidate) {
+        validateLanguage != RecordValidationState.doNotValidate) {
       final isAnyLanguage =
           metadata.frames.any((element) => element.frameName == "TLAN");
       var isValidLanguage = validateLanguage == RecordValidationState.required
@@ -189,7 +189,7 @@ class RecordValidation {
 
     // Check if album is required and one is set. If albums string is not empty check if is part of accepted albums.
     if (validateAlbum != null &&
-        validateAlbum != RecordValidationState.dontvalidate) {
+        validateAlbum != RecordValidationState.doNotValidate) {
       var isAnyAlbum = metadata.album?.isNotEmpty ?? false;
       isValid &=
           validateAlbum == RecordValidationState.required ? isAnyAlbum : true;
@@ -212,7 +212,7 @@ class RecordValidation {
 
     // Check if genre is required and one is set. If genres string is not empty check if is part of accepted genres.
     if (validateGenre != null &&
-        validateGenre != RecordValidationState.dontvalidate) {
+        validateGenre != RecordValidationState.doNotValidate) {
       final isAnyGenre = metadata.frames.any(
         (element) => element.frameName == "TCON",
       );
@@ -257,7 +257,7 @@ class RecordValidation {
 }
 
 /// States of validation.
-enum RecordValidationState { dontvalidate, validate, required }
+enum RecordValidationState { doNotValidate, validate, required }
 
 /// Holds the identifiers on which records can be validated.
 abstract class RecordValidationKeys {
@@ -283,7 +283,7 @@ abstract class RecordValidationKeys {
   static const String cover = "cover";
 }
 
-/// Holds the identifiers of Erros, whic can accure on validation.
+/// Holds the identifiers of Errors, which can occur on validation.
 abstract class RecordValidationErrors {
   /// Langae tag identifier.
   static const String language = "uploadInvalidLanguage";

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/gen/assets.gen.dart';
 import 'package:rive/rive.dart';
 
 /// Function called when animation ends.
@@ -11,9 +12,9 @@ class CheckAnimation extends StatefulWidget {
 
   /// Initializes the animation.
   const CheckAnimation({
-    Key? key,
+    super.key,
     this.onStop,
-  }) : super(key: key);
+  });
 
   @override
   CheckAnimationState createState() => CheckAnimationState();
@@ -38,7 +39,7 @@ class CheckAnimationState extends State<CheckAnimation> {
   @override
   Widget build(BuildContext context) {
     return RiveAnimation.asset(
-      'assets/animations/check.riv',
+      Assets.animations.check,
       controllers: [_controller],
     );
   }

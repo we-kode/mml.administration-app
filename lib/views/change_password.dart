@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/change_password.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,7 @@ import 'package:provider/provider.dart';
 /// Screen to force the user to change his password on first login.
 class ChangePasswordScreen extends StatelessWidget {
   /// Initializes the instance.
-  const ChangePasswordScreen({Key? key}) : super(key: key);
+  const ChangePasswordScreen({super.key});
 
   /// Create the screen.
   @override
@@ -43,7 +44,7 @@ class ChangePasswordScreen extends StatelessWidget {
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.actualPassword,
-                            icon: const Icon(Icons.lock),
+                            icon: const Icon(Symbols.lock),
                           ),
                           onSaved: (String? password) {
                             vm.actualPassword = password!;
@@ -60,7 +61,7 @@ class ChangePasswordScreen extends StatelessWidget {
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.newPassword,
-                            icon: const Icon(Icons.lock),
+                            icon: const Icon(Symbols.lock),
                           ),
                           onSaved: (String? password) {
                             vm.newPassword = password!;
@@ -77,7 +78,7 @@ class ChangePasswordScreen extends StatelessWidget {
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.confirmNewPassword,
-                            icon: const Icon(Icons.lock),
+                            icon: const Icon(Symbols.lock),
                           ),
                           onSaved: (String? password) {
                             vm.newConfirmPassword = password!;

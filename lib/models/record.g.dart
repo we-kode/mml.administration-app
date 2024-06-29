@@ -9,7 +9,7 @@ part of 'record.dart';
 Record _$RecordFromJson(Map<String, dynamic> json) => Record(
       recordId: json['recordId'] as String?,
       title: json['title'] as String?,
-      trackNumber: json['trackNumber'] as int?,
+      trackNumber: (json['trackNumber'] as num?)?.toInt(),
       date:
           json['date'] == null ? null : DateTime.parse(json['date'] as String),
       duration: (json['duration'] as num?)?.toDouble() ?? 0,
@@ -17,7 +17,7 @@ Record _$RecordFromJson(Map<String, dynamic> json) => Record(
       artist: json['artist'] as String?,
       genre: json['genre'] as String?,
       language: json['language'] as String?,
-      bitrate: json['bitrate'] as int?,
+      bitrate: (json['bitrate'] as num?)?.toInt(),
       cover: json['cover'] as String?,
       locked: json['locked'] as bool?,
       isDeletable: json['isDeletable'] as bool? ?? true,

@@ -3,7 +3,7 @@ import 'package:mml_admin/models/model_base.dart';
 
 part 'genre.g.dart';
 
-/// Genre model that holds all informations of a record genre.
+/// Genre model that holds all information of a record genre.
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
 class Genre extends ModelBase {
   /// Id of the genre.
@@ -16,8 +16,8 @@ class Genre extends ModelBase {
   Genre({
     this.genreId,
     this.name,
-    bool isDeletable = false,
-  }) : super(isDeletable: isDeletable);
+    super.isDeletable = false,
+  });
 
   /// Converts a json object/map to the model.
   factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
