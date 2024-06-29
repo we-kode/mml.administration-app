@@ -7,7 +7,9 @@ class SecureStorageService {
 
   /// Instance of the secure storage plugin to access the data from the
   /// secure storage.
-  final _storage = const FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage(
+    wOptions: WindowsOptions(useBackwardCompatibility: true),
+  );
 
   /// Key under which the app key is persisted.
   static const String appKeyStorageKey = 'appKey';
