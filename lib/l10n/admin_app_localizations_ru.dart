@@ -416,4 +416,29 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get lock => 'Заблокировать';
+
+  @override
+  String get newUpdate => 'Новое обновление';
+
+  @override
+  String get later => 'Позже';
+
+  @override
+  String get checkUpdate => 'Посмотрите новые функции и улучшения.';
+
+  @override
+  String get updateInstall => 'Обновить и установить';
+
+  @override
+  String get downloading => 'Скачивание...';
+
+  @override
+  String newVersion(String latestVersion) {
+    return 'Доступна новая версия $latestVersion.';
+  }
+
+  @override
+  String oldVersion(String appVersion) {
+    return 'В данный момент используется версия $appVersion.';
+  }
 }

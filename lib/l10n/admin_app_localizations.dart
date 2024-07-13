@@ -904,6 +904,48 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Sperren'**
   String get lock;
+
+  /// No description provided for @newUpdate.
+  ///
+  /// In de, this message translates to:
+  /// **'Neues Update'**
+  String get newUpdate;
+
+  /// No description provided for @later.
+  ///
+  /// In de, this message translates to:
+  /// **'Später'**
+  String get later;
+
+  /// No description provided for @checkUpdate.
+  ///
+  /// In de, this message translates to:
+  /// **'Neue Funktionen und Verbesserungen prüfen.'**
+  String get checkUpdate;
+
+  /// No description provided for @updateInstall.
+  ///
+  /// In de, this message translates to:
+  /// **'Aktualisieren'**
+  String get updateInstall;
+
+  /// No description provided for @downloading.
+  ///
+  /// In de, this message translates to:
+  /// **'Herunterladen...'**
+  String get downloading;
+
+  /// No description provided for @newVersion.
+  ///
+  /// In de, this message translates to:
+  /// **'Eine neue Version {latestVersion} ist verfügbar.'**
+  String newVersion(String latestVersion);
+
+  /// No description provided for @oldVersion.
+  ///
+  /// In de, this message translates to:
+  /// **'Sie verwenden derzeit die Version {appVersion}.'**
+  String oldVersion(String appVersion);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

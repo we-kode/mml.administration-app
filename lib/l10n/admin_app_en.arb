@@ -134,5 +134,12 @@
   "assignTo": "Assign",
   "selectLoaded": "Select all loaded elements",
   "makeUndeletable": "Not deletable",
-  "lock": "Lock"
+  "lock": "Lock",
+  "newUpdate": "New Update",
+  "later": "Later",
+  "checkUpdate": "Check new features and improvements.",
+  "updateInstall": "Update and install",
+  "downloading": "Downloading...",
+  "newVersion": "A new Version {latestVersion} is available.",
+  "oldVersion": "You are currently running version {appVersion}."
 }

@@ -134,5 +134,12 @@
   "assignTo": "Назначить",
   "selectLoaded": "Выбрать все загруженные элементы",
   "makeUndeletable": "Неудаляемый",
-  "lock": "Заблокировать"
+  "lock": "Заблокировать",
+  "newUpdate": "Новое обновление",
+  "later": "Позже",
+  "checkUpdate": "Посмотрите новые функции и улучшения.",
+  "updateInstall": "Обновить и установить",
+  "downloading": "Скачивание...",
+  "newVersion": "Доступна новая версия {latestVersion}.",
+  "oldVersion": "В данный момент используется версия {appVersion}."
 }
