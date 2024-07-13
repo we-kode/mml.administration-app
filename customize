@@ -22,7 +22,7 @@ if test -f "$COLOR_SCHEME"; then
 fi
 
 # replace titles
-echo "Replacing titles"
+echo "Replacing texts"
 input="./config/app.cfg"
 while IFS='=' read -r key value
 do
@@ -51,6 +51,12 @@ do
 		sed -i -E "s/		<string>\$(AppIdentifierPrefix)de.wekode.mmlAdmin<\/string>/		<string>\$(AppIdentifierPrefix)$value<\/string>/" "$DIR/macos/Runner/RunnerDebug.entitlements"
 		sed -i -E "s/  identity_name: .*/  identity_name: $value/" "$DIR/pubspec.yaml"
 		;;
+	repository)
+	    sed -i -E "s/  static String repository = '';/  static String repository = \"$value\";/" "$DIR/lib/view_models/main.dart"
+	    ;;
+	fileName)
+	    sed -i -E "s/  static String fileName = '';/  static String fileName = \"$value\";/" "$DIR/lib/view_models/main.dart"
+	    ;;
 	*)
 		echo "Not known key: $key"
   esac

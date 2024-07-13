@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
@@ -8,6 +10,23 @@ import 'package:mml_admin/services/user.dart';
 class MainViewModel extends ChangeNotifier {
   /// Route of the main screen.
   static String route = '/';
+
+  /// The repository url to which the app belongs to.
+  static String repository = '';
+
+  /// The name of the released file without version, platform and extension.
+  static String fileName = '';
+
+  /// The uri where the changelog can be found;
+  static String changeLogUri =
+      'https://api.github.com/repos/we-kode/mml.administration-app/releases/tags/';
+
+  /// The uri of the binary.
+  static String binaryUri = 'https://github.com/$repository/releases/download/';
+
+  /// The uri of the latest version endoint.
+  static String latestVersionUri =
+      'https://api.github.com/repos/$repository/releases/latest';
 
   late BuildContext _context;
 
@@ -63,5 +82,16 @@ class MainViewModel extends ChangeNotifier {
     var routeService = RouterService.getInstance();
     var route = routeService.nestedRoutes.keys.elementAt(_selectedIndex);
     state?.pushReplacementNamed(route);
+  }
+
+  /// Returns the extension of the file depending on the operating system.
+  static String get extension {
+    if (Platform.isWindows) {
+      return '.msix';
+    } else if (Platform.isMacOS) {
+      return '.dmg';
+    }
+
+    return '.zip';
   }
 }

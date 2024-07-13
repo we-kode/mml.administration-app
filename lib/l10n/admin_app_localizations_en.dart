@@ -416,4 +416,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lock => 'Lock';
+
+  @override
+  String get newUpdate => 'New Update';
+
+  @override
+  String get later => 'Later';
+
+  @override
+  String get checkUpdate => 'Check new features and improvements.';
+
+  @override
+  String get updateInstall => 'Update and install';
+
+  @override
+  String get downloading => 'Downloading...';
+
+  @override
+  String newVersion(String latestVersion) {
+    return 'A new Version $latestVersion is available.';
+  }
+
+  @override
+  String oldVersion(String appVersion) {
+    return 'You are currently running version $appVersion.';
+  }
 }

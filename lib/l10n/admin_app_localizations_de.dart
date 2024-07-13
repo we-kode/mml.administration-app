@@ -416,4 +416,29 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get lock => 'Sperren';
+
+  @override
+  String get newUpdate => 'Neues Update';
+
+  @override
+  String get later => 'Später';
+
+  @override
+  String get checkUpdate => 'Neue Funktionen und Verbesserungen prüfen.';
+
+  @override
+  String get updateInstall => 'Aktualisieren';
+
+  @override
+  String get downloading => 'Herunterladen...';
+
+  @override
+  String newVersion(String latestVersion) {
+    return 'Eine neue Version $latestVersion ist verfügbar.';
+  }
+
+  @override
+  String oldVersion(String appVersion) {
+    return 'Sie verwenden derzeit die Version $appVersion.';
+  }
 }

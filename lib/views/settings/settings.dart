@@ -121,7 +121,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Symbols.new_releases),
-                    title: Text(vm.version),
+                    title: Text(SettingsViewModel.version),
                   ),
                 ],
               );

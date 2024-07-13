@@ -165,5 +165,26 @@
   "assignTo": "Zuordnen",
   "selectLoaded": "Alle geladenen Elemente auswählen",
   "makeUndeletable": "Nicht löschbar",
-  "lock": "Sperren"
+  "lock": "Sperren",
+  "newUpdate": "Neues Update",
+  "later": "Später",
+  "checkUpdate": "Neue Funktionen und Verbesserungen prüfen.",
+  "updateInstall": "Aktualisieren",
+  "downloading": "Herunterladen...",
+  "newVersion": "Eine neue Version {latestVersion} ist verfügbar.",
+  "@newVersion": {
+    "placeholders": {
+      "latestVersion": {
+        "type": "String"
+      }
+    }
+  },
+  "oldVersion": "Sie verwenden derzeit die Version {appVersion}.",
+  "@oldVersion": {
+    "placeholders": {
+      "appVersion": {
+        "type": "String"
+      }
+    }
+  }
 }
