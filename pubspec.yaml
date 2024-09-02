@@ -70,7 +70,7 @@ dev_dependencies:
   json_serializable: ^6.8.0
   msix: ^3.16.7
   flutter_gen: ^5.5.0+1
-  flutter_gen_runner: ^5.5.0+1
+  flutter_gen_runner: ^5.7.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
