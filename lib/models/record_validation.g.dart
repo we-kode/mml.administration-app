@@ -60,7 +60,7 @@ Map<String, dynamic> _$RecordValidationToJson(RecordValidation instance) {
 }
 
 const _$RecordValidationStateEnumMap = {
-  RecordValidationState.dontvalidate: 'dontvalidate',
+  RecordValidationState.doNotValidate: 'doNotValidate',
   RecordValidationState.validate: 'validate',
   RecordValidationState.required: 'required',
 };

@@ -3,7 +3,7 @@ import 'package:mml_admin/models/model_base.dart';
 
 part 'language.g.dart';
 
-/// Language model that holds all informations of a record language.
+/// Language model that holds all information of a record language.
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
 class Language extends ModelBase {
   /// Id of the language.
@@ -16,8 +16,8 @@ class Language extends ModelBase {
   Language({
     this.languageId,
     this.name,
-    bool isDeletable = false,
-  }) : super(isDeletable: isDeletable);
+    super.isDeletable = false,
+  });
 
   /// Converts a json object/map to the model.
   factory Language.fromJson(Map<String, dynamic> json) => _$LanguageFromJson(json);

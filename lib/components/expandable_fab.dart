@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:material_symbols_icons/symbols.dart';
+
 /// Expandable FAB action button.
 ///
-/// A floationg action button whcih has muliple sub action buttons,
-/// which will be expandeed when clicked on the button.
+/// A floating action button which has multiple sub action buttons,
+/// which will be expanded when clicked on the button.
 @immutable
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
-    Key? key,
+    super.key,
     this.initialOpen,
     required this.distance,
     required this.children,
-  }) : super(key: key);
+  });
 
   /// True, if initial the button is opened.
   final bool? initialOpen;
@@ -112,7 +114,7 @@ class _ExpandableFabState extends State<ExpandableFab>
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(
-                Icons.close,
+                Symbols.close,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
@@ -161,7 +163,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
             onPressed: _toggle,
-            child: const Icon(Icons.add),
+            child: const Icon(Symbols.add),
           ),
         ),
       ),
@@ -169,7 +171,7 @@ class _ExpandableFabState extends State<ExpandableFab>
   }
 }
 
-/// Trasnisiton widget of the [ExpandableFab], which is performed when the button changes from collapsed to expand
+/// Transition widget of the [ExpandableFab], which is performed when the button changes from collapsed to expand
 /// state and in the other direction.
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
@@ -223,10 +225,10 @@ class _ExpandingActionButton extends StatelessWidget {
 @immutable
 class ActionButton extends StatelessWidget {
   const ActionButton({
-    Key? key,
+    super.key,
     this.onPressed,
     required this.icon,
-  }) : super(key: key);
+  });
 
   /// Called when button is pressed.
   final VoidCallback? onPressed;

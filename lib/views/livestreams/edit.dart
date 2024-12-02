@@ -4,19 +4,19 @@ import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/livestreams/edit.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 class LivestreamEditDialog extends StatelessWidget {
-  /// Id of the livestream to edit or null if a new livestream should be created.
+  /// Id of the live stream to edit or null if a new live stream should be created.
   final String? id;
 
-  /// Initializes the view for the livestream create/edit dialog.
+  /// Initializes the view for the live stream create/edit dialog.
   const LivestreamEditDialog({
-    Key? key,
+    super.key,
     required this.id,
-  }) : super(key: key);
+  });
 
-  /// Builds the livestream create/edit dialog.
+  /// Builds the live stream create/edit dialog.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LivestreamEditDialogViewModel>(
@@ -97,8 +97,8 @@ class LivestreamEditDialog extends StatelessWidget {
           ChipChoices(
             loadData: vm.getGroups,
             initialSelectedItems: vm.stream.groups,
-            onSelectionChanged: (selecteItems) =>
-                vm.stream.groups = selecteItems
+            onSelectionChanged: (selectableItems) =>
+                vm.stream.groups = selectableItems
                     .map(
                       (e) => e as Group,
                     )

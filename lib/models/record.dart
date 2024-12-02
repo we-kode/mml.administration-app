@@ -4,11 +4,12 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/extensions/flag.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 part 'record.g.dart';
 
@@ -68,9 +69,9 @@ class Record extends ModelBase {
     this.bitrate,
     this.cover,
     this.locked,
-    bool isDeletable = true,
+    super.isDeletable,
     List<Group>? groups,
-  }) : super(isDeletable: isDeletable) {
+  }) {
     this.groups = groups ?? [];
   }
 
@@ -141,13 +142,13 @@ class Record extends ModelBase {
         ),
       );
     }
-    return const Icon(Icons.music_note_outlined);
+    return const Icon(Symbols.music_note);
   }
 
   @override
   Widget? getSecureState(BuildContext context) {
     return Icon(
-      Icons.lock_open_outlined,
+      Symbols.lock_open,
       size: 10,
       color: (locked ?? false) ? Theme.of(context).colorScheme.secondary : null
     );

@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
@@ -39,7 +40,7 @@ typedef DeleteFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
 /// after successful action or false on cancel.
 /// The list will reload the data starting from beginning, if true will be
 /// returned.
-typedef ActionPerfomedFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
+typedef ActionPerformedFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
 
 /// Function to be called when the back button is pressed. And the list should navigate up in folder structure.
 typedef MoveUpFunction = Function(
@@ -87,7 +88,7 @@ class AsyncListView extends StatefulWidget {
   /// after successful deletion or false on cancel.
   /// The list will reload the data starting from beginning, if true will be
   /// returned.
-  final ActionPerfomedFunction? assignItems;
+  final ActionPerformedFunction? assignItems;
 
   /// Function that locks the items with the passed [itemIdentifiers].
   ///
@@ -95,7 +96,7 @@ class AsyncListView extends StatefulWidget {
   /// after successful operation or false on cancel.
   /// The list will reload the data starting from beginning, if true will be
   /// returned.
-  final ActionPerfomedFunction? lockItems;
+  final ActionPerformedFunction? lockItems;
 
   /// Indicates, whether the add button should be shown or not.
   final bool showAddButton;
@@ -119,7 +120,7 @@ class AsyncListView extends StatefulWidget {
   /// Subaction buttons which can be used to add multiple sub actions to the main add button
   final List<ActionButton>? subactions;
 
-  /// A subfilter widget which can be used to add subfilters like chips for more filter posibilities.
+  /// A subfilter widget which can be used to add subfilters like chips for more filter possibilities.
   final ListSubfilterView? subfilter;
 
   /// Navigation state if a hierarchical view is used.
@@ -128,19 +129,19 @@ class AsyncListView extends StatefulWidget {
   /// Function to be called when the back button is pressed. And the list should navigate up in folder structure.
   final MoveUpFunction? moveUp;
 
-  /// Function to load all availabe tags which can be selected in list group view.
+  /// Function to load all available tags which can be selected in list group view.
   /// If group tags in list exists this function should not be null.
   final ModelList? availableTags;
 
   /// Function called if selectable tags of [item] changed. If tags in [item] exists this function should not be null.
   final AvailableTagsChangedFunction? onChangedAvailableTags;
 
-  /// Indicates whether to enable fast action siwtch in header or not.
+  /// Indicates whether to enable fast action switch in header or not.
   final bool enableFastActionSwitch;
 
   /// Initializes the list view.
   const AsyncListView({
-    Key? key,
+    super.key,
     required this.loadData,
     required this.deleteItems,
     required this.editItem,
@@ -155,7 +156,7 @@ class AsyncListView extends StatefulWidget {
     this.availableTags,
     this.onChangedAvailableTags,
     this.enableFastActionSwitch = false,
-  }) : super(key: key);
+  });
 
   @override
   State<AsyncListView> createState() => _AsyncListViewState();
@@ -166,11 +167,11 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Initial offset to start loading data from.
   final int _initialOffset = 0;
 
-  /// Intial amount of data that should be loaded.
+  /// Initial amount of data that should be loaded.
   final int _initialTake = 100;
 
   /// Delta the [_offset] should be increased or decreased while scrolling and
-  /// lazy loading next/previuous data.
+  /// lazy loading next/previous data.
   final int _offsetDelta = 50;
 
   /// Indicates, whether the list is currently in multi select mode.
@@ -198,7 +199,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// The actual item group if list items should be grouped.
   String? _actualGroup;
 
-  /// Idicates whether fast actions are enabled in list items or not.
+  /// Indicates whether fast actions are enabled in list items or not.
   bool fastActionsEnabled = false;
 
   @override
@@ -224,11 +225,11 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
+    return KeyboardListener(
       autofocus: true,
       focusNode: FocusNode(),
-      onKey: (event) => {
-        if (event.isKeyPressed(LogicalKeyboardKey.f5)) {_reloadData()}
+      onKeyEvent: (event) => {
+        if (event.logicalKey == LogicalKeyboardKey.f5) {_reloadData()}
       },
       child: Scaffold(
         body: Column(
@@ -265,7 +266,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     }
   }
 
-  /// Stores the identifer of the item at the [index] or removes it, when
+  /// Stores the identifier of the item at the [index] or removes it, when
   /// the identifier was in the list of selected items.
   void _onItemChecked(int index) {
     if (_selectedItems.any(
@@ -280,7 +281,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     });
   }
 
-  /// Reloads the data starting from inital offset with inital count.
+  /// Reloads the data starting from initial offset with initial count.
   void _reloadData() {
     if (!mounted) {
       return;
@@ -296,7 +297,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   ///
   /// Shows a loading indicator instead of the list during load, if
   /// [showLoadingOverlay] is true.
-  /// Otherwhise the data will be loaded lazy in the background.
+  /// Otherwise the data will be loaded lazy in the background.
   void _loadData({
     bool showLoadingOverlay = true,
     Subfilter? subfilter,
@@ -360,7 +361,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                 });
               },
               tooltip: AppLocalizations.of(context)!.add,
-              child: const Icon(Icons.add),
+              child: const Icon(Symbols.add),
             ),
     );
   }
@@ -385,11 +386,11 @@ class _AsyncListViewState extends State<AsyncListView> {
                           onPressed: widget.navState!.path != null
                               ? () => widget.navState!.returnPressed()
                               : null,
-                          icon: const Icon(Icons.arrow_back),
+                          icon: const Icon(Symbols.arrow_back),
                         ),
                       IconButton(
                         onPressed: () => _reloadData(),
-                        icon: const Icon(Icons.refresh),
+                        icon: const Icon(Symbols.refresh),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width *
@@ -397,7 +398,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                         child: TextField(
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.filter,
-                            icon: const Icon(Icons.filter_list_alt),
+                            icon: const Icon(Symbols.filter_list_alt),
                           ),
                           onChanged: (String filterText) {
                             setState(() {
@@ -414,8 +415,8 @@ class _AsyncListViewState extends State<AsyncListView> {
                                 fastActionsEnabled = !fastActionsEnabled;
                               }),
                               icon: Icon(fastActionsEnabled
-                                  ? Icons.edit_off
-                                  : Icons.edit),
+                                  ? Symbols.edit_off
+                                  : Symbols.edit),
                             )
                           : const SizedBox.shrink(),
                     ],
@@ -452,7 +453,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                           _selectedItems = [];
                         });
                       },
-                      icon: const Icon(Icons.close),
+                      icon: const Icon(Symbols.close),
                       tooltip: AppLocalizations.of(context)!.cancel,
                     ),
                     horizontalSpacer,
@@ -470,7 +471,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                           _selectedItems = _selectedItems;
                         });
                       },
-                      icon: const Icon(Icons.check_box_outlined),
+                      icon: const Icon(Symbols.check_box),
                       tooltip: AppLocalizations.of(context)!.selectLoaded,
                     ),
                     if (widget.lockItems != null)
@@ -508,7 +509,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                                 .pop();
                           });
                         },
-                        icon: const Icon(Icons.lock_outline),
+                        icon: const Icon(Symbols.lock_outline),
                         tooltip: AppLocalizations.of(context)!.lock,
                       ),
                     if (widget.assignItems != null)
@@ -546,7 +547,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                                 .pop();
                           });
                         },
-                        icon: const Icon(Icons.assignment_add),
+                        icon: const Icon(Symbols.assignment_add),
                         tooltip: AppLocalizations.of(context)!.assignTo,
                       ),
                     IconButton(
@@ -583,7 +584,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                               .pop();
                         });
                       },
-                      icon: const Icon(Icons.delete),
+                      icon: const Icon(Symbols.delete),
                       tooltip: AppLocalizations.of(context)!.remove,
                     ),
                   ],
@@ -612,7 +613,7 @@ class _AsyncListViewState extends State<AsyncListView> {
           var endNotReached = (_offset + _take) <= _items!.totalCount;
           var loadNextIndexReached =
               index == (_offset + _take - (_offsetDelta / 2).ceil());
-          var loadPreviuousIndexReached = index == _offset;
+          var loadPreviousIndexReached = index == _offset;
           var beginNotReached = index > 0;
 
           if (endNotReached && loadNextIndexReached) {
@@ -625,7 +626,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                 subfilter: widget.subfilter?.filter,
               );
             });
-          } else if (beginNotReached && loadPreviuousIndexReached) {
+          } else if (beginNotReached && loadPreviousIndexReached) {
             _offset = _offset - _offsetDelta;
             _take = _initialTake + _offsetDelta;
 
@@ -654,7 +655,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   }
 
   /// Creates a widget that will be shown, if no data were loaded or an error
-  /// occured during loading of data.
+  /// occurred during loading of data.
   Widget _createNoDataWidget() {
     return Center(
       child: Row(
@@ -664,7 +665,7 @@ class _AsyncListViewState extends State<AsyncListView> {
           horizontalSpacer,
           TextButton.icon(
             onPressed: () => _loadData(subfilter: widget.subfilter?.filter),
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Symbols.refresh),
             label: Text(AppLocalizations.of(context)!.reload),
           ),
         ],
@@ -695,7 +696,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                     child: Container(
                       height: 42,
                       width: 42,
-                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
                       child: item.getAvatar(context),
                     ),
                   ),
@@ -893,10 +894,10 @@ class _AsyncListViewState extends State<AsyncListView> {
     );
   }
 
-  /// Creates a list tile widget for a not loded list item.
+  /// Creates a list tile widget for a not loaded list item.
   Widget _createLoadingTile() {
     return Shimmer.fromColors(
-      baseColor: Theme.of(context).colorScheme.surfaceVariant,
+      baseColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       highlightColor: Theme.of(context).colorScheme.surface,
       child: ListTile(
         title: Stack(

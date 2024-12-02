@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/models/model_base.dart';
 
 part 'record_folder.g.dart';
 
-/// Model holds the actual fodler view, when in hieracrchical navigation.
+/// Model holds the actual folder view, when in hierarchical navigation.
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
 class RecordFolder extends ModelBase {
   final int year;
@@ -17,8 +18,8 @@ class RecordFolder extends ModelBase {
     required this.year,
     this.month,
     this.day,
-    bool isDeletable = true,
-  }) : super(isDeletable: isDeletable);
+    super.isDeletable,
+  });
 
   /// Converts a json object/map to the model.
   factory RecordFolder.fromJson(Map<String, dynamic> json) =>
@@ -51,7 +52,7 @@ class RecordFolder extends ModelBase {
 
   @override
   Icon? getPrefixIcon(BuildContext context) {
-    return const Icon(Icons.folder);
+    return const Icon(Symbols.folder);
   }
 
   /// returns the [RecordFolder] converted from range of [startDate] and [endDate] or null if one date is not provided.

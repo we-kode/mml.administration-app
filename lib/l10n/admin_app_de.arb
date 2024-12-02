@@ -16,8 +16,8 @@
   "invalidAppKey": "Ein korrekter App-Schlüssel muss angegeben werden!",
   "invalidUsername": "Bitte geben Sie Ihren Benutzernamen an!",
   "invalidPassword": "Bitte geben Sie Ihr Passwort an!",
-  "badCertificate": "Es ist ein Zertifikatfehler aufgetreten!",
-  "unexpectedError": "Es ist ein unerwarterter Fehler aufgetreten: {message}",
+  "badCertificate": "Es ist ein Zertifikatsfehler aufgetreten!",
+  "unexpectedError": "Es ist ein unerwarteter Fehler aufgetreten: {message}",
   "@unexpectedError": {
     "placeholders": {
       "message": {
@@ -131,8 +131,8 @@
   "editLivestream": "Livestream bearbeiten",
   "createLivestream": "Livestream erstellen",
   "streamUrl": "Url zum Livestream",
-  "streamUrlHint": "Interne Url zum Streamingendpunkt: http://<adresse>:<port>",
-  "similiarClients": "Ähnliche Geräte",
+  "streamUrlHint": "Interne Url zum Streaming-Endpunkt: http://<adresse>:<port>",
+  "similarClients": "Ähnliche Geräte",
   "onlyNew": "Neu",
   "uploadValidation": "MP3-Tag Validierung",
   "uploadValidLanguage": "Sprache ist gesetzt",
@@ -143,10 +143,10 @@
   "uploadValidAlbum": "Album ist gesetzt",
   "uploadValidGenre": "Genre ist gesetzt",
   "uploadValidAlbums": "Gültige Alben",
-  "uploadValidAlbumInfo": "Albennamen getrennt mit einem Komma. Wenn leer, dann keine Eingrenzung der Alben.",
+  "uploadValidAlbumInfo": "Alben-Namen getrennt mit einem Komma. Wenn leer, dann keine Eingrenzung der Alben.",
   "uploadValidGenres": "Gültige Genres",
-  "uploadValidGenreInfo": "Genrenamen getrennt mit einem Komma. Wenn leer, dann keine Eingrenzung der Genres.",
-  "upladValidFilename": "Dateinamen Format",
+  "uploadValidGenreInfo": "Genre-Namen getrennt mit einem Komma. Wenn leer, dann keine Eingrenzung der Genres.",
+  "uploadValidFilename": "Dateinamen Format",
   "uploadValidFilenameInfo": "Dateiname muss spezielles Format erfüllen. Regex. Standard keine Begrenzung.",
   "uploadInvalidLanguage": "Sprache ist nicht gesetzt oder unbekannt.",
   "uploadInvalidAlbum": "Album ist nicht gesetzt.",
@@ -158,12 +158,33 @@
   "uploadInvalidNumber": "Tracknummer ist nicht gesetzt.",
   "uploadInvalidCover": "Cover ist nicht verfügbar.",
   "uploadInvalidFilenameFormat": "Dateiname entspricht nicht erwartetes Format.",
-  "uploadValidFailed": "Beim Hochladen ist ein unerwarterter Fehler aufgetreten.",
-  "dontvalidate": "Nicht überprüfen",
+  "uploadValidFailed": "Beim Hochladen ist ein unerwarteter Fehler aufgetreten.",
+  "doNotValidate": "Nicht überprüfen",
   "validate": "Überprüfen",
   "required": "Pflichtfeld",
   "assignTo": "Zuordnen",
   "selectLoaded": "Alle geladenen Elemente auswählen",
   "makeUndeletable": "Nicht löschbar",
-  "lock": "Sperren"
+  "lock": "Sperren",
+  "newUpdate": "Neues Update",
+  "later": "Später",
+  "checkUpdate": "Neue Funktionen und Verbesserungen prüfen.",
+  "updateInstall": "Aktualisieren",
+  "downloading": "Herunterladen...",
+  "newVersion": "Eine neue Version {latestVersion} ist verfügbar.",
+  "@newVersion": {
+    "placeholders": {
+      "latestVersion": {
+        "type": "String"
+      }
+    }
+  },
+  "oldVersion": "Sie verwenden derzeit die Version {appVersion}.",
+  "@oldVersion": {
+    "placeholders": {
+      "appVersion": {
+        "type": "String"
+      }
+    }
+  }
 }

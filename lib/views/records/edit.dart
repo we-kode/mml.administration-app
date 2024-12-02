@@ -4,7 +4,7 @@ import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/records/edit.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// Edit screen of the record of the music lib.
 class RecordEditDialog extends StatelessWidget {
@@ -12,7 +12,7 @@ class RecordEditDialog extends StatelessWidget {
   final String? recordId;
 
   /// Initializes the instance.
-  const RecordEditDialog({Key? key, required this.recordId}) : super(key: key);
+  const RecordEditDialog({super.key, required this.recordId});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class RecordEditDialog extends StatelessWidget {
                 child: Container(
                   height: 200,
                   width: 200,
-                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   child: vm.record.getAvatar(context),
                 ),
               ),
@@ -162,8 +162,8 @@ class RecordEditDialog extends StatelessWidget {
             ChipChoices(
               loadData: vm.getGroups,
               initialSelectedItems: vm.record.groups,
-              onSelectionChanged: (selecteItems) =>
-                  vm.record.groups = selecteItems
+              onSelectionChanged: (selectableItems) =>
+                  vm.record.groups = selectableItems
                       .map(
                         (e) => e as Group,
                       )

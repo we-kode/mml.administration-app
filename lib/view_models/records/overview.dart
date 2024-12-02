@@ -45,6 +45,7 @@ class RecordsViewModel extends ChangeNotifier {
           ))
               ?.toLowerCase() ==
           'true';
+      // TODO: Is exectued before logged in --> should be moved anywhere else
       groups = await _groupService.getMediaGroups(null, 0, -1);
       return true;
     });

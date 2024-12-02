@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:mml_admin/services/messenger.dart';
+import 'package:mml_admin/view_models/settings/settings.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'admin_app.dart';
 
 class MMLHttpOverrides extends HttpOverrides {
@@ -54,5 +56,8 @@ void main() async {
   });
 
   HttpOverrides.global = MMLHttpOverrides();
+
+  var pkgInfo = await PackageInfo.fromPlatform();
+  SettingsViewModel.version = pkgInfo.version;
   runApp(const AdminApp());
 }

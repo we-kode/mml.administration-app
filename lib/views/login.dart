@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:mml_admin/gen/assets.gen.dart';
 import 'package:mml_admin/view_models/login.dart';
 import 'package:provider/provider.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
@@ -8,7 +10,7 @@ import 'package:mml_admin/models/user.dart';
 /// the administration application.
 class LoginScreen extends StatelessWidget {
   /// Initializes the instance.
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   /// Builds the screen with the login form.
   @override
@@ -46,18 +48,14 @@ class LoginScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'assets/images/logo_admin.png',
-                          width: 256,
-                          height: 256,
-                        ),
+                        Assets.images.logoAdmin.image(width: 256, height: 256),
                         verticalSpacer,
                         verticalSpacer,
                         verticalSpacer,
                         TextFormField(
                           decoration: InputDecoration(
                             labelText: vm.locales.username,
-                            icon: const Icon(Icons.person),
+                            icon: const Icon(Symbols.person),
                           ),
                           onSaved: (String? username) {
                             vm.username = username!;
@@ -70,7 +68,7 @@ class LoginScreen extends StatelessWidget {
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.password,
-                            icon: const Icon(Icons.lock),
+                            icon: const Icon(Symbols.lock),
                           ),
                           onSaved: (String? password) {
                             vm.password = password!;
@@ -80,7 +78,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         verticalSpacer,
                         ExpansionTile(
-                          leading: const Icon(Icons.extension),
+                          leading: const Icon(Symbols.extension),
                           initiallyExpanded: vm.showAdvanced,
                           maintainState: true,
                           title: Text(vm.locales.advanced),
@@ -88,7 +86,7 @@ class LoginScreen extends StatelessWidget {
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: vm.clientIdLabel,
-                                icon: const Icon(Icons.credit_score),
+                                icon: const Icon(Symbols.credit_score),
                               ),
                               onSaved: (String? clientId) {
                                 vm.clientId = clientId;
@@ -104,7 +102,7 @@ class LoginScreen extends StatelessWidget {
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: vm.serverNameLabel,
-                                icon: const Icon(Icons.storage),
+                                icon: const Icon(Symbols.storage),
                               ),
                               onSaved: (String? serverName) {
                                 vm.serverName = serverName;
@@ -120,7 +118,7 @@ class LoginScreen extends StatelessWidget {
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: vm.appKeyLabel,
-                                icon: const Icon(Icons.vpn_key_outlined),
+                                icon: const Icon(Symbols.vpn_key),
                               ),
                               onSaved: (String? appKey) {
                                 vm.appKey = appKey;

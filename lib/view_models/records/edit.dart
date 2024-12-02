@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/record.dart';

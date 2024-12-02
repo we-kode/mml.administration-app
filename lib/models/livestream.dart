@@ -25,8 +25,8 @@ class Livestream extends ModelBase {
     this.title,
     this.url,
     List<Group>? groups,
-    bool isDeletable = true,
-  }) : super(isDeletable: isDeletable) {
+    super.isDeletable,
+  }) {
     this.groups = groups ?? [];
   }
 

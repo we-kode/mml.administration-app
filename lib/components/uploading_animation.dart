@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/gen/assets.gen.dart';
 import 'package:rive/rive.dart';
 
-/// Animation for the file uplaoding.
+/// Animation for the file uploading.
 class UploadAnimation extends StatelessWidget {
   /// Initializes the animation.
   const UploadAnimation({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return RiveAnimation.asset(
-      'assets/animations/mml.riv',
+      Assets.animations.mml,
       onInit: (Artboard artboard) {
         artboard.forEachComponent(
           (child) {

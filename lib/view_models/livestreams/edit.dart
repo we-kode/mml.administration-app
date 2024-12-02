@@ -8,7 +8,7 @@ import 'package:mml_admin/models/livestream.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/livestreams.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
 

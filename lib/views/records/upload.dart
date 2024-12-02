@@ -6,11 +6,11 @@ import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/records/upload.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// View of the upload dialog for records.
 class RecordUploadDialog extends StatelessWidget {
-  /// The path of the folder from where files should be uploaded or null if single files will be uplaoded.
+  /// The path of the folder from where files should be uploaded or null if single files will be uploaded.
   final String? folderPath;
 
   /// List of files which should be uploaded or null if files from a whole folder will be uploaded.
@@ -18,10 +18,10 @@ class RecordUploadDialog extends StatelessWidget {
 
   /// Initializes the view for the records upload dialog.
   const RecordUploadDialog({
-    Key? key,
+    super.key,
     required this.folderPath,
     required this.files,
-  }) : super(key: key);
+  });
 
   /// Builds the records upload dialog.
   @override
@@ -80,8 +80,8 @@ class RecordUploadDialog extends StatelessWidget {
                       ChipChoices(
                         loadData: vm.getGroups,
                         initialSelectedItems: vm.selectedGroups,
-                        onSelectionChanged: (selecteItems) =>
-                            vm.selectedGroups = selecteItems
+                        onSelectionChanged: (selectableItems) =>
+                            vm.selectedGroups = selectableItems
                                 .map(
                                   (e) => e as Group,
                                 )
@@ -139,7 +139,7 @@ class RecordUploadDialog extends StatelessWidget {
     ];
   }
 
-  /// Returns the uplaoding progress content.
+  /// Returns the uploading progress content.
   List<Widget> _uploadProgressTile(
     RecordsUploadDialogViewModel vm,
     BuildContext context,
@@ -174,7 +174,7 @@ class RecordUploadDialog extends StatelessWidget {
     ];
   }
 
-  /// Returns the result text when uplaod finished.
+  /// Returns the result text when upload finished.
   List<Widget> _uploadFinishedTile(RecordsUploadDialogViewModel vm) {
     return [
       Text(vm.locales.uploadFinished),

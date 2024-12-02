@@ -4,7 +4,7 @@ import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/clients/edit.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/admin_app_localizations.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// Edit screen of the client of the music lib.
 class ClientEditDialog extends StatelessWidget {
@@ -12,7 +12,7 @@ class ClientEditDialog extends StatelessWidget {
   final String? clientId;
 
   /// Initializes the instance.
-  const ClientEditDialog({Key? key, required this.clientId}) : super(key: key);
+  const ClientEditDialog({super.key, required this.clientId});
 
   /// Builds the clients editing screen.
   @override
@@ -100,8 +100,8 @@ class ClientEditDialog extends StatelessWidget {
           ChipChoices(
             loadData: vm.getGroups,
             initialSelectedItems: vm.client.groups,
-            onSelectionChanged: (selecteItems) =>
-                vm.client.groups = selecteItems
+            onSelectionChanged: (selectableItems) =>
+                vm.client.groups = selectableItems
                     .map(
                       (e) => e as Group,
                     )
