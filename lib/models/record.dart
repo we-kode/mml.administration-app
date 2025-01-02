@@ -147,10 +147,14 @@ class Record extends ModelBase {
 
   @override
   Widget? getSecureState(BuildContext context) {
+    if (!(locked ?? false)) {
+      return null;
+    }
+
     return Icon(
-      Symbols.lock_open,
+      Symbols.block,
       size: 10,
-      color: (locked ?? false) ? Theme.of(context).colorScheme.secondary : null
+      color: Theme.of(context).colorScheme.error
     );
   }
 
