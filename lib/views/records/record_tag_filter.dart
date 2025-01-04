@@ -172,6 +172,7 @@ class RecordTagFilter extends ListSubfilterView {
         MediaQuery.of(context).size.width * 0.2,
       ),
       borderRadius: BorderRadius.circular(0),
+      value: [vm.tagFilter.startDate, vm.tagFilter.endDate],
     );
 
     if (dateUpdated == null || dateUpdated.isEmpty) {
