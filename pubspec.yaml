@@ -39,7 +39,7 @@ dependencies:
   provider: ^6.1.2
   flutter_secure_storage: ^9.2.2
   http: ^1.2.1
-  dio: ^5.4.3+1
+  dio: ^5.7.0
   json_annotation: ^4.9.0
   shimmer: ^3.0.0
   window_manager: ^0.3.9
