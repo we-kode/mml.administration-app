@@ -1,3 +1,5 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'admin_app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -63,7 +65,8 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get forbidden => 'У вас нет необходимых прав, чтобы выполнить это действие!';
+  String get forbidden =>
+      'У вас нет необходимых прав, чтобы выполнить это действие!';
 
   @override
   String get incorrectCredentials => 'Не удалось войти в систему!';
@@ -84,7 +87,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get logout => 'Выйти';
 
   @override
-  String get relogin => 'Срок действия вашего логина истёк! Пожалуйста, войдите в систему ещё раз!';
+  String get relogin =>
+      'Срок действия вашего логина истёк! Пожалуйста, войдите в систему ещё раз!';
 
   @override
   String get advanced => 'Дополнительные настройки';
@@ -105,7 +109,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get save => 'Применить';
 
   @override
-  String get confirmAccount => 'Пожалуйста, обновите свой пароль, чтобы продолжить.';
+  String get confirmAccount =>
+      'Пожалуйста, обновите свой пароль, чтобы продолжить.';
 
   @override
   String get actualPassword => 'Текущий пароль';
@@ -117,7 +122,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get confirmNewPassword => 'Подтвердить пароль';
 
   @override
-  String get invalidConfirmPasswords => 'Новый пароль не соответствует проверке.';
+  String get invalidConfirmPasswords =>
+      'Новый пароль не соответствует проверке.';
 
   @override
   String get updatePasswordFailed => 'Не удалось обновить пароль!';
@@ -147,7 +153,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get invalidDisplayName => 'Пожалуйста введите имя!';
 
   @override
-  String get deleteConfirmation => 'Вы действительно хотите удалить выбранные записи?';
+  String get deleteConfirmation =>
+      'Вы действительно хотите удалить выбранные записи?';
 
   @override
   String get yes => 'Да';
@@ -191,13 +198,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get groupIsDefault => 'Стандартная группа';
 
   @override
-  String get groupIsDefaultHint => 'Группа будет назначена по умолчанию при создании клиента.';
+  String get groupIsDefaultHint =>
+      'Группа будет назначена по умолчанию при создании клиента.';
 
   @override
   String get invalidGroupName => 'Пожалуйста, введите название группы!';
 
   @override
-  String get invalidGroupIsDefault => 'Пожалуйста, укажите, является ли группа стандартной или нет!';
+  String get invalidGroupIsDefault =>
+      'Пожалуйста, укажите, является ли группа стандартной или нет!';
 
   @override
   String get uploading => 'Загрузка файлов.';
@@ -264,7 +273,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get compressionRate => 'Битрейт в кбит/с';
 
   @override
-  String get compressionInfo => 'Сжатие происходит при следующей загрузке. При пустом битрейте сжатие не происходит.';
+  String get compressionInfo =>
+      'Сжатие происходит при следующей загрузке. При пустом битрейте сжатие не происходит.';
 
   @override
   String get invalidCompressionRate => 'Значение должно быть больше нуля.';
@@ -315,7 +325,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get streamUrl => 'Ссылка на трансляцию';
 
   @override
-  String get streamUrlHint => 'Внутренний url-адрес конечной точки трансляции: http://<адрес>:<порт>';
+  String get streamUrlHint =>
+      'Внутренний url-адрес конечной точки трансляции: http://<адрес>:<порт>';
 
   @override
   String get similarClients => 'Похожее устройство';
@@ -351,19 +362,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get uploadValidAlbums => 'Допустимые альбомы';
 
   @override
-  String get uploadValidAlbumInfo => 'Названия альбомов, разделенные запятой. Если пусто, то альбомы не ограничиваются.';
+  String get uploadValidAlbumInfo =>
+      'Названия альбомов, разделенные запятой. Если пусто, то альбомы не ограничиваются.';
 
   @override
   String get uploadValidGenres => 'Допустимые жанры';
 
   @override
-  String get uploadValidGenreInfo => 'Названия жанров, разделенные запятой. Если пусто, то жанры не ограничиваются.';
+  String get uploadValidGenreInfo =>
+      'Названия жанров, разделенные запятой. Если пусто, то жанры не ограничиваются.';
 
   @override
   String get uploadValidFilename => 'Формат названия файла';
 
   @override
-  String get uploadValidFilenameInfo => 'Название файла должно соответствовать специальному формату. Regex. По умолчанию без ограничений.';
+  String get uploadValidFilenameInfo =>
+      'Название файла должно соответствовать специальному формату. Regex. По умолчанию без ограничений.';
 
   @override
   String get uploadInvalidLanguage => 'Язык не указан или неизвестен.';
@@ -393,10 +407,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get uploadInvalidCover => 'Обложка отсутствует.';
 
   @override
-  String get uploadInvalidFilenameFormat => 'Имя файла не соответствует ожидаемому формату.';
+  String get uploadInvalidFilenameFormat =>
+      'Имя файла не соответствует ожидаемому формату.';
 
   @override
-  String get uploadValidFailed => 'При загрузке произошла непредвиденная ошибка.';
+  String get uploadValidFailed =>
+      'При загрузке произошла непредвиденная ошибка.';
 
   @override
   String get doNotValidate => 'Не проверять';

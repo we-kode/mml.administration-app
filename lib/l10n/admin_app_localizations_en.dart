@@ -1,3 +1,5 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'admin_app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -63,7 +65,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get forbidden => 'You have not the necessary rights, to execute this action!';
+  String get forbidden =>
+      'You have not the necessary rights, to execute this action!';
 
   @override
   String get incorrectCredentials => 'Login failed!';
@@ -84,7 +87,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logout => 'Logout';
 
   @override
-  String get relogin => 'You were automatically logged out! Please login again!';
+  String get relogin =>
+      'You were automatically logged out! Please login again!';
 
   @override
   String get advanced => 'Advanced';
@@ -117,7 +121,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmNewPassword => 'Confirm password';
 
   @override
-  String get invalidConfirmPasswords => 'New password does not match verification.';
+  String get invalidConfirmPasswords =>
+      'New password does not match verification.';
 
   @override
   String get updatePasswordFailed => 'Updating password failed!';
@@ -147,7 +152,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidDisplayName => 'Please enter a name!';
 
   @override
-  String get deleteConfirmation => 'Are you really want to delete the selected records?';
+  String get deleteConfirmation =>
+      'Are you really want to delete the selected records?';
 
   @override
   String get yes => 'Yes';
@@ -191,13 +197,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get groupIsDefault => 'Default group';
 
   @override
-  String get groupIsDefaultHint => 'Group will be assigned per default on client creation.';
+  String get groupIsDefaultHint =>
+      'Group will be assigned per default on client creation.';
 
   @override
   String get invalidGroupName => 'Please enter a name!';
 
   @override
-  String get invalidGroupIsDefault => 'Please specify, whether the group is a default group or not!';
+  String get invalidGroupIsDefault =>
+      'Please specify, whether the group is a default group or not!';
 
   @override
   String get uploading => 'Uploading files.';
@@ -264,7 +272,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get compressionRate => 'Bitrate in kbit/s';
 
   @override
-  String get compressionInfo => 'Compression occurs at the next upload. With an empty bitrate, there is no compression.';
+  String get compressionInfo =>
+      'Compression occurs at the next upload. With an empty bitrate, there is no compression.';
 
   @override
   String get invalidCompressionRate => 'The value must be greater than zero.';
@@ -315,7 +324,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get streamUrl => 'Url to live stream';
 
   @override
-  String get streamUrlHint => 'Internal url to streaming endpoint: http://<address>:<port>';
+  String get streamUrlHint =>
+      'Internal url to streaming endpoint: http://<address>:<port>';
 
   @override
   String get similarClients => 'Similar Devices';
@@ -351,19 +361,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadValidAlbums => 'Valid albums';
 
   @override
-  String get uploadValidAlbumInfo => 'Album names separated by a comma. If empty, then no limitation of albums.';
+  String get uploadValidAlbumInfo =>
+      'Album names separated by a comma. If empty, then no limitation of albums.';
 
   @override
   String get uploadValidGenres => 'Valid genres';
 
   @override
-  String get uploadValidGenreInfo => 'Genre names separated with a comma. If empty, then no limitation of genres.';
+  String get uploadValidGenreInfo =>
+      'Genre names separated with a comma. If empty, then no limitation of genres.';
 
   @override
   String get uploadValidFilename => 'File name template';
 
   @override
-  String get uploadValidFilenameInfo => 'File name must meet special format. Regex. Standard no restriction.';
+  String get uploadValidFilenameInfo =>
+      'File name must meet special format. Regex. Standard no restriction.';
 
   @override
   String get uploadInvalidLanguage => 'Language is not set or unknown.';
@@ -393,10 +406,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadInvalidCover => 'Cover is not available.';
 
   @override
-  String get uploadInvalidFilenameFormat => 'File name does not match expected format.';
+  String get uploadInvalidFilenameFormat =>
+      'File name does not match expected format.';
 
   @override
-  String get uploadValidFailed => 'An unexpected error occurred while uploading.';
+  String get uploadValidFailed =>
+      'An unexpected error occurred while uploading.';
 
   @override
   String get doNotValidate => 'Do not validate';

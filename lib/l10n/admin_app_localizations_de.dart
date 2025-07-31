@@ -1,3 +1,5 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'admin_app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -16,7 +18,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get serverNameUnchanged => 'Server (Domain:Port) (unverändert)';
 
   @override
-  String get invalidServerName => 'Eine korrekte Serveradresse muss angegeben werden!';
+  String get invalidServerName =>
+      'Eine korrekte Serveradresse muss angegeben werden!';
 
   @override
   String get login => 'Anmelden';
@@ -43,10 +46,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get appKeyUnchanged => 'App-Schlüssel (unverändert)';
 
   @override
-  String get invalidClientId => 'Eine korrekte Client-ID muss angegeben werden!';
+  String get invalidClientId =>
+      'Eine korrekte Client-ID muss angegeben werden!';
 
   @override
-  String get invalidAppKey => 'Ein korrekter App-Schlüssel muss angegeben werden!';
+  String get invalidAppKey =>
+      'Ein korrekter App-Schlüssel muss angegeben werden!';
 
   @override
   String get invalidUsername => 'Bitte geben Sie Ihren Benutzernamen an!';
@@ -63,7 +68,8 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get forbidden => 'Sie haben nicht die notwendigen Rechte, die Aktion auszuführen!';
+  String get forbidden =>
+      'Sie haben nicht die notwendigen Rechte, die Aktion auszuführen!';
 
   @override
   String get incorrectCredentials => 'Anmeldung fehlgeschlagen!';
@@ -84,7 +90,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get logout => 'Abmelden';
 
   @override
-  String get relogin => 'Sie wurden automatisch abgemeldet! Bitte melden Sie sich neu an!';
+  String get relogin =>
+      'Sie wurden automatisch abgemeldet! Bitte melden Sie sich neu an!';
 
   @override
   String get advanced => 'Erweitert';
@@ -105,7 +112,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get save => 'Anwenden';
 
   @override
-  String get confirmAccount => 'Bitte aktualisieren Sie Ihr Passwort, um fortzufahren.';
+  String get confirmAccount =>
+      'Bitte aktualisieren Sie Ihr Passwort, um fortzufahren.';
 
   @override
   String get actualPassword => 'Aktuelles Passwort';
@@ -117,7 +125,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get confirmNewPassword => 'Passwort bestätigen';
 
   @override
-  String get invalidConfirmPasswords => 'Neues Passwort stimmt mit Überprüfung nicht überein.';
+  String get invalidConfirmPasswords =>
+      'Neues Passwort stimmt mit Überprüfung nicht überein.';
 
   @override
   String get updatePasswordFailed => 'Passwortaktualisierung fehlgeschlagen!';
@@ -147,7 +156,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get invalidDisplayName => 'Bitte geben Sie einen Namen an!';
 
   @override
-  String get deleteConfirmation => 'Möchten Sie tatsächlich die gewählten Datensätze löschen?';
+  String get deleteConfirmation =>
+      'Möchten Sie tatsächlich die gewählten Datensätze löschen?';
 
   @override
   String get yes => 'Ja';
@@ -191,13 +201,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get groupIsDefault => 'Standardgruppe';
 
   @override
-  String get groupIsDefaultHint => 'Gruppe wird beim Erstellen neuer Geräte automatisch zugewiesen.';
+  String get groupIsDefaultHint =>
+      'Gruppe wird beim Erstellen neuer Geräte automatisch zugewiesen.';
 
   @override
   String get invalidGroupName => 'Bitte geben Sie einen Namen an!';
 
   @override
-  String get invalidGroupIsDefault => 'Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!';
+  String get invalidGroupIsDefault =>
+      'Bitte legen Sie fest, ob die Gruppe eine Standardgruppe ist!';
 
   @override
   String get uploading => 'Dateien werden hochgeladen.';
@@ -264,7 +276,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get compressionRate => 'Bitrate in kbit/s';
 
   @override
-  String get compressionInfo => 'Kompression erfolgt beim nächsten Upload. Bei leerer Bitrate erfolgt keine Kompression.';
+  String get compressionInfo =>
+      'Kompression erfolgt beim nächsten Upload. Bei leerer Bitrate erfolgt keine Kompression.';
 
   @override
   String get invalidCompressionRate => 'Der Wert muss größer als Null sein.';
@@ -315,7 +328,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get streamUrl => 'Url zum Livestream';
 
   @override
-  String get streamUrlHint => 'Interne Url zum Streaming-Endpunkt: http://<adresse>:<port>';
+  String get streamUrlHint =>
+      'Interne Url zum Streaming-Endpunkt: http://<adresse>:<port>';
 
   @override
   String get similarClients => 'Ähnliche Geräte';
@@ -351,22 +365,26 @@ class AppLocalizationsDe extends AppLocalizations {
   String get uploadValidAlbums => 'Gültige Alben';
 
   @override
-  String get uploadValidAlbumInfo => 'Alben-Namen getrennt mit einem Komma. Wenn leer, dann keine Eingrenzung der Alben.';
+  String get uploadValidAlbumInfo =>
+      'Alben-Namen getrennt mit einem Komma. Wenn leer, dann keine Eingrenzung der Alben.';
 
   @override
   String get uploadValidGenres => 'Gültige Genres';
 
   @override
-  String get uploadValidGenreInfo => 'Genre-Namen getrennt mit einem Komma. Wenn leer, dann keine Eingrenzung der Genres.';
+  String get uploadValidGenreInfo =>
+      'Genre-Namen getrennt mit einem Komma. Wenn leer, dann keine Eingrenzung der Genres.';
 
   @override
   String get uploadValidFilename => 'Dateinamen Format';
 
   @override
-  String get uploadValidFilenameInfo => 'Dateiname muss spezielles Format erfüllen. Regex. Standard keine Begrenzung.';
+  String get uploadValidFilenameInfo =>
+      'Dateiname muss spezielles Format erfüllen. Regex. Standard keine Begrenzung.';
 
   @override
-  String get uploadInvalidLanguage => 'Sprache ist nicht gesetzt oder unbekannt.';
+  String get uploadInvalidLanguage =>
+      'Sprache ist nicht gesetzt oder unbekannt.';
 
   @override
   String get uploadInvalidAlbum => 'Album ist nicht gesetzt.';
@@ -393,10 +411,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get uploadInvalidCover => 'Cover ist nicht verfügbar.';
 
   @override
-  String get uploadInvalidFilenameFormat => 'Dateiname entspricht nicht erwartetes Format.';
+  String get uploadInvalidFilenameFormat =>
+      'Dateiname entspricht nicht erwartetes Format.';
 
   @override
-  String get uploadValidFailed => 'Beim Hochladen ist ein unerwarteter Fehler aufgetreten.';
+  String get uploadValidFailed =>
+      'Beim Hochladen ist ein unerwarteter Fehler aufgetreten.';
 
   @override
   String get doNotValidate => 'Nicht überprüfen';
