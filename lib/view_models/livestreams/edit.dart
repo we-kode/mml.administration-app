@@ -134,7 +134,7 @@ class LivestreamEditDialogViewModel extends ChangeNotifier {
 
   /// Loads all groups from the server
   Future<ModelList> getGroups() async {
-    return await _groupService.getGroups(null, 0, -1);
+    return await _groupService.getMediaGroups(null, 0, -1);
   }
 
   /// Clears the errors from the backend for the field with the passed

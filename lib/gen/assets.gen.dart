@@ -12,17 +12,17 @@ import 'package:flutter/widgets.dart';
 class $AssetsAnimationsGen {
   const $AssetsAnimationsGen();
 
-  /// File path: assets/animations/check.riv
-  String get check => 'assets/animations/check.riv';
+  /// File path: assets/animations/Loading.json
+  String get loading => 'assets/animations/Loading.json';
 
-  /// File path: assets/animations/error.riv
-  String get error => 'assets/animations/error.riv';
+  /// File path: assets/animations/check.json
+  String get check => 'assets/animations/check.json';
 
-  /// File path: assets/animations/mml.riv
-  String get mml => 'assets/animations/mml.riv';
+  /// File path: assets/animations/error.json
+  String get error => 'assets/animations/error.json';
 
   /// List of all assets
-  List<String> get values => [check, error, mml];
+  List<String> get values => [loading, check, error];
 }
 
 class $AssetsImagesGen {
@@ -40,18 +40,19 @@ class $AssetsImagesGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName, {this.size = null});
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
 
   final String _assetName;
 
   final Size? size;
+  final Set<String> flavors;
 
   Image image({
     Key? key,
@@ -71,10 +72,10 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = false,
+    bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {
@@ -106,15 +107,8 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
   }
 
   String get path => _assetName;

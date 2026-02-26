@@ -35,7 +35,7 @@ class ClientsViewModel extends ChangeNotifier {
   /// Initializes the view model.
   Future<bool> init(BuildContext context) {
     return Future.microtask(() async {
-      groups = await _groupService.getMediaGroups(null, 0, -1);
+      groups = await _groupService.getGroups(null, 0, -1);
       return true;
     });
   }
