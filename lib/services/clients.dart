@@ -47,7 +47,7 @@ class ClientService {
     var response = await _apiService.request(
       '/identity/client/list',
       queryParameters: params,
-      data: tagfilter != null ? tagfilter.toJson() : {},
+      data: tagfilter != null ? tagfilter.toJson() : <String, dynamic>{},
       options: Options(
         method: 'POST',
       ),
@@ -123,7 +123,7 @@ class ClientService {
   ) async {
     await _apiService.request(
       '/identity/client/assign',
-      data: {
+      data: <String, dynamic>{
         "items": clients,
         "groups": groups,
         "initGroups": initialGroups,

@@ -113,7 +113,7 @@ class UserService {
 
     Response<Map> response = await _apiService.request(
       '/identity/connect/token',
-      data: {
+      data: <String, dynamic>{
         'grant_type': 'password',
         'client_id': clientId,
         'scope': 'offline_access',
@@ -149,7 +149,7 @@ class UserService {
 
       await dio.request(
         '/identity/connect/logout',
-        data: {},
+        data: <String, dynamic>{},
         options: Options(
           method: 'POST',
           contentType: Headers.formUrlEncodedContentType,
@@ -200,7 +200,7 @@ class UserService {
 
       Response response = await dio.request(
         "/identity/connect/token",
-        data: {
+        data: <String, dynamic>{
           "grant_type": "refresh_token",
           "client_id": clientId,
           "refresh_token": refreshToken,
@@ -214,11 +214,11 @@ class UserService {
 
       // Store the tokens on successfull request.
       if (response.statusCode == HttpStatus.ok) {
-        _storage.set(
+       await _storage.set(
           SecureStorageService.accessTokenStorageKey,
           response.data?['access_token'],
         );
-        _storage.set(
+       await _storage.set(
           SecureStorageService.refreshTokenStorageKey,
           response.data?['refresh_token'],
         );

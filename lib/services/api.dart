@@ -133,7 +133,9 @@ class ApiService {
                   options: options,
                   data: requestOptions.data is FormData
                       ? _reinitFormData(requestOptions.data)
-                      : requestOptions.data,
+                      : (requestOptions.data is Map
+                          ? Map<String, dynamic>.from(requestOptions.data)
+                          : requestOptions.data),
                   queryParameters: requestOptions.queryParameters,
                 );
 

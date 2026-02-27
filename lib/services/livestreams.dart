@@ -99,7 +99,7 @@ class LivestreamService {
   ) async {
     await _apiService.request(
       '/media/livestream/assign',
-      data: {
+      data: <String, dynamic>{
         "items": items,
         "groups": groups,
         "initGroups": initGroups,

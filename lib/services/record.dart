@@ -90,7 +90,7 @@ class RecordService {
     var response = await _apiService.request(
       '/media/record/list',
       queryParameters: params,
-      data: tagFilter != null ? tagFilter.toJson() : {},
+      data: tagFilter != null ? tagFilter.toJson() : <String, dynamic>{},
       options: Options(
         method: 'POST',
       ),
@@ -376,7 +376,7 @@ class RecordService {
   ) async {
     await _apiService.request(
       '/media/record/assign',
-      data: {
+      data: <String, dynamic>{
         "items": items,
         "groups": groups,
         "initGroups": initGroups,
@@ -396,7 +396,7 @@ class RecordService {
   ) async {
     await _apiService.request(
       '/media/record/assignFolder',
-      data: {
+      data: <String, dynamic>{
         "items": list,
         "groups": selectedGroups,
         "initGroups": initGroups,
@@ -412,7 +412,7 @@ class RecordService {
   Future lock(List<String> list) async {
     await _apiService.request(
       '/media/record/lock',
-      data: {
+      data: <String, dynamic>{
         "items": list,
       },
       options: Options(
@@ -426,7 +426,7 @@ class RecordService {
   Future lockFolders(List<RecordFolder> list) async {
     await _apiService.request(
       '/media/record/lockFolder',
-      data: {
+      data: <String, dynamic>{
         "items": list,
       },
       options: Options(
