@@ -36,7 +36,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   late AppLocalizations locales;
 
   /// Socket connection to the server.
-  late RegistrationService _socket;
+  RegistrationService? _socket;
 
   /// [RegistrationState] of the current process.
   RegistrationState _state = RegistrationState.scan;
@@ -64,7 +64,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     final messenger = MessengerService.getInstance();
 
     try {
-      await _socket.connect();
+      await _socket!.connect();
     } on HttpException catch (e) {
       if (e.statusCode != HttpStatus.unauthorized) {
         messenger.showMessage(messenger.unexpectedError(e.message));
@@ -73,7 +73,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
 
       await UserService.getInstance().refreshToken();
       try {
-        await _socket.connect();
+        await _socket!.connect();
       } catch (_) {
         _closeOnError();
       }
@@ -136,9 +136,15 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   void abort() async {
     var nav = Navigator.of(_context);
     showProgressIndicator();
-    await _socket.close();
+    await _socket?.close();
     RouterService.getInstance().navigatorKey.currentState!.pop();
     nav.pop(false);
+  }
+
+  @override
+  void dispose() {
+    _socket?.close();
+    super.dispose();
   }
 
   /// Validates the given [displayName] and returns an error message or null if
