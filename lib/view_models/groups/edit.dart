@@ -90,7 +90,7 @@ class GroupEditDialogViewModel extends ChangeNotifier {
 
   /// Clears the errors from the backend for the field with the passed
   /// [fieldName].
-  clearBackendErrors(String fieldName) {
+  void clearBackendErrors(String fieldName) {
     errors.remove(fieldName);
   }
 

@@ -170,7 +170,7 @@ class ApiService {
   }
 
   /// Reinitialize the form data when token was refreshed.
-  FormData _reinitFormData(data) {
+  FormData _reinitFormData(dynamic data) {
     FormData formData = FormData();
     formData.fields.addAll(data.fields);
     for (MapEntry mapFile in data.files) {

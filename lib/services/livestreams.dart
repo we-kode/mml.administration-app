@@ -57,7 +57,7 @@ class LivestreamService {
   }
 
   /// Removes all livestreams [ids].
-  Future<void> delete<String>(List<String> ids) async {
+  Future<void> delete(List<String> ids) async {
     await _apiService.request(
       '/media/livestream/deleteList',
       data: ids,

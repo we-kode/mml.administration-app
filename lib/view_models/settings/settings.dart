@@ -30,6 +30,9 @@ class SettingsViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
+       if (!_context.mounted) {
+        return false;
+      }
       locales = AppLocalizations.of(_context)!;
       try {
         user = await _userService.getUserInfo();

@@ -45,7 +45,6 @@ class RecordsViewModel extends ChangeNotifier {
           ))
               ?.toLowerCase() ==
           'true';
-      // TODO: Is exectued before logged in --> should be moved anywhere else
       groups = await _groupService.getMediaGroups(null, 0, -1);
       return true;
     });
@@ -76,8 +75,8 @@ class RecordsViewModel extends ChangeNotifier {
 
   /// Deletes the records with the passed [recordIds] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> delete<ModelBase>(
-    List<ModelBase> items,
+  Future<bool> delete<T>(
+    List<T> items,
     BuildContext context,
   ) async {
     var shouldDelete = await showDeleteDialog(context);
@@ -87,11 +86,11 @@ class RecordsViewModel extends ChangeNotifier {
         showProgressIndicator();
         if (items.first is Record) {
           await _service.delete(items
-              .map<String>((ModelBase e) => (e as Record).getIdentifier())
+              .map<String>((T e) => (e as Record).getIdentifier())
               .toList());
         } else {
           await _service.deleteFolder(items
-              .map<RecordFolder>((ModelBase e) => (e as RecordFolder))
+              .map<RecordFolder>((T e) => (e as RecordFolder))
               .toList());
         }
         RouterService.getInstance().navigatorKey.currentState!.pop();
@@ -106,7 +105,7 @@ class RecordsViewModel extends ChangeNotifier {
   }
 
   /// Loads the next folder which is before actual date range filtered by [subFilter].
-  moveFolderUp(ID3TagFilter subFilter) {
+  void moveFolderUp(ID3TagFilter subFilter) {
     if (subFilter.startDate == null) {
       return;
     }
@@ -153,8 +152,8 @@ class RecordsViewModel extends ChangeNotifier {
   }
 
   /// Assigns groups to records.
-  Future assignGroups<ModelBase>(
-    List<ModelBase> items,
+  Future assignGroups<T>(
+    List<T> items,
     List<String> initialGroups,
     List<String> selectedGroups,
   ) async {

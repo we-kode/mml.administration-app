@@ -44,7 +44,7 @@ class MainScreen extends StatelessWidget {
         return "${MainViewModel.binaryUri}$version/$file";
       },
       appName: AppLocalizations.of(context)!.appTitle,
-      getChangelog: (latestVersion, __) async {
+      getChangelog: (latestVersion, _) async {
         var version = latestVersion.split('-').first;
         final data = await http.get(
           Uri.parse(

@@ -13,18 +13,9 @@ ClientRegistration _$ClientRegistrationFromJson(Map<String, dynamic> json) =>
       endpoint: json['endpoint'] as String?,
     );
 
-Map<String, dynamic> _$ClientRegistrationToJson(ClientRegistration instance) {
-  final val = <String, dynamic>{
-    'token': instance.token,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('endpoint', instance.endpoint);
-  val['appKey'] = instance.appKey;
-  return val;
-}
+Map<String, dynamic> _$ClientRegistrationToJson(ClientRegistration instance) =>
+    <String, dynamic>{
+      'token': instance.token,
+      'endpoint': ?instance.endpoint,
+      'appKey': instance.appKey,
+    };

@@ -7,25 +7,16 @@ part of 'genre_bitrate.dart';
 // **************************************************************************
 
 GenreBitrate _$GenreBitrateFromJson(Map<String, dynamic> json) => GenreBitrate(
-      genreId: json['genreId'] as String?,
-      name: json['name'] as String?,
-      bitrate: (json['bitrate'] as num?)?.toInt(),
-      isDeletable: json['isDeletable'] as bool? ?? true,
-    );
+  genreId: json['genreId'] as String?,
+  name: json['name'] as String?,
+  bitrate: (json['bitrate'] as num?)?.toInt(),
+  isDeletable: json['isDeletable'] as bool? ?? true,
+);
 
-Map<String, dynamic> _$GenreBitrateToJson(GenreBitrate instance) {
-  final val = <String, dynamic>{
-    'isDeletable': instance.isDeletable,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('genreId', instance.genreId);
-  writeNotNull('name', instance.name);
-  writeNotNull('bitrate', instance.bitrate);
-  return val;
-}
+Map<String, dynamic> _$GenreBitrateToJson(GenreBitrate instance) =>
+    <String, dynamic>{
+      'isDeletable': instance.isDeletable,
+      'genreId': ?instance.genreId,
+      'name': ?instance.name,
+      'bitrate': ?instance.bitrate,
+    };

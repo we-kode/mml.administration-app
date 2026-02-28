@@ -7,25 +7,16 @@ part of 'record_folder.dart';
 // **************************************************************************
 
 RecordFolder _$RecordFolderFromJson(Map<String, dynamic> json) => RecordFolder(
-      year: (json['year'] as num).toInt(),
-      month: (json['month'] as num?)?.toInt(),
-      day: (json['day'] as num?)?.toInt(),
-      isDeletable: json['isDeletable'] as bool? ?? true,
-    );
+  year: (json['year'] as num).toInt(),
+  month: (json['month'] as num?)?.toInt(),
+  day: (json['day'] as num?)?.toInt(),
+  isDeletable: json['isDeletable'] as bool? ?? true,
+);
 
-Map<String, dynamic> _$RecordFolderToJson(RecordFolder instance) {
-  final val = <String, dynamic>{
-    'isDeletable': instance.isDeletable,
-    'year': instance.year,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('month', instance.month);
-  writeNotNull('day', instance.day);
-  return val;
-}
+Map<String, dynamic> _$RecordFolderToJson(RecordFolder instance) =>
+    <String, dynamic>{
+      'isDeletable': instance.isDeletable,
+      'year': instance.year,
+      'month': ?instance.month,
+      'day': ?instance.day,
+    };

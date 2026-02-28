@@ -7,23 +7,13 @@ part of 'artist.dart';
 // **************************************************************************
 
 Artist _$ArtistFromJson(Map<String, dynamic> json) => Artist(
-      artistId: json['artistId'] as String?,
-      name: json['name'] as String?,
-      isDeletable: json['isDeletable'] as bool? ?? false,
-    );
+  artistId: json['artistId'] as String?,
+  name: json['name'] as String?,
+  isDeletable: json['isDeletable'] as bool? ?? false,
+);
 
-Map<String, dynamic> _$ArtistToJson(Artist instance) {
-  final val = <String, dynamic>{
-    'isDeletable': instance.isDeletable,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('artistId', instance.artistId);
-  writeNotNull('name', instance.name);
-  return val;
-}
+Map<String, dynamic> _$ArtistToJson(Artist instance) => <String, dynamic>{
+  'isDeletable': instance.isDeletable,
+  'artistId': ?instance.artistId,
+  'name': ?instance.name,
+};

@@ -61,6 +61,10 @@ class RecordsScreen extends StatelessWidget {
                       return;
                     }
 
+                    if (!context.mounted) {
+                      return;
+                    }
+
                     return await showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -84,7 +88,7 @@ class RecordsScreen extends StatelessWidget {
                       dialogTitle: locales.uploadFiles,
                     );
 
-                    if (selected == null) {
+                    if (selected == null || !context.mounted) {
                       return;
                     }
 
@@ -101,7 +105,7 @@ class RecordsScreen extends StatelessWidget {
                   },
                 ),
               ],
-              deleteItems: <ModelBase>(List<ModelBase> items) => vm.delete(
+              deleteItems: <T>(List<T> items) => vm.delete(
                 items,
                 context,
               ),
@@ -162,7 +166,7 @@ class RecordsScreen extends StatelessWidget {
               availableTags: vm.groups,
               onChangedAvailableTags: (item, changedTags) =>
                   vm.groupsChanged(item, changedTags),
-              assignItems: <ModelBase>(List<ModelBase> items) async {
+              assignItems: <T>(List<T> items) async {
                 var selectedGroups = await showDialog(
                   barrierDismissible: false,
                   context: context,
@@ -186,7 +190,7 @@ class RecordsScreen extends StatelessWidget {
                 );
                 return true;
               },
-              lockItems: <ModelBase>(List<ModelBase> items) async {
+              lockItems: <T>(List<T> items) async {
                 await vm.lockRecords(
                   items,
                 );

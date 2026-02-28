@@ -57,8 +57,12 @@ class ChangePasswordViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
+      if (!_context.mounted) {
+        return false;
+      }
+
       var args =
-          ModalRoute.of(context)!.settings.arguments as ChangePasswordArguments;
+          ModalRoute.of(_context)!.settings.arguments as ChangePasswordArguments;
       user = args.user;
       isCloseable = args.isManualTriggered;
       locales = AppLocalizations.of(_context)!;

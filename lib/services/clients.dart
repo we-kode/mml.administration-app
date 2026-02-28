@@ -63,7 +63,7 @@ class ClientService {
   }
 
   /// Deletes the clients with the given [clientIds] on the server.
-  Future<void> deleteClients<String>(List<String> clientIds) async {
+  Future<void> deleteClients(List<String> clientIds) async {
     await _apiService.request(
       '/identity/client/deleteList',
       data: clientIds,

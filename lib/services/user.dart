@@ -72,7 +72,7 @@ class UserService {
   }
 
   /// Deletes the users with the given [userIds] on the server.
-  Future<void> deleteUsers<int>(List<int> userIds) async {
+  Future<void> deleteUsers(List<int> userIds) async {
     await _apiService.request(
       '/identity/user/deleteList',
       data: userIds,

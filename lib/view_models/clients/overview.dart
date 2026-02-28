@@ -62,8 +62,8 @@ class ClientsViewModel extends ChangeNotifier {
 
   /// Deletes the clients with the passed [clients] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> deleteClients<ModelBase>(
-    List<ModelBase> clients,
+  Future<bool> deleteClients<T>(
+    List<T> clients,
     BuildContext context,
   ) async {
     var shouldDelete = await showDeleteDialog(context);
@@ -72,7 +72,7 @@ class ClientsViewModel extends ChangeNotifier {
       try {
         showProgressIndicator();
         await _service.deleteClients(clients
-            .map<String>((ModelBase e) => (e as Client).getIdentifier())
+            .map<String>((T e) => (e as Client).getIdentifier())
             .toList());
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
@@ -96,8 +96,8 @@ class ClientsViewModel extends ChangeNotifier {
   }
 
   /// Assigns groups to clients.
-  Future assignGroups<ModelBase>(
-    List<ModelBase> clients,
+  Future assignGroups<T>(
+    List<T> clients,
     List<String> initialGroups,
     List<String> selectedGroups,
   ) async {

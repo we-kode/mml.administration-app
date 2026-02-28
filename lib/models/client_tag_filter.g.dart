@@ -8,8 +8,9 @@ part of 'client_tag_filter.dart';
 
 ClientTagFilter _$ClientTagFilterFromJson(Map<String, dynamic> json) =>
     ClientTagFilter(
-      groups:
-          (json['groups'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      groups: (json['groups'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       onlyNew: json['onlyNew'] as bool? ?? false,
     )..isGrouped = json['isGrouped'] as bool;
 

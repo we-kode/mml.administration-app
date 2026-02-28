@@ -7,25 +7,15 @@ part of 'group.dart';
 // **************************************************************************
 
 Group _$GroupFromJson(Map<String, dynamic> json) => Group(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      isDefault: json['isDefault'] as bool? ?? false,
-      isDeletable: json['isDeletable'] as bool? ?? true,
-    );
+  id: json['id'] as String?,
+  name: json['name'] as String?,
+  isDefault: json['isDefault'] as bool? ?? false,
+  isDeletable: json['isDeletable'] as bool? ?? true,
+);
 
-Map<String, dynamic> _$GroupToJson(Group instance) {
-  final val = <String, dynamic>{
-    'isDeletable': instance.isDeletable,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('id', instance.id);
-  writeNotNull('name', instance.name);
-  val['isDefault'] = instance.isDefault;
-  return val;
-}
+Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
+  'isDeletable': instance.isDeletable,
+  'id': ?instance.id,
+  'name': ?instance.name,
+  'isDefault': instance.isDefault,
+};

@@ -23,7 +23,7 @@ class MessengerService {
   }
 
   /// Shows the given [text] in the app snackbar.
-  showMessage(String text) {
+  void showMessage(String text) {
     final SnackBar snackBar = SnackBar(content: Text(text));
     snackbarKey.currentState?.showSnackBar(snackBar);
   }

@@ -182,7 +182,7 @@ class RecordService {
   }
 
   /// Deletes the records with the given [recordIds] on the server.
-  Future<void> delete<String>(List<String> recordIds) async {
+  Future<void> delete(List<String> recordIds) async {
     await _apiService.request(
       '/media/record/deleteList',
       data: recordIds,
@@ -208,7 +208,7 @@ class RecordService {
   }
 
   /// Updates the given [Record] on the server.
-  updateRecord(Record record) async {
+  Future<void> updateRecord(Record record) async {
     await _apiService.request(
       '/media/record',
       data: record.toJson(),
@@ -231,7 +231,7 @@ class RecordService {
   }
 
   /// Saves the record settings
-  saveSettings(Settings settings) async {
+  Future<void> saveSettings(Settings settings) async {
     await _apiService.request(
       '/media/settings',
       data: settings.toJson(),
@@ -259,7 +259,7 @@ class RecordService {
   }
 
   /// Saves the record validation settings.
-  saveValidationSettings(RecordValidation settings) async {
+  Future<void> saveValidationSettings(RecordValidation settings) async {
     await _apiService.request(
       '/media/settings/UploadValidation',
       data: Map<String, String>.from(<String, String>{

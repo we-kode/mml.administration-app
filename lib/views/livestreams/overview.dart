@@ -27,7 +27,7 @@ class LiveStreamsScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             return AsyncListView(
-              deleteItems: <ModelBase>(List<ModelBase> items) => vm.delete(
+              deleteItems: <T>(List<T> items) => vm.delete(
                 context,
                 items,
               ),
@@ -57,7 +57,7 @@ class LiveStreamsScreen extends StatelessWidget {
               availableTags: vm.groups,
               onChangedAvailableTags: (item, changedTags) =>
                   vm.groupsChanged(item, changedTags),
-              assignItems: <ModelBase>(List<ModelBase> items) async {
+              assignItems: <T>(List<T> items) async {
                 var selectedGroups = await showDialog(
                   barrierDismissible: false,
                   context: context,

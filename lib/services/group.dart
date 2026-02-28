@@ -60,7 +60,7 @@ class GroupService {
   }
 
   /// Deletes the groups with the given [groupIds] on the server.
-  Future<void> deleteGroups<String>(List<String> groupIds) async {
+  Future<void> deleteGroups(List<String> groupIds) async {
     await _apiService.request(
       '/identity/group/deleteList',
       data: groupIds,

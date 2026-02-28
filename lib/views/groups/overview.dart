@@ -21,7 +21,7 @@ class GroupsOverviewScreen extends StatelessWidget {
         var vm = Provider.of<GroupsOverviewViewModel>(context, listen: false);
 
         return AsyncListView(
-          deleteItems: <ModelBase>(List<ModelBase> items) => vm.deleteGroups(
+          deleteItems: <T>(List<T> items) => vm.deleteGroups(
             context,
             items,
           ),

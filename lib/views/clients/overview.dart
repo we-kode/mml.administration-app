@@ -36,7 +36,7 @@ class ClientsScreen extends StatelessWidget {
                     clients: vm.clientCount,
                     tagFilter: vm.tagFilter,
                   ),
-                  deleteItems: <ModelBase>(List<ModelBase> items) =>
+                  deleteItems: <T>(List<T> items) =>
                       vm.deleteClients(
                     items,
                     context,
@@ -64,7 +64,7 @@ class ClientsScreen extends StatelessWidget {
                   availableTags: vm.groups,
                   onChangedAvailableTags: (item, changedTags) =>
                       vm.groupsChanged(item, changedTags),
-                  assignItems: <ModelBase>(List<ModelBase> clients) async {
+                  assignItems: <T>(List<T> clients) async {
                     var result = await showDialog(
                       barrierDismissible: false,
                       context: context,

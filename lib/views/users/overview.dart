@@ -21,7 +21,7 @@ class UsersOverviewScreen extends StatelessWidget {
         var vm = Provider.of<UsersOverviewViewModel>(context, listen: false);
 
         return AsyncListView(
-          deleteItems: <ModelBase>(List<ModelBase> items) => vm.deleteUsers(
+          deleteItems: <T>(List<T> items) => vm.deleteUsers(
             context,
             items,
           ),

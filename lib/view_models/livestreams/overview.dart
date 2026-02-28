@@ -46,9 +46,9 @@ class LiveStreamsViewModel extends ChangeNotifier {
   }
 
   /// Deletes [items].
-  Future<bool> delete<ModelBase>(
+  Future<bool> delete<T>(
     BuildContext context,
-    List<ModelBase> items,
+    List<T> items,
   ) async {
     var shouldDelete = await showDeleteDialog(context);
 
@@ -56,7 +56,7 @@ class LiveStreamsViewModel extends ChangeNotifier {
       try {
         showProgressIndicator();
         await _service.delete(items
-            .map<String>((ModelBase e) => (e as Livestream).getIdentifier())
+            .map<String>((T e) => (e as Livestream).getIdentifier())
             .toList());
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
@@ -80,8 +80,8 @@ class LiveStreamsViewModel extends ChangeNotifier {
   }
 
   /// Assigns groups to records.
-  Future assignGroups<ModelBase>(
-    List<ModelBase> clients,
+  Future assignGroups<T>(
+    List<T> clients,
     List<String> initialGroups,
     List<String> selectedGroups,
   ) async {
