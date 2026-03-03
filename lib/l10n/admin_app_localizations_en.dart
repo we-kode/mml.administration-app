@@ -458,4 +458,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String oldVersion(String appVersion) {
     return 'You are currently running version $appVersion.';
   }
+
+  @override
+  String get inactive => 'Inactive';
 }

@@ -141,5 +141,6 @@
   "updateInstall": "Update and install",
   "downloading": "Downloading...",
   "newVersion": "A new Version {latestVersion} is available.",
-  "oldVersion": "You are currently running version {appVersion}."
+  "oldVersion": "You are currently running version {appVersion}.",
+  "inactive": "Inactive"
 }

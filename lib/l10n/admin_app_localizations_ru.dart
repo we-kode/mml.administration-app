@@ -459,4 +459,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String oldVersion(String appVersion) {
     return 'В данный момент используется версия $appVersion.';
   }
+
+  @override
+  String get inactive => 'Неактивный';
 }
