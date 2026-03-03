@@ -141,5 +141,6 @@
   "updateInstall": "Обновить и установить",
   "downloading": "Скачивание...",
   "newVersion": "Доступна новая версия {latestVersion}.",
-  "oldVersion": "В данный момент используется версия {appVersion}."
+  "oldVersion": "В данный момент используется версия {appVersion}.",
+  "inactive": "Неактивный"
 }

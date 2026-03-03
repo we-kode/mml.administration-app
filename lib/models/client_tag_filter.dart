@@ -12,10 +12,14 @@ class ClientTagFilter extends Subfilter {
   /// Shows only new clients
   bool onlyNew = false;
 
+  /// Shows only inactive clients
+  bool inactive = false;
+
   /// Initializes the model.
   ClientTagFilter({
     List<String>? groups,
     this.onlyNew = false,
+    this.inactive = false,
   }) {
     this.groups = groups ?? [];
   }
@@ -30,11 +34,14 @@ class ClientTagFilter extends Subfilter {
   /// Assigns the new filter [value] to the [ClientTagFilters] identifier.
   void operator []=(String identifier, dynamic value) {
     switch (identifier) {
-       case ClientTagFilters.groups:
+      case ClientTagFilters.groups:
         groups = value as List<String>;
         break;
-       case ClientTagFilters.onlyNew:
+      case ClientTagFilters.onlyNew:
         onlyNew = value as bool;
+        break;
+      case ClientTagFilters.inactive:
+        inactive = value as bool;
         break;
     }
     notifyListeners();
@@ -43,10 +50,12 @@ class ClientTagFilter extends Subfilter {
   /// Returns the saved values of the [ClientTagFilters] identifier.
   dynamic operator [](String identifier) {
     switch (identifier) {
-       case ClientTagFilters.groups:
+      case ClientTagFilters.groups:
         return groups;
       case ClientTagFilters.onlyNew:
         return onlyNew;
+      case ClientTagFilters.inactive:
+        return inactive;
     }
   }
 
@@ -59,6 +68,9 @@ class ClientTagFilter extends Subfilter {
       case ClientTagFilters.onlyNew:
         onlyNew = false;
         break;
+      case ClientTagFilters.inactive:
+        inactive = false;
+        break;
     }
     notifyListeners();
   }
@@ -66,10 +78,12 @@ class ClientTagFilter extends Subfilter {
   /// Checks if the value of the [identifier] is not empty.
   bool isNotEmpty(String identifier) {
     switch (identifier) {
-       case ClientTagFilters.groups:
+      case ClientTagFilters.groups:
         return groups.isNotEmpty;
       case ClientTagFilters.onlyNew:
         return onlyNew;
+      case ClientTagFilters.inactive:
+        return inactive;
       default:
         return true;
     }
@@ -80,6 +94,10 @@ class ClientTagFilter extends Subfilter {
 abstract class ClientTagFilters {
   /// Languages tag identifier.
   static const String groups = "groups";
+
   /// Only new tag identifier,
   static const String onlyNew = "onlyNew";
+
+  /// Inactive tag identifier,
+  static const String inactive = "inactive";
 }

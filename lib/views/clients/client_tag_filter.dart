@@ -27,27 +27,41 @@ class ClientTagFilterView extends ListSubfilterView {
       builder: (context, _) {
         var locales = AppLocalizations.of(context)!;
 
-        return Row(
-          children: [
-            _createTagFilter(
-              '$clients',
-              Symbols.phone_android_rounded,
-              context,
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width,
             ),
-            horizontalSpacer,
-            _createActiveTagFilter(
-              ClientTagFilters.groups,
-              locales.groups,
-              Symbols.vibration,
+            child: Row(
+              children: [
+                _createTagFilter(
+                  '$clients',
+                  Symbols.phone_android_rounded,
+                  context,
+                ),
+                horizontalSpacer,
+                _createActiveTagFilter(
+                  ClientTagFilters.groups,
+                  locales.groups,
+                  Symbols.vibration,
+                ),
+                horizontalSpacer,
+                _createActiveTagFilter(
+                  ClientTagFilters.onlyNew,
+                  locales.onlyNew,
+                  Symbols.qr_code_2,
+                ),
+                horizontalSpacer,
+                _createActiveTagFilter(
+                  ClientTagFilters.inactive,
+                  locales.inactive,
+                  Symbols.mobile_off,
+                ),
+                horizontalSpacer,
+              ],
             ),
-            horizontalSpacer,
-            _createActiveTagFilter(
-              ClientTagFilters.onlyNew,
-              locales.onlyNew,
-              Symbols.qr_code_2,
-            ),
-            horizontalSpacer,
-          ],
+          ),
         );
       },
     );
@@ -56,19 +70,12 @@ class ClientTagFilterView extends ListSubfilterView {
   /// Creates a single tag filter for given [identifier].
   ///
   /// [icon] can be set.
-  Widget _createTagFilter(
-    String label,
-    IconData icon,
-    BuildContext context,
-  ) {
+  Widget _createTagFilter(String label, IconData icon, BuildContext context) {
     return Chip(
       side: BorderSide.none,
       backgroundColor: Theme.of(context).colorScheme.outlineVariant,
       label: Text(label),
-      avatar: Icon(
-        icon,
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-      ),
+      avatar: Icon(icon, color: Theme.of(context).colorScheme.onSurfaceVariant),
     );
   }
 
@@ -102,9 +109,7 @@ class ClientTagFilterView extends ListSubfilterView {
           deleteIconColor: isActive ? activeColor : null,
           onPressed: () => _handleFilter(identifier, context, vm),
           onDeleted: vm.tagFilter.isNotEmpty(identifier)
-              ? () => {
-                    vm.clear(identifier),
-                  }
+              ? () => {vm.clear(identifier)}
               : null,
         );
       },
@@ -123,12 +128,8 @@ class ClientTagFilterView extends ListSubfilterView {
         context: context,
         builder: (BuildContext context) {
           return AsyncSelectListDialog(
-            loadData: ({filter, offset, take}) => vm.load(
-              identifier,
-              filter: filter,
-              offset: offset,
-              take: take,
-            ),
+            loadData: ({filter, offset, take}) =>
+                vm.load(identifier, filter: filter, offset: offset, take: take),
             initialSelected: vm.tagFilter[identifier],
           );
         },

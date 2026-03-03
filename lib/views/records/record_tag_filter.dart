@@ -18,12 +18,12 @@ class RecordTagFilter extends ListSubfilterView {
     DateTime? endDate,
     bool isFolderView = false,
   }) : super(
-          filter: ID3TagFilter(
-            startDate: startDate,
-            endDate: endDate,
-            isFolderView: isFolderView,
-          ),
-        );
+         filter: ID3TagFilter(
+           startDate: startDate,
+           endDate: endDate,
+           isFolderView: isFolderView,
+         ),
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -32,56 +32,64 @@ class RecordTagFilter extends ListSubfilterView {
       builder: (context, _) {
         var locales = AppLocalizations.of(context)!;
 
-        return Row(
-          children: [
-            _createTagFilter(
-              ID3TagFilters.folderView,
-              locales.folder,
-              Symbols.folder,
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width,
             ),
-            Consumer<RecordTagFilterViewModel>(
-              builder: (context, vm, child) {
-                var isFolderView = (filter as ID3TagFilter).isGrouped;
-                return !isFolderView ? horizontalSpacer : Container();
-              },
+            child: Row(
+              children: [
+                _createTagFilter(
+                  ID3TagFilters.folderView,
+                  locales.folder,
+                  Symbols.folder,
+                ),
+                Consumer<RecordTagFilterViewModel>(
+                  builder: (context, vm, child) {
+                    var isFolderView = (filter as ID3TagFilter).isGrouped;
+                    return !isFolderView ? horizontalSpacer : Container();
+                  },
+                ),
+                _createTagFilter(
+                  ID3TagFilters.date,
+                  locales.date,
+                  Symbols.calendar_month,
+                ),
+                horizontalSpacer,
+                _createTagFilter(
+                  ID3TagFilters.artists,
+                  locales.artist,
+                  Symbols.person,
+                ),
+                horizontalSpacer,
+                _createTagFilter(
+                  ID3TagFilters.genres,
+                  locales.genre,
+                  Symbols.genres,
+                ),
+                horizontalSpacer,
+                _createTagFilter(
+                  ID3TagFilters.albums,
+                  locales.album,
+                  Symbols.library_music,
+                ),
+                horizontalSpacer,
+                _createTagFilter(
+                  ID3TagFilters.languages,
+                  locales.language,
+                  Symbols.translate,
+                ),
+                horizontalSpacer,
+                _createTagFilter(
+                  ID3TagFilters.groups,
+                  locales.groups,
+                  Symbols.vibration,
+                ),
+                horizontalSpacer,
+              ],
             ),
-            _createTagFilter(
-              ID3TagFilters.date,
-              locales.date,
-              Symbols.calendar_month,
-            ),
-            horizontalSpacer,
-            _createTagFilter(
-              ID3TagFilters.artists,
-              locales.artist,
-              Symbols.person,
-            ),
-            horizontalSpacer,
-            _createTagFilter(
-              ID3TagFilters.genres,
-              locales.genre,
-              Symbols.genres,
-            ),
-            horizontalSpacer,
-            _createTagFilter(
-              ID3TagFilters.albums,
-              locales.album,
-              Symbols.library_music,
-            ),
-            horizontalSpacer,
-            _createTagFilter(
-              ID3TagFilters.languages,
-              locales.language,
-              Symbols.translate,
-            ),
-            horizontalSpacer,
-            _createTagFilter(
-              ID3TagFilters.groups,
-              locales.groups,
-              Symbols.vibration,
-            ),
-            horizontalSpacer,
-          ],
+          ),
         );
       },
     );
@@ -90,14 +98,11 @@ class RecordTagFilter extends ListSubfilterView {
   /// Creates a single tag filter for given [identifier].
   ///
   /// [icon] can be set.
-  Widget _createTagFilter(
-    String identifier,
-    String label,
-    IconData icon,
-  ) {
+  Widget _createTagFilter(String identifier, String label, IconData icon) {
     return Consumer<RecordTagFilterViewModel>(
       builder: (context, vm, child) {
-        var isFolderView = identifier == ID3TagFilters.date &&
+        var isFolderView =
+            identifier == ID3TagFilters.date &&
             (filter as ID3TagFilter).isGrouped;
         final isActive = vm.tagFilter.isNotEmpty(identifier);
         final brightness = Theme.of(context).brightness;
@@ -122,12 +127,10 @@ class RecordTagFilter extends ListSubfilterView {
                 onPressed: () => identifier == ID3TagFilters.date
                     ? _handleDateFilter(context, vm)
                     : identifier == ID3TagFilters.folderView
-                        ? _handleFolderFilter(context, vm)
-                        : _handleFilter(identifier, context, vm),
+                    ? _handleFolderFilter(context, vm)
+                    : _handleFilter(identifier, context, vm),
                 onDeleted: vm.tagFilter.isNotEmpty(identifier)
-                    ? () => {
-                          vm.clear(identifier),
-                        }
+                    ? () => {vm.clear(identifier)}
                     : null,
               );
       },
@@ -156,15 +159,11 @@ class RecordTagFilter extends ListSubfilterView {
         lastDate: DateTime.now(),
         cancelButton: Text(
           locales.cancel,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
         okButton: Text(
           locales.save,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
       ),
       dialogSize: Size(
@@ -181,10 +180,7 @@ class RecordTagFilter extends ListSubfilterView {
 
     vm.updateFilter(
       ID3TagFilters.date,
-      DateTimeRange(
-        start: dateUpdated.first!,
-        end: dateUpdated.last!,
-      ),
+      DateTimeRange(start: dateUpdated.first!, end: dateUpdated.last!),
     );
   }
 
@@ -199,12 +195,8 @@ class RecordTagFilter extends ListSubfilterView {
       context: context,
       builder: (BuildContext context) {
         return AsyncSelectListDialog(
-          loadData: ({filter, offset, take}) => vm.load(
-            identifier,
-            filter: filter,
-            offset: offset,
-            take: take,
-          ),
+          loadData: ({filter, offset, take}) =>
+              vm.load(identifier, filter: filter, offset: offset, take: take),
           initialSelected: vm.tagFilter[identifier],
         );
       },

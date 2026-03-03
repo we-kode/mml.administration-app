@@ -951,6 +951,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Sie verwenden derzeit die Version {appVersion}.'**
   String oldVersion(String appVersion);
+
+  /// No description provided for @inactive.
+  ///
+  /// In de, this message translates to:
+  /// **'Inaktiv'**
+  String get inactive;
 }
 
 class _AppLocalizationsDelegate
