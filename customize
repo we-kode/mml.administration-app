@@ -50,6 +50,7 @@ do
 		sed -i -E "s/		<string>\$(AppIdentifierPrefix)de.wekode.mmlAdmin<\/string>/		<string>\$(AppIdentifierPrefix)$value<\/string>/" "$DIR/macos/Runner/Release.entitlements"
 		sed -i -E "s/		<string>\$(AppIdentifierPrefix)de.wekode.mmlAdmin<\/string>/		<string>\$(AppIdentifierPrefix)$value<\/string>/" "$DIR/macos/Runner/RunnerDebug.entitlements"
 		sed -i -E "s/  identity_name: .*/  identity_name: $value/" "$DIR/pubspec.yaml"
+		sed -i -E "s/  static const _key = .*/  static const _key = \"${value//./_}_image_cache\";/" "$DIR/lib/manager/image_cache_manager.dart"
 		;;
 	repository)
 	    sed -i -E "s/  static String repository = '';/  static String repository = \"$value\";/" "$DIR/lib/view_models/main.dart"

@@ -142,5 +142,14 @@
   "downloading": "Скачивание...",
   "newVersion": "Доступна новая версия {latestVersion}.",
   "oldVersion": "В данный момент используется версия {appVersion}.",
-  "inactive": "Неактивный"
+  "inactive": "Неактивный",
+  "cacheSettings": "Управление памятью",
+  "cacheRemove": "Очистить кэш",
+  "cacheRemoveTime": "Очистить через",
+  "cacheRangeWeek": "1 неделя",
+  "cacheRangeMonth": "1 месяц",
+  "cacheRangeYear": "1 год",
+  "cacheRangeNever": "Никогда",
+  "cacheCleared": "Кэш был успешно очищен.",
+  "cacheClearedFailed": "Кэш не может быть очищен."
 }

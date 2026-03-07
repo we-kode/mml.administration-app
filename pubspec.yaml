@@ -55,6 +55,8 @@ dependencies:
   toggle_switch: ^2.3.0
   material_symbols_icons: ^4.2906.0
   updat: ^1.4.0
+  cached_network_image: ^3.4.1
+  flutter_cache_manager: ^3.4.1
 
 dev_dependencies:
   flutter_test:
