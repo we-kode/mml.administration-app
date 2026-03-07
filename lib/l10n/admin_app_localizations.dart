@@ -957,6 +957,60 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Inaktiv'**
   String get inactive;
+
+  /// No description provided for @cacheSettings.
+  ///
+  /// In de, this message translates to:
+  /// **'Speicherverwaltung'**
+  String get cacheSettings;
+
+  /// No description provided for @cacheRemove.
+  ///
+  /// In de, this message translates to:
+  /// **'Cache löschen'**
+  String get cacheRemove;
+
+  /// No description provided for @cacheRemoveTime.
+  ///
+  /// In de, this message translates to:
+  /// **'Löschen, nach'**
+  String get cacheRemoveTime;
+
+  /// No description provided for @cacheRangeWeek.
+  ///
+  /// In de, this message translates to:
+  /// **'1 Woche'**
+  String get cacheRangeWeek;
+
+  /// No description provided for @cacheRangeMonth.
+  ///
+  /// In de, this message translates to:
+  /// **'1 Monat'**
+  String get cacheRangeMonth;
+
+  /// No description provided for @cacheRangeYear.
+  ///
+  /// In de, this message translates to:
+  /// **'1 Jahr'**
+  String get cacheRangeYear;
+
+  /// No description provided for @cacheRangeNever.
+  ///
+  /// In de, this message translates to:
+  /// **'Nie'**
+  String get cacheRangeNever;
+
+  /// No description provided for @cacheCleared.
+  ///
+  /// In de, this message translates to:
+  /// **'Cache wurde erfolgreich gelöscht.'**
+  String get cacheCleared;
+
+  /// No description provided for @cacheClearedFailed.
+  ///
+  /// In de, this message translates to:
+  /// **'Cache konnte nicht gelöscht werden.'**
+  String get cacheClearedFailed;
 }
 
 class _AppLocalizationsDelegate

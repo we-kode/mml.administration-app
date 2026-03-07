@@ -29,6 +29,9 @@ class SecureStorageService {
   /// Key under which the hierarchical folder view flag is stored.
   static const String folderViewStorageKey = 'isFolderView';
 
+  /// Key under which the cache remove time is stored.
+  static const String cacheDurationStorageKey = 'cacheDuration';
+
   /// Private constructor of the service.
   SecureStorageService._();
 

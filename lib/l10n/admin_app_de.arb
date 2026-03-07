@@ -187,5 +187,14 @@
       }
     }
   },
-  "inactive": "Inaktiv"
+  "inactive": "Inaktiv",
+  "cacheSettings": "Speicherverwaltung",
+  "cacheRemove": "Cache löschen",
+  "cacheRemoveTime": "Löschen, nach",
+  "cacheRangeWeek": "1 Woche",
+  "cacheRangeMonth": "1 Monat",
+  "cacheRangeYear": "1 Jahr",
+  "cacheRangeNever": "Nie",
+  "cacheCleared": "Cache wurde erfolgreich gelöscht.",
+  "cacheClearedFailed": "Cache konnte nicht gelöscht werden."
 }

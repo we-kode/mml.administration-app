@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
+import 'package:mml_admin/manager/image_cache_manager.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -59,5 +60,6 @@ void main() async {
 
   var pkgInfo = await PackageInfo.fromPlatform();
   SettingsViewModel.version = pkgInfo.version;
+  await ImageCacheManager.init();
   runApp(const AdminApp());
 }

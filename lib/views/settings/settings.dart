@@ -25,9 +25,7 @@ class SettingsScreen extends StatelessWidget {
             future: vm.init(context),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
 
               return ListView(
@@ -49,15 +47,11 @@ class SettingsScreen extends StatelessWidget {
                       icon: const Icon(Symbols.lock),
                       label: Text(vm.locales.changePassword),
                     ),
-                    title: Text(
-                      '${vm.locales.actualUser}: ${vm.user!.name!}',
-                    ),
+                    title: Text('${vm.locales.actualUser}: ${vm.user!.name!}'),
                   ),
                   ListTile(
                     leading: const Icon(Symbols.qr_code_2),
-                    title: Text(
-                      vm.locales.actualConnectionSettings,
-                    ),
+                    title: Text(vm.locales.actualConnectionSettings),
                     onTap: () => showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -106,6 +100,60 @@ class SettingsScreen extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return const SettingsUploadValidationScreen();
+                      },
+                    ),
+                  ),
+                  const Divider(),
+                  verticalSpacer,
+                  ListTile(
+                    dense: true,
+                    visualDensity: const VisualDensity(vertical: -4),
+                    title: Text(
+                      vm.locales.cacheSettings,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Symbols.avg_pace),
+                    trailing: DropdownMenu(
+                      inputDecorationTheme: InputDecorationTheme(isDense: true),
+                      selectOnly: true,
+                      dropdownMenuEntries: [
+                        DropdownMenuEntry(
+                          value: 7,
+                          label: vm.locales.cacheRangeWeek,
+                        ),
+                        DropdownMenuEntry(
+                          value: 30,
+                          label: vm.locales.cacheRangeMonth,
+                        ),
+                        DropdownMenuEntry(
+                          value: 365,
+                          label: vm.locales.cacheRangeYear,
+                        ),
+                        DropdownMenuEntry(
+                          value: 3650,
+                          label: vm.locales.cacheRangeNever,
+                        ),
+                      ],
+                      initialSelection: vm.cacheManager.durationLimit,
+                      onSelected: (value) {
+                        vm.updateCacheLimits(duration: value);
+                      },
+                    ),
+                    title: Text(vm.locales.cacheRemoveTime),
+                  ),
+                  verticalSpacer,
+                  TextButton(
+                    onPressed: () {
+                      vm.clearCache();
+                    },
+                    child: ValueListenableBuilder<double>(
+                      valueListenable: vm.cacheManager.cacheSizeMB,
+                      builder: (context, size, _) {
+                        return Text(
+                          '${vm.locales.cacheRemove} (${size.toStringAsFixed(2)} MB)',
+                        );
                       },
                     ),
                   ),

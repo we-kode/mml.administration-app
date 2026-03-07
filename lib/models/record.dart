@@ -1,12 +1,12 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:mml_admin/components/shimmer_cover.dart';
 import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/extensions/flag.dart';
+import 'package:mml_admin/manager/image_cache_manager.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
@@ -136,10 +136,12 @@ class Record extends ModelBase {
   @override
   Widget? getAvatar(BuildContext context) {
     if (cover != null && cover!.isNotEmpty) {
-      return Image.memory(
-        Uint8List.fromList(
-          base64.decode(cover!),
-        ),
+      return CachedNetworkImage(
+        cacheKey: cover,
+        imageUrl: cover!,
+        placeholder: (context, url) => const ShimmerCover(),
+        errorWidget: (context, url, error) => const Icon(Symbols.music_note_2),
+        cacheManager: ImageCacheManager(),
       );
     }
     return const Icon(Symbols.music_note);

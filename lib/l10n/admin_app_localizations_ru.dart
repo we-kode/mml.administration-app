@@ -462,4 +462,31 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get inactive => 'Неактивный';
+
+  @override
+  String get cacheSettings => 'Управление памятью';
+
+  @override
+  String get cacheRemove => 'Очистить кэш';
+
+  @override
+  String get cacheRemoveTime => 'Очистить через';
+
+  @override
+  String get cacheRangeWeek => '1 неделя';
+
+  @override
+  String get cacheRangeMonth => '1 месяц';
+
+  @override
+  String get cacheRangeYear => '1 год';
+
+  @override
+  String get cacheRangeNever => 'Никогда';
+
+  @override
+  String get cacheCleared => 'Кэш был успешно очищен.';
+
+  @override
+  String get cacheClearedFailed => 'Кэш не может быть очищен.';
 }

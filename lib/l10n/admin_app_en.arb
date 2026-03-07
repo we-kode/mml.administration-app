@@ -142,5 +142,14 @@
   "downloading": "Downloading...",
   "newVersion": "A new Version {latestVersion} is available.",
   "oldVersion": "You are currently running version {appVersion}.",
-  "inactive": "Inactive"
+  "inactive": "Inactive",
+  "cacheSettings": "Memory management",
+  "cacheRemove": "Clear cache",
+  "cacheRemoveTime": "Clear after",
+  "cacheRangeWeek": "1 Week",
+  "cacheRangeMonth": "1 Month",
+  "cacheRangeYear": "1 Year",
+  "cacheRangeNever": "Never",
+  "cacheCleared": "Cache was cleared successfully.",
+  "cacheClearedFailed": "Cache could not be cleared."
 }
