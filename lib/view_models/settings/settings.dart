@@ -3,6 +3,7 @@ import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/manager/image_cache_manager.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/route_arguments/change_password.dart';
+import 'package:mml_admin/services/instance.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/user.dart';
@@ -26,6 +27,8 @@ class SettingsViewModel extends ChangeNotifier {
   /// Current user
   late User? user;
 
+  String? instance = '';
+
   /// Current build context.
   late BuildContext _context;
 
@@ -45,6 +48,7 @@ class SettingsViewModel extends ChangeNotifier {
       locales = AppLocalizations.of(_context)!;
       try {
         user = await _userService.getUserInfo();
+        instance = await InstanceService.getInstance().get();
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
       }

@@ -151,5 +151,7 @@
   "cacheRangeYear": "1 Year",
   "cacheRangeNever": "Never",
   "cacheCleared": "Cache was cleared successfully.",
-  "cacheClearedFailed": "Cache could not be cleared."
+  "cacheClearedFailed": "Cache could not be cleared.",
+  "instance": "Instance",
+  "sync": "Sync"
 }

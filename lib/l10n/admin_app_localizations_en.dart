@@ -488,4 +488,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cacheClearedFailed => 'Cache could not be cleared.';
+
+  @override
+  String get instance => 'Instance';
+
+  @override
+  String get sync => 'Sync';
 }

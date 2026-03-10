@@ -36,6 +36,8 @@ class MainViewModel extends ChangeNotifier {
   /// Index of the currently selected route.
   int _selectedIndex = 0;
 
+  final ValueNotifier<bool> syncUpdateAvailable = ValueNotifier(true);
+
   /// Initializes the view model.
   Future<bool> init(BuildContext context) async {
     _context = context;

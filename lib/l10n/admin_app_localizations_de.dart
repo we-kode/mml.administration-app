@@ -493,4 +493,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get cacheClearedFailed => 'Cache konnte nicht gelöscht werden.';
+
+  @override
+  String get instance => 'Instanz';
+
+  @override
+  String get sync => 'Sync';
 }

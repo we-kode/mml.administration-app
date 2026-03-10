@@ -196,5 +196,7 @@
   "cacheRangeYear": "1 Jahr",
   "cacheRangeNever": "Nie",
   "cacheCleared": "Cache wurde erfolgreich gelöscht.",
-  "cacheClearedFailed": "Cache konnte nicht gelöscht werden."
+  "cacheClearedFailed": "Cache konnte nicht gelöscht werden.",
+  "instance": "Instanz",
+  "sync": "Sync"
 }

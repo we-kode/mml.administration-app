@@ -489,4 +489,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get cacheClearedFailed => 'Кэш не может быть очищен.';
+
+  @override
+  String get instance => 'Инстанция';
+
+  @override
+  String get sync => 'Синк';
 }

@@ -26,11 +26,7 @@ class MainScreen extends StatelessWidget {
           return SettingsViewModel.version;
         }
 
-        final data = await http.get(
-          Uri.parse(
-            MainViewModel.latestVersionUri,
-          ),
-        );
+        final data = await http.get(Uri.parse(MainViewModel.latestVersionUri));
 
         return jsonDecode(data.body)["tag_name"];
       },
@@ -47,9 +43,7 @@ class MainScreen extends StatelessWidget {
       getChangelog: (latestVersion, _) async {
         var version = latestVersion.split('-').first;
         final data = await http.get(
-          Uri.parse(
-            "${MainViewModel.changeLogUri}$version",
-          ),
+          Uri.parse("${MainViewModel.changeLogUri}$version"),
         );
         return jsonDecode(data.body)["body"];
       },
@@ -101,18 +95,23 @@ class MainScreen extends StatelessWidget {
                                   Symbols.phone_android_rounded,
                                   vm.locales.devices,
                                 ),
-                                _navItem(
-                                  Symbols.vibration,
-                                  vm.locales.groups,
+                                _navItem(Symbols.vibration, vm.locales.groups),
+                                _navItem(Symbols.person, vm.locales.adminUsers),
+                                NavigationRailDestination(
+                                  icon: ValueListenableBuilder<bool>(
+                                    valueListenable: vm.syncUpdateAvailable,
+                                    builder:
+                                        (context, updatesAvailable, child) {
+                                          return Badge(
+                                            isLabelVisible: updatesAvailable,
+                                            smallSize: 8,
+                                            child: Icon(Symbols.graph_7),
+                                          );
+                                        },
+                                  ),
+                                  label: Text(vm.locales.sync),
                                 ),
-                                _navItem(
-                                  Symbols.person,
-                                  vm.locales.adminUsers,
-                                ),
-                                _navItem(
-                                  Symbols.settings,
-                                  vm.locales.settings,
-                                ),
+                                _navItem(Symbols.settings, vm.locales.settings),
                               ],
                             );
                           },
@@ -151,9 +150,6 @@ class MainScreen extends StatelessWidget {
   /// Returns a new navigation rail destination with the given
   /// [label] and [icon].
   NavigationRailDestination _navItem(IconData icon, String label) {
-    return NavigationRailDestination(
-      icon: Icon(icon),
-      label: Text(label),
-    );
+    return NavigationRailDestination(icon: Icon(icon), label: Text(label));
   }
 }

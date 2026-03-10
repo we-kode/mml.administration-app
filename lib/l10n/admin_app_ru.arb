@@ -151,5 +151,7 @@
   "cacheRangeYear": "1 год",
   "cacheRangeNever": "Никогда",
   "cacheCleared": "Кэш был успешно очищен.",
-  "cacheClearedFailed": "Кэш не может быть очищен."
+  "cacheClearedFailed": "Кэш не может быть очищен.",
+  "instance": "Инстанция",
+  "sync": "Синк"
 }

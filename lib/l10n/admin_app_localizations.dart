@@ -1011,6 +1011,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Cache konnte nicht gelöscht werden.'**
   String get cacheClearedFailed;
+
+  /// No description provided for @instance.
+  ///
+  /// In de, this message translates to:
+  /// **'Instanz'**
+  String get instance;
+
+  /// No description provided for @sync.
+  ///
+  /// In de, this message translates to:
+  /// **'Sync'**
+  String get sync;
 }
 
 class _AppLocalizationsDelegate

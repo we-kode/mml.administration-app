@@ -39,6 +39,10 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
+                    leading: const Icon(Symbols.computer),
+                    title: Text('${vm.locales.instance}: ${vm.instance}'),
+                  ),
+                  ListTile(
                     leading: const Icon(Symbols.person),
                     trailing: ElevatedButton.icon(
                       onPressed: () {
