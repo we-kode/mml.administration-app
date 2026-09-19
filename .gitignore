@@ -47,3 +47,13 @@ app.*.map.json
 
 .vscode/
 untranslated_messages.txt
+
+# Graphify local caches and transient extraction files
+graphify-out/cache/
+graphify-out/cost.json
+graphify-out/.graphify_*
+graphify-out/converted/
+graphify-out/memory/
+graphify-out/20*/
+graphify-out/.graphify_root
+graphify-out/.graphify_labels.json*

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
@@ -30,9 +31,7 @@ class RecordEditDialog extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -59,9 +58,7 @@ class RecordEditDialog extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: ClipRRect(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                 child: Container(
                   height: 200,
                   width: 200,
@@ -70,7 +67,13 @@ class RecordEditDialog extends StatelessWidget {
                 ),
               ),
             ),
+            if (!vm.isEditable)
+              ListTile(
+                leading: Icon(Symbols.warning),
+                title: Text(vm.locales.notOwned(vm.instance)),
+              ),
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.title,
               decoration: InputDecoration(
                 labelText: vm.locales.title,
@@ -87,6 +90,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.artist,
               decoration: InputDecoration(
                 labelText: vm.locales.artist,
@@ -101,6 +105,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.album,
               decoration: InputDecoration(
                 labelText: vm.locales.album,
@@ -115,6 +120,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.genre,
               decoration: InputDecoration(
                 labelText: vm.locales.genre,
@@ -129,6 +135,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.language,
               decoration: InputDecoration(
                 labelText: vm.locales.language,
@@ -162,12 +169,8 @@ class RecordEditDialog extends StatelessWidget {
             ChipChoices(
               loadData: vm.getGroups,
               initialSelectedItems: vm.record.groups,
-              onSelectionChanged: (selectableItems) =>
-                  vm.record.groups = selectableItems
-                      .map(
-                        (e) => e as Group,
-                      )
-                      .toList(),
+              onSelectionChanged: (selectableItems) => vm.record.groups =
+                  selectableItems.map((e) => e as Group).toList(),
             ),
           ],
         ),

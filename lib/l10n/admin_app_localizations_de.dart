@@ -499,4 +499,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get sync => 'Sync';
+
+  @override
+  String notOwned(String owner) {
+    return 'Eigenschaften können nur von dem Eigentümer \'$owner\' bearbeitet werden.';
+  }
+
+  @override
+  String get assignAndRemove => 'Gruppen übernehmen und löschen.';
 }

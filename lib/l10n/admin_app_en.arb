@@ -153,5 +153,7 @@
   "cacheCleared": "Cache was cleared successfully.",
   "cacheClearedFailed": "Cache could not be cleared.",
   "instance": "Instance",
-  "sync": "Sync"
+  "sync": "Sync",
+  "notOwned": "Properties can be edited only by owner '{owner}'.",
+  "assignAndRemove":"Assume groups and delete."
 }

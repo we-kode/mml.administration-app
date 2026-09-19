@@ -495,4 +495,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sync => 'Синк';
+
+  @override
+  String notOwned(String owner) {
+    return 'Свойства могут быть изменены только владельцем \'$owner\'.';
+  }
+
+  @override
+  String get assignAndRemove => 'Gruppen übernehmen und löschen.';
 }

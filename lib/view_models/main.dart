@@ -5,6 +5,7 @@ import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/user.dart';
+import 'package:mml_admin/view_models/sync/overview.dart';
 
 /// View model for the main screen.
 class MainViewModel extends ChangeNotifier {
@@ -33,16 +34,21 @@ class MainViewModel extends ChangeNotifier {
   /// Locales of the app.
   late AppLocalizations locales;
 
+  /// [RouterService].
+  final RouterService _routerService = RouterService.getInstance();
+
   /// Index of the currently selected route.
   int _selectedIndex = 0;
 
-  final ValueNotifier<bool> syncUpdateAvailable = ValueNotifier(true);
+  /// Value notifier that indicates if an update of the sync module is available.
+  final ValueNotifier<bool> syncUpdateAvailable = ValueNotifier(false);
+  late int _syncRouteIndex;
 
   /// Initializes the view model.
   Future<bool> init(BuildContext context) async {
     _context = context;
     locales = AppLocalizations.of(_context)!;
-
+    _syncRouteIndex = _routerService.nestedRoutes.keys.toList().indexOf(SyncOverviewViewModel.route);
     return Future<bool>.microtask(() async {
       return true;
     });
@@ -52,6 +58,9 @@ class MainViewModel extends ChangeNotifier {
   set selectedIndex(int index) {
     _selectedIndex = index;
     notifyListeners();
+    if (_selectedIndex == _syncRouteIndex) {
+      syncUpdateAvailable.value = false;
+    }
   }
 
   /// Returns index of the actual selected page.
@@ -80,9 +89,7 @@ class MainViewModel extends ChangeNotifier {
         });
       });
     });
-
-    var routeService = RouterService.getInstance();
-    var route = routeService.nestedRoutes.keys.elementAt(_selectedIndex);
+    var route = _routerService.nestedRoutes.keys.elementAt(_selectedIndex);
     state?.pushReplacementNamed(route);
   }
 

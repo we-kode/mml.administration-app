@@ -1023,6 +1023,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Sync'**
   String get sync;
+
+  /// No description provided for @notOwned.
+  ///
+  /// In de, this message translates to:
+  /// **'Eigenschaften können nur von dem Eigentümer \'{owner}\' bearbeitet werden.'**
+  String notOwned(String owner);
+
+  /// No description provided for @assignAndRemove.
+  ///
+  /// In de, this message translates to:
+  /// **'Gruppen übernehmen und löschen.'**
+  String get assignAndRemove;
 }
 
 class _AppLocalizationsDelegate

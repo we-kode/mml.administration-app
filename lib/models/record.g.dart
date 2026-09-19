@@ -8,6 +8,7 @@ part of 'record.dart';
 
 Record _$RecordFromJson(Map<String, dynamic> json) => Record(
   recordId: json['recordId'] as String?,
+  ownerInstance: json['ownerInstance'] as String,
   title: json['title'] as String?,
   trackNumber: (json['trackNumber'] as num?)?.toInt(),
   date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
@@ -38,6 +39,7 @@ Map<String, dynamic> _$RecordToJson(Record instance) => <String, dynamic>{
   'language': ?instance.language,
   'bitrate': ?instance.bitrate,
   'cover': ?instance.cover,
+  'ownerInstance': instance.ownerInstance,
   'locked': ?instance.locked,
   'groups': instance.groups.map((e) => e.toJson()).toList(),
 };

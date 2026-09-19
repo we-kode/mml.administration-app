@@ -198,5 +198,14 @@
   "cacheCleared": "Cache wurde erfolgreich gelöscht.",
   "cacheClearedFailed": "Cache konnte nicht gelöscht werden.",
   "instance": "Instanz",
-  "sync": "Sync"
+  "sync": "Sync",
+  "notOwned": "Eigenschaften können nur von dem Eigentümer '{owner}' bearbeitet werden.",
+  "@notOwned": {
+    "placeholders": {
+      "owner": {
+        "type": "String"
+      }
+    }
+  },
+  "assignAndRemove":"Gruppen übernehmen und löschen."
 }

@@ -7,6 +7,7 @@ import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/record.dart';
 import 'package:mml_admin/services/group.dart';
+import 'package:mml_admin/services/sync.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
@@ -35,11 +36,18 @@ class RecordEditViewModel extends ChangeNotifier {
   /// Flag that indicates whether the record is successful loaded.
   bool loadedSuccessfully = false;
 
+  /// The running instance.
+  late String instance;
+
+  /// Returns whether the record is editable or not.
+  bool get isEditable => instance == record.ownerInstance;
+
   /// Initialize the edit record view model.
   Future<bool> init(BuildContext context, String? recordId) async {
     _context = context;
     locales = AppLocalizations.of(context)!;
     try {
+      instance = await SyncService.getInstance().get();
       record = await _service.getRecord(recordId!);
       loadedSuccessfully = true;
       notifyListeners();

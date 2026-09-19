@@ -49,6 +49,9 @@ class Record extends ModelBase {
   /// The cover image of the record.
   String? cover;
 
+  /// The owner of the record.
+  String ownerInstance;
+
   /// Indicates whether the record is locked for some operations on records..
   bool? locked;
 
@@ -58,6 +61,7 @@ class Record extends ModelBase {
   /// Creates a new record instance with the given values.
   Record({
     required this.recordId,
+    required this.ownerInstance,
     this.title,
     this.trackNumber,
     this.date,
@@ -156,7 +160,7 @@ class Record extends ModelBase {
     return Icon(
       Symbols.block,
       size: 10,
-      color: Theme.of(context).colorScheme.error
+      color: Theme.of(context).colorScheme.error,
     );
   }
 

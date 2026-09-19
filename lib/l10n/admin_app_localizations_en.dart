@@ -494,4 +494,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sync => 'Sync';
+
+  @override
+  String notOwned(String owner) {
+    return 'Properties can be edited only by owner \'$owner\'.';
+  }
+
+  @override
+  String get assignAndRemove => 'Assume groups and delete.';
 }
