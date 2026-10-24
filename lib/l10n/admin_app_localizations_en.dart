@@ -502,4 +502,446 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assignAndRemove => 'Assume groups and delete.';
+
+  @override
+  String get peers => 'Instances';
+
+  @override
+  String get invitations => 'Invitations';
+
+  @override
+  String get audit => 'Audit log';
+
+  @override
+  String get approve => 'Approve';
+
+  @override
+  String get reject => 'Reject';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get copy => 'Copy';
+
+  @override
+  String get unlink => 'Remove registration';
+
+  @override
+  String get synchronize => 'Synchronize';
+
+  @override
+  String get unassigned => 'Unassigned';
+
+  @override
+  String get recordsOfInstance => 'Records of instance';
+
+  @override
+  String get peerStateRequested => 'Requested';
+
+  @override
+  String get peerStatePendingApproval => 'Waiting for approval';
+
+  @override
+  String get peerStateResponsePending => 'Approved, response pending';
+
+  @override
+  String get peerStateLinked => 'Linked';
+
+  @override
+  String get peerStateRejected => 'Rejected';
+
+  @override
+  String peerKeysUpdatedAt(String date) {
+    return 'Keys last updated: $date';
+  }
+
+  @override
+  String get peerPendingApprovalInfo =>
+      'The instance wants to synchronize records with this instance. After approval the partner is informed and the synchronization is enabled according to the rules. A rejected request is deleted.';
+
+  @override
+  String get peerRequestedInfo =>
+      'The request was sent and waits for the approval of the admin of the partner.';
+
+  @override
+  String get peerUrl => 'Address of the partner';
+
+  @override
+  String get invitationCode => 'Invitation code';
+
+  @override
+  String get requestRegistration => 'Request registration';
+
+  @override
+  String get requestRegistrationSend => 'Request';
+
+  @override
+  String get requestRegistrationInfo =>
+      'Enter the HTTPS address of the partner and the invitation code created by the admin of the partner.';
+
+  @override
+  String get invitationCreated => 'Invitation created';
+
+  @override
+  String invitationInfo(String date) {
+    return 'Pass the address and the code to the admin of the partner. The code can be used once until $date and is not shown again.';
+  }
+
+  @override
+  String invitationExpiresAt(String date) {
+    return 'Valid until $date';
+  }
+
+  @override
+  String get outgoingRules => 'Outgoing rules';
+
+  @override
+  String get incomingRules => 'Incoming rules';
+
+  @override
+  String get outgoingRule => 'Outgoing rule';
+
+  @override
+  String get incomingRule => 'Incoming rule';
+
+  @override
+  String get outgoingRulesInfo =>
+      'Own records matching a rule are sent to the partner. Nothing is sent without a rule. Rules only apply to new records or manual synchronizations.';
+
+  @override
+  String get incomingRulesInfo =>
+      'Received records are assigned to the groups of the most specific matching rule. Without a matching rule they are unassigned.';
+
+  @override
+  String get ruleInfo =>
+      'Several values of one criterion are combined with OR, the criteria with AND. Received records are matched by name, ignoring the case.';
+
+  @override
+  String get ruleEmptyMatchesAll => 'Empty matches all.';
+
+  @override
+  String get ruleMatchesAll => 'All records';
+
+  @override
+  String get ruleGroups => 'Groups of received records';
+
+  @override
+  String unlinkTitle(String instance) {
+    return 'Remove registration of $instance';
+  }
+
+  @override
+  String get unlinkInfo =>
+      'The synchronization is stopped and the partner is informed. Synchronized records are kept unless you delete them.';
+
+  @override
+  String get unlinkDeleteRecords => 'Delete synchronized records';
+
+  @override
+  String unlinkDeleteRecordsInfo(String instance) {
+    return 'All records received from $instance are deleted here, locked ones too. $instance is asked to delete the records of this instance.';
+  }
+
+  @override
+  String unlinkKeepRecordsInfo(String instance) {
+    return 'The records received from $instance are kept here and can be deleted manually.';
+  }
+
+  @override
+  String get unlinkLocally => 'Remove locally only';
+
+  @override
+  String unlinkLocallyInfo(String instance) {
+    return '$instance could not be informed. If you remove the registration locally only, $instance keeps the registration until the admin of the partner removes it.';
+  }
+
+  @override
+  String unlinkLocallyDeleteInfo(String instance) {
+    return '$instance could not be informed. If you remove the registration locally only, the records received from $instance are deleted here. The records of this instance are kept by $instance.';
+  }
+
+  @override
+  String registrationReceived(String instance) {
+    return 'New registration request from $instance.';
+  }
+
+  @override
+  String syncResult(int queued, int skipped) {
+    return '$queued transfers queued, $skipped records skipped.';
+  }
+
+  @override
+  String get federationDisabled =>
+      'The synchronization is not configured on the server.';
+
+  @override
+  String get federationInvalidUrl =>
+      'The address must be a valid HTTPS address.';
+
+  @override
+  String get federationRemoteUnreachable => 'The partner is not reachable.';
+
+  @override
+  String get federationRemoteRejected =>
+      'The partner rejected the request. Check the invitation code.';
+
+  @override
+  String get federationInvalidDiscovery =>
+      'The partner returns invalid information.';
+
+  @override
+  String get federationInstanceConflict =>
+      'An instance with this name is already registered.';
+
+  @override
+  String get federationInvalidState =>
+      'The action is not possible in the current state of the partner.';
+
+  @override
+  String get federationInvalidInvitation => 'The invitation code is invalid.';
+
+  @override
+  String auditRecords(int count) {
+    return '$count records';
+  }
+
+  @override
+  String get auditStatus => 'Status';
+
+  @override
+  String get auditSource => 'Source';
+
+  @override
+  String get auditTarget => 'Target';
+
+  @override
+  String get auditTransaction => 'Transaction';
+
+  @override
+  String get auditMessage => 'Message';
+
+  @override
+  String get auditSuccess => 'Successful';
+
+  @override
+  String get auditFailed => 'Failed';
+
+  @override
+  String get auditSkipped => 'Skipped';
+
+  @override
+  String get auditRegistrationRequested => 'Registration requested';
+
+  @override
+  String get auditRegistrationReceived => 'Registration request received';
+
+  @override
+  String get auditRegistrationApproved => 'Registration approved';
+
+  @override
+  String get auditRegistrationRejected => 'Registration rejected';
+
+  @override
+  String get auditUnlinked => 'Registration removed';
+
+  @override
+  String get auditKeysChanged => 'Keys changed';
+
+  @override
+  String get auditRecordPushed => 'Record sent';
+
+  @override
+  String get auditRecordReceived => 'Record received';
+
+  @override
+  String get auditRecordUpdated => 'Record updated';
+
+  @override
+  String get auditRecordDeleted => 'Record deleted';
+
+  @override
+  String get auditRecordsRemoved => 'Records removed';
+
+  @override
+  String rejectTitle(String instance) {
+    return 'Reject request of $instance';
+  }
+
+  @override
+  String rejectInfo(String instance) {
+    return '$instance is informed about the rejection and the request is deleted. If $instance is not reachable, the request is deleted anyway. $instance needs a new invitation code for a new request.';
+  }
+
+  @override
+  String get auditNewEntries => 'New entries – reload';
+
+  @override
+  String get auditRetention => 'Keep audit log';
+
+  @override
+  String get auditRetentionInfo =>
+      'Older entries of the synchronization audit log are deleted automatically.';
+
+  @override
+  String get retentionThreeMonths => '3 Months';
+
+  @override
+  String get retentionSixMonths => '6 Months';
+
+  @override
+  String get invitationAddress => 'Address of this instance';
+
+  @override
+  String get rules => 'Rules';
+
+  @override
+  String get ruleAllInstances => 'All instances';
+
+  @override
+  String get ruleEmptyAllInstances =>
+      'Empty applies to all instances, also to instances linked later.';
+
+  @override
+  String get peerNoRules => 'No rule applies to this instance.';
+
+  @override
+  String get peerRulesInfo =>
+      'Rules are managed under Sync → Rules. Rules restricted to the instance take precedence over rules for all instances.';
+
+  @override
+  String approveTitle(String instance) {
+    return 'Approve request of $instance';
+  }
+
+  @override
+  String approveInfo(String instance, int count) {
+    return '$instance is informed and the synchronization is enabled. From then on $count outgoing rules apply to $instance: new own records matching them are sent to $instance.';
+  }
+
+  @override
+  String get ruleSourceGroups => 'Groups of the records which are sent';
+
+  @override
+  String receivedFrom(String owner) {
+    return 'Received from $owner';
+  }
+
+  @override
+  String get syncState => 'Synchronization';
+
+  @override
+  String get syncStateReceived => 'Received';
+
+  @override
+  String get syncStateSent => 'Sent';
+
+  @override
+  String get syncStateProblem => 'Problem';
+
+  @override
+  String get syncStateNone => 'Not synchronized';
+
+  @override
+  String syncProblemWith(String instance) {
+    return 'Synchronization with $instance failed';
+  }
+
+  @override
+  String get syncProblemFailed =>
+      'Failed finally. Try again with “Synchronize”.';
+
+  @override
+  String syncProblemRetry(String date) {
+    return 'Next attempt: $date';
+  }
+
+  @override
+  String syncSentCount(int count) {
+    return 'Sent to $count instances';
+  }
+
+  @override
+  String syncProblemCount(int count) {
+    return '$count problems';
+  }
+
+  @override
+  String get auditResult => 'Result';
+
+  @override
+  String get auditDirection => 'Direction';
+
+  @override
+  String get auditAction => 'Action';
+
+  @override
+  String get auditIncoming => 'Incoming';
+
+  @override
+  String get auditOutgoing => 'Outgoing';
+
+  @override
+  String get auditFilterReset => 'Reset filters';
+
+  @override
+  String get auditSelectionClear => 'Clear selection';
+
+  @override
+  String get auditDeleteSelected => 'Delete selected';
+
+  @override
+  String auditDeleteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count entries will be deleted.',
+      one: '1 entry will be deleted.',
+    );
+    return '$_temp0 Continue?';
+  }
+
+  @override
+  String get auditFilterRemove => 'Remove filter';
+
+  @override
+  String get invitationNew => 'New invitation';
+
+  @override
+  String get invitationNewInfo =>
+      'An invitation code is created, which a partner instance can use once to register.';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get auditRecordRemoved => 'Record no longer available';
+
+  @override
+  String get auditPending => 'Pending';
+
+  @override
+  String get invitationValidity => 'Validity';
+
+  @override
+  String durationHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours',
+      one: '1 hour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
 }

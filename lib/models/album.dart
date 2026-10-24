@@ -13,11 +13,7 @@ class Album extends ModelBase {
   final String? albumName;
 
   /// Initializes the model.
-  Album({
-    this.albumId,
-    this.albumName,
-    super.isDeletable = false,
-  });
+  Album({this.albumId, this.albumName, super.isDeletable = false});
 
   /// Converts a json object/map to the model.
   factory Album.fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);

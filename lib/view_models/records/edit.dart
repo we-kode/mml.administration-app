@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mml_admin/extensions/federation_error.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
+import 'package:mml_admin/models/federation/record_sync.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/record.dart';
+import 'package:mml_admin/services/federation.dart';
 import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/sync.dart';
 import 'package:mml_admin/services/messenger.dart';
@@ -39,6 +42,9 @@ class RecordEditViewModel extends ChangeNotifier {
   /// The running instance.
   late String instance;
 
+  /// The synchronization details of the record.
+  RecordSyncInfo sync = RecordSyncInfo();
+
   /// Returns whether the record is editable or not.
   bool get isEditable => instance == record.ownerInstance;
 
@@ -49,6 +55,11 @@ class RecordEditViewModel extends ChangeNotifier {
     try {
       instance = await SyncService.getInstance().get();
       record = await _service.getRecord(recordId!);
+      try {
+        sync = await FederationService.getInstance().getRecordSync(recordId);
+      } catch (e) {
+        // The record can be edited without the synchronization details.
+      }
       loadedSuccessfully = true;
       notifyListeners();
       return true;
@@ -108,6 +119,25 @@ class RecordEditViewModel extends ChangeNotifier {
   /// Loads all groups from the server.
   Future<ModelList> getGroups() async {
     return await _groupService.getMediaGroups(null, 0, -1);
+  }
+
+  /// Synchronizes the record with partner instances and shows the result.
+  Future<void> synchronize() async {
+    showProgressIndicator();
+    try {
+      var result = await FederationService.getInstance().synchronize(
+        recordIds: [record.recordId!],
+      );
+      MessengerService.getInstance().showMessage(
+        locales.syncResult(result.queued, result.skipped),
+      );
+    } on FederationException catch (e) {
+      MessengerService.getInstance().showMessage(e.message(locales));
+    } catch (_) {
+      // Other errors are shown by the api service.
+    } finally {
+      RouterService.getInstance().navigatorKey.currentState!.pop();
+    }
   }
 
   /// Locks the record, so it can not be deleted.

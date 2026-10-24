@@ -207,5 +207,292 @@
       }
     }
   },
-  "assignAndRemove":"Gruppen übernehmen und löschen."
+  "assignAndRemove":"Gruppen übernehmen und löschen.",
+  "peers": "Instanzen",
+  "invitations": "Einladungen",
+  "audit": "Protokoll",
+  "approve": "Annehmen",
+  "reject": "Ablehnen",
+  "close": "Schließen",
+  "copy": "Kopieren",
+  "unlink": "Registrierung aufheben",
+  "synchronize": "Synchronisieren",
+  "unassigned": "Nicht zugeordnet",
+  "recordsOfInstance": "Aufnahmen von Instanz",
+  "peerStateRequested": "Angefragt",
+  "peerStatePendingApproval": "Wartet auf Genehmigung",
+  "peerStateResponsePending": "Genehmigt, Rückantwort ausstehend",
+  "peerStateLinked": "Verknüpft",
+  "peerStateRejected": "Abgelehnt",
+  "peerKeysUpdatedAt": "Schlüssel zuletzt aktualisiert: {date}",
+  "@peerKeysUpdatedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "peerPendingApprovalInfo": "Die Instanz möchte Aufnahmen mit dieser Instanz synchronisieren. Nach dem Annehmen wird der Partner informiert und die Synchronisation gemäß den Regeln aktiviert. Beim Ablehnen wird die Anfrage gelöscht.",
+  "peerRequestedInfo": "Die Anfrage wurde gesendet und wartet auf die Genehmigung durch den Admin des Partners.",
+  "peerUrl": "Adresse des Partners",
+  "invitationCode": "Einladungscode",
+  "requestRegistration": "Registrierung anfragen",
+  "requestRegistrationSend": "Anfragen",
+  "requestRegistrationInfo": "Gib die HTTPS-Adresse des Partners und den Einladungscode ein, den der Admin des Partners erstellt hat.",
+  "invitationCreated": "Einladung erstellt",
+  "invitationInfo": "Gib Adresse und Code an den Admin des Partners weiter. Der Code kann einmalig bis {date} verwendet werden und wird danach nicht mehr angezeigt.",
+  "@invitationInfo": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationExpiresAt": "Gültig bis {date}",
+  "@invitationExpiresAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "outgoingRules": "Ausgehende Regeln",
+  "incomingRules": "Eingehende Regeln",
+  "outgoingRule": "Ausgehende Regel",
+  "incomingRule": "Eingehende Regel",
+  "outgoingRulesInfo": "Eigene Aufnahmen, die zu einer Regel passen, werden an den Partner gesendet. Ohne Regel wird nichts gesendet. Regeln gelten nur für neue Aufnahmen oder bei manueller Synchronisation.",
+  "incomingRulesInfo": "Empfangene Aufnahmen werden den Gruppen der spezifischsten passenden Regel zugeordnet. Ohne passende Regel sind sie nicht zugeordnet.",
+  "ruleInfo": "Mehrere Werte eines Kriteriums sind mit ODER verknüpft, die Kriterien mit UND. Empfangene Aufnahmen werden über den Namen ohne Groß- und Kleinschreibung zugeordnet.",
+  "ruleEmptyMatchesAll": "Leer passt zu allen.",
+  "ruleMatchesAll": "Alle Aufnahmen",
+  "ruleGroups": "Gruppen für empfangene Aufnahmen",
+  "unlinkTitle": "Registrierung von {instance} aufheben",
+  "@unlinkTitle": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "unlinkInfo": "Die Synchronisation wird beendet und der Partner wird informiert. Bereits synchronisierte Aufnahmen bleiben erhalten, wenn du sie nicht löschst.",
+  "unlinkDeleteRecords": "Synchronisierte Aufnahmen löschen",
+  "unlinkDeleteRecordsInfo": "Alle von {instance} empfangenen Aufnahmen werden hier gelöscht, auch gesperrte. {instance} wird gebeten, die Aufnahmen dieser Instanz zu löschen.",
+  "@unlinkDeleteRecordsInfo": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "unlinkKeepRecordsInfo": "Die von {instance} empfangenen Aufnahmen bleiben hier erhalten und können manuell gelöscht werden.",
+  "@unlinkKeepRecordsInfo": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "unlinkLocally": "Nur lokal aufheben",
+  "unlinkLocallyInfo": "{instance} konnte nicht informiert werden. Wenn du die Registrierung nur lokal aufhebst, behält {instance} die Registrierung, bis der Admin des Partners sie entfernt.",
+  "@unlinkLocallyInfo": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "unlinkLocallyDeleteInfo": "{instance} konnte nicht informiert werden. Wenn du die Registrierung nur lokal aufhebst, werden die von {instance} empfangenen Aufnahmen hier gelöscht. Die Aufnahmen dieser Instanz bleiben bei {instance} erhalten.",
+  "@unlinkLocallyDeleteInfo": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "registrationReceived": "Neue Registrierungsanfrage von {instance}.",
+  "@registrationReceived": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "syncResult": "{queued} Übertragungen eingeplant, {skipped} Aufnahmen übersprungen.",
+  "@syncResult": {
+    "placeholders": {
+      "queued": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "federationDisabled": "Die Synchronisation ist auf dem Server nicht konfiguriert.",
+  "federationInvalidUrl": "Die Adresse muss eine gültige HTTPS-Adresse sein.",
+  "federationRemoteUnreachable": "Der Partner ist nicht erreichbar.",
+  "federationRemoteRejected": "Der Partner hat die Anfrage abgelehnt. Prüfe den Einladungscode.",
+  "federationInvalidDiscovery": "Der Partner liefert ungültige Informationen.",
+  "federationInstanceConflict": "Eine Instanz mit diesem Namen ist bereits registriert.",
+  "federationInvalidState": "Die Aktion ist im aktuellen Zustand des Partners nicht möglich.",
+  "federationInvalidInvitation": "Der Einladungscode ist ungültig.",
+  "auditRecords": "{count} Aufnahmen",
+  "@auditRecords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "auditStatus": "Status",
+  "auditSource": "Quelle",
+  "auditTarget": "Ziel",
+  "auditTransaction": "Transaktion",
+  "auditMessage": "Meldung",
+  "auditSuccess": "Erfolgreich",
+  "auditFailed": "Fehlgeschlagen",
+  "auditSkipped": "Übersprungen",
+  "auditRegistrationRequested": "Registrierung angefragt",
+  "auditRegistrationReceived": "Registrierungsanfrage erhalten",
+  "auditRegistrationApproved": "Registrierung angenommen",
+  "auditRegistrationRejected": "Registrierung abgelehnt",
+  "auditUnlinked": "Registrierung aufgehoben",
+  "auditKeysChanged": "Schlüssel geändert",
+  "auditRecordPushed": "Aufnahme gesendet",
+  "auditRecordReceived": "Aufnahme empfangen",
+  "auditRecordUpdated": "Aufnahme aktualisiert",
+  "auditRecordDeleted": "Aufnahme gelöscht",
+  "auditRecordsRemoved": "Aufnahmen entfernt",
+  "rejectTitle": "Anfrage von {instance} ablehnen",
+  "@rejectTitle": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "rejectInfo": "{instance} wird über die Ablehnung informiert und die Anfrage wird gelöscht. Ist {instance} nicht erreichbar, wird die Anfrage trotzdem gelöscht. Für eine neue Anfrage braucht {instance} einen neuen Einladungscode.",
+  "@rejectInfo": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "auditNewEntries": "Neue Einträge – neu laden",
+  "auditRetention": "Protokoll aufbewahren",
+  "auditRetentionInfo": "Ältere Einträge des Synchronisationsprotokolls werden automatisch gelöscht.",
+  "retentionThreeMonths": "3 Monate",
+  "retentionSixMonths": "6 Monate",
+  "invitationAddress": "Adresse dieser Instanz",
+  "rules": "Regeln",
+  "ruleAllInstances": "Alle Instanzen",
+  "ruleEmptyAllInstances": "Leer gilt für alle Instanzen, auch für später verknüpfte.",
+  "peerNoRules": "Keine Regel gilt für diese Instanz.",
+  "peerRulesInfo": "Regeln werden unter Sync → Regeln verwaltet. Auf die Instanz eingegrenzte Regeln haben Vorrang vor Regeln für alle Instanzen.",
+  "approveTitle": "Anfrage von {instance} annehmen",
+  "@approveTitle": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "approveInfo": "{instance} wird informiert und die Synchronisation aktiviert. Ab dann gelten {count} ausgehende Regeln für {instance}: neue eigene Aufnahmen, die dazu passen, werden an {instance} gesendet.",
+  "@approveInfo": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ruleSourceGroups": "Gruppen der Aufnahmen, die gesendet werden",
+  "receivedFrom": "Empfangen von {owner}",
+  "@receivedFrom": {
+    "placeholders": {
+      "owner": {
+        "type": "String"
+      }
+    }
+  },
+  "syncState": "Synchronisation",
+  "syncStateReceived": "Empfangen",
+  "syncStateSent": "Gesendet",
+  "syncStateProblem": "Problem",
+  "syncStateNone": "Nicht synchronisiert",
+  "syncProblemWith": "Synchronisation mit {instance} fehlgeschlagen",
+  "@syncProblemWith": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "syncProblemFailed": "Endgültig fehlgeschlagen. Mit „Synchronisieren“ neu versuchen.",
+  "syncProblemRetry": "Nächster Versuch: {date}",
+  "@syncProblemRetry": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "syncSentCount": "An {count} Instanzen gesendet",
+  "@syncSentCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncProblemCount": "{count} Probleme",
+  "@syncProblemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "auditResult": "Ergebnis",
+  "auditDirection": "Richtung",
+  "auditAction": "Aktion",
+  "auditIncoming": "Eingehend",
+  "auditOutgoing": "Ausgehend",
+  "auditFilterReset": "Filter zurücksetzen",
+  "auditSelectionClear": "Auswahl aufheben",
+  "auditDeleteSelected": "Ausgewählte löschen",
+  "auditDeleteCount": "{count, plural, =1{1 Eintrag wird gelöscht.} other{{count} Einträge werden gelöscht.}} Fortfahren?",
+  "@auditDeleteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "auditFilterRemove": "Filter entfernen",
+  "invitationNew": "Neue Einladung",
+  "invitationNewInfo": "Es wird ein Einladungscode erstellt, mit dem sich eine Partner-Instanz einmalig registrieren kann.",
+  "create": "Erstellen",
+  "auditRecordRemoved": "Aufnahme nicht mehr vorhanden",
+  "auditPending": "Ausstehend",
+  "invitationValidity": "Gültigkeit",
+  "durationHours": "{count, plural, =1{1 Stunde} other{{count} Stunden}}",
+  "@durationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "durationDays": "{count, plural, =1{1 Tag} other{{count} Tage}}",
+  "@durationDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

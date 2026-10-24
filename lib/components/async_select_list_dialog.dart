@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
@@ -110,7 +112,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
     return AlertDialog(
       content: SizedBox(
         height: MediaQuery.of(context).size.height * 0.4,
-        width: MediaQuery.of(context).size.width * 0.2,
+        width: max(MediaQuery.of(context).size.width * 0.2, 360),
         child: Column(
           children: [
             // List header with filter and action buttons.
@@ -325,11 +327,7 @@ class _AsyncSelectListDialogState extends State<AsyncSelectListDialog> {
       leading: leadingTile,
       minVerticalPadding: 0,
       visualDensity: const VisualDensity(vertical: 0),
-      title: Row(
-        children: [
-          Text(item.getDisplayDescription()),
-        ],
-      ),
+      title: Text(item.getDisplayDescription()),
       onTap: () {
         _onItemChecked(index);
       },

@@ -11,7 +11,11 @@ import 'package:mml_admin/models/navigation_state.dart';
 import 'package:mml_admin/models/record.dart';
 import 'package:mml_admin/models/record_folder.dart';
 import 'package:mml_admin/models/subfilter.dart';
+import 'package:mml_admin/extensions/federation_error.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
+import 'package:mml_admin/services/federation.dart';
 import 'package:mml_admin/services/group.dart';
+import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
@@ -40,10 +44,10 @@ class RecordsViewModel extends ChangeNotifier {
   /// Initializes the view model.
   Future<bool> init(BuildContext context) {
     return Future.microtask(() async {
-      isFolderView = (await SecureStorageService.getInstance().get(
+      isFolderView =
+          (await SecureStorageService.getInstance().get(
             SecureStorageService.folderViewStorageKey,
-          ))
-              ?.toLowerCase() ==
+          ))?.toLowerCase() ==
           'true';
       groups = await _groupService.getMediaGroups(null, 0, -1);
       return true;
@@ -75,23 +79,20 @@ class RecordsViewModel extends ChangeNotifier {
 
   /// Deletes the records with the passed [recordIds] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> delete<T>(
-    List<T> items,
-    BuildContext context,
-  ) async {
+  Future<bool> delete<T>(List<T> items, BuildContext context) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete && items.isNotEmpty) {
       try {
         showProgressIndicator();
         if (items.first is Record) {
-          await _service.delete(items
-              .map<String>((T e) => (e as Record).getIdentifier())
-              .toList());
+          await _service.delete(
+            items.map<String>((T e) => (e as Record).getIdentifier()).toList(),
+          );
         } else {
-          await _service.deleteFolder(items
-              .map<RecordFolder>((T e) => (e as RecordFolder))
-              .toList());
+          await _service.deleteFolder(
+            items.map<RecordFolder>((T e) => (e as RecordFolder)).toList(),
+          );
         }
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
@@ -120,21 +121,15 @@ class RecordsViewModel extends ChangeNotifier {
           subFilter.endDate!.year,
           subFilter.endDate!.month,
           DateUtils.getDaysInMonth(
-              subFilter.endDate!.year, subFilter.endDate!.month),
+            subFilter.endDate!.year,
+            subFilter.endDate!.month,
+          ),
         ),
       );
     } else if (subFilter.startDate!.month == subFilter.endDate!.month) {
       subFilter[ID3TagFilters.date] = DateTimeRange(
-        start: DateTime(
-          subFilter.startDate!.year,
-          1,
-          1,
-        ),
-        end: DateTime(
-          subFilter.endDate!.year,
-          12,
-          31,
-        ),
+        start: DateTime(subFilter.startDate!.year, 1, 1),
+        end: DateTime(subFilter.endDate!.year, 12, 31),
       );
     } else {
       subFilter.clear(ID3TagFilters.date);
@@ -143,11 +138,7 @@ class RecordsViewModel extends ChangeNotifier {
 
   /// Updates the groups of the [item].
   void groupsChanged(ModelBase item, List<ModelBase> changedGroups) async {
-    (item as Record).groups = changedGroups
-        .map(
-          (e) => e as Group,
-        )
-        .toList();
+    (item as Record).groups = changedGroups.map((e) => e as Group).toList();
     _service.updateRecord(item);
   }
 
@@ -183,15 +174,33 @@ class RecordsViewModel extends ChangeNotifier {
   Future lockRecords(List items) async {
     var isRecords = items.any((element) => element is Record);
     if (isRecords) {
-      await _service.lock(
-        items.map((e) => (e as Record).recordId!).toList(),
-      );
+      await _service.lock(items.map((e) => (e as Record).recordId!).toList());
       return;
     }
 
-    await _service.lockFolders(
-      items.map((e) => (e as RecordFolder)).toList(),
-    );
+    await _service.lockFolders(items.map((e) => (e as RecordFolder)).toList());
+  }
+
+  /// Synchronizes the selected [items] with partner instances and shows the
+  /// result. Returns false, so the selection stays active.
+  Future<bool> synchronize(List items, BuildContext context) async {
+    var locales = AppLocalizations.of(context)!;
+    var isRecords = items.any((element) => element is Record);
+    var messenger = MessengerService.getInstance();
+    try {
+      var result = await FederationService.getInstance().synchronize(
+        recordIds: isRecords
+            ? items.map((e) => (e as Record).recordId!).toList()
+            : const [],
+        folders: isRecords
+            ? const []
+            : items.map((e) => e as RecordFolder).toList(),
+      );
+      messenger.showMessage(locales.syncResult(result.queued, result.skipped));
+    } on FederationException catch (e) {
+      messenger.showMessage(e.message(locales));
+    }
+    return false;
   }
 
   /// Loads the assigned groups.
@@ -200,11 +209,11 @@ class RecordsViewModel extends ChangeNotifier {
     var groups = List.empty(growable: true);
     if (isRecords) {
       groups = await _service.assignedGroups(
-         items.map((e) => (e as Record).recordId!).toList(),
+        items.map((e) => (e as Record).recordId!).toList(),
       );
     } else {
       groups = await _service.assignedFolderGroups(
-         items.map((e) => (e as RecordFolder)).toList(),
+        items.map((e) => (e as RecordFolder)).toList(),
       );
     }
 

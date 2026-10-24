@@ -1,7 +1,7 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/async_select_list_dialog.dart';
+import 'package:mml_admin/components/date_range_dialog.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/list_subfilter_view.dart';
@@ -87,6 +87,24 @@ class RecordTagFilter extends ListSubfilterView {
                   Symbols.vibration,
                 ),
                 horizontalSpacer,
+                _createTagFilter(
+                  ID3TagFilters.unassigned,
+                  locales.unassigned,
+                  Symbols.label_off,
+                ),
+                horizontalSpacer,
+                _createTagFilter(
+                  ID3TagFilters.instances,
+                  locales.recordsOfInstance,
+                  Symbols.hub,
+                ),
+                horizontalSpacer,
+                _createTagFilter(
+                  ID3TagFilters.syncStates,
+                  locales.syncState,
+                  Symbols.sync,
+                ),
+                horizontalSpacer,
               ],
             ),
           ),
@@ -128,6 +146,8 @@ class RecordTagFilter extends ListSubfilterView {
                     ? _handleDateFilter(context, vm)
                     : identifier == ID3TagFilters.folderView
                     ? _handleFolderFilter(context, vm)
+                    : identifier == ID3TagFilters.unassigned
+                    ? vm.updateFilter(identifier, !vm.tagFilter.unassigned)
                     : _handleFilter(identifier, context, vm),
                 onDeleted: vm.tagFilter.isNotEmpty(identifier)
                     ? () => {vm.clear(identifier)}
@@ -146,42 +166,23 @@ class RecordTagFilter extends ListSubfilterView {
     await vm.updateFilter(ID3TagFilters.folderView, isFolderView);
   }
 
-  /// Creates a [showDateRangePicker] to handle the date filter.
+  /// Shows a date range dialog to handle the date filter.
   Future _handleDateFilter(
     BuildContext context,
     RecordTagFilterViewModel vm,
   ) async {
-    var locales = AppLocalizations.of(context)!;
-    var dateUpdated = await showCalendarDatePicker2Dialog(
-      context: context,
-      config: CalendarDatePicker2WithActionButtonsConfig(
-        calendarType: CalendarDatePicker2Type.range,
-        lastDate: DateTime.now(),
-        cancelButton: Text(
-          locales.cancel,
-          style: TextStyle(color: Theme.of(context).colorScheme.primary),
-        ),
-        okButton: Text(
-          locales.save,
-          style: TextStyle(color: Theme.of(context).colorScheme.primary),
-        ),
-      ),
-      dialogSize: Size(
-        MediaQuery.of(context).size.height * 0.4,
-        MediaQuery.of(context).size.width * 0.2,
-      ),
-      borderRadius: BorderRadius.circular(0),
-      value: [vm.tagFilter.startDate, vm.tagFilter.endDate],
+    var tagFilter = vm.tagFilter;
+    var dates = await showDateRangeDialog(
+      context,
+      initial: tagFilter.startDate != null && tagFilter.endDate != null
+          ? DateTimeRange(start: tagFilter.startDate!, end: tagFilter.endDate!)
+          : null,
     );
-
-    if (dateUpdated == null || dateUpdated.isEmpty) {
+    if (dates == null) {
       return;
     }
 
-    vm.updateFilter(
-      ID3TagFilters.date,
-      DateTimeRange(start: dateUpdated.first!, end: dateUpdated.last!),
-    );
+    vm.updateFilter(ID3TagFilters.date, dates);
   }
 
   /// Creates an [AsyncSelectListDialog] to handle list filters.
@@ -195,8 +196,13 @@ class RecordTagFilter extends ListSubfilterView {
       context: context,
       builder: (BuildContext context) {
         return AsyncSelectListDialog(
-          loadData: ({filter, offset, take}) =>
-              vm.load(identifier, filter: filter, offset: offset, take: take),
+          loadData: ({filter, offset, take}) => vm.load(
+            identifier,
+            AppLocalizations.of(context)!,
+            filter: filter,
+            offset: offset,
+            take: take,
+          ),
           initialSelected: vm.tagFilter[identifier],
         );
       },

@@ -37,9 +37,7 @@ class RecordsScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             return AsyncListView(
-              subfilter: RecordTagFilter(
-                isFolderView: vm.isFolderView,
-              ),
+              subfilter: RecordTagFilter(isFolderView: vm.isFolderView),
               navState: vm.navigationState,
               moveUp: (subFilter) {
                 vm.moveFolderUp(subFilter as ID3TagFilter);
@@ -52,11 +50,11 @@ class RecordsScreen extends StatelessWidget {
                 ActionButton(
                   icon: const Icon(Symbols.drive_folder_upload),
                   onPressed: () async {
-                    String? selected =
-                        await FilePicker.platform.getDirectoryPath(
-                      lockParentWindow: true,
-                      dialogTitle: locales.uploadFolder,
-                    );
+                    String? selected = await FilePicker.platform
+                        .getDirectoryPath(
+                          lockParentWindow: true,
+                          dialogTitle: locales.uploadFolder,
+                        );
                     if (selected == null) {
                       return;
                     }
@@ -80,13 +78,13 @@ class RecordsScreen extends StatelessWidget {
                 ActionButton(
                   icon: const Icon(Symbols.file_upload),
                   onPressed: () async {
-                    FilePickerResult? selected =
-                        await FilePicker.platform.pickFiles(
-                      allowMultiple: true,
-                      type: FileType.custom,
-                      allowedExtensions: ['mp3'],
-                      dialogTitle: locales.uploadFiles,
-                    );
+                    FilePickerResult? selected = await FilePicker.platform
+                        .pickFiles(
+                          allowMultiple: true,
+                          type: FileType.custom,
+                          allowedExtensions: ['mp3'],
+                          dialogTitle: locales.uploadFiles,
+                        );
 
                     if (selected == null || !context.mounted) {
                       return;
@@ -105,28 +103,18 @@ class RecordsScreen extends StatelessWidget {
                   },
                 ),
               ],
-              deleteItems: <T>(List<T> items) => vm.delete(
-                items,
-                context,
-              ),
+              deleteItems: <T>(List<T> items) => vm.delete(items, context),
               editItem: (ModelBase item, Subfilter? subfilter) async {
                 if (item is RecordFolder) {
                   vm.navigationState.path = item.getIdentifier();
-                  (subfilter as ID3TagFilter)[ID3TagFilters.date] =
-                      DateTimeRange(
-                    start: DateTime(
-                      item.year,
-                      item.month ?? 1,
-                      item.day ?? 1,
-                    ),
+                  (subfilter
+                      as ID3TagFilter)[ID3TagFilters.date] = DateTimeRange(
+                    start: DateTime(item.year, item.month ?? 1, item.day ?? 1),
                     end: DateTime(
                       item.year,
                       item.month ?? 12,
                       item.day ??
-                          DateUtils.getDaysInMonth(
-                            item.year,
-                            item.month ?? 12,
-                          ),
+                          DateUtils.getDaysInMonth(item.year, item.month ?? 12),
                     ),
                   );
                   return true;
@@ -142,27 +130,26 @@ class RecordsScreen extends StatelessWidget {
                   },
                 );
               },
-              loadData: ({
-                String? filter,
-                int? offset,
-                int? take,
-                dynamic subfilter,
-              }) {
-                WidgetsBinding.instance.addPostFrameCallback(
-                  (_) {
-                    if (!(subfilter as ID3TagFilter).isGrouped) {
-                      vm.navigationState.path = null;
-                    }
-                  },
-                );
+              loadData:
+                  ({
+                    String? filter,
+                    int? offset,
+                    int? take,
+                    dynamic subfilter,
+                  }) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (!(subfilter as ID3TagFilter).isGrouped) {
+                        vm.navigationState.path = null;
+                      }
+                    });
 
-                return vm.load(
-                  filter: filter,
-                  offset: offset,
-                  take: take,
-                  subfilter: subfilter,
-                );
-              },
+                    return vm.load(
+                      filter: filter,
+                      offset: offset,
+                      take: take,
+                      subfilter: subfilter,
+                    );
+                  },
               availableTags: vm.groups,
               onChangedAvailableTags: (item, changedTags) =>
                   vm.groupsChanged(item, changedTags),
@@ -190,10 +177,9 @@ class RecordsScreen extends StatelessWidget {
                 );
                 return true;
               },
+              syncItems: <T>(List<T> items) => vm.synchronize(items, context),
               lockItems: <T>(List<T> items) async {
-                await vm.lockRecords(
-                  items,
-                );
+                await vm.lockRecords(items);
                 return true;
               },
               enableFastActionSwitch: true,

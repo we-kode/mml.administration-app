@@ -24,6 +24,7 @@ Record _$RecordFromJson(Map<String, dynamic> json) => Record(
   groups: (json['groups'] as List<dynamic>?)
       ?.map((e) => Group.fromJson(e as Map<String, dynamic>))
       .toList(),
+  syncState: (json['syncState'] as num?)?.toInt() ?? RecordSyncState.none,
 );
 
 Map<String, dynamic> _$RecordToJson(Record instance) => <String, dynamic>{
@@ -38,7 +39,6 @@ Map<String, dynamic> _$RecordToJson(Record instance) => <String, dynamic>{
   'album': ?instance.album,
   'language': ?instance.language,
   'bitrate': ?instance.bitrate,
-  'cover': ?instance.cover,
   'ownerInstance': instance.ownerInstance,
   'locked': ?instance.locked,
   'groups': instance.groups.map((e) => e.toJson()).toList(),

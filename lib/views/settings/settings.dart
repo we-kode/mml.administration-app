@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
 import 'package:mml_admin/views/settings/settings_compression.dart';
 import 'package:mml_admin/views/settings/settings_connection.dart';
 import 'package:mml_admin/views/settings/settings_genre_bitrate.dart';
 import 'package:mml_admin/views/settings/settings_upload_validation.dart';
+import 'package:mml_admin/services/federation.dart';
 import 'package:provider/provider.dart';
 
 /// Screen to modify own app settings.
@@ -113,6 +115,38 @@ class SettingsScreen extends StatelessWidget {
                     dense: true,
                     visualDensity: const VisualDensity(vertical: -4),
                     title: Text(
+                      vm.locales.sync,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Symbols.history),
+                    trailing: DropdownMenu(
+                      inputDecorationTheme: InputDecorationTheme(isDense: true),
+                      selectOnly: true,
+                      dropdownMenuEntries: [
+                        for (var days in AuditRetention.allowedDays)
+                          DropdownMenuEntry(
+                            value: days,
+                            label: _retentionLabel(vm.locales, days),
+                          ),
+                      ],
+                      initialSelection: vm.auditRetentionDays,
+                      onSelected: (value) {
+                        if (value != null) {
+                          vm.updateAuditRetention(value);
+                        }
+                      },
+                    ),
+                    title: Text(vm.locales.auditRetention),
+                    subtitle: Text(vm.locales.auditRetentionInfo),
+                  ),
+                  const Divider(),
+                  verticalSpacer,
+                  ListTile(
+                    dense: true,
+                    visualDensity: const VisualDensity(vertical: -4),
+                    title: Text(
                       vm.locales.cacheSettings,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
@@ -182,5 +216,23 @@ class SettingsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  /// Returns the label of the audit log retention of [days].
+  String _retentionLabel(AppLocalizations locales, int days) {
+    switch (days) {
+      case 7:
+        return locales.cacheRangeWeek;
+      case 30:
+        return locales.cacheRangeMonth;
+      case 90:
+        return locales.retentionThreeMonths;
+      case 180:
+        return locales.retentionSixMonths;
+      case 365:
+        return locales.cacheRangeYear;
+      default:
+        return locales.cacheRangeNever;
+    }
   }
 }

@@ -7,6 +7,8 @@ import 'package:mml_admin/components/shimmer_cover.dart';
 import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/extensions/flag.dart';
 import 'package:mml_admin/manager/image_cache_manager.dart';
+import 'package:mml_admin/models/federation/record_sync.dart';
+import 'package:mml_admin/models/federation/rule.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
@@ -46,11 +48,18 @@ class Record extends ModelBase {
   /// The bitrate in kbit/s of the record.
   int? bitrate;
 
-  /// The cover image of the record.
+  /// The file name of the cover image of the record. It is managed by the
+  /// server and not sent on updates.
+  @JsonKey(includeToJson: false)
   String? cover;
 
   /// The owner of the record.
   String ownerInstance;
+
+  /// The synchronization state with partner instances, see
+  /// [RecordSyncState]. Only set in lists of records.
+  @JsonKey(includeToJson: false)
+  int syncState;
 
   /// Indicates whether the record is locked for some operations on records..
   bool? locked;
@@ -75,6 +84,7 @@ class Record extends ModelBase {
     this.locked,
     super.isDeletable,
     List<Group>? groups,
+    this.syncState = RecordSyncState.none,
   }) {
     this.groups = groups ?? [];
   }
@@ -98,8 +108,14 @@ class Record extends ModelBase {
 
   @override
   String? getSubtitle(BuildContext context) {
-    var locales = AppLocalizations.of(context)!;
-    return artist ?? locales.unknown;
+    return artist ?? AppLocalizations.of(context)!.unknown;
+  }
+
+  @override
+  String? getSubtitleNote(BuildContext context) {
+    return syncState == RecordSyncState.received
+        ? AppLocalizations.of(context)!.receivedFrom(ownerInstance)
+        : null;
   }
 
   @override
@@ -153,14 +169,62 @@ class Record extends ModelBase {
 
   @override
   Widget? getSecureState(BuildContext context) {
-    if (!(locked ?? false)) {
+    var isLocked = locked ?? false;
+    var syncIcon = _syncIcon(context);
+    if (!isLocked && syncIcon == null) {
       return null;
     }
 
-    return Icon(
-      Symbols.block,
-      size: 10,
-      color: Theme.of(context).colorScheme.error,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ?syncIcon,
+        if (isLocked)
+          Icon(
+            Symbols.block,
+            size: 10,
+            color: Theme.of(context).colorScheme.error,
+          ),
+      ],
+    );
+  }
+
+  /// Returns the icon of the synchronization state or null for records,
+  /// which are not synchronized.
+  Widget? _syncIcon(BuildContext context) {
+    var locales = AppLocalizations.of(context)!;
+    var colors = Theme.of(context).colorScheme;
+    var (icon, color, message) = switch (syncState) {
+      RecordSyncState.received => (
+        SyncDirection.icon(SyncDirection.incoming),
+        colors.secondary,
+        locales.receivedFrom(ownerInstance),
+      ),
+      RecordSyncState.sent => (
+        SyncDirection.icon(SyncDirection.outgoing),
+        colors.primary,
+        locales.syncStateSent,
+      ),
+      RecordSyncState.problem => (
+        Symbols.sync_problem,
+        colors.error,
+        locales.syncStateProblem,
+      ),
+      _ => (null, null, null),
+    };
+    if (icon == null) {
+      return null;
+    }
+
+    return Tooltip(
+      message: message,
+      child: Container(
+        decoration: BoxDecoration(
+          color: colors.surface,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, size: 16, color: color),
+      ),
     );
   }
 

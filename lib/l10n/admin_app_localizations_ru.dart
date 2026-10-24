@@ -503,4 +503,443 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get assignAndRemove => 'Gruppen übernehmen und löschen.';
+
+  @override
+  String get peers => 'Экземпляры';
+
+  @override
+  String get invitations => 'Приглашения';
+
+  @override
+  String get audit => 'Журнал';
+
+  @override
+  String get approve => 'Принять';
+
+  @override
+  String get reject => 'Отклонить';
+
+  @override
+  String get close => 'Закрыть';
+
+  @override
+  String get copy => 'Копировать';
+
+  @override
+  String get unlink => 'Отменить регистрацию';
+
+  @override
+  String get synchronize => 'Синхронизировать';
+
+  @override
+  String get unassigned => 'Не назначено';
+
+  @override
+  String get recordsOfInstance => 'Записи экземпляра';
+
+  @override
+  String get peerStateRequested => 'Запрошено';
+
+  @override
+  String get peerStatePendingApproval => 'Ожидает подтверждения';
+
+  @override
+  String get peerStateResponsePending => 'Подтверждено, ответ ожидается';
+
+  @override
+  String get peerStateLinked => 'Связано';
+
+  @override
+  String get peerStateRejected => 'Отклонено';
+
+  @override
+  String peerKeysUpdatedAt(String date) {
+    return 'Ключи обновлены: $date';
+  }
+
+  @override
+  String get peerPendingApprovalInfo =>
+      'Экземпляр хочет синхронизировать записи с этим экземпляром. После подтверждения партнёр будет уведомлён, и синхронизация будет включена согласно правилам. Отклонённый запрос удаляется.';
+
+  @override
+  String get peerRequestedInfo =>
+      'Запрос отправлен и ожидает подтверждения администратором партнёра.';
+
+  @override
+  String get peerUrl => 'Адрес партнёра';
+
+  @override
+  String get invitationCode => 'Код приглашения';
+
+  @override
+  String get requestRegistration => 'Запросить регистрацию';
+
+  @override
+  String get requestRegistrationSend => 'Запросить';
+
+  @override
+  String get requestRegistrationInfo =>
+      'Введите HTTPS-адрес партнёра и код приглашения, созданный администратором партнёра.';
+
+  @override
+  String get invitationCreated => 'Приглашение создано';
+
+  @override
+  String invitationInfo(String date) {
+    return 'Передайте адрес и код администратору партнёра. Код можно использовать один раз до $date, после этого он больше не отображается.';
+  }
+
+  @override
+  String invitationExpiresAt(String date) {
+    return 'Действительно до $date';
+  }
+
+  @override
+  String get outgoingRules => 'Исходящие правила';
+
+  @override
+  String get incomingRules => 'Входящие правила';
+
+  @override
+  String get outgoingRule => 'Исходящее правило';
+
+  @override
+  String get incomingRule => 'Входящее правило';
+
+  @override
+  String get outgoingRulesInfo =>
+      'Собственные записи, соответствующие правилу, отправляются партнёру. Без правила ничего не отправляется. Правила применяются только к новым записям или при ручной синхронизации.';
+
+  @override
+  String get incomingRulesInfo =>
+      'Полученные записи назначаются группам наиболее точного подходящего правила. Без подходящего правила они не назначены.';
+
+  @override
+  String get ruleInfo =>
+      'Несколько значений одного критерия объединяются через ИЛИ, критерии — через И. Полученные записи сопоставляются по имени без учёта регистра.';
+
+  @override
+  String get ruleEmptyMatchesAll => 'Пусто — подходит всё.';
+
+  @override
+  String get ruleMatchesAll => 'Все записи';
+
+  @override
+  String get ruleGroups => 'Группы для полученных записей';
+
+  @override
+  String unlinkTitle(String instance) {
+    return 'Отменить регистрацию $instance';
+  }
+
+  @override
+  String get unlinkInfo =>
+      'Синхронизация прекращается, партнёр уведомляется. Синхронизированные записи сохраняются, если вы их не удалите.';
+
+  @override
+  String get unlinkDeleteRecords => 'Удалить синхронизированные записи';
+
+  @override
+  String unlinkDeleteRecordsInfo(String instance) {
+    return 'Все записи, полученные от $instance, удаляются здесь, включая заблокированные. $instance будет предложено удалить записи этого экземпляра.';
+  }
+
+  @override
+  String unlinkKeepRecordsInfo(String instance) {
+    return 'Записи, полученные от $instance, сохраняются здесь и могут быть удалены вручную.';
+  }
+
+  @override
+  String get unlinkLocally => 'Отменить только локально';
+
+  @override
+  String unlinkLocallyInfo(String instance) {
+    return 'Не удалось уведомить $instance. Если отменить регистрацию только локально, $instance сохранит регистрацию, пока её не удалит администратор партнёра.';
+  }
+
+  @override
+  String unlinkLocallyDeleteInfo(String instance) {
+    return 'Не удалось уведомить $instance. Если отменить регистрацию только локально, полученные от $instance записи удаляются здесь. Записи этого экземпляра остаются у $instance.';
+  }
+
+  @override
+  String registrationReceived(String instance) {
+    return 'Новый запрос на регистрацию от $instance.';
+  }
+
+  @override
+  String syncResult(int queued, int skipped) {
+    return 'Запланировано передач: $queued, пропущено записей: $skipped.';
+  }
+
+  @override
+  String get federationDisabled => 'Синхронизация не настроена на сервере.';
+
+  @override
+  String get federationInvalidUrl =>
+      'Адрес должен быть действительным HTTPS-адресом.';
+
+  @override
+  String get federationRemoteUnreachable => 'Партнёр недоступен.';
+
+  @override
+  String get federationRemoteRejected =>
+      'Партнёр отклонил запрос. Проверьте код приглашения.';
+
+  @override
+  String get federationInvalidDiscovery =>
+      'Партнёр возвращает неверные данные.';
+
+  @override
+  String get federationInstanceConflict =>
+      'Экземпляр с таким именем уже зарегистрирован.';
+
+  @override
+  String get federationInvalidState =>
+      'Действие невозможно в текущем состоянии партнёра.';
+
+  @override
+  String get federationInvalidInvitation => 'Код приглашения недействителен.';
+
+  @override
+  String auditRecords(int count) {
+    return 'Записей: $count';
+  }
+
+  @override
+  String get auditStatus => 'Статус';
+
+  @override
+  String get auditSource => 'Источник';
+
+  @override
+  String get auditTarget => 'Цель';
+
+  @override
+  String get auditTransaction => 'Транзакция';
+
+  @override
+  String get auditMessage => 'Сообщение';
+
+  @override
+  String get auditSuccess => 'Успешно';
+
+  @override
+  String get auditFailed => 'Ошибка';
+
+  @override
+  String get auditSkipped => 'Пропущено';
+
+  @override
+  String get auditRegistrationRequested => 'Регистрация запрошена';
+
+  @override
+  String get auditRegistrationReceived => 'Получен запрос на регистрацию';
+
+  @override
+  String get auditRegistrationApproved => 'Регистрация принята';
+
+  @override
+  String get auditRegistrationRejected => 'Регистрация отклонена';
+
+  @override
+  String get auditUnlinked => 'Регистрация отменена';
+
+  @override
+  String get auditKeysChanged => 'Ключи изменены';
+
+  @override
+  String get auditRecordPushed => 'Запись отправлена';
+
+  @override
+  String get auditRecordReceived => 'Запись получена';
+
+  @override
+  String get auditRecordUpdated => 'Запись обновлена';
+
+  @override
+  String get auditRecordDeleted => 'Запись удалена';
+
+  @override
+  String get auditRecordsRemoved => 'Записи удалены';
+
+  @override
+  String rejectTitle(String instance) {
+    return 'Отклонить запрос $instance';
+  }
+
+  @override
+  String rejectInfo(String instance) {
+    return '$instance будет уведомлён об отклонении, запрос будет удалён. Если $instance недоступен, запрос всё равно удаляется. Для нового запроса $instance нужен новый код приглашения.';
+  }
+
+  @override
+  String get auditNewEntries => 'Новые записи — обновить';
+
+  @override
+  String get auditRetention => 'Хранить журнал';
+
+  @override
+  String get auditRetentionInfo =>
+      'Более старые записи журнала синхронизации удаляются автоматически.';
+
+  @override
+  String get retentionThreeMonths => '3 месяца';
+
+  @override
+  String get retentionSixMonths => '6 месяцев';
+
+  @override
+  String get invitationAddress => 'Адрес этого экземпляра';
+
+  @override
+  String get rules => 'Правила';
+
+  @override
+  String get ruleAllInstances => 'Все экземпляры';
+
+  @override
+  String get ruleEmptyAllInstances =>
+      'Пусто — действует для всех экземпляров, в том числе связанных позже.';
+
+  @override
+  String get peerNoRules => 'Для этого экземпляра нет правил.';
+
+  @override
+  String get peerRulesInfo =>
+      'Правила управляются в разделе Sync → Правила. Правила, ограниченные экземпляром, имеют приоритет над правилами для всех экземпляров.';
+
+  @override
+  String approveTitle(String instance) {
+    return 'Принять запрос $instance';
+  }
+
+  @override
+  String approveInfo(String instance, int count) {
+    return '$instance будет уведомлён, синхронизация включится. С этого момента для $instance действуют исходящие правила: $count. Новые собственные записи, соответствующие им, отправляются $instance.';
+  }
+
+  @override
+  String get ruleSourceGroups => 'Группы отправляемых записей';
+
+  @override
+  String receivedFrom(String owner) {
+    return 'Получено от $owner';
+  }
+
+  @override
+  String get syncState => 'Синхронизация';
+
+  @override
+  String get syncStateReceived => 'Получено';
+
+  @override
+  String get syncStateSent => 'Отправлено';
+
+  @override
+  String get syncStateProblem => 'Проблема';
+
+  @override
+  String get syncStateNone => 'Не синхронизировано';
+
+  @override
+  String syncProblemWith(String instance) {
+    return 'Ошибка синхронизации с $instance';
+  }
+
+  @override
+  String get syncProblemFailed =>
+      'Окончательная ошибка. Повторите через «Синхронизировать».';
+
+  @override
+  String syncProblemRetry(String date) {
+    return 'Следующая попытка: $date';
+  }
+
+  @override
+  String syncSentCount(int count) {
+    return 'Отправлено экземплярам: $count';
+  }
+
+  @override
+  String syncProblemCount(int count) {
+    return 'Проблем: $count';
+  }
+
+  @override
+  String get auditResult => 'Результат';
+
+  @override
+  String get auditDirection => 'Направление';
+
+  @override
+  String get auditAction => 'Действие';
+
+  @override
+  String get auditIncoming => 'Входящее';
+
+  @override
+  String get auditOutgoing => 'Исходящее';
+
+  @override
+  String get auditFilterReset => 'Сбросить фильтры';
+
+  @override
+  String get auditSelectionClear => 'Снять выделение';
+
+  @override
+  String get auditDeleteSelected => 'Удалить выбранные';
+
+  @override
+  String auditDeleteCount(int count) {
+    return 'Будет удалено записей: $count. Продолжить?';
+  }
+
+  @override
+  String get auditFilterRemove => 'Убрать фильтр';
+
+  @override
+  String get invitationNew => 'Новое приглашение';
+
+  @override
+  String get invitationNewInfo =>
+      'Будет создан код приглашения, с помощью которого экземпляр-партнёр сможет один раз зарегистрироваться.';
+
+  @override
+  String get create => 'Создать';
+
+  @override
+  String get auditRecordRemoved => 'Запись больше не существует';
+
+  @override
+  String get auditPending => 'Ожидает';
+
+  @override
+  String get invitationValidity => 'Срок действия';
+
+  @override
+  String durationHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count часа',
+      many: '$count часов',
+      few: '$count часа',
+      one: '1 час',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count дня',
+      many: '$count дней',
+      few: '$count дня',
+      one: '1 день',
+    );
+    return '$_temp0';
+  }
 }

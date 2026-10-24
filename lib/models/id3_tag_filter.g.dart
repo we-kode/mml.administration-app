@@ -16,6 +16,13 @@ ID3TagFilter _$ID3TagFilterFromJson(Map<String, dynamic> json) => ID3TagFilter(
       ?.map((e) => e as String)
       .toList(),
   groups: (json['groups'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  instances: (json['instances'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+  syncStates: (json['syncStates'] as List<dynamic>?)
+      ?.map((e) => (e as num).toInt())
+      .toList(),
+  unassigned: json['unassigned'] as bool? ?? false,
   startDate: json['startDate'] == null
       ? null
       : DateTime.parse(json['startDate'] as String),
@@ -32,6 +39,9 @@ Map<String, dynamic> _$ID3TagFilterToJson(ID3TagFilter instance) =>
       'albums': instance.albums,
       'languages': instance.languages,
       'groups': instance.groups,
+      'unassigned': instance.unassigned,
+      'instances': instance.instances,
+      'syncStates': instance.syncStates,
       'startDate': ?instance.startDate?.toIso8601String(),
       'endDate': ?instance.endDate?.toIso8601String(),
     };
