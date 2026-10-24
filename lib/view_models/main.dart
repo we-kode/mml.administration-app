@@ -1,10 +1,14 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
+import 'package:mml_admin/services/federation_events.dart';
+import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/user.dart';
+import 'package:mml_admin/view_models/sync/overview.dart';
 
 /// View model for the main screen.
 class MainViewModel extends ChangeNotifier {
@@ -33,23 +37,67 @@ class MainViewModel extends ChangeNotifier {
   /// Locales of the app.
   late AppLocalizations locales;
 
+  /// [RouterService].
+  final RouterService _routerService = RouterService.getInstance();
+
   /// Index of the currently selected route.
   int _selectedIndex = 0;
+
+  /// Value notifier that indicates if an update of the sync module is available.
+  final ValueNotifier<bool> syncUpdateAvailable = ValueNotifier(false);
+  late int _syncRouteIndex;
+
+  StreamSubscription<FederationEvent>? _federationEvents;
 
   /// Initializes the view model.
   Future<bool> init(BuildContext context) async {
     _context = context;
     locales = AppLocalizations.of(_context)!;
-
+    _syncRouteIndex = _routerService.nestedRoutes.keys.toList().indexOf(SyncOverviewViewModel.route);
+    if (_federationEvents == null) {
+      var federationEvents = FederationEventService.getInstance();
+      _federationEvents = federationEvents.events.listen(_onFederationEvent);
+      federationEvents.connect();
+    }
     return Future<bool>.microtask(() async {
       return true;
     });
+  }
+
+  @override
+  void dispose() {
+    _federationEvents?.cancel();
+    FederationEventService.getInstance().close();
+    syncUpdateAvailable.dispose();
+    super.dispose();
+  }
+
+  void _onFederationEvent(FederationEvent event) {
+    var isNewEntry = event.type == FederationEventType.requestReceived ||
+        (event.type == FederationEventType.auditAdded &&
+            (event.entry?.isNotable ?? false));
+    if (!isNewEntry) {
+      return;
+    }
+
+    if (_selectedIndex != _syncRouteIndex) {
+      syncUpdateAvailable.value = true;
+    }
+
+    if (event.type == FederationEventType.requestReceived) {
+      MessengerService.getInstance().showMessage(
+        locales.registrationReceived(event.peer?.instance ?? ''),
+      );
+    }
   }
 
   /// Sets the actual screens [index] as selected.
   set selectedIndex(int index) {
     _selectedIndex = index;
     notifyListeners();
+    if (_selectedIndex == _syncRouteIndex) {
+      syncUpdateAvailable.value = false;
+    }
   }
 
   /// Returns index of the actual selected page.
@@ -78,9 +126,7 @@ class MainViewModel extends ChangeNotifier {
         });
       });
     });
-
-    var routeService = RouterService.getInstance();
-    var route = routeService.nestedRoutes.keys.elementAt(_selectedIndex);
+    var route = _routerService.nestedRoutes.keys.elementAt(_selectedIndex);
     state?.pushReplacementNamed(route);
   }
 

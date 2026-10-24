@@ -64,19 +64,16 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     notUploadedFiles = {};
     folder = folderPath;
     files = fileList;
-    return Future<bool>.microtask(
-      () async {
-        _recordValidation = await _service.getValidationSettings();
-        if (_state == UploadProcessState.upload) {
-          initUpload();
-        } else if (_state == UploadProcessState.groups) {
-          final groups = List<Group>.from(await getGroups());
-          selectedGroups =
-              groups.where((element) => element.isDefault).toList();
-        }
-        return true;
-      },
-    );
+    return Future<bool>.microtask(() async {
+      _recordValidation = await _service.getValidationSettings();
+      if (_state == UploadProcessState.upload) {
+        initUpload();
+      } else if (_state == UploadProcessState.groups) {
+        final groups = List<Group>.from(await getGroups());
+        selectedGroups = groups.where((element) => element.isDefault).toList();
+      }
+      return true;
+    });
   }
 
   /// Loads all groups from the server.
@@ -95,9 +92,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   Future _uploadFolder(String folderPath) async {
     final files = await Directory(folderPath).list(recursive: true).toList();
     fileCount = files
-        .where(
-          (element) => element is File && _isMp3(element),
-        )
+        .where((element) => element is File && _isMp3(element))
         .length;
     for (var element in files) {
       if (element is File) {
@@ -159,10 +154,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
           }
         }
         messenger.showMessage(
-          messenger.uploadingFileFailed(
-            uploadingFileName,
-            uploadError,
-          ),
+          messenger.uploadingFileFailed(uploadingFileName, uploadError),
         );
         return;
       }
@@ -210,8 +202,4 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
 }
 
 /// State of the upload process.
-enum UploadProcessState {
-  groups,
-  upload,
-  success,
-}
+enum UploadProcessState { groups, upload, success }

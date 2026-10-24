@@ -16,12 +16,7 @@ class GenreBitrate extends ModelBase {
   int? bitrate;
 
   /// Initializes the model.
-  GenreBitrate({
-    this.genreId,
-    this.name,
-    this.bitrate,
-    super.isDeletable,
-  });
+  GenreBitrate({this.genreId, this.name, this.bitrate, super.isDeletable});
 
   /// Converts a json object/map to the model.
   factory GenreBitrate.fromJson(Map<String, dynamic> json) =>

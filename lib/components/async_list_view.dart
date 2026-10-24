@@ -98,6 +98,15 @@ class AsyncListView extends StatefulWidget {
   /// returned.
   final ActionPerformedFunction? lockItems;
 
+  /// Function that synchronizes the items with the passed [itemIdentifiers]
+  /// with partner instances.
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful operation or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
+  final ActionPerformedFunction? syncItems;
+
   /// Indicates, whether the add button should be shown or not.
   final bool showAddButton;
 
@@ -147,6 +156,7 @@ class AsyncListView extends StatefulWidget {
     required this.editItem,
     this.assignItems,
     this.lockItems,
+    this.syncItems,
     this.addItem,
     this.showAddButton = true,
     this.subactions,
@@ -474,81 +484,23 @@ class _AsyncListViewState extends State<AsyncListView> {
                       icon: const Icon(Symbols.check_box),
                       tooltip: AppLocalizations.of(context)!.selectLoaded,
                     ),
+                    if (widget.syncItems != null)
+                      _createSelectionAction(
+                        widget.syncItems!,
+                        Symbols.sync,
+                        AppLocalizations.of(context)!.synchronize,
+                      ),
                     if (widget.lockItems != null)
-                      IconButton(
-                        onPressed: () {
-                          showProgressIndicator();
-                          widget.lockItems!(_selectedItems).then((value) {
-                            if (!mounted) {
-                              return;
-                            }
-
-                            RouterService.getInstance()
-                                .navigatorKey
-                                .currentState!
-                                .pop();
-
-                            if (!value) {
-                              return;
-                            }
-
-                            setState(() {
-                              _isInMultiSelectMode = false;
-                              _selectedItems = [];
-                            });
-
-                            _reloadData();
-                          }).onError((error, stackTrace) {
-                            if (!mounted) {
-                              return;
-                            }
-
-                            RouterService.getInstance()
-                                .navigatorKey
-                                .currentState!
-                                .pop();
-                          });
-                        },
-                        icon: const Icon(Symbols.lock_outline),
-                        tooltip: AppLocalizations.of(context)!.lock,
+                      _createSelectionAction(
+                        widget.lockItems!,
+                        Symbols.lock_outline,
+                        AppLocalizations.of(context)!.lock,
                       ),
                     if (widget.assignItems != null)
-                      IconButton(
-                        onPressed: () {
-                          showProgressIndicator();
-                          widget.assignItems!(_selectedItems).then((value) {
-                            if (!mounted) {
-                              return;
-                            }
-
-                            RouterService.getInstance()
-                                .navigatorKey
-                                .currentState!
-                                .pop();
-
-                            if (!value) {
-                              return;
-                            }
-
-                            setState(() {
-                              _isInMultiSelectMode = false;
-                              _selectedItems = [];
-                            });
-
-                            _reloadData();
-                          }).onError((error, stackTrace) {
-                            if (!mounted) {
-                              return;
-                            }
-
-                            RouterService.getInstance()
-                                .navigatorKey
-                                .currentState!
-                                .pop();
-                          });
-                        },
-                        icon: const Icon(Symbols.assignment_add),
-                        tooltip: AppLocalizations.of(context)!.assignTo,
+                      _createSelectionAction(
+                        widget.assignItems!,
+                        Symbols.assignment_add,
+                        AppLocalizations.of(context)!.assignTo,
                       ),
                     IconButton(
                       onPressed: () {
@@ -594,6 +546,45 @@ class _AsyncListViewState extends State<AsyncListView> {
           ),
         ],
       ),
+    );
+  }
+
+  /// Creates a button performing the [action] on the selected items.
+  Widget _createSelectionAction(
+    ActionPerformedFunction action,
+    IconData icon,
+    String tooltip,
+  ) {
+    return IconButton(
+      onPressed: () {
+        showProgressIndicator();
+        action(_selectedItems).then((value) {
+          if (!mounted) {
+            return;
+          }
+
+          RouterService.getInstance().navigatorKey.currentState!.pop();
+
+          if (!value) {
+            return;
+          }
+
+          setState(() {
+            _isInMultiSelectMode = false;
+            _selectedItems = [];
+          });
+
+          _reloadData();
+        }).onError((error, stackTrace) {
+          if (!mounted) {
+            return;
+          }
+
+          RouterService.getInstance().navigatorKey.currentState!.pop();
+        });
+      },
+      icon: Icon(icon),
+      tooltip: tooltip,
     );
   }
 
@@ -795,8 +786,18 @@ class _AsyncListViewState extends State<AsyncListView> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.only(top: 2),
-                    child: Text(
-                      item.getSubtitle(context)!,
+                    child: Text.rich(
+                      TextSpan(
+                        text: item.getSubtitle(context)!,
+                        children: [
+                          if (item.getSubtitleNote(context) != null)
+                            TextSpan(
+                              text: ' · ${item.getSubtitleNote(context)}',
+                              style:
+                                  const TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                        ],
+                      ),
                       overflow: TextOverflow.fade,
                       maxLines: 1,
                       softWrap: false,

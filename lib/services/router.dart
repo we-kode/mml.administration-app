@@ -6,6 +6,7 @@ import 'package:mml_admin/view_models/livestreams/overview.dart';
 import 'package:mml_admin/view_models/login.dart';
 import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
+import 'package:mml_admin/view_models/sync/overview.dart';
 import 'package:mml_admin/view_models/users/overview.dart';
 import 'package:mml_admin/views/change_password.dart';
 import 'package:mml_admin/views/clients/overview.dart';
@@ -16,6 +17,7 @@ import 'package:mml_admin/view_models/main.dart';
 import 'package:mml_admin/views/main.dart';
 import 'package:mml_admin/views/records/overview.dart';
 import 'package:mml_admin/views/settings/settings.dart';
+import 'package:mml_admin/views/sync/overview.dart';
 import 'package:mml_admin/views/users/overview.dart';
 
 /// Service that holds all routing information of the navigators of the app.
@@ -71,6 +73,11 @@ class RouterService {
       UsersOverviewViewModel.route: PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) =>
             const UsersOverviewScreen(),
+        transitionDuration: const Duration(seconds: 0),
+      ),
+      SyncOverviewViewModel.route: PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            const SyncOverviewScreen(),
         transitionDuration: const Duration(seconds: 0),
       ),
       SettingsViewModel.route: PageRouteBuilder(

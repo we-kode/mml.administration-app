@@ -3,6 +3,8 @@ import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/manager/image_cache_manager.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/route_arguments/change_password.dart';
+import 'package:mml_admin/services/federation.dart';
+import 'package:mml_admin/services/sync.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/user.dart';
@@ -26,6 +28,12 @@ class SettingsViewModel extends ChangeNotifier {
   /// Current user
   late User? user;
 
+  String? instance = '';
+
+  /// Days the audit log of the synchronization is kept, 0 keeps it until it
+  /// is deleted manually.
+  int auditRetentionDays = AuditRetention.defaultDays;
+
   /// Current build context.
   late BuildContext _context;
 
@@ -45,6 +53,9 @@ class SettingsViewModel extends ChangeNotifier {
       locales = AppLocalizations.of(_context)!;
       try {
         user = await _userService.getUserInfo();
+        instance = await SyncService.getInstance().get();
+        auditRetentionDays = await FederationService.getInstance()
+            .getAuditRetention();
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
       }
@@ -65,6 +76,17 @@ class SettingsViewModel extends ChangeNotifier {
     cacheManager.updateLimits(
       maxCacheTime: duration,
     );
+    notifyListeners();
+  }
+
+  /// Sets the days the audit log of the synchronization is kept to [days].
+  Future<void> updateAuditRetention(int days) async {
+    try {
+      await FederationService.getInstance().setAuditRetention(days);
+      auditRetentionDays = days;
+    } catch (e) {
+      // Catch all errors and do nothing, since handled by api service!
+    }
     notifyListeners();
   }
 

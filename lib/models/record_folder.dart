@@ -14,12 +14,7 @@ class RecordFolder extends ModelBase {
   final int? day;
 
   /// Initializes the model.
-  RecordFolder({
-    required this.year,
-    this.month,
-    this.day,
-    super.isDeletable,
-  });
+  RecordFolder({required this.year, this.month, this.day, super.isDeletable});
 
   /// Converts a json object/map to the model.
   factory RecordFolder.fromJson(Map<String, dynamic> json) =>
@@ -63,7 +58,10 @@ class RecordFolder extends ModelBase {
 
     if (startDate == endDate) {
       return RecordFolder(
-          year: startDate.year, month: startDate.month, day: startDate.day);
+        year: startDate.year,
+        month: startDate.month,
+        day: startDate.day,
+      );
     }
 
     if (startDate.month == endDate.month) {

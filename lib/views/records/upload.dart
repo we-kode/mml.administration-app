@@ -29,23 +29,21 @@ class RecordUploadDialog extends StatelessWidget {
     return ChangeNotifierProvider<RecordsUploadDialogViewModel>(
       create: (context) => RecordsUploadDialogViewModel(),
       builder: (context, _) {
-        var vm =
-            Provider.of<RecordsUploadDialogViewModel>(context, listen: false);
+        var vm = Provider.of<RecordsUploadDialogViewModel>(
+          context,
+          listen: false,
+        );
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
-          title: Text(
-            locales.uploading,
-          ),
+          title: Text(locales.uploading),
           content: FutureBuilder(
             future: vm.init(context, folderPath, files),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -62,7 +60,9 @@ class RecordUploadDialog extends StatelessWidget {
 
   /// Creates the upload content that should be shown in the dialog.
   Widget _createUploadContent(
-      BuildContext context, RecordsUploadDialogViewModel vm) {
+    BuildContext context,
+    RecordsUploadDialogViewModel vm,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -82,9 +82,7 @@ class RecordUploadDialog extends StatelessWidget {
                         initialSelectedItems: vm.selectedGroups,
                         onSelectionChanged: (selectableItems) =>
                             vm.selectedGroups = selectableItems
-                                .map(
-                                  (e) => e as Group,
-                                )
+                                .map((e) => e as Group)
                                 .toList(),
                       ),
                     ],
@@ -94,10 +92,7 @@ class RecordUploadDialog extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: value.uploadedFiles == value.fileCount
                         ? _uploadFinishedTile(value)
-                        : _uploadProgressTile(
-                            value,
-                            context,
-                          ),
+                        : _uploadProgressTile(value, context),
                   );
           },
         ),
@@ -116,7 +111,8 @@ class RecordUploadDialog extends StatelessWidget {
       Consumer<RecordsUploadDialogViewModel>(
         builder: (context, value, child) {
           return TextButton(
-            onPressed: value.state != UploadProcessState.groups &&
+            onPressed:
+                value.state != UploadProcessState.groups &&
                     value.uploadedFiles == value.fileCount
                 ? null
                 : () => Navigator.pop(context, false),
@@ -130,8 +126,8 @@ class RecordUploadDialog extends StatelessWidget {
             onPressed: value.state == UploadProcessState.groups
                 ? value.initUpload
                 : value.uploadedFiles == value.fileCount
-                    ? () => Navigator.pop(context, true)
-                    : null,
+                ? () => Navigator.pop(context, true)
+                : null,
             child: Text(locales.save),
           );
         },
@@ -145,11 +141,7 @@ class RecordUploadDialog extends StatelessWidget {
     BuildContext context,
   ) {
     return [
-      const SizedBox(
-        height: 256,
-        width: 256,
-        child: UploadAnimation(),
-      ),
+      const SizedBox(height: 256, width: 256, child: UploadAnimation()),
       Row(
         children: [
           Text(
@@ -161,14 +153,11 @@ class RecordUploadDialog extends StatelessWidget {
             vm.uploadedFiles.toString(),
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          Text(
-            '/',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text('/', style: Theme.of(context).textTheme.bodySmall),
           Text(
             vm.fileCount.toString(),
             style: Theme.of(context).textTheme.bodySmall,
-          )
+          ),
         ],
       ),
     ];
@@ -188,9 +177,7 @@ class RecordUploadDialog extends StatelessWidget {
             itemCount: vm.notUploadedFiles.length,
             itemBuilder: (BuildContext context, int index) {
               return ExpansionTile(
-                title: Text(
-                  vm.notUploadedFiles.keys.elementAt(index),
-                ),
+                title: Text(vm.notUploadedFiles.keys.elementAt(index)),
                 children: [
                   SizedBox(
                     height: 100,
@@ -207,8 +194,9 @@ class RecordUploadDialog extends StatelessWidget {
                         );
                       },
                       itemCount: vm
-                          .notUploadedFiles[
-                              vm.notUploadedFiles.keys.elementAt(index)]
+                          .notUploadedFiles[vm.notUploadedFiles.keys.elementAt(
+                            index,
+                          )]
                           ?.length,
                     ),
                   ),

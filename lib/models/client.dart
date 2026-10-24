@@ -62,8 +62,9 @@ class Client extends ModelBase {
   @override
   String? getSubtitle(BuildContext context) {
     var locales = AppLocalizations.of(context)!;
-    return locales
-        .lastTokenRefresh(DateFormat().format(lastTokenRefreshDate!.toLocal()));
+    return locales.lastTokenRefresh(
+      DateFormat().format(lastTokenRefreshDate!.toLocal()),
+    );
   }
 
   @override

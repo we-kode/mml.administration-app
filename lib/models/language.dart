@@ -13,14 +13,11 @@ class Language extends ModelBase {
   final String? name;
 
   /// Initializes the model.
-  Language({
-    this.languageId,
-    this.name,
-    super.isDeletable = false,
-  });
+  Language({this.languageId, this.name, super.isDeletable = false});
 
   /// Converts a json object/map to the model.
-  factory Language.fromJson(Map<String, dynamic> json) => _$LanguageFromJson(json);
+  factory Language.fromJson(Map<String, dynamic> json) =>
+      _$LanguageFromJson(json);
 
   /// Converts the current model to a json object/map.
   Map<String, dynamic> toJson() => _$LanguageToJson(this);

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
+import 'package:mml_admin/models/federation/rule.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/records/edit.dart';
 import 'package:provider/provider.dart';
@@ -30,9 +33,7 @@ class RecordEditDialog extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -59,9 +60,7 @@ class RecordEditDialog extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: ClipRRect(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                 child: Container(
                   height: 200,
                   width: 200,
@@ -70,7 +69,13 @@ class RecordEditDialog extends StatelessWidget {
                 ),
               ),
             ),
+            if (!vm.isEditable)
+              ListTile(
+                leading: const Icon(Symbols.warning),
+                title: Text(vm.locales.notOwned(vm.record.ownerInstance)),
+              ),
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.title,
               decoration: InputDecoration(
                 labelText: vm.locales.title,
@@ -87,6 +92,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.artist,
               decoration: InputDecoration(
                 labelText: vm.locales.artist,
@@ -101,6 +107,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.album,
               decoration: InputDecoration(
                 labelText: vm.locales.album,
@@ -115,6 +122,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.genre,
               decoration: InputDecoration(
                 labelText: vm.locales.genre,
@@ -129,6 +137,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              enabled: vm.isEditable,
               initialValue: vm.record.language,
               decoration: InputDecoration(
                 labelText: vm.locales.language,
@@ -162,16 +171,99 @@ class RecordEditDialog extends StatelessWidget {
             ChipChoices(
               loadData: vm.getGroups,
               initialSelectedItems: vm.record.groups,
-              onSelectionChanged: (selectableItems) =>
-                  vm.record.groups = selectableItems
-                      .map(
-                        (e) => e as Group,
-                      )
-                      .toList(),
+              onSelectionChanged: (selectableItems) => vm.record.groups =
+                  selectableItems.map((e) => e as Group).toList(),
             ),
+            verticalSpacer,
+            _createSyncSection(context, vm),
           ],
         ),
       ),
+    );
+  }
+
+  /// Creates the synchronization section: the origin of a received record or
+  /// the partners an own record was sent to and the problems. The details are
+  /// collapsed, since the list can be long.
+  Widget _createSyncSection(BuildContext context, RecordEditViewModel vm) {
+    var format = DateFormat.yMd().add_Hm();
+    var problems = vm.sync.problems
+        .map(
+          (problem) => ListTile(
+            dense: true,
+            leading: Icon(
+              Symbols.sync_problem,
+              color: Theme.of(context).colorScheme.error,
+            ),
+            title: Text(vm.locales.syncProblemWith(problem.instance)),
+            subtitle: Text(
+              [
+                if (problem.error?.isNotEmpty ?? false) problem.error!,
+                problem.failed || problem.nextAttemptAt == null
+                    ? vm.locales.syncProblemFailed
+                    : vm.locales.syncProblemRetry(
+                        format.format(problem.nextAttemptAt!.toLocal()),
+                      ),
+              ].join('\n'),
+            ),
+          ),
+        )
+        .toList();
+
+    if (!vm.isEditable) {
+      var received = vm.sync.links
+          .where((link) => link.direction == SyncDirection.incoming)
+          .firstOrNull;
+      return ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(SyncDirection.icon(SyncDirection.incoming)),
+        title: Text(vm.locales.receivedFrom(vm.record.ownerInstance)),
+        subtitle: received != null
+            ? Text(format.format(received.syncedAt.toLocal()))
+            : null,
+      );
+    }
+
+    var sent = vm.sync.links
+        .where((link) => link.direction == SyncDirection.outgoing)
+        .map(
+          (link) => ListTile(
+            dense: true,
+            leading: Icon(SyncDirection.icon(SyncDirection.outgoing)),
+            title: Text(link.instance ?? ''),
+            subtitle: Text(format.format(link.syncedAt.toLocal())),
+          ),
+        )
+        .toList();
+    var button = IconButton(
+      onPressed: vm.synchronize,
+      icon: const Icon(Symbols.sync),
+      tooltip: vm.locales.synchronize,
+    );
+    var title = Text(vm.locales.syncState);
+
+    if (sent.isEmpty && problems.isEmpty) {
+      return ListTile(
+        contentPadding: EdgeInsets.zero,
+        title: title,
+        trailing: button,
+      );
+    }
+
+    return ExpansionTile(
+      tilePadding: EdgeInsets.zero,
+      shape: const Border(),
+      collapsedShape: const Border(),
+      controlAffinity: ListTileControlAffinity.leading,
+      title: title,
+      subtitle: Text(
+        [
+          if (sent.isNotEmpty) vm.locales.syncSentCount(sent.length),
+          if (problems.isNotEmpty) vm.locales.syncProblemCount(problems.length),
+        ].join(' · '),
+      ),
+      trailing: button,
+      children: [...problems, ...sent],
     );
   }
 

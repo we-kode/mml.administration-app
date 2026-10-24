@@ -29,6 +29,12 @@ abstract class ModelBase {
     return null;
   }
 
+  /// Returns a note shown emphasized after the subtitle or null if no note
+  /// was set.
+  String? getSubtitleNote(BuildContext context) {
+    return null;
+  }
+
   /// Returns meta dara information, e.g. duration.
   String? getMetadata(BuildContext context) {
     return null;
