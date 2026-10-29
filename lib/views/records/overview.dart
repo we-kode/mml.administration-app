@@ -178,6 +178,8 @@ class RecordsScreen extends StatelessWidget {
                 return true;
               },
               syncItems: <T>(List<T> items) => vm.synchronize(items, context),
+              revokeSyncItems: <T>(List<T> items) =>
+                  vm.revokeSync(items, context),
               lockItems: <T>(List<T> items) async {
                 await vm.lockRecords(items);
                 return true;

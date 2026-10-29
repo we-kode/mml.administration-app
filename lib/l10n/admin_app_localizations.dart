@@ -1755,6 +1755,114 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'{count, plural, =1{1 Tag} other{{count} Tage}}'**
   String durationDays(int count);
+
+  /// No description provided for @syncStatePending.
+  ///
+  /// In de, this message translates to:
+  /// **'Wird gesendet'**
+  String get syncStatePending;
+
+  /// No description provided for @auditRecordRevoked.
+  ///
+  /// In de, this message translates to:
+  /// **'Synchronisation aufgehoben'**
+  String get auditRecordRevoked;
+
+  /// No description provided for @auditAddressChanged.
+  ///
+  /// In de, this message translates to:
+  /// **'Adresse geändert'**
+  String get auditAddressChanged;
+
+  /// No description provided for @federationInvalidPeer.
+  ///
+  /// In de, this message translates to:
+  /// **'Eine ausgewählte Instanz ist nicht verknüpft.'**
+  String get federationInvalidPeer;
+
+  /// No description provided for @federationUnknownKeys.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Instanz unter der neuen Adresse kann nicht nachweisen, dass sie einen bekannten Schlüssel besitzt. Wurden auch die Schlüssel ersetzt, muss die Verknüpfung aufgehoben und neu angefragt werden.'**
+  String get federationUnknownKeys;
+
+  /// No description provided for @revokeSync.
+  ///
+  /// In de, this message translates to:
+  /// **'Synchronisation aufheben'**
+  String get revokeSync;
+
+  /// No description provided for @revokeSyncInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Aufnahmen werden bei den ausgewählten Instanzen entfernt und bleiben hier erhalten. Sie werden dorthin nicht mehr automatisch oder über Ordner gesendet, bis sie einzeln wieder synchronisiert werden.'**
+  String get revokeSyncInfo;
+
+  /// No description provided for @revokeResult.
+  ///
+  /// In de, this message translates to:
+  /// **'{count} Entfernungen bei Partnern eingeplant.'**
+  String revokeResult(int count);
+
+  /// No description provided for @transferPercent.
+  ///
+  /// In de, this message translates to:
+  /// **'{percent} %'**
+  String transferPercent(int percent);
+
+  /// No description provided for @transferWaiting.
+  ///
+  /// In de, this message translates to:
+  /// **'Wartet bis {date}'**
+  String transferWaiting(String date);
+
+  /// No description provided for @allInstances.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Instanzen'**
+  String get allInstances;
+
+  /// No description provided for @changeAddress.
+  ///
+  /// In de, this message translates to:
+  /// **'Adresse ändern'**
+  String get changeAddress;
+
+  /// No description provided for @changeAddressTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Adresse von {instance} ändern'**
+  String changeAddressTitle(String instance);
+
+  /// No description provided for @changeAddressInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Unter der neuen Adresse muss {instance} mit demselben Namen erreichbar sein und mit einem bekannten Schlüssel signieren. Offene Übertragungen werden danach sofort wiederholt.'**
+  String changeAddressInfo(String instance);
+
+  /// No description provided for @addressChanged.
+  ///
+  /// In de, this message translates to:
+  /// **'{instance} ist jetzt unter {url} erreichbar.'**
+  String addressChanged(String instance, String url);
+
+  /// No description provided for @syncRevokedAt.
+  ///
+  /// In de, this message translates to:
+  /// **'Synchronisation aufgehoben am {date}'**
+  String syncRevokedAt(String date);
+
+  /// No description provided for @syncPendingCount.
+  ///
+  /// In de, this message translates to:
+  /// **'{count} Übertragungen offen'**
+  String syncPendingCount(int count);
+
+  /// No description provided for @syncRevokedCount.
+  ///
+  /// In de, this message translates to:
+  /// **'Bei {count} Instanzen aufgehoben'**
+  String syncRevokedCount(int count);
 }
 
 class _AppLocalizationsDelegate

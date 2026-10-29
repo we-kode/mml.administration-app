@@ -1,19 +1,22 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:mml_admin/extensions/federation_error.dart';
-import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
-import 'package:mml_admin/models/federation/record_sync.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
+import 'package:mml_admin/models/federation/record_sync_info.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/record.dart';
 import 'package:mml_admin/services/federation.dart';
+import 'package:mml_admin/services/federation_events.dart';
 import 'package:mml_admin/services/group.dart';
-import 'package:mml_admin/services/sync.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
+import 'package:mml_admin/services/sync.dart';
+import 'package:mml_admin/view_models/sync/overview.dart';
 
 /// View model for the edit record screen.
 class RecordEditViewModel extends ChangeNotifier {
@@ -45,6 +48,8 @@ class RecordEditViewModel extends ChangeNotifier {
   /// The synchronization details of the record.
   RecordSyncInfo sync = RecordSyncInfo();
 
+  StreamSubscription<FederationEvent>? _events;
+
   /// Returns whether the record is editable or not.
   bool get isEditable => instance == record.ownerInstance;
 
@@ -57,6 +62,9 @@ class RecordEditViewModel extends ChangeNotifier {
       record = await _service.getRecord(recordId!);
       try {
         sync = await FederationService.getInstance().getRecordSync(recordId);
+        _events ??= FederationEventService.getInstance().events.listen(
+          _updateProgress,
+        );
       } catch (e) {
         // The record can be edited without the synchronization details.
       }
@@ -121,23 +129,66 @@ class RecordEditViewModel extends ChangeNotifier {
     return await _groupService.getMediaGroups(null, 0, -1);
   }
 
-  /// Synchronizes the record with partner instances and shows the result.
+  /// Synchronizes the record with the partner instances the admin selects,
+  /// even if its synchronization was revoked, and shows the result.
   Future<void> synchronize() async {
-    showProgressIndicator();
+    await synchronizeRecords(_context, recordIds: [record.recordId!]);
+    await _reloadSync();
+  }
+
+  /// The partner instances the record is sent to or is being sent to.
+  Set<String> get sentTo => {
+    for (var link in sync.links)
+      if (link.direction == SyncDirection.outgoing) link.instance ?? '',
+    for (var transfer in sync.transfers) transfer.instance,
+  };
+
+  /// Revokes the synchronization of the record with the partner instances the
+  /// admin selects of [sentTo] and shows the result.
+  Future<void> revokeSync() async {
+    await revokeRecords(
+      _context,
+      recordIds: [record.recordId!],
+      instances: sentTo,
+    );
+    await _reloadSync();
+  }
+
+  @override
+  void dispose() {
+    _events?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _reloadSync() async {
     try {
-      var result = await FederationService.getInstance().synchronize(
-        recordIds: [record.recordId!],
+      sync = await FederationService.getInstance().getRecordSync(
+        record.recordId!,
       );
-      MessengerService.getInstance().showMessage(
-        locales.syncResult(result.queued, result.skipped),
-      );
-    } on FederationException catch (e) {
-      MessengerService.getInstance().showMessage(e.message(locales));
+      notifyListeners();
     } catch (_) {
-      // Other errors are shown by the api service.
-    } finally {
-      RouterService.getInstance().navigatorKey.currentState!.pop();
+      // The shown details are kept.
     }
+  }
+
+  void _updateProgress(FederationEvent event) {
+    var progress = event.progress;
+    if (progress == null || progress.recordId != record.recordId) {
+      return;
+    }
+
+    sync = RecordSyncInfo(
+      links: sync.links,
+      problems: sync.problems,
+      exclusions: sync.exclusions,
+      transfers: [
+        for (var transfer in sync.transfers)
+          transfer.instance == progress.instance
+              ? transfer.withProgress(progress.transferred, progress.size)
+              : transfer,
+      ],
+    );
+    notifyListeners();
   }
 
   /// Locks the record, so it can not be deleted.

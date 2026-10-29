@@ -4,14 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/shimmer_cover.dart';
+import 'package:mml_admin/components/transfer_indicator.dart';
 import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/extensions/flag.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/manager/image_cache_manager.dart';
-import 'package:mml_admin/models/federation/record_sync.dart';
-import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/models/federation/record_sync_state.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_base.dart';
-import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 part 'record.g.dart';
 
@@ -210,10 +211,24 @@ class Record extends ModelBase {
         colors.error,
         locales.syncStateProblem,
       ),
+      RecordSyncState.pending => (
+        Symbols.sync,
+        colors.primary,
+        locales.syncStatePending,
+      ),
       _ => (null, null, null),
     };
     if (icon == null) {
       return null;
+    }
+
+    if (syncState == RecordSyncState.pending) {
+      return TransferIndicator(
+        record: this,
+        message: message!,
+        icon: icon,
+        stateIcon: _syncIcon,
+      );
     }
 
     return Tooltip(

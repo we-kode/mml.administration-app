@@ -7,9 +7,12 @@ import 'package:mml_admin/components/date_range_dialog.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
+import 'package:mml_admin/models/federation/audit_action.dart';
 import 'package:mml_admin/models/federation/audit_entry.dart';
-import 'package:mml_admin/models/federation/audit_filter.dart';
-import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/models/federation/audit_sort_field.dart';
+import 'package:mml_admin/models/federation/audit_status.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
+import 'package:mml_admin/models/federation/transfer_progress.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/select_option.dart';
 import 'package:mml_admin/view_models/sync/audit.dart';
@@ -330,10 +333,26 @@ class _AuditTableState extends State<AuditTable> {
           }
         },
         onClearFilter: () => filter.statuses = [],
-        content: (entry) => Tooltip(
-          message: entry.statusName(locales),
-          child: statusIcon(context, entry.status),
-        ),
+        content: (entry) {
+          var icon = Tooltip(
+            message: entry.statusName(locales),
+            child: statusIcon(context, entry.status),
+          );
+          var fraction = transferFraction(entry.transferred, entry.size);
+          if (fraction == null) {
+            return icon;
+          }
+
+          return Row(
+            children: [
+              icon,
+              horizontalSpacer,
+              Expanded(child: LinearProgressIndicator(value: fraction)),
+              horizontalSpacer,
+              Text(locales.transferPercent((fraction * 100).floor())),
+            ],
+          );
+        },
       ),
       _AuditColumn(
         label: locales.auditDirection,

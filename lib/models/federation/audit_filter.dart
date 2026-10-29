@@ -1,26 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mml_admin/models/federation/rule.dart';
-
-/// Columns the audit log can be sorted by.
-abstract class AuditSortField {
-  /// The creation date.
-  static const String timestamp = 'timestamp';
-
-  /// The result of the action.
-  static const String status = 'status';
-
-  /// The direction seen from this instance.
-  static const String direction = 'direction';
-
-  /// The performed action.
-  static const String action = 'action';
-
-  /// The partner instance.
-  static const String instance = 'instance';
-}
-
-/// One column the audit log is sorted by.
-typedef AuditSort = ({String field, bool descending});
+import 'package:mml_admin/models/federation/audit_sort.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 
 /// Column filters and sort order of the federation audit log. Listeners are
 /// notified whenever the entries have to be reloaded.

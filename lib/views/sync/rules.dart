@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/view_models/sync/rules.dart';

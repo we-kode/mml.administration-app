@@ -5,7 +5,9 @@ import 'package:mml_admin/components/info_tooltip.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/federation/peer.dart';
+import 'package:mml_admin/models/federation/peer_state.dart';
 import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 import 'package:mml_admin/view_models/sync/peer.dart';
 import 'package:provider/provider.dart';
 
@@ -80,12 +82,20 @@ class PeerDialog extends StatelessWidget {
 
   List<Widget> _createInfo(BuildContext context, AppLocalizations locales) {
     var format = DateFormat.yMd().add_Hm();
+    var vm = Provider.of<PeerViewModel>(context, listen: false);
     return [
       ListTile(
         contentPadding: EdgeInsets.zero,
         leading: const Icon(Symbols.link),
         title: Text(peer.baseUrl),
         subtitle: Text(peer.stateName(locales)),
+        trailing: peer.isPendingApproval || peer.state == PeerState.rejected
+            ? null
+            : IconButton(
+                onPressed: vm.changeAddress,
+                icon: const Icon(Symbols.edit),
+                tooltip: locales.changeAddress,
+              ),
       ),
       if (peer.jwksUpdatedAt != null)
         ListTile(

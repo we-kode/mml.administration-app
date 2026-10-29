@@ -1,12 +1,11 @@
+import '../view_models/sync_audit_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
-import 'package:mml_admin/models/federation/audit_filter.dart';
+import 'package:mml_admin/models/federation/audit_sort_field.dart';
 import 'package:mml_admin/view_models/sync/audit.dart';
 import 'package:mml_admin/views/sync/audit.dart';
-
-import '../view_models/sync_audit_test.dart';
 
 void main() {
   final locales = lookupAppLocalizations(const Locale('en'));

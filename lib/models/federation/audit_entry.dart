@@ -1,77 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
-import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/models/federation/audit_action.dart';
+import 'package:mml_admin/models/federation/audit_record.dart';
+import 'package:mml_admin/models/federation/audit_status.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 
 part 'audit_entry.g.dart';
-
-/// Actions written to the federation audit log.
-abstract class AuditAction {
-  /// A registration was requested at a partner.
-  static const int registrationRequested = 1;
-
-  /// A registration request of a partner was received.
-  static const int registrationReceived = 2;
-
-  /// A registration was approved.
-  static const int registrationApproved = 3;
-
-  /// A registration was rejected.
-  static const int registrationRejected = 4;
-
-  /// A registration was removed.
-  static const int unlinked = 5;
-
-  /// The keys of an instance changed.
-  static const int keysChanged = 6;
-
-  /// A record was sent to a partner.
-  static const int recordPushed = 7;
-
-  /// A record was received from a partner.
-  static const int recordReceived = 8;
-
-  /// The metadata of a record was updated.
-  static const int recordUpdated = 9;
-
-  /// A record was deleted.
-  static const int recordDeleted = 10;
-
-  /// Records of a partner were removed.
-  static const int recordsRemoved = 11;
-
-  /// All actions.
-  static const List<int> values = [
-    registrationRequested,
-    registrationReceived,
-    registrationApproved,
-    registrationRejected,
-    unlinked,
-    keysChanged,
-    recordPushed,
-    recordReceived,
-    recordUpdated,
-    recordDeleted,
-    recordsRemoved,
-  ];
-}
-
-/// Results of an audited action.
-abstract class AuditStatus {
-  /// The action succeeded.
-  static const int success = 1;
-
-  /// The action failed.
-  static const int failed = 2;
-
-  /// The action was skipped, e.g. because the record already exists.
-  static const int skipped = 3;
-
-  /// The action is scheduled and not finished yet.
-  static const int pending = 4;
-
-  /// All statuses.
-  static const List<int> values = [pending, success, failed, skipped];
-}
 
 /// One entry of the federation audit log.
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
@@ -113,6 +47,12 @@ class AuditEntry {
   /// Additional information or the error message.
   final String? message;
 
+  /// The number of transferred bytes if the entry is a running transfer.
+  final int? transferred;
+
+  /// The size of the file in bytes if the entry is a running transfer.
+  final int? size;
+
   /// Initializes the model.
   AuditEntry({
     required this.entryId,
@@ -127,6 +67,8 @@ class AuditEntry {
     this.recordIds = const [],
     this.records = const [],
     this.message,
+    this.transferred,
+    this.size,
   });
 
   /// Converts a json object/map to the model.
@@ -135,6 +77,14 @@ class AuditEntry {
 
   /// Converts the current model to a json object/map.
   Map<String, dynamic> toJson() => _$AuditEntryToJson(this);
+
+  /// Returns a copy with the [transferred] bytes and the [size] of a running
+  /// transfer.
+  AuditEntry withProgress(int transferred, int size) => AuditEntry.fromJson({
+    ...toJson(),
+    'transferred': transferred,
+    'size': size,
+  });
 
   /// Returns the translated name of the action.
   String actionName(AppLocalizations locales) {
@@ -189,6 +139,10 @@ class AuditEntry {
         return locales.auditRecordUpdated;
       case AuditAction.recordDeleted:
         return locales.auditRecordDeleted;
+      case AuditAction.recordRevoked:
+        return locales.auditRecordRevoked;
+      case AuditAction.addressChanged:
+        return locales.auditAddressChanged;
       default:
         return locales.auditRecordsRemoved;
     }
@@ -214,36 +168,4 @@ class AuditEntry {
         ? locales.auditOutgoing
         : locales.auditIncoming;
   }
-}
-
-/// A record affected by an audit log entry.
-@JsonSerializable()
-class AuditRecord {
-  /// Id of the record.
-  final String recordId;
-
-  /// Current title of the record.
-  final String title;
-
-  /// Initializes the model.
-  AuditRecord({required this.recordId, required this.title});
-
-  /// Converts a json object/map to the model.
-  factory AuditRecord.fromJson(Map<String, dynamic> json) =>
-      _$AuditRecordFromJson(json);
-
-  /// Converts the current model to a json object/map.
-  Map<String, dynamic> toJson() => _$AuditRecordToJson(this);
-}
-
-/// One page of audit log entries.
-class AuditEntries {
-  /// The loaded entries.
-  final List<AuditEntry> items;
-
-  /// The count of all entries matching the filter.
-  final int totalCount;
-
-  /// Initializes the page.
-  AuditEntries(this.items, this.totalCount);
 }

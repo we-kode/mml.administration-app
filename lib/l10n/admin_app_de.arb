@@ -494,5 +494,89 @@
         "type": "int"
       }
     }
+  },
+  "syncStatePending": "Wird gesendet",
+  "auditRecordRevoked": "Synchronisation aufgehoben",
+  "auditAddressChanged": "Adresse geändert",
+  "federationInvalidPeer": "Eine ausgewählte Instanz ist nicht verknüpft.",
+  "federationUnknownKeys": "Die Instanz unter der neuen Adresse kann nicht nachweisen, dass sie einen bekannten Schlüssel besitzt. Wurden auch die Schlüssel ersetzt, muss die Verknüpfung aufgehoben und neu angefragt werden.",
+  "revokeSync": "Synchronisation aufheben",
+  "revokeSyncInfo": "Die Aufnahmen werden bei den ausgewählten Instanzen entfernt und bleiben hier erhalten. Sie werden dorthin nicht mehr automatisch oder über Ordner gesendet, bis sie einzeln wieder synchronisiert werden.",
+  "revokeResult": "{count} Entfernungen bei Partnern eingeplant.",
+  "@revokeResult": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "transferPercent": "{percent} %",
+  "@transferPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "transferWaiting": "Wartet bis {date}",
+  "@transferWaiting": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "allInstances": "Alle Instanzen",
+  "changeAddress": "Adresse ändern",
+  "changeAddressTitle": "Adresse von {instance} ändern",
+  "@changeAddressTitle": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "changeAddressInfo": "Unter der neuen Adresse muss {instance} mit demselben Namen erreichbar sein und mit einem bekannten Schlüssel signieren. Offene Übertragungen werden danach sofort wiederholt.",
+  "@changeAddressInfo": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      }
+    }
+  },
+  "addressChanged": "{instance} ist jetzt unter {url} erreichbar.",
+  "@addressChanged": {
+    "placeholders": {
+      "instance": {
+        "type": "String"
+      },
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "syncRevokedAt": "Synchronisation aufgehoben am {date}",
+  "@syncRevokedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "syncPendingCount": "{count} Übertragungen offen",
+  "@syncPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncRevokedCount": "Bei {count} Instanzen aufgehoben",
+  "@syncRevokedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

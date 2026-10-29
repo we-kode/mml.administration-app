@@ -949,4 +949,79 @@ class AppLocalizationsDe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get syncStatePending => 'Wird gesendet';
+
+  @override
+  String get auditRecordRevoked => 'Synchronisation aufgehoben';
+
+  @override
+  String get auditAddressChanged => 'Adresse geändert';
+
+  @override
+  String get federationInvalidPeer =>
+      'Eine ausgewählte Instanz ist nicht verknüpft.';
+
+  @override
+  String get federationUnknownKeys =>
+      'Die Instanz unter der neuen Adresse kann nicht nachweisen, dass sie einen bekannten Schlüssel besitzt. Wurden auch die Schlüssel ersetzt, muss die Verknüpfung aufgehoben und neu angefragt werden.';
+
+  @override
+  String get revokeSync => 'Synchronisation aufheben';
+
+  @override
+  String get revokeSyncInfo =>
+      'Die Aufnahmen werden bei den ausgewählten Instanzen entfernt und bleiben hier erhalten. Sie werden dorthin nicht mehr automatisch oder über Ordner gesendet, bis sie einzeln wieder synchronisiert werden.';
+
+  @override
+  String revokeResult(int count) {
+    return '$count Entfernungen bei Partnern eingeplant.';
+  }
+
+  @override
+  String transferPercent(int percent) {
+    return '$percent %';
+  }
+
+  @override
+  String transferWaiting(String date) {
+    return 'Wartet bis $date';
+  }
+
+  @override
+  String get allInstances => 'Alle Instanzen';
+
+  @override
+  String get changeAddress => 'Adresse ändern';
+
+  @override
+  String changeAddressTitle(String instance) {
+    return 'Adresse von $instance ändern';
+  }
+
+  @override
+  String changeAddressInfo(String instance) {
+    return 'Unter der neuen Adresse muss $instance mit demselben Namen erreichbar sein und mit einem bekannten Schlüssel signieren. Offene Übertragungen werden danach sofort wiederholt.';
+  }
+
+  @override
+  String addressChanged(String instance, String url) {
+    return '$instance ist jetzt unter $url erreichbar.';
+  }
+
+  @override
+  String syncRevokedAt(String date) {
+    return 'Synchronisation aufgehoben am $date';
+  }
+
+  @override
+  String syncPendingCount(int count) {
+    return '$count Übertragungen offen';
+  }
+
+  @override
+  String syncRevokedCount(int count) {
+    return 'Bei $count Instanzen aufgehoben';
+  }
 }

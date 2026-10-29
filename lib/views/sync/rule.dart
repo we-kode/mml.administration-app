@@ -7,6 +7,7 @@ import 'package:mml_admin/models/album.dart';
 import 'package:mml_admin/models/artist.dart';
 import 'package:mml_admin/models/federation/peer.dart';
 import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 import 'package:mml_admin/models/genre.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/sync/rule.dart';

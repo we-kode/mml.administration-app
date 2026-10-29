@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:mml_admin/models/federation/audit_entries.dart';
 import 'package:mml_admin/models/federation/audit_entry.dart';
 import 'package:mml_admin/models/federation/audit_filter.dart';
 import 'package:mml_admin/models/federation/invitation.dart';
 import 'package:mml_admin/models/federation/owner_instance.dart';
 import 'package:mml_admin/models/federation/peer.dart';
-import 'package:mml_admin/models/federation/record_sync.dart';
+import 'package:mml_admin/models/federation/record_sync_info.dart';
 import 'package:mml_admin/models/federation/rule.dart';
 import 'package:mml_admin/models/federation/sync_result.dart';
 import 'package:mml_admin/models/model_list.dart';
@@ -44,6 +45,12 @@ abstract class FederationErrors {
 
   /// The partner or rule does not exist.
   static const String notFound = 'NOT_FOUND';
+
+  /// A selected partner does not exist or is not linked.
+  static const String invalidPeer = 'INVALID_PEER';
+
+  /// The partner at the new address does not publish a known key.
+  static const String unknownKeys = 'UNKNOWN_KEYS';
 }
 
 /// Retention of the federation audit log.
@@ -220,17 +227,47 @@ class FederationService {
   }
 
   /// Sends the own records with the [recordIds] and the records within the
-  /// [folders] to every partner with a matching outgoing rule.
+  /// [folders] to the partners with the [peerIds] or to every linked partner,
+  /// if [peerIds] is null, with a matching outgoing rule. Records with the
+  /// [recordIds] are sent even if their synchronization was revoked.
   Future<SyncResult> synchronize({
     List<String> recordIds = const [],
     List<RecordFolder> folders = const [],
+    List<String>? peerIds,
   }) async {
     var response = await _request(
       '/media/sync',
       'POST',
-      data: {'recordIds': recordIds, 'folders': folders},
+      data: {'recordIds': recordIds, 'folders': folders, 'peerIds': ?peerIds},
     );
     return SyncResult.fromJson(response.data);
+  }
+
+  /// Revokes the synchronization of the own records with the [recordIds] and
+  /// within the [folders] with the partners with the [peerIds] or with every
+  /// linked partner, if [peerIds] is null. The records are removed on the
+  /// partners and not sent again until they are synchronized manually.
+  Future<SyncResult> revoke({
+    List<String> recordIds = const [],
+    List<RecordFolder> folders = const [],
+    List<String>? peerIds,
+  }) async {
+    var response = await _request(
+      '/media/sync/revoke',
+      'POST',
+      data: {'recordIds': recordIds, 'folders': folders, 'peerIds': ?peerIds},
+    );
+    return SyncResult.fromJson(response.data);
+  }
+
+  /// Changes the address of the partner with the [peerId] to the [baseUrl].
+  Future<Peer> changeAddress(String peerId, String baseUrl) async {
+    var response = await _request(
+      'peers/$peerId/address',
+      'POST',
+      data: {'baseUrl': baseUrl},
+    );
+    return Peer.fromJson(response.data);
   }
 
   /// Returns the partners the record with the [recordId] was sent to or
