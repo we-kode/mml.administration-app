@@ -27,10 +27,7 @@ class PeerRegisterViewModel extends ChangeNotifier {
 
   /// Validates the [url] of the partner.
   String? validateUrl(String? url, AppLocalizations locales) {
-    var uri = Uri.tryParse(url?.trim() ?? '');
-    return uri != null && uri.scheme == 'https' && uri.host.isNotEmpty
-        ? null
-        : locales.federationInvalidUrl;
+    return validatePeerUrl(url, locales);
   }
 
   /// Validates the invitation [code].
@@ -64,4 +61,13 @@ class PeerRegisterViewModel extends ChangeNotifier {
       RouterService.getInstance().navigatorKey.currentState!.pop();
     }
   }
+}
+
+/// Validates the [url] of a partner, which must be an https url, and returns
+/// an error message or null if the [url] is valid.
+String? validatePeerUrl(String? url, AppLocalizations locales) {
+  var uri = Uri.tryParse(url?.trim() ?? '');
+  return uri != null && uri.scheme == 'https' && uri.host.isNotEmpty
+      ? null
+      : locales.federationInvalidUrl;
 }

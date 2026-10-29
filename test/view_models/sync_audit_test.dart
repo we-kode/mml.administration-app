@@ -1,9 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mml_admin/models/federation/audit_action.dart';
+import 'package:mml_admin/models/federation/audit_entries.dart';
 import 'package:mml_admin/models/federation/audit_entry.dart';
 import 'package:mml_admin/models/federation/audit_filter.dart';
-import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/models/federation/audit_sort_field.dart';
+import 'package:mml_admin/models/federation/audit_status.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
+import 'package:mml_admin/models/federation/transfer_progress.dart';
 import 'package:mml_admin/services/federation.dart';
+import 'package:mml_admin/services/federation_events.dart';
 import 'package:mml_admin/view_models/sync/audit.dart';
 
 /// Serves [count] audit entries and records the requested pages.
@@ -173,5 +181,53 @@ void main() {
     filter.reset();
     expect(filter.isActive, isFalse);
     expect(filter.message, 'refused');
+  });
+
+  test('updates shown entries with progress and results in place', () async {
+    final events = StreamController<FederationEvent>();
+    final vm = AuditViewModel(
+      ValueNotifier(0),
+      service: FakeAuditService(3),
+      events: events.stream,
+    );
+    await vm.init();
+    final rows = vm.rows;
+
+    events.add(
+      const FederationEvent(
+        FederationEventType.progress,
+        progress: TransferProgress(
+          entryId: 'e1',
+          instance: 'alpha',
+          direction: SyncDirection.outgoing,
+          transferred: 5,
+          size: 10,
+        ),
+      ),
+    );
+    await pumpEventQueue();
+    expect((vm.rows[1].transferred, vm.rows[1].size), (5, 10));
+    expect(vm.rows[0], same(rows[0]));
+
+    events.add(
+      FederationEvent(
+        FederationEventType.auditAdded,
+        entry: AuditEntry(
+          entryId: 'e1',
+          timestamp: DateTime.utc(2026, 10, 22),
+          action: AuditAction.recordPushed,
+          status: AuditStatus.failed,
+          source: 'local',
+          target: 'alpha',
+        ),
+      ),
+    );
+    await pumpEventQueue();
+    expect(vm.rows[1].status, AuditStatus.failed);
+    expect(vm.rows[1].transferred, isNull);
+    expect(vm.rows, hasLength(3));
+
+    vm.dispose();
+    await events.close();
   });
 }

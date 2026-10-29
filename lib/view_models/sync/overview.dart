@@ -5,7 +5,10 @@ import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/extensions/federation_error.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/federation/peer.dart';
+import 'package:mml_admin/models/federation/peer_state.dart';
+import 'package:mml_admin/models/federation/sync_result.dart';
 import 'package:mml_admin/models/model_list.dart';
+import 'package:mml_admin/models/record_folder.dart';
 import 'package:mml_admin/services/federation.dart';
 import 'package:mml_admin/services/federation_events.dart';
 import 'package:mml_admin/services/messenger.dart';
@@ -189,6 +192,138 @@ Future<bool> rejectPeer(BuildContext context, Peer peer) async {
     return e.code == FederationErrors.notFound;
   } catch (_) {
     return false;
+  } finally {
+    RouterService.getInstance().navigatorKey.currentState!.pop();
+  }
+}
+
+/// Sends the own records with the [recordIds] and within the [folders] to the
+/// linked partners the admin selects and shows the result. Records with the
+/// [recordIds] are sent even if their synchronization was revoked.
+Future<void> synchronizeRecords(
+  BuildContext context, {
+  List<String> recordIds = const [],
+  List<RecordFolder> folders = const [],
+}) async {
+  var locales = AppLocalizations.of(context)!;
+  var selection = await _selectLinkedPeers(
+    context,
+    title: locales.synchronize,
+    action: locales.synchronize,
+  );
+  if (selection == null) {
+    return;
+  }
+
+  await _runSync(
+    locales,
+    () => FederationService.getInstance().synchronize(
+      recordIds: recordIds,
+      folders: folders,
+      peerIds: selection.peerIds,
+    ),
+    (result) => locales.syncResult(result.queued, result.skipped),
+  );
+}
+
+/// Revokes the synchronization of the own records with the [recordIds] and
+/// within the [folders] with the linked partners the admin selects and shows
+/// the result. Only the partners named in [instances] are offered if set.
+Future<void> revokeRecords(
+  BuildContext context, {
+  List<String> recordIds = const [],
+  List<RecordFolder> folders = const [],
+  Set<String>? instances,
+}) async {
+  var locales = AppLocalizations.of(context)!;
+  var selection = await _selectLinkedPeers(
+    context,
+    title: locales.revokeSync,
+    action: locales.revokeSync,
+    info: locales.revokeSyncInfo,
+    instances: instances,
+    confirm: true,
+  );
+  if (selection == null) {
+    return;
+  }
+
+  await _runSync(
+    locales,
+    () => FederationService.getInstance().revoke(
+      recordIds: recordIds,
+      folders: folders,
+      peerIds: selection.peerIds,
+    ),
+    (result) => locales.revokeResult(result.queued),
+  );
+}
+
+/// Lets the admin select linked partners, which are named in [instances] if
+/// set. The dialog is skipped for a single partner unless it must [confirm]
+/// the action.
+///
+/// Returns the ids of the selected partners, null ids for all linked
+/// partners, or null if the admin cancels the operation.
+Future<({List<String>? peerIds})?> _selectLinkedPeers(
+  BuildContext context, {
+  required String title,
+  required String action,
+  String? info,
+  Set<String>? instances,
+  bool confirm = false,
+}) async {
+  List<Peer> peers;
+  try {
+    peers = (await FederationService.getInstance().getPeers(null, 0, -1))
+        .whereType<Peer>()
+        .where((peer) => peer.state == PeerState.linked)
+        .where((peer) => instances?.contains(peer.instance) ?? true)
+        .toList();
+  } catch (_) {
+    // Errors are shown by the api service.
+    return null;
+  }
+
+  if (!context.mounted || (instances != null && peers.isEmpty)) {
+    return null;
+  }
+
+  if (peers.length <= (confirm ? 0 : 1)) {
+    return (peerIds: null);
+  }
+
+  var selected = await showPeerSelectionDialog(
+    context,
+    peers,
+    title: title,
+    action: action,
+    info: info,
+  );
+  if (selected == null) {
+    return null;
+  }
+
+  return (
+    peerIds: instances == null && selected.length == peers.length
+        ? null
+        : selected,
+  );
+}
+
+Future<void> _runSync(
+  AppLocalizations locales,
+  Future<SyncResult> Function() action,
+  String Function(SyncResult result) message,
+) async {
+  var messenger = MessengerService.getInstance();
+  showProgressIndicator();
+  try {
+    messenger.showMessage(message(await action()));
+  } on FederationException catch (e) {
+    messenger.showMessage(e.message(locales));
+  } catch (_) {
+    // Other errors are shown by the api service.
   } finally {
     RouterService.getInstance().navigatorKey.currentState!.pop();
   }

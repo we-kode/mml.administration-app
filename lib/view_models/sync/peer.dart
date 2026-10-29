@@ -4,6 +4,7 @@ import 'package:mml_admin/extensions/federation_error.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/federation/peer.dart';
 import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 import 'package:mml_admin/services/federation.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
@@ -84,6 +85,35 @@ class PeerViewModel extends ChangeNotifier {
     var nav = Navigator.of(_context);
     if (await rejectPeer(_context, peer)) {
       nav.pop(true);
+    }
+  }
+
+  /// Changes the address of the partner to the one the admin enters and
+  /// closes the dialog.
+  Future<void> changeAddress() async {
+    var nav = Navigator.of(_context);
+    var baseUrl = await showAddressDialog(
+      _context,
+      peer.instance,
+      peer.baseUrl,
+    );
+    if (baseUrl == null) {
+      return;
+    }
+
+    showProgressIndicator();
+    try {
+      var changed = await _service.changeAddress(peer.peerId, baseUrl);
+      RouterService.getInstance().navigatorKey.currentState!.pop();
+      MessengerService.getInstance().showMessage(
+        locales.addressChanged(changed.instance, changed.baseUrl),
+      );
+      nav.pop(true);
+    } on FederationException catch (e) {
+      RouterService.getInstance().navigatorKey.currentState!.pop();
+      _showError(e);
+    } catch (_) {
+      RouterService.getInstance().navigatorKey.currentState!.pop();
     }
   }
 

@@ -107,6 +107,15 @@ class AsyncListView extends StatefulWidget {
   /// returned.
   final ActionPerformedFunction? syncItems;
 
+  /// Function that revokes the synchronization of the items with the passed
+  /// [itemIdentifiers] with partner instances.
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful operation or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
+  final ActionPerformedFunction? revokeSyncItems;
+
   /// Indicates, whether the add button should be shown or not.
   final bool showAddButton;
 
@@ -157,6 +166,7 @@ class AsyncListView extends StatefulWidget {
     this.assignItems,
     this.lockItems,
     this.syncItems,
+    this.revokeSyncItems,
     this.addItem,
     this.showAddButton = true,
     this.subactions,
@@ -489,6 +499,12 @@ class _AsyncListViewState extends State<AsyncListView> {
                         widget.syncItems!,
                         Symbols.sync,
                         AppLocalizations.of(context)!.synchronize,
+                      ),
+                    if (widget.revokeSyncItems != null)
+                      _createSelectionAction(
+                        widget.revokeSyncItems!,
+                        Symbols.sync_disabled,
+                        AppLocalizations.of(context)!.revokeSync,
                       ),
                     if (widget.lockItems != null)
                       _createSelectionAction(

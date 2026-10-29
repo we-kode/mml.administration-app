@@ -3,11 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
-import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
+import 'package:mml_admin/models/federation/transfer_progress.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/view_models/records/edit.dart';
 import 'package:provider/provider.dart';
-import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// Edit screen of the record of the music lib.
 class RecordEditDialog extends StatelessWidget {
@@ -175,7 +176,9 @@ class RecordEditDialog extends StatelessWidget {
                   selectableItems.map((e) => e as Group).toList(),
             ),
             verticalSpacer,
-            _createSyncSection(context, vm),
+            Consumer<RecordEditViewModel>(
+              builder: (context, vm, _) => _createSyncSection(context, vm),
+            ),
           ],
         ),
       ),
@@ -235,14 +238,60 @@ class RecordEditDialog extends StatelessWidget {
           ),
         )
         .toList();
-    var button = IconButton(
-      onPressed: vm.synchronize,
-      icon: const Icon(Symbols.sync),
-      tooltip: vm.locales.synchronize,
+    var transfers = vm.sync.transfers.map((transfer) {
+      var fraction = transferFraction(transfer.transferred, transfer.size);
+      return ListTile(
+        dense: true,
+        leading: const Icon(Symbols.sync),
+        title: Text(transfer.instance),
+        subtitle: fraction == null
+            ? Text(
+                vm.locales.transferWaiting(
+                  format.format(transfer.nextAttemptAt.toLocal()),
+                ),
+              )
+            : LinearProgressIndicator(value: fraction),
+        trailing: fraction == null
+            ? null
+            : Text(vm.locales.transferPercent((fraction * 100).floor())),
+      );
+    }).toList();
+    var exclusions = vm.sync.exclusions
+        .map(
+          (exclusion) => ListTile(
+            dense: true,
+            leading: const Icon(Symbols.sync_disabled),
+            title: Text(exclusion.instance),
+            subtitle: Text(
+              vm.locales.syncRevokedAt(
+                format.format(exclusion.createdAt.toLocal()),
+              ),
+            ),
+          ),
+        )
+        .toList();
+    var button = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (vm.sentTo.isNotEmpty)
+          IconButton(
+            onPressed: vm.revokeSync,
+            icon: const Icon(Symbols.sync_disabled),
+            tooltip: vm.locales.revokeSync,
+          ),
+        IconButton(
+          onPressed: vm.synchronize,
+          icon: const Icon(Symbols.sync),
+          tooltip: vm.locales.synchronize,
+        ),
+      ],
     );
     var title = Text(vm.locales.syncState);
 
-    if (sent.isEmpty && problems.isEmpty) {
+    if (sent.isEmpty &&
+        problems.isEmpty &&
+        transfers.isEmpty &&
+        exclusions.isEmpty) {
       return ListTile(
         contentPadding: EdgeInsets.zero,
         title: title,
@@ -259,11 +308,15 @@ class RecordEditDialog extends StatelessWidget {
       subtitle: Text(
         [
           if (sent.isNotEmpty) vm.locales.syncSentCount(sent.length),
+          if (transfers.isNotEmpty)
+            vm.locales.syncPendingCount(transfers.length),
           if (problems.isNotEmpty) vm.locales.syncProblemCount(problems.length),
+          if (exclusions.isNotEmpty)
+            vm.locales.syncRevokedCount(exclusions.length),
         ].join(' · '),
       ),
       trailing: button,
-      children: [...problems, ...sent],
+      children: [...problems, ...transfers, ...sent, ...exclusions],
     );
   }
 

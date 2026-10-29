@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:mml_admin/models/federation/audit_entry.dart';
 import 'package:mml_admin/models/federation/peer.dart';
+import 'package:mml_admin/models/federation/transfer_progress.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:signalr_pure/signalr_pure.dart' hide Stream;
 
@@ -15,6 +16,9 @@ enum FederationEventType {
 
   /// A new audit log entry was written.
   auditAdded,
+
+  /// A part of a record was transferred.
+  progress,
 }
 
 /// A federation event sent by the server.
@@ -29,8 +33,11 @@ class FederationEvent {
   /// The new entry for [FederationEventType.auditAdded] events.
   final AuditEntry? entry;
 
+  /// The progress for [FederationEventType.progress] events.
+  final TransferProgress? progress;
+
   /// Initializes the event.
-  const FederationEvent(this.type, {this.peer, this.entry});
+  const FederationEvent(this.type, {this.peer, this.entry, this.progress});
 }
 
 /// Service receiving the federation events of the server over a socket
@@ -109,6 +116,16 @@ class FederationEventService {
           entry: args.isNotEmpty ? AuditEntry.fromJson(args.first) : null,
         ),
       );
+    });
+    connection.on('FEDERATION_PROGRESS', (args) {
+      if (args.isNotEmpty) {
+        _events.add(
+          FederationEvent(
+            FederationEventType.progress,
+            progress: TransferProgress.fromJson(args.first),
+          ),
+        );
+      }
     });
     connection.onclose((_) => _scheduleReconnect());
     _connection = connection;

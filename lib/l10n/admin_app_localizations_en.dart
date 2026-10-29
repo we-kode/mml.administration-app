@@ -944,4 +944,78 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get syncStatePending => 'Sending';
+
+  @override
+  String get auditRecordRevoked => 'Synchronization revoked';
+
+  @override
+  String get auditAddressChanged => 'Address changed';
+
+  @override
+  String get federationInvalidPeer => 'A selected instance is not linked.';
+
+  @override
+  String get federationUnknownKeys =>
+      'The instance at the new address cannot prove that it owns a known key. If its keys were replaced as well, remove the registration and request it again.';
+
+  @override
+  String get revokeSync => 'Revoke synchronization';
+
+  @override
+  String get revokeSyncInfo =>
+      'The records are removed on the selected instances and kept here. They are not sent there automatically or with folders anymore until they are synchronized again one by one.';
+
+  @override
+  String revokeResult(int count) {
+    return '$count removals on partners scheduled.';
+  }
+
+  @override
+  String transferPercent(int percent) {
+    return '$percent %';
+  }
+
+  @override
+  String transferWaiting(String date) {
+    return 'Waiting until $date';
+  }
+
+  @override
+  String get allInstances => 'All instances';
+
+  @override
+  String get changeAddress => 'Change address';
+
+  @override
+  String changeAddressTitle(String instance) {
+    return 'Change address of $instance';
+  }
+
+  @override
+  String changeAddressInfo(String instance) {
+    return '$instance must be reachable at the new address with the same name and sign with a known key. Open transfers are retried immediately afterwards.';
+  }
+
+  @override
+  String addressChanged(String instance, String url) {
+    return '$instance is reachable at $url now.';
+  }
+
+  @override
+  String syncRevokedAt(String date) {
+    return 'Synchronization revoked on $date';
+  }
+
+  @override
+  String syncPendingCount(int count) {
+    return '$count transfers open';
+  }
+
+  @override
+  String syncRevokedCount(int count) {
+    return 'Revoked for $count instances';
+  }
 }

@@ -1,32 +1,14 @@
-import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/album.dart';
 import 'package:mml_admin/models/artist.dart';
+import 'package:mml_admin/models/federation/peer.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 import 'package:mml_admin/models/genre.dart';
 import 'package:mml_admin/models/group.dart';
-import 'package:mml_admin/models/federation/peer.dart';
 import 'package:mml_admin/models/model_base.dart';
 
 part 'rule.g.dart';
-
-/// Directions a rule is applied to.
-abstract class SyncDirection {
-  /// Own records sent to the partner.
-  static const int outgoing = 1;
-
-  /// Records received from the partner.
-  static const int incoming = 2;
-
-  /// Returns the icon of the [direction], which is used for records, rules
-  /// and audit log entries.
-  static IconData icon(int direction) {
-    return direction == outgoing
-        ? Symbols.sync_arrow_up
-        : Symbols.sync_arrow_down;
-  }
-}
 
 /// A filter rule which determines the records synchronized with partners.
 ///

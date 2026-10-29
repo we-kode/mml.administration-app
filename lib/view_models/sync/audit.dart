@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
@@ -6,6 +8,7 @@ import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/federation/audit_entry.dart';
 import 'package:mml_admin/models/federation/audit_filter.dart';
 import 'package:mml_admin/services/federation.dart';
+import 'package:mml_admin/services/federation_events.dart';
 import 'package:mml_admin/services/router.dart';
 
 /// View model of the federation audit log table. The entries are loaded page
@@ -24,6 +27,8 @@ class AuditViewModel extends ChangeNotifier {
   /// Notifier which changes when new entries are available on the server.
   final ValueListenable<int> _version;
 
+  StreamSubscription<FederationEvent>? _events;
+
   List<AuditEntry> _rows = [];
   final Set<String> _selected = {};
   List<String> _instances = [];
@@ -35,16 +40,25 @@ class AuditViewModel extends ChangeNotifier {
   bool _disposed = false;
 
   /// Initializes the view model, which marks [newEntries] when the [version]
-  /// changes. A custom [service] can be passed for tests.
-  AuditViewModel(this._version, {FederationService? service})
-    : _service = service ?? FederationService.getInstance() {
+  /// changes and updates shown entries with the progress and results of the
+  /// federation [events]. A custom [service] and [events] can be passed for
+  /// tests.
+  AuditViewModel(
+    this._version, {
+    FederationService? service,
+    Stream<FederationEvent>? events,
+  }) : _service = service ?? FederationService.getInstance() {
     _version.addListener(_markNewEntries);
     filter.addListener(_onFilterChanged);
+    _events = (events ?? FederationEventService.getInstance().events).listen(
+      _updateRow,
+    );
   }
 
   @override
   void dispose() {
     _disposed = true;
+    _events?.cancel();
     _version.removeListener(_markNewEntries);
     filter.removeListener(_onFilterChanged);
     filter.dispose();
@@ -154,6 +168,29 @@ class AuditViewModel extends ChangeNotifier {
 
   void _markNewEntries() {
     newEntries.value = true;
+  }
+
+  // shown entries are replaced in place, so the scroll position and the
+  // selection are kept.
+  void _updateRow(FederationEvent event) {
+    var progress = event.progress;
+    var entry = event.entry;
+    var index = _rows.indexWhere(
+      (row) => row.entryId == (progress?.entryId ?? entry?.entryId),
+    );
+    if (index < 0 || (progress == null && entry == null)) {
+      return;
+    }
+
+    var row = _rows[index];
+    _rows = [..._rows];
+    _rows[index] = progress != null
+        ? row.withProgress(progress.transferred, progress.size)
+        : AuditEntry.fromJson({
+            ...entry!.toJson(),
+            'records': [for (var record in row.records) record.toJson()],
+          });
+    notifyListeners();
   }
 
   void _onFilterChanged() {

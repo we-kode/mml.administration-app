@@ -11,14 +11,11 @@ import 'package:mml_admin/models/navigation_state.dart';
 import 'package:mml_admin/models/record.dart';
 import 'package:mml_admin/models/record_folder.dart';
 import 'package:mml_admin/models/subfilter.dart';
-import 'package:mml_admin/extensions/federation_error.dart';
-import 'package:mml_admin/l10n/admin_app_localizations.dart';
-import 'package:mml_admin/services/federation.dart';
 import 'package:mml_admin/services/group.dart';
-import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
+import 'package:mml_admin/view_models/sync/overview.dart';
 
 /// View model for the records overview screen.
 class RecordsViewModel extends ChangeNotifier {
@@ -181,26 +178,28 @@ class RecordsViewModel extends ChangeNotifier {
     await _service.lockFolders(items.map((e) => (e as RecordFolder)).toList());
   }
 
-  /// Synchronizes the selected [items] with partner instances and shows the
-  /// result. Returns false, so the selection stays active.
+  /// Synchronizes the selected [items] with the partner instances the admin
+  /// selects and shows the result. Returns false, so the selection stays
+  /// active.
   Future<bool> synchronize(List items, BuildContext context) async {
-    var locales = AppLocalizations.of(context)!;
-    var isRecords = items.any((element) => element is Record);
-    var messenger = MessengerService.getInstance();
-    try {
-      var result = await FederationService.getInstance().synchronize(
-        recordIds: isRecords
-            ? items.map((e) => (e as Record).recordId!).toList()
-            : const [],
-        folders: isRecords
-            ? const []
-            : items.map((e) => e as RecordFolder).toList(),
-      );
-      messenger.showMessage(locales.syncResult(result.queued, result.skipped));
-    } on FederationException catch (e) {
-      messenger.showMessage(e.message(locales));
-    }
+    await synchronizeRecords(
+      context,
+      recordIds: items.whereType<Record>().map((e) => e.recordId!).toList(),
+      folders: items.whereType<RecordFolder>().toList(),
+    );
     return false;
+  }
+
+  /// Revokes the synchronization of the selected [items] with the partner
+  /// instances the admin selects and shows the result. Returns true, so the
+  /// list is reloaded.
+  Future<bool> revokeSync(List items, BuildContext context) async {
+    await revokeRecords(
+      context,
+      recordIds: items.whereType<Record>().map((e) => e.recordId!).toList(),
+      folders: items.whereType<RecordFolder>().toList(),
+    );
+    return true;
   }
 
   /// Loads the assigned groups.

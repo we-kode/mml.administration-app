@@ -942,4 +942,78 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get syncStatePending => 'Отправляется';
+
+  @override
+  String get auditRecordRevoked => 'Синхронизация отменена';
+
+  @override
+  String get auditAddressChanged => 'Адрес изменён';
+
+  @override
+  String get federationInvalidPeer => 'Выбранный экземпляр не связан.';
+
+  @override
+  String get federationUnknownKeys =>
+      'Экземпляр по новому адресу не может подтвердить владение известным ключом. Если ключи тоже были заменены, удалите связь и запросите её заново.';
+
+  @override
+  String get revokeSync => 'Отменить синхронизацию';
+
+  @override
+  String get revokeSyncInfo =>
+      'Записи удаляются на выбранных экземплярах и остаются здесь. Они больше не отправляются туда автоматически или через папки, пока их снова не синхронизируют по отдельности.';
+
+  @override
+  String revokeResult(int count) {
+    return 'Запланировано удалений у партнёров: $count.';
+  }
+
+  @override
+  String transferPercent(int percent) {
+    return '$percent %';
+  }
+
+  @override
+  String transferWaiting(String date) {
+    return 'Ожидает до $date';
+  }
+
+  @override
+  String get allInstances => 'Все экземпляры';
+
+  @override
+  String get changeAddress => 'Изменить адрес';
+
+  @override
+  String changeAddressTitle(String instance) {
+    return 'Изменить адрес $instance';
+  }
+
+  @override
+  String changeAddressInfo(String instance) {
+    return '$instance должен быть доступен по новому адресу с тем же именем и подписывать известным ключом. Открытые передачи затем сразу повторяются.';
+  }
+
+  @override
+  String addressChanged(String instance, String url) {
+    return '$instance теперь доступен по адресу $url.';
+  }
+
+  @override
+  String syncRevokedAt(String date) {
+    return 'Синхронизация отменена $date';
+  }
+
+  @override
+  String syncPendingCount(int count) {
+    return 'Открытых передач: $count';
+  }
+
+  @override
+  String syncRevokedCount(int count) {
+    return 'Отменено для экземпляров: $count';
+  }
 }

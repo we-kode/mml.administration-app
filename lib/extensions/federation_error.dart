@@ -24,6 +24,10 @@ extension FederationErrorMessage on FederationException {
         return locales.federationInvalidInvitation;
       case FederationErrors.notFound:
         return locales.notFound;
+      case FederationErrors.invalidPeer:
+        return locales.federationInvalidPeer;
+      case FederationErrors.unknownKeys:
+        return locales.federationUnknownKeys;
       default:
         return locales.unexpectedError('${code ?? statusCode ?? ''}');
     }

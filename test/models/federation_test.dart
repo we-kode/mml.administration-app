@@ -5,11 +5,21 @@ import 'package:mml_admin/extensions/federation_error.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/album.dart';
 import 'package:mml_admin/models/artist.dart';
+import 'package:mml_admin/models/federation/audit_action.dart';
 import 'package:mml_admin/models/federation/audit_entry.dart';
+import 'package:mml_admin/models/federation/audit_record.dart';
+import 'package:mml_admin/models/federation/audit_status.dart';
 import 'package:mml_admin/models/federation/peer.dart';
-import 'package:mml_admin/models/federation/record_sync.dart';
+import 'package:mml_admin/models/federation/peer_state.dart';
+import 'package:mml_admin/models/federation/record_link.dart';
+import 'package:mml_admin/models/federation/record_sync_info.dart';
+import 'package:mml_admin/models/federation/record_sync_problem.dart';
+import 'package:mml_admin/models/federation/record_sync_state.dart';
+import 'package:mml_admin/models/federation/record_sync_transfer.dart';
 import 'package:mml_admin/models/federation/rule.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
 import 'package:mml_admin/models/federation/sync_result.dart';
+import 'package:mml_admin/models/federation/transfer_progress.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/record.dart';
@@ -305,5 +315,90 @@ void main() {
     expect(info.links.single.instance, 'beta');
     expect(info.problems.single.instance, 'gamma');
     expect(info.problems.single.failed, isTrue);
+  });
+
+  test('RecordSyncInfo reads transfers and exclusions', () {
+    final info = RecordSyncInfo.fromJson({
+      'transfers': [
+        {
+          'instance': 'beta',
+          'transferred': 50,
+          'size': 200,
+          'nextAttemptAt': '2026-10-22T10:00:00Z',
+        },
+        {'instance': 'gamma', 'nextAttemptAt': '2026-10-22T10:00:00Z'},
+      ],
+      'exclusions': [
+        {
+          'peerId': 'p1',
+          'instance': 'delta',
+          'createdAt': '2026-10-22T10:00:00Z',
+        },
+      ],
+    });
+
+    final waiting = info.transfers.last;
+    expect(transferFraction(info.transfers.first.transferred, 200), 0.25);
+    expect(transferFraction(waiting.transferred, waiting.size), isNull);
+    expect(waiting.withProgress(10, 40).size, 40);
+    expect(info.exclusions.single.instance, 'delta');
+  });
+
+  test('TransferProgress reads the event of the server', () {
+    final progress = TransferProgress.fromJson({
+      'entryId': 'e1',
+      'recordId': 'r1',
+      'instance': 'beta',
+      'direction': SyncDirection.outgoing,
+      'transferred': 300,
+      'size': 200,
+    });
+
+    expect(progress.recordId, 'r1');
+    expect(progress.fraction, 1);
+  });
+
+  test('AuditEntry keeps its values when the progress changes', () {
+    final entry = AuditEntry(
+      entryId: 'e1',
+      timestamp: DateTime.utc(2026, 10, 22),
+      action: AuditAction.recordRevoked,
+      status: AuditStatus.pending,
+      source: 'alpha',
+      target: 'beta',
+      records: [AuditRecord(recordId: 'r1', title: 'Title')],
+      recordIds: ['r1'],
+    );
+
+    final updated = entry.withProgress(5, 10);
+
+    expect((updated.transferred, updated.size), (5, 10));
+    expect(updated.recordTitles('-'), ['Title']);
+    expect(updated.actionName(locales), locales.auditRecordRevoked);
+  });
+
+  test('RecordSyncInfo evaluates the state of an own record', () {
+    final sent = RecordLink(
+      direction: SyncDirection.outgoing,
+      syncedAt: DateTime.utc(2026, 10, 22),
+    );
+    final transfer = RecordSyncTransfer(
+      instance: 'beta',
+      nextAttemptAt: DateTime.utc(2026, 10, 22),
+    );
+
+    expect(RecordSyncInfo().ownState, RecordSyncState.none);
+    expect(RecordSyncInfo(links: [sent]).ownState, RecordSyncState.sent);
+    expect(
+      RecordSyncInfo(links: [sent], transfers: [transfer]).ownState,
+      RecordSyncState.pending,
+    );
+    expect(
+      RecordSyncInfo(
+        transfers: [transfer],
+        problems: [RecordSyncProblem(instance: 'gamma')],
+      ).ownState,
+      RecordSyncState.problem,
+    );
   });
 }

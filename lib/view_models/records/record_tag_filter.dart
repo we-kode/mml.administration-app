@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
-import 'package:mml_admin/models/federation/record_sync.dart';
+import 'package:mml_admin/models/federation/record_sync_state.dart';
+import 'package:mml_admin/models/federation/sync_state_option.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/federation.dart';

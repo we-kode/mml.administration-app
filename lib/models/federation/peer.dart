@@ -3,27 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
+import 'package:mml_admin/models/federation/peer_state.dart';
 import 'package:mml_admin/models/model_base.dart';
 
 part 'peer.g.dart';
-
-/// Registration states of a partner instance.
-abstract class PeerState {
-  /// This instance requested the registration and waits for the approval of the partner.
-  static const int requested = 1;
-
-  /// The partner requested the registration and waits for the approval of the admin.
-  static const int pendingApproval = 2;
-
-  /// The admin approved the registration and the partner is not informed yet.
-  static const int responsePending = 3;
-
-  /// Records are synchronized with the partner.
-  static const int linked = 4;
-
-  /// The registration was rejected.
-  static const int rejected = 5;
-}
 
 /// A partner instance records are synchronized with.
 @JsonSerializable(includeIfNull: false, explicitToJson: true)

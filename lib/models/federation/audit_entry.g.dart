@@ -25,6 +25,8 @@ AuditEntry _$AuditEntryFromJson(Map<String, dynamic> json) => AuditEntry(
           .toList() ??
       const [],
   message: json['message'] as String?,
+  transferred: (json['transferred'] as num?)?.toInt(),
+  size: (json['size'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$AuditEntryToJson(AuditEntry instance) =>
@@ -41,12 +43,6 @@ Map<String, dynamic> _$AuditEntryToJson(AuditEntry instance) =>
       'recordIds': instance.recordIds,
       'records': instance.records.map((e) => e.toJson()).toList(),
       'message': ?instance.message,
+      'transferred': ?instance.transferred,
+      'size': ?instance.size,
     };
-
-AuditRecord _$AuditRecordFromJson(Map<String, dynamic> json) => AuditRecord(
-  recordId: json['recordId'] as String,
-  title: json['title'] as String,
-);
-
-Map<String, dynamic> _$AuditRecordToJson(AuditRecord instance) =>
-    <String, dynamic>{'recordId': instance.recordId, 'title': instance.title};

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mml_admin/components/info_tooltip.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
+import 'package:mml_admin/models/federation/peer.dart';
+import 'package:mml_admin/view_models/sync/register.dart';
 
 /// Shows the dialog to remove the registration of the partner [instance].
 ///
@@ -154,4 +156,138 @@ Future<bool> showApproveDialog(
   );
 
   return shouldApprove ?? false;
+}
+
+/// Lets the admin select the partners of the [peers] an action is applied
+/// to. All partners are selected initially. The dialog is named with the
+/// [title] and confirmed with the [action].
+///
+/// Returns the ids of the selected partners or null if the admin cancels the
+/// operation.
+Future<List<String>?> showPeerSelectionDialog(
+  BuildContext context,
+  List<Peer> peers, {
+  required String title,
+  required String action,
+  String? info,
+}) {
+  var locales = AppLocalizations.of(context)!;
+  var selected = {for (var peer in peers) peer.peerId};
+
+  return showDialog<List<String>>(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) => StatefulBuilder(
+      builder: (context, setState) => AlertDialog(
+        title: Text(title),
+        content: SizedBox(
+          width: 500,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (info != null) ...[Text(info), verticalSpacer],
+                CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  tristate: true,
+                  value: selected.length == peers.length
+                      ? true
+                      : selected.isEmpty
+                      ? false
+                      : null,
+                  onChanged: (_) => setState(
+                    () => selected.length == peers.length
+                        ? selected.clear()
+                        : selected.addAll(peers.map((p) => p.peerId)),
+                  ),
+                  title: Text(locales.allInstances),
+                ),
+                for (var peer in peers)
+                  CheckboxListTile(
+                    contentPadding: const EdgeInsets.only(left: 20),
+                    value: selected.contains(peer.peerId),
+                    onChanged: (value) => setState(
+                      () => value ?? false
+                          ? selected.add(peer.peerId)
+                          : selected.remove(peer.peerId),
+                    ),
+                    title: Text(peer.instance),
+                    subtitle: Text(peer.baseUrl),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(locales.cancel),
+          ),
+          TextButton(
+            onPressed: selected.isEmpty
+                ? null
+                : () => Navigator.pop(context, selected.toList()),
+            child: Text(action),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+/// Shows the dialog to change the address of the partner [instance], which
+/// is reachable at the [baseUrl] so far.
+///
+/// Returns the new address or null if the admin cancels the operation.
+Future<String?> showAddressDialog(
+  BuildContext context,
+  String instance,
+  String baseUrl,
+) {
+  var locales = AppLocalizations.of(context)!;
+  var formKey = GlobalKey<FormState>();
+  var url = baseUrl;
+
+  return showDialog<String>(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: Text(locales.changeAddressTitle(instance)),
+      content: SizedBox(
+        width: 500,
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(locales.changeAddressInfo(instance)),
+              verticalSpacer,
+              TextFormField(
+                initialValue: baseUrl,
+                decoration: InputDecoration(labelText: locales.peerUrl),
+                onChanged: (value) => url = value.trim(),
+                validator: (value) => validatePeerUrl(value, locales),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(locales.cancel),
+        ),
+        TextButton(
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              Navigator.pop(context, url);
+            }
+          },
+          child: Text(locales.save),
+        ),
+      ],
+    ),
+  );
 }
