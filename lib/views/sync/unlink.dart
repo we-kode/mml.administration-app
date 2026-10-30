@@ -249,6 +249,12 @@ Future<String?> showAddressDialog(
   var formKey = GlobalKey<FormState>();
   var url = baseUrl;
 
+  void submit(BuildContext context) {
+    if (formKey.currentState!.validate()) {
+      Navigator.pop(context, url);
+    }
+  }
+
   return showDialog<String>(
     barrierDismissible: false,
     context: context,
@@ -265,6 +271,7 @@ Future<String?> showAddressDialog(
               Text(locales.changeAddressInfo(instance)),
               verticalSpacer,
               TextFormField(
+                onFieldSubmitted: (_) => submit(context),
                 initialValue: baseUrl,
                 decoration: InputDecoration(labelText: locales.peerUrl),
                 onChanged: (value) => url = value.trim(),
@@ -280,11 +287,7 @@ Future<String?> showAddressDialog(
           child: Text(locales.cancel),
         ),
         TextButton(
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              Navigator.pop(context, url);
-            }
-          },
+          onPressed: () => submit(context),
           child: Text(locales.save),
         ),
       ],

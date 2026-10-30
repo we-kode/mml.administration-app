@@ -60,6 +60,7 @@ class UsersEditDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            onFieldSubmitted: (_) => vm.saveUser(),
             initialValue: vm.user.name,
             decoration: InputDecoration(
               labelText: vm.locales.username,
@@ -80,6 +81,7 @@ class UsersEditDialog extends StatelessWidget {
           Consumer<UsersEditDialogViewModel>(
             builder: (context, value, child) {
               return TextFormField(
+                onFieldSubmitted: (_) => vm.saveUser(),
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: vm.passwordLabel,

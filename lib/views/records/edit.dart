@@ -76,6 +76,7 @@ class RecordEditDialog extends StatelessWidget {
                 title: Text(vm.locales.notOwned(vm.record.ownerInstance)),
               ),
             TextFormField(
+              onFieldSubmitted: (_) => vm.saveRecord(),
               enabled: vm.isEditable,
               initialValue: vm.record.title,
               decoration: InputDecoration(
@@ -93,6 +94,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              onFieldSubmitted: (_) => vm.saveRecord(),
               enabled: vm.isEditable,
               initialValue: vm.record.artist,
               decoration: InputDecoration(
@@ -108,6 +110,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              onFieldSubmitted: (_) => vm.saveRecord(),
               enabled: vm.isEditable,
               initialValue: vm.record.album,
               decoration: InputDecoration(
@@ -123,6 +126,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              onFieldSubmitted: (_) => vm.saveRecord(),
               enabled: vm.isEditable,
               initialValue: vm.record.genre,
               decoration: InputDecoration(
@@ -138,6 +142,7 @@ class RecordEditDialog extends StatelessWidget {
             ),
             verticalSpacer,
             TextFormField(
+              onFieldSubmitted: (_) => vm.saveRecord(),
               enabled: vm.isEditable,
               initialValue: vm.record.language,
               decoration: InputDecoration(

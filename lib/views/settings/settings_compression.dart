@@ -40,6 +40,7 @@ class SettingsCompressionScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           TextFormField(
+                            onFieldSubmitted: (_) => vm.save(),
                             inputFormatters: [
                               FilteringTextInputFormatter.digitsOnly
                             ],

@@ -30,6 +30,7 @@ class PeerRegisterDialog extends StatelessWidget {
                   Text(locales.requestRegistrationInfo),
                   verticalSpacer,
                   TextFormField(
+                    onFieldSubmitted: (_) => vm.request(context),
                     autofocus: true,
                     decoration: InputDecoration(
                       labelText: locales.peerUrl,
@@ -43,6 +44,7 @@ class PeerRegisterDialog extends StatelessWidget {
                   ),
                   verticalSpacer,
                   TextFormField(
+                    onFieldSubmitted: (_) => vm.request(context),
                     decoration: InputDecoration(
                       labelText: locales.invitationCode,
                       hintText: 'XXXXX-XXXXX-XXXXX-XXXXX',
