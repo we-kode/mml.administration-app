@@ -53,6 +53,7 @@ class LoginScreen extends StatelessWidget {
                         verticalSpacer,
                         verticalSpacer,
                         TextFormField(
+                          onFieldSubmitted: (_) => vm.login(),
                           decoration: InputDecoration(
                             labelText: vm.locales.username,
                             icon: const Icon(Symbols.person),
@@ -65,6 +66,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         verticalSpacer,
                         TextFormField(
+                          onFieldSubmitted: (_) => vm.login(),
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.password,
@@ -84,6 +86,7 @@ class LoginScreen extends StatelessWidget {
                           title: Text(vm.locales.advanced),
                           children: [
                             TextFormField(
+                              onFieldSubmitted: (_) => vm.login(),
                               decoration: InputDecoration(
                                 labelText: vm.clientIdLabel,
                                 icon: const Icon(Symbols.credit_score),
@@ -100,6 +103,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             verticalSpacer,
                             TextFormField(
+                              onFieldSubmitted: (_) => vm.login(),
                               decoration: InputDecoration(
                                 labelText: vm.serverNameLabel,
                                 icon: const Icon(Symbols.storage),
@@ -116,6 +120,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             verticalSpacer,
                             TextFormField(
+                              onFieldSubmitted: (_) => vm.login(),
                               decoration: InputDecoration(
                                 labelText: vm.appKeyLabel,
                                 icon: const Icon(Symbols.vpn_key),

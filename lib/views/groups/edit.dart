@@ -60,6 +60,7 @@ class GroupEditDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            onFieldSubmitted: (_) => vm.saveGroup(),
             initialValue: vm.group.name,
             decoration: InputDecoration(
               labelText: vm.locales.groupName,

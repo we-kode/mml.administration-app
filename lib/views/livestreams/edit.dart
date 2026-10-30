@@ -61,6 +61,7 @@ class LivestreamEditDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            onFieldSubmitted: (_) => vm.save(),
             initialValue: vm.stream.title,
             decoration: InputDecoration(
               labelText: vm.locales.displayName,
@@ -79,6 +80,7 @@ class LivestreamEditDialog extends StatelessWidget {
           ),
           verticalSpacer,
           TextFormField(
+            onFieldSubmitted: (_) => vm.save(),
             initialValue: vm.stream.url,
             decoration: InputDecoration(
               labelText: vm.locales.streamUrl,

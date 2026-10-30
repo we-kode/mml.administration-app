@@ -113,4 +113,29 @@ void main() {
     await tester.pumpAndSettle();
     expect(result, 'https://beta.new');
   });
+
+  testWidgets('enter submits the address only when valid', (tester) async {
+    String? result;
+    await open(
+      tester,
+      (context) async => result = await showAddressDialog(
+        context,
+        'beta',
+        'https://beta.example',
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byType(TextFormField), 'http://beta.new');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(find.text(locales.federationInvalidUrl), findsOneWidget);
+    expect(result, isNull);
+
+    await tester.enterText(find.byType(TextFormField), 'https://beta.new');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(result, 'https://beta.new');
+  });
 }

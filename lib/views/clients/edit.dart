@@ -57,6 +57,7 @@ class ClientEditDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            onFieldSubmitted: (_) => vm.saveClient(),
             initialValue: vm.client.displayName,
             decoration: InputDecoration(
               labelText: vm.locales.displayName,
@@ -75,6 +76,7 @@ class ClientEditDialog extends StatelessWidget {
           ),
           verticalSpacer,
           TextFormField(
+            onFieldSubmitted: (_) => vm.saveClient(),
             initialValue: vm.client.deviceIdentifier,
             decoration: InputDecoration(
               labelText: vm.locales.deviceName,

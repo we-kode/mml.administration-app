@@ -63,6 +63,7 @@ class SettingsGenreBitrate extends StatelessWidget {
                                   leading: SizedBox(
                                     width: 500,
                                     child: TextFormField(
+                                      onFieldSubmitted: (_) => vm.save(),
                                       key: GlobalKey(),
                                       decoration: InputDecoration(
                                         labelText: locales.genre,
@@ -80,6 +81,7 @@ class SettingsGenreBitrate extends StatelessWidget {
                                   title: SizedBox(
                                     width: 10,
                                     child: TextFormField(
+                                      onFieldSubmitted: (_) => vm.save(),
                                       key: GlobalKey(),
                                       inputFormatters: [
                                         FilteringTextInputFormatter.digitsOnly

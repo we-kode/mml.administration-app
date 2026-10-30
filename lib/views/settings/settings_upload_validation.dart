@@ -82,6 +82,7 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                             Consumer<SettingsUploadValidationViewModel>(
                               builder: (context, vm, _) {
                                 return TextFormField(
+                                  onFieldSubmitted: (_) => vm.save(),
                                   enabled: vm.model.validateAlbum != null &&
                                       vm.model.validateAlbum !=
                                           RecordValidationState.doNotValidate,
@@ -110,6 +111,7 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                             Consumer<SettingsUploadValidationViewModel>(
                               builder: (context, vm, _) {
                                 return TextFormField(
+                                  onFieldSubmitted: (_) => vm.save(),
                                   enabled: vm.model.validateGenre != null &&
                                       vm.model.validateGenre !=
                                           RecordValidationState.doNotValidate,
@@ -130,6 +132,7 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                               },
                             ),
                             TextFormField(
+                              onFieldSubmitted: (_) => vm.save(),
                               decoration: InputDecoration(
                                 labelText: vm.locales.uploadValidFilename,
                                 hintText: vm.locales.uploadValidFilenameInfo,

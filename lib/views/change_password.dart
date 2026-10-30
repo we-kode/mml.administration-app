@@ -41,6 +41,7 @@ class ChangePasswordScreen extends StatelessWidget {
                         ),
                         verticalSpacer,
                         TextFormField(
+                          onFieldSubmitted: (_) => vm.confirmPassword(),
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.actualPassword,
@@ -58,6 +59,7 @@ class ChangePasswordScreen extends StatelessWidget {
                         ),
                         verticalSpacer,
                         TextFormField(
+                          onFieldSubmitted: (_) => vm.confirmPassword(),
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.newPassword,
@@ -75,6 +77,7 @@ class ChangePasswordScreen extends StatelessWidget {
                         ),
                         verticalSpacer,
                         TextFormField(
+                          onFieldSubmitted: (_) => vm.confirmPassword(),
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.confirmNewPassword,
