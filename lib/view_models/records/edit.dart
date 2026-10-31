@@ -42,8 +42,9 @@ class RecordEditViewModel extends ChangeNotifier {
   /// Flag that indicates whether the record is successful loaded.
   bool loadedSuccessfully = false;
 
-  /// The running instance.
-  late String instance;
+  /// The running instance or null if the server does not support the
+  /// synchronization.
+  String? instance;
 
   /// The synchronization details of the record.
   RecordSyncInfo sync = RecordSyncInfo();
@@ -51,7 +52,10 @@ class RecordEditViewModel extends ChangeNotifier {
   StreamSubscription<FederationEvent>? _events;
 
   /// Returns whether the record is editable or not.
-  bool get isEditable => instance == record.ownerInstance;
+  bool get isEditable => record.isLegacy || instance == record.ownerInstance;
+
+  /// Returns whether the server supports the synchronization.
+  bool get isSyncSupported => instance != null;
 
   /// Initialize the edit record view model.
   Future<bool> init(BuildContext context, String? recordId) async {
@@ -60,13 +64,15 @@ class RecordEditViewModel extends ChangeNotifier {
     try {
       instance = await SyncService.getInstance().get();
       record = await _service.getRecord(recordId!);
-      try {
-        sync = await FederationService.getInstance().getRecordSync(recordId);
-        _events ??= FederationEventService.getInstance().events.listen(
-          _updateProgress,
-        );
-      } catch (e) {
-        // The record can be edited without the synchronization details.
+      if (isSyncSupported) {
+        try {
+          sync = await FederationService.getInstance().getRecordSync(recordId);
+          _events ??= FederationEventService.getInstance().events.listen(
+            _updateProgress,
+          );
+        } catch (e) {
+          // The record can be edited without the synchronization details.
+        }
       }
       loadedSuccessfully = true;
       notifyListeners();

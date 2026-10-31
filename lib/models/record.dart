@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -50,12 +52,14 @@ class Record extends ModelBase {
   int? bitrate;
 
   /// The file name of the cover image of the record. It is managed by the
-  /// server and not sent on updates.
+  /// server and not sent on updates. Servers without synchronization send the
+  /// base64 encoded image instead, see [isLegacy].
   @JsonKey(includeToJson: false)
   String? cover;
 
-  /// The owner of the record.
-  String ownerInstance;
+  /// The owner of the record or null if the server does not support the
+  /// synchronization.
+  String? ownerInstance;
 
   /// The synchronization state with partner instances, see
   /// [RecordSyncState]. Only set in lists of records.
@@ -71,7 +75,7 @@ class Record extends ModelBase {
   /// Creates a new record instance with the given values.
   Record({
     required this.recordId,
-    required this.ownerInstance,
+    this.ownerInstance,
     this.title,
     this.trackNumber,
     this.date,
@@ -93,8 +97,15 @@ class Record extends ModelBase {
   /// Converts a json object/map to the record model.
   factory Record.fromJson(Map<String, dynamic> json) => _$RecordFromJson(json);
 
-  /// Converts the current record model to a json object/map.
-  Map<String, dynamic> toJson() => _$RecordToJson(this);
+  /// Converts the current record model to a json object/map. Servers without
+  /// synchronization replace the cover with the sent one, so it is kept.
+  Map<String, dynamic> toJson() => {
+    ..._$RecordToJson(this),
+    if (isLegacy && cover != null) 'cover': cover,
+  };
+
+  /// Whether the record was loaded from a server without synchronization.
+  bool get isLegacy => ownerInstance == null;
 
   @override
   String getDisplayDescription() {
@@ -115,7 +126,7 @@ class Record extends ModelBase {
   @override
   String? getSubtitleNote(BuildContext context) {
     return syncState == RecordSyncState.received
-        ? AppLocalizations.of(context)!.receivedFrom(ownerInstance)
+        ? AppLocalizations.of(context)!.receivedFrom(ownerInstance ?? '')
         : null;
   }
 
@@ -157,6 +168,18 @@ class Record extends ModelBase {
   @override
   Widget? getAvatar(BuildContext context) {
     if (cover != null && cover!.isNotEmpty) {
+      if (isLegacy) {
+        try {
+          return Image.memory(
+            base64.decode(cover!),
+            errorBuilder: (context, error, stackTrace) =>
+                const Icon(Symbols.music_note_2),
+          );
+        } on FormatException {
+          return const Icon(Symbols.music_note_2);
+        }
+      }
+
       return CachedNetworkImage(
         cacheKey: cover,
         imageUrl: cover!,
@@ -199,7 +222,7 @@ class Record extends ModelBase {
       RecordSyncState.received => (
         SyncDirection.icon(SyncDirection.incoming),
         colors.secondary,
-        locales.receivedFrom(ownerInstance),
+        locales.receivedFrom(ownerInstance ?? ''),
       ),
       RecordSyncState.sent => (
         SyncDirection.icon(SyncDirection.outgoing),

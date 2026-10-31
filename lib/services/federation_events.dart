@@ -132,6 +132,11 @@ class FederationEventService {
 
     try {
       await connection.startAsync();
+    } on HttpException catch (e) {
+      // Servers without synchronization do not provide the socket.
+      if (e.statusCode != 404) {
+        _scheduleReconnect();
+      }
     } catch (_) {
       _scheduleReconnect();
     }

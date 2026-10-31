@@ -40,10 +40,11 @@ class SettingsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
-                  ListTile(
-                    leading: const Icon(Symbols.computer),
-                    title: Text('${vm.locales.instance}: ${vm.instance}'),
-                  ),
+                  if (vm.instance != null)
+                    ListTile(
+                      leading: const Icon(Symbols.computer),
+                      title: Text('${vm.locales.instance}: ${vm.instance}'),
+                    ),
                   ListTile(
                     leading: const Icon(Symbols.person),
                     trailing: ElevatedButton.icon(
@@ -110,38 +111,42 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   const Divider(),
-                  verticalSpacer,
-                  ListTile(
-                    dense: true,
-                    visualDensity: const VisualDensity(vertical: -4),
-                    title: Text(
-                      vm.locales.sync,
-                      style: Theme.of(context).textTheme.titleSmall,
+                  if (vm.instance != null) ...[
+                    verticalSpacer,
+                    ListTile(
+                      dense: true,
+                      visualDensity: const VisualDensity(vertical: -4),
+                      title: Text(
+                        vm.locales.sync,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Symbols.history),
-                    trailing: DropdownMenu(
-                      inputDecorationTheme: InputDecorationTheme(isDense: true),
-                      selectOnly: true,
-                      dropdownMenuEntries: [
-                        for (var days in AuditRetention.allowedDays)
-                          DropdownMenuEntry(
-                            value: days,
-                            label: _retentionLabel(vm.locales, days),
-                          ),
-                      ],
-                      initialSelection: vm.auditRetentionDays,
-                      onSelected: (value) {
-                        if (value != null) {
-                          vm.updateAuditRetention(value);
-                        }
-                      },
+                    ListTile(
+                      leading: const Icon(Symbols.history),
+                      trailing: DropdownMenu(
+                        inputDecorationTheme: InputDecorationTheme(
+                          isDense: true,
+                        ),
+                        selectOnly: true,
+                        dropdownMenuEntries: [
+                          for (var days in AuditRetention.allowedDays)
+                            DropdownMenuEntry(
+                              value: days,
+                              label: _retentionLabel(vm.locales, days),
+                            ),
+                        ],
+                        initialSelection: vm.auditRetentionDays,
+                        onSelected: (value) {
+                          if (value != null) {
+                            vm.updateAuditRetention(value);
+                          }
+                        },
+                      ),
+                      title: Text(vm.locales.auditRetention),
+                      subtitle: Text(vm.locales.auditRetentionInfo),
                     ),
-                    title: Text(vm.locales.auditRetention),
-                    subtitle: Text(vm.locales.auditRetentionInfo),
-                  ),
-                  const Divider(),
+                    const Divider(),
+                  ],
                   verticalSpacer,
                   ListTile(
                     dense: true,

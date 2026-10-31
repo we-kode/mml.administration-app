@@ -13,6 +13,7 @@ import 'package:mml_admin/services/federation.dart';
 import 'package:mml_admin/services/federation_events.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
+import 'package:mml_admin/services/sync.dart';
 import 'package:mml_admin/views/sync/unlink.dart';
 
 /// Sections of the sync screen.
@@ -48,6 +49,10 @@ class SyncOverviewViewModel extends ChangeNotifier {
   final ValueNotifier<SyncSection> section = ValueNotifier(
     SyncSection.invitations,
   );
+
+  /// The running instance or null if the server does not support the
+  /// synchronization.
+  final Future<String?> instance = SyncService.getInstance().get();
 
   /// Version of the partner list, which changes when partners changed on the
   /// server.

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/federation/peer.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/subfilter.dart';
@@ -25,36 +26,55 @@ class SyncOverviewScreen extends StatelessWidget {
       create: (context) => SyncOverviewViewModel(),
       builder: (context, _) {
         var vm = Provider.of<SyncOverviewViewModel>(context, listen: false);
-        return ValueListenableBuilder<SyncSection>(
-          valueListenable: vm.section,
-          builder: (context, section, _) {
-            var chips = SyncSectionChips(section: vm.section);
-            switch (section) {
-              case SyncSection.invitations:
-                return InvitationsView(
-                  key: const ValueKey(SyncSection.invitations),
-                  sectionChips: chips,
-                );
-              case SyncSection.peers:
-                return ValueListenableBuilder<int>(
-                  valueListenable: vm.peersVersion,
-                  builder: (context, version, _) =>
-                      _createPeers(context, vm, version, chips),
-                );
-              case SyncSection.rules:
-                return RulesView(
-                  key: const ValueKey(SyncSection.rules),
-                  sectionChips: chips,
-                );
-              case SyncSection.audit:
-                return AuditView(
-                  key: const ValueKey(SyncSection.audit),
-                  version: vm.auditVersion,
-                  sectionChips: chips,
-                );
+        return FutureBuilder<String?>(
+          future: vm.instance,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(child: CircularProgressIndicator());
             }
+
+            if (!snapshot.hasError && snapshot.data == null) {
+              return Center(
+                child: Text(AppLocalizations.of(context)!.syncUnsupported),
+              );
+            }
+
+            return _createSections(vm);
           },
         );
+      },
+    );
+  }
+
+  Widget _createSections(SyncOverviewViewModel vm) {
+    return ValueListenableBuilder<SyncSection>(
+      valueListenable: vm.section,
+      builder: (context, section, _) {
+        var chips = SyncSectionChips(section: vm.section);
+        switch (section) {
+          case SyncSection.invitations:
+            return InvitationsView(
+              key: const ValueKey(SyncSection.invitations),
+              sectionChips: chips,
+            );
+          case SyncSection.peers:
+            return ValueListenableBuilder<int>(
+              valueListenable: vm.peersVersion,
+              builder: (context, version, _) =>
+                  _createPeers(context, vm, version, chips),
+            );
+          case SyncSection.rules:
+            return RulesView(
+              key: const ValueKey(SyncSection.rules),
+              sectionChips: chips,
+            );
+          case SyncSection.audit:
+            return AuditView(
+              key: const ValueKey(SyncSection.audit),
+              version: vm.auditVersion,
+              sectionChips: chips,
+            );
+        }
       },
     );
   }

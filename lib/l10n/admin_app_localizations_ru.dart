@@ -494,6 +494,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get instance => 'Инстанция';
 
   @override
+  String get syncUnsupported =>
+      'Сервер не поддерживает синхронизацию. Обновите сервер, чтобы использовать её.';
+
+  @override
   String get sync => 'Синк';
 
   @override

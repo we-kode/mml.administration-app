@@ -498,6 +498,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get instance => 'Instanz';
 
   @override
+  String get syncUnsupported =>
+      'Der Server unterstützt die Synchronisation nicht. Aktualisiere den Server, um sie zu nutzen.';
+
+  @override
   String get sync => 'Sync';
 
   @override

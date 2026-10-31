@@ -11,12 +11,16 @@ import 'package:provider/provider.dart';
 
 /// Tag filters for the records view.
 class RecordTagFilter extends ListSubfilterView {
+  /// Whether the filters of servers with synchronization are shown.
+  final bool isSyncSupported;
+
   /// Initializes the [RecordTagFilter].
   RecordTagFilter({
     super.key,
     DateTime? startDate,
     DateTime? endDate,
     bool isFolderView = false,
+    this.isSyncSupported = true,
   }) : super(
          filter: ID3TagFilter(
            startDate: startDate,
@@ -87,24 +91,26 @@ class RecordTagFilter extends ListSubfilterView {
                   Symbols.vibration,
                 ),
                 horizontalSpacer,
-                _createTagFilter(
-                  ID3TagFilters.unassigned,
-                  locales.unassigned,
-                  Symbols.label_off,
-                ),
-                horizontalSpacer,
-                _createTagFilter(
-                  ID3TagFilters.instances,
-                  locales.recordsOfInstance,
-                  Symbols.hub,
-                ),
-                horizontalSpacer,
-                _createTagFilter(
-                  ID3TagFilters.syncStates,
-                  locales.syncState,
-                  Symbols.sync,
-                ),
-                horizontalSpacer,
+                if (isSyncSupported) ...[
+                  _createTagFilter(
+                    ID3TagFilters.unassigned,
+                    locales.unassigned,
+                    Symbols.label_off,
+                  ),
+                  horizontalSpacer,
+                  _createTagFilter(
+                    ID3TagFilters.instances,
+                    locales.recordsOfInstance,
+                    Symbols.hub,
+                  ),
+                  horizontalSpacer,
+                  _createTagFilter(
+                    ID3TagFilters.syncStates,
+                    locales.syncState,
+                    Symbols.sync,
+                  ),
+                  horizontalSpacer,
+                ],
               ],
             ),
           ),

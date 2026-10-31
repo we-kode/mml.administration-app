@@ -1,4 +1,6 @@
 // Service that handles the instance data of the server.
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:mml_admin/services/api.dart';
 
@@ -19,15 +21,21 @@ class SyncService {
 
   /// Loads the instance data from the server.
   ///
-  /// Returns the instance data.
-  Future<String> get() async {
-    var response = await _apiService.request(
-      '/media/sync/instance',
-      options: Options(
-        method: 'GET',
-      ),
-    );
+  /// Returns the instance data or null if the server does not support the
+  /// synchronization.
+  Future<String?> get() async {
+    try {
+      var response = await _apiService.request(
+        '/media/sync/instance',
+        options: Options(method: 'GET'),
+      );
 
-    return response.data;
+      return response.data;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == HttpStatus.notFound) {
+        return null;
+      }
+      rethrow;
+    }
   }
 }
