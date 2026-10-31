@@ -153,6 +153,7 @@
   "cacheCleared": "Cache was cleared successfully.",
   "cacheClearedFailed": "Cache could not be cleared.",
   "instance": "Instance",
+  "syncUnsupported": "The server does not support the synchronization. Update the server to use it.",
   "sync": "Sync",
   "notOwned": "Properties can be edited only by owner '{owner}'.",
   "assignAndRemove":"Assume groups and delete.",

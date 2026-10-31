@@ -37,7 +37,10 @@ class RecordsScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             return AsyncListView(
-              subfilter: RecordTagFilter(isFolderView: vm.isFolderView),
+              subfilter: RecordTagFilter(
+                isFolderView: vm.isFolderView,
+                isSyncSupported: vm.isSyncSupported,
+              ),
               navState: vm.navigationState,
               moveUp: (subFilter) {
                 vm.moveFolderUp(subFilter as ID3TagFilter);
@@ -177,9 +180,12 @@ class RecordsScreen extends StatelessWidget {
                 );
                 return true;
               },
-              syncItems: <T>(List<T> items) => vm.synchronize(items, context),
-              revokeSyncItems: <T>(List<T> items) =>
-                  vm.revokeSync(items, context),
+              syncItems: vm.isSyncSupported
+                  ? <T>(List<T> items) => vm.synchronize(items, context)
+                  : null,
+              revokeSyncItems: vm.isSyncSupported
+                  ? <T>(List<T> items) => vm.revokeSync(items, context)
+                  : null,
               lockItems: <T>(List<T> items) async {
                 await vm.lockRecords(items);
                 return true;

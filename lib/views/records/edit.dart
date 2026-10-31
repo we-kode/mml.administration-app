@@ -73,7 +73,7 @@ class RecordEditDialog extends StatelessWidget {
             if (!vm.isEditable)
               ListTile(
                 leading: const Icon(Symbols.warning),
-                title: Text(vm.locales.notOwned(vm.record.ownerInstance)),
+                title: Text(vm.locales.notOwned(vm.record.ownerInstance ?? '')),
               ),
             TextFormField(
               onFieldSubmitted: (_) => vm.saveRecord(),
@@ -181,9 +181,10 @@ class RecordEditDialog extends StatelessWidget {
                   selectableItems.map((e) => e as Group).toList(),
             ),
             verticalSpacer,
-            Consumer<RecordEditViewModel>(
-              builder: (context, vm, _) => _createSyncSection(context, vm),
-            ),
+            if (vm.isSyncSupported)
+              Consumer<RecordEditViewModel>(
+                builder: (context, vm, _) => _createSyncSection(context, vm),
+              ),
           ],
         ),
       ),
@@ -225,7 +226,7 @@ class RecordEditDialog extends StatelessWidget {
       return ListTile(
         contentPadding: EdgeInsets.zero,
         leading: Icon(SyncDirection.icon(SyncDirection.incoming)),
-        title: Text(vm.locales.receivedFrom(vm.record.ownerInstance)),
+        title: Text(vm.locales.receivedFrom(vm.record.ownerInstance ?? '')),
         subtitle: received != null
             ? Text(format.format(received.syncedAt.toLocal()))
             : null,

@@ -493,6 +493,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get instance => 'Instance';
 
   @override
+  String get syncUnsupported =>
+      'The server does not support the synchronization. Update the server to use it.';
+
+  @override
   String get sync => 'Sync';
 
   @override

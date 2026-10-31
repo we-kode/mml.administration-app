@@ -1018,6 +1018,12 @@ abstract class AppLocalizations {
   /// **'Instanz'**
   String get instance;
 
+  /// No description provided for @syncUnsupported.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Server unterstützt die Synchronisation nicht. Aktualisiere den Server, um sie zu nutzen.'**
+  String get syncUnsupported;
+
   /// No description provided for @sync.
   ///
   /// In de, this message translates to:
