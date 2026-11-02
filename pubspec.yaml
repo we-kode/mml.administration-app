@@ -50,7 +50,7 @@ dependencies:
   mime: ^2.0.0
   http_parser: ^4.1.2
   package_info_plus: ^9.0.0
-  calendar_date_picker2: ^2.0.1
+  calendar_date_picker2: ^4.0.0
   id3tag: ^0.2.0
   toggle_switch: ^2.3.0
   material_symbols_icons: ^4.2960.0
