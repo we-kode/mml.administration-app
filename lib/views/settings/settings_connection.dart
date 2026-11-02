@@ -15,8 +15,10 @@ class SettingsConnectionScreen extends StatelessWidget {
     return ChangeNotifierProvider<SettingsConnectionViewModel>(
       create: (context) => SettingsConnectionViewModel(),
       builder: (context, _) {
-        var vm =
-            Provider.of<SettingsConnectionViewModel>(context, listen: false);
+        var vm = Provider.of<SettingsConnectionViewModel>(
+          context,
+          listen: false,
+        );
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
@@ -27,9 +29,7 @@ class SettingsConnectionScreen extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -44,9 +44,8 @@ class SettingsConnectionScreen extends StatelessWidget {
                           height: 256,
                           width: 256,
                           data: vm.connectionSettings.toString(),
-                          errorBuilder: (context, error) => Center(
-                            child: Text(error),
-                          ),
+                          errorBuilder: (context, error) =>
+                              Center(child: Text(error)),
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -77,11 +76,6 @@ class SettingsConnectionScreen extends StatelessWidget {
   ) {
     var locales = AppLocalizations.of(context)!;
 
-    return [
-      TextButton(
-        onPressed: vm.abort,
-        child: Text(locales.ok),
-      ),
-    ];
+    return [TextButton(onPressed: vm.abort, child: Text(locales.ok))];
   }
 }

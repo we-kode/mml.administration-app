@@ -6,7 +6,9 @@ void main() {
   testWidgets('shows the message only on demand', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
-        home: Scaffold(body: Center(child: InfoTooltip(message: 'Details'))),
+        home: Scaffold(
+          body: Center(child: InfoTooltip(message: 'Details')),
+        ),
       ),
     );
 

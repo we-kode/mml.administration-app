@@ -10,11 +10,11 @@ import 'package:mml_admin/l10n/admin_app_localizations.dart';
 class MMLAdminScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-        PointerDeviceKind.stylus,
-        PointerDeviceKind.unknown,
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.stylus,
+    PointerDeviceKind.unknown,
+  };
 }
 
 /// Administration application for My Media Lib.
@@ -37,14 +37,8 @@ class AdminApp extends StatelessWidget {
       scrollBehavior: MMLAdminScrollBehavior(),
 
       // Configure theme data.
-      theme: ThemeData(
-        colorScheme: lightColorScheme,
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: darkColorScheme,
-        useMaterial3: true,
-      ),
+      theme: ThemeData(colorScheme: lightColorScheme, useMaterial3: true),
+      darkTheme: ThemeData(colorScheme: darkColorScheme, useMaterial3: true),
       themeMode: ThemeMode.system,
 
       // Configure the main navigator of the app.

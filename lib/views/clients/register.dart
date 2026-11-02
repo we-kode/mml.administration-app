@@ -164,7 +164,9 @@ class ClientRegisterDialog extends StatelessWidget {
                             vm.assignAndDeleteClient(index, context);
                           },
                           icon: const Icon(Symbols.delete_sweep),
-                          tooltip: AppLocalizations.of(context)!.assignAndRemove,
+                          tooltip: AppLocalizations.of(
+                            context,
+                          )!.assignAndRemove,
                         ),
                         IconButton(
                           onPressed: () {

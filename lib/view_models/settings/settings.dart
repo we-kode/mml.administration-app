@@ -73,9 +73,7 @@ class SettingsViewModel extends ChangeNotifier {
 
   /// Sets the cache limit to [value] and notifies listeners.
   Future<void> updateCacheLimits({int? duration = 0}) async {
-    cacheManager.updateLimits(
-      maxCacheTime: duration,
-    );
+    cacheManager.updateLimits(maxCacheTime: duration);
     notifyListeners();
   }
 
@@ -99,7 +97,7 @@ class SettingsViewModel extends ChangeNotifier {
     }
 
     try {
-     await cacheManager.clearCache();
+      await cacheManager.clearCache();
       _messengerService.showMessage(_messengerService.cacheCleared);
     } catch (e) {
       _messengerService.showMessage(_messengerService.cacheClearedFailed);

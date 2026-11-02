@@ -19,12 +19,13 @@ import 'package:shimmer/shimmer.dart';
 
 /// Function to load data with the passed [filter], starting from [offset] and
 /// loading an amount of [take] data. Also a [subfilter] can be added to filter the list more specific.
-typedef LoadDataFunction = Future<ModelList> Function({
-  String? filter,
-  int? offset,
-  int? take,
-  Subfilter? subfilter,
-});
+typedef LoadDataFunction =
+    Future<ModelList> Function({
+      String? filter,
+      int? offset,
+      int? take,
+      Subfilter? subfilter,
+    });
 
 /// Function that deletes the items with the passed [itemIdentifiers].
 ///
@@ -40,12 +41,11 @@ typedef DeleteFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
 /// after successful action or false on cancel.
 /// The list will reload the data starting from beginning, if true will be
 /// returned.
-typedef ActionPerformedFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
+typedef ActionPerformedFunction =
+    Future<bool> Function<T>(List<T> itemIdentifiers);
 
 /// Function to be called when the back button is pressed. And the list should navigate up in folder structure.
-typedef MoveUpFunction = Function(
-  Subfilter? subFilter,
-);
+typedef MoveUpFunction = Function(Subfilter? subFilter);
 
 /// Function that updates the passed [item].
 ///
@@ -53,8 +53,8 @@ typedef MoveUpFunction = Function(
 /// after successful update or false on cancel.
 /// The list will reload the data starting from beginning, if true will be
 /// returned.
-typedef EditFunction = Future<bool> Function(
-    ModelBase item, Subfilter? subFilter);
+typedef EditFunction =
+    Future<bool> Function(ModelBase item, Subfilter? subFilter);
 
 /// Function that creates an new item.
 ///
@@ -65,8 +65,8 @@ typedef EditFunction = Future<bool> Function(
 typedef AddFunction = Future<bool> Function();
 
 /// Function called if selectable tags of [item] changed.
-typedef AvailableTagsChangedFunction = void Function(
-    ModelBase item, List<ModelBase> changedTags);
+typedef AvailableTagsChangedFunction =
+    void Function(ModelBase item, List<ModelBase> changedTags);
 
 /// List that supports async loading of data, when necessary in chunks.
 class AsyncListView extends StatefulWidget {
@@ -249,7 +249,7 @@ class _AsyncListViewState extends State<AsyncListView> {
       autofocus: true,
       focusNode: FocusNode(),
       onKeyEvent: (event) => {
-        if (event.logicalKey == LogicalKeyboardKey.f5) {_reloadData()}
+        if (event.logicalKey == LogicalKeyboardKey.f5) {_reloadData()},
       },
       child: Scaffold(
         body: Column(
@@ -262,8 +262,8 @@ class _AsyncListViewState extends State<AsyncListView> {
               child: _isLoadingData
                   ? _createLoadingWidget()
                   : (_items!.totalCount > 0
-                      ? _createListViewWidget()
-                      : _createNoDataWidget()),
+                        ? _createListViewWidget()
+                        : _createNoDataWidget()),
             ),
           ],
         ),
@@ -290,7 +290,8 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// the identifier was in the list of selected items.
   void _onItemChecked(int index) {
     if (_selectedItems.any(
-        (item) => item.getIdentifier() == _items![index]?.getIdentifier())) {
+      (item) => item.getIdentifier() == _items![index]?.getIdentifier(),
+    )) {
       _selectedItems.remove(_items![index]);
     } else if (_items![index] != null) {
       _selectedItems.add(_items![index]!);
@@ -318,10 +319,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Shows a loading indicator instead of the list during load, if
   /// [showLoadingOverlay] is true.
   /// Otherwise the data will be loaded lazy in the background.
-  void _loadData({
-    bool showLoadingOverlay = true,
-    Subfilter? subfilter,
-  }) {
+  void _loadData({bool showLoadingOverlay = true, Subfilter? subfilter}) {
     if (showLoadingOverlay) {
       setState(() {
         _isLoadingData = true;
@@ -335,25 +333,27 @@ class _AsyncListViewState extends State<AsyncListView> {
       subfilter: subfilter,
     );
 
-    dataFuture.then((value) {
-      if (!mounted) {
-        return;
-      }
+    dataFuture
+        .then((value) {
+          if (!mounted) {
+            return;
+          }
 
-      setState(() {
-        _isLoadingData = false;
-        _items = value;
-      });
-    }).onError((e, _) {
-      if (!mounted) {
-        return;
-      }
+          setState(() {
+            _isLoadingData = false;
+            _items = value;
+          });
+        })
+        .onError((e, _) {
+          if (!mounted) {
+            return;
+          }
 
-      setState(() {
-        _isLoadingData = false;
-        _items = ModelList([], _initialOffset, 0);
-      });
-    });
+          setState(() {
+            _isLoadingData = false;
+            _items = ModelList([], _initialOffset, 0);
+          });
+        });
   }
 
   /// Show a floating action button or an expanding fab.
@@ -364,10 +364,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     return Visibility(
       visible: widget.showAddButton,
       child: widget.subactions != null && widget.subactions!.isNotEmpty
-          ? ExpandableFab(
-              distance: 96.0,
-              children: widget.subactions!,
-            )
+          ? ExpandableFab(distance: 96.0, children: widget.subactions!)
           : FloatingActionButton(
               onPressed: () {
                 if (widget.addItem == null) {
@@ -413,7 +410,8 @@ class _AsyncListViewState extends State<AsyncListView> {
                         icon: const Icon(Symbols.refresh),
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width *
+                        width:
+                            MediaQuery.of(context).size.width *
                             (widget.navState != null ? 0.838 : 0.863),
                         child: TextField(
                           decoration: InputDecoration(
@@ -434,9 +432,11 @@ class _AsyncListViewState extends State<AsyncListView> {
                               onPressed: () => setState(() {
                                 fastActionsEnabled = !fastActionsEnabled;
                               }),
-                              icon: Icon(fastActionsEnabled
-                                  ? Symbols.edit_off
-                                  : Symbols.edit),
+                              icon: Icon(
+                                fastActionsEnabled
+                                    ? Symbols.edit_off
+                                    : Symbols.edit,
+                              ),
                             )
                           : const SizedBox.shrink(),
                     ],
@@ -447,11 +447,10 @@ class _AsyncListViewState extends State<AsyncListView> {
                   if (widget.navState?.path != null)
                     Chip(
                       side: BorderSide.none,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.outlineVariant,
-                      label: Text(
-                        widget.navState!.path!,
-                      ),
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.outlineVariant,
+                      label: Text(widget.navState!.path!),
                     ),
                 ],
               ),
@@ -521,36 +520,39 @@ class _AsyncListViewState extends State<AsyncListView> {
                     IconButton(
                       onPressed: () {
                         showProgressIndicator();
-                        widget.deleteItems(_selectedItems).then((value) {
-                          if (!mounted) {
-                            return;
-                          }
+                        widget
+                            .deleteItems(_selectedItems)
+                            .then((value) {
+                              if (!mounted) {
+                                return;
+                              }
 
-                          RouterService.getInstance()
-                              .navigatorKey
-                              .currentState!
-                              .pop();
+                              RouterService.getInstance()
+                                  .navigatorKey
+                                  .currentState!
+                                  .pop();
 
-                          if (!value) {
-                            return;
-                          }
+                              if (!value) {
+                                return;
+                              }
 
-                          setState(() {
-                            _isInMultiSelectMode = false;
-                            _selectedItems = [];
-                          });
+                              setState(() {
+                                _isInMultiSelectMode = false;
+                                _selectedItems = [];
+                              });
 
-                          _reloadData();
-                        }).onError((error, stackTrace) {
-                          if (!mounted) {
-                            return;
-                          }
+                              _reloadData();
+                            })
+                            .onError((error, stackTrace) {
+                              if (!mounted) {
+                                return;
+                              }
 
-                          RouterService.getInstance()
-                              .navigatorKey
-                              .currentState!
-                              .pop();
-                        });
+                              RouterService.getInstance()
+                                  .navigatorKey
+                                  .currentState!
+                                  .pop();
+                            });
                       },
                       icon: const Icon(Symbols.delete),
                       tooltip: AppLocalizations.of(context)!.remove,
@@ -574,30 +576,32 @@ class _AsyncListViewState extends State<AsyncListView> {
     return IconButton(
       onPressed: () {
         showProgressIndicator();
-        action(_selectedItems).then((value) {
-          if (!mounted) {
-            return;
-          }
+        action(_selectedItems)
+            .then((value) {
+              if (!mounted) {
+                return;
+              }
 
-          RouterService.getInstance().navigatorKey.currentState!.pop();
+              RouterService.getInstance().navigatorKey.currentState!.pop();
 
-          if (!value) {
-            return;
-          }
+              if (!value) {
+                return;
+              }
 
-          setState(() {
-            _isInMultiSelectMode = false;
-            _selectedItems = [];
-          });
+              setState(() {
+                _isInMultiSelectMode = false;
+                _selectedItems = [];
+              });
 
-          _reloadData();
-        }).onError((error, stackTrace) {
-          if (!mounted) {
-            return;
-          }
+              _reloadData();
+            })
+            .onError((error, stackTrace) {
+              if (!mounted) {
+                return;
+              }
 
-          RouterService.getInstance().navigatorKey.currentState!.pop();
-        });
+              RouterService.getInstance().navigatorKey.currentState!.pop();
+            });
       },
       icon: Icon(icon),
       tooltip: tooltip,
@@ -607,14 +611,10 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Creates the list view widget.
   Widget _createListViewWidget() {
     return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(
-        scrollbars: false,
-      ),
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: ListView.separated(
         separatorBuilder: (context, index) {
-          return const Divider(
-            height: 1,
-          );
+          return const Divider(height: 1);
         },
         itemBuilder: (context, index) {
           var endNotReached = (_offset + _take) <= _items!.totalCount;
@@ -656,9 +656,7 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   /// Creates a loading indicator widget.
   Widget _createLoadingWidget() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+    return const Center(child: CircularProgressIndicator());
   }
 
   /// Creates a widget that will be shown, if no data were loaded or an error
@@ -690,20 +688,20 @@ class _AsyncListViewState extends State<AsyncListView> {
 
     var leadingTile = item.getAvatar(context) == null
         ? !_isInMultiSelectMode
-            ? item.getPrefixIcon(context)
-            : _selectCheckbox(index, item)
+              ? item.getPrefixIcon(context)
+              : _selectCheckbox(index, item)
         : Column(
             children: [
               Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                     child: Container(
                       height: 42,
                       width: 42,
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
                       child: item.getAvatar(context),
                     ),
                   ),
@@ -752,17 +750,11 @@ class _AsyncListViewState extends State<AsyncListView> {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              top: 10,
-              left: 10,
-              right: 10,
-            ),
+            padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
             child: Chip(
               side: BorderSide.none,
               backgroundColor: Theme.of(context).colorScheme.outlineVariant,
-              label: Text(
-                item.getGroup(context)!,
-              ),
+              label: Text(item.getGroup(context)!),
             ),
           ),
           _listTile(leadingTile, item, index),
@@ -809,8 +801,9 @@ class _AsyncListViewState extends State<AsyncListView> {
                           if (item.getSubtitleNote(context) != null)
                             TextSpan(
                               text: ' · ${item.getSubtitleNote(context)}',
-                              style:
-                                  const TextStyle(fontStyle: FontStyle.italic),
+                              style: const TextStyle(
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
                         ],
                       ),
@@ -819,11 +812,12 @@ class _AsyncListViewState extends State<AsyncListView> {
                       softWrap: false,
                     ),
                   ),
-                _getGroupTags(item) ?? const SizedBox.shrink()
+                _getGroupTags(item) ?? const SizedBox.shrink(),
               ],
             )
           : null,
-      trailing: (item.getMetadata(context) != null ||
+      trailing:
+          (item.getMetadata(context) != null ||
               item.getSubMetadata(context) != null)
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -885,12 +879,10 @@ class _AsyncListViewState extends State<AsyncListView> {
               selectableItems: widget.availableTags!,
               initialSelectedItems: item.getTags()!,
               onSelectionChanged: (selectedItems) =>
-                  widget.onChangedAvailableTags!(
-                item,
-                selectedItems,
-              ),
+                  widget.onChangedAvailableTags!(item, selectedItems),
               isEditable: fastActionsEnabled,
-            ))
+            ),
+          )
         : null;
   }
 
@@ -899,15 +891,14 @@ class _AsyncListViewState extends State<AsyncListView> {
       splashRadius: 0,
       side: BorderSide.none,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(5.0),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
       ),
       onChanged: (_) {
         _onItemChecked(index);
       },
-      value: _selectedItems
-          .any((elem) => elem.getIdentifier() == item.getIdentifier()),
+      value: _selectedItems.any(
+        (elem) => elem.getIdentifier() == item.getIdentifier(),
+      ),
     );
   }
 

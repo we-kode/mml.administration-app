@@ -286,10 +286,7 @@ Future<String?> showAddressDialog(
           onPressed: () => Navigator.pop(context),
           child: Text(locales.cancel),
         ),
-        TextButton(
-          onPressed: () => submit(context),
-          child: Text(locales.save),
-        ),
+        TextButton(onPressed: () => submit(context), child: Text(locales.save)),
       ],
     ),
   );

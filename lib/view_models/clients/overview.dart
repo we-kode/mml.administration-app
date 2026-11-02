@@ -62,18 +62,15 @@ class ClientsViewModel extends ChangeNotifier {
 
   /// Deletes the clients with the passed [clients] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> deleteClients<T>(
-    List<T> clients,
-    BuildContext context,
-  ) async {
+  Future<bool> deleteClients<T>(List<T> clients, BuildContext context) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete) {
       try {
         showProgressIndicator();
-        await _service.deleteClients(clients
-            .map<String>((T e) => (e as Client).getIdentifier())
-            .toList());
+        await _service.deleteClients(
+          clients.map<String>((T e) => (e as Client).getIdentifier()).toList(),
+        );
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();
@@ -87,11 +84,7 @@ class ClientsViewModel extends ChangeNotifier {
 
   /// Updates the groups of the [item].
   void groupsChanged(ModelBase item, List<ModelBase> changedGroups) async {
-    (item as Client).groups = changedGroups
-        .map(
-          (e) => e as Group,
-        )
-        .toList();
+    (item as Client).groups = changedGroups.map((e) => e as Group).toList();
     _service.updateClient(item);
   }
 
@@ -115,9 +108,7 @@ class ClientsViewModel extends ChangeNotifier {
 
   /// Loads the assigned groups.
   Future<List<String>> loadAssignedGroups(List<String> clients) async {
-    var groups = await _service.assignedGroups(
-      clients,
-    );
+    var groups = await _service.assignedGroups(clients);
 
     return groups.map((e) => (e as Group).id!).toList();
   }

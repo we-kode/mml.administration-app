@@ -38,7 +38,7 @@ class LivestreamEditDialogViewModel extends ChangeNotifier {
   /// Name of the Livestream name field in the errors response.
   final String nameField = 'DisplayName';
 
-   /// Name of the groups field in the errors response.
+  /// Name of the groups field in the errors response.
   final String groupsField = 'Groups';
 
   /// Map of errors from the server.

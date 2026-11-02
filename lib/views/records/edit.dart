@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:mml_admin/components/chip_choices.dart';
+import 'package:mml_admin/components/progress_ring.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/federation/sync_direction.dart';
@@ -58,15 +59,49 @@ class RecordEditDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Align(
-              alignment: Alignment.center,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                child: Container(
-                  height: 200,
-                  width: 200,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  child: vm.record.getAvatar(context),
+            Consumer<RecordEditViewModel>(
+              builder: (context, vm, _) => Align(
+                alignment: Alignment.center,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  child: Container(
+                    height: 200,
+                    width: 200,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHighest,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        vm.newCover != null
+                            ? Image.memory(vm.newCover!)
+                            : vm.coverRemoved
+                            ? const Icon(Symbols.music_note)
+                            : vm.record.getAvatar(context) ??
+                                  const Icon(Symbols.music_note),
+                        if (vm.canChangeCover)
+                          Positioned(
+                            right: 4,
+                            bottom: 4,
+                            child: Row(
+                              children: [
+                                IconButton.filledTonal(
+                                  onPressed: vm.pickCover,
+                                  icon: const Icon(Symbols.image),
+                                  tooltip: vm.locales.changeCover,
+                                ),
+                                if (vm.hasCover)
+                                  IconButton.filledTonal(
+                                    onPressed: vm.removeCover,
+                                    icon: const Icon(Symbols.hide_image),
+                                    tooltip: vm.locales.removeCover,
+                                  ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -248,7 +283,9 @@ class RecordEditDialog extends StatelessWidget {
       var fraction = transferFraction(transfer.transferred, transfer.size);
       return ListTile(
         dense: true,
-        leading: const Icon(Symbols.sync),
+        leading: fraction == null
+            ? const Icon(Symbols.sync)
+            : ProgressRing(value: fraction),
         title: Text(transfer.instance),
         subtitle: fraction == null
             ? Text(
@@ -256,10 +293,7 @@ class RecordEditDialog extends StatelessWidget {
                   format.format(transfer.nextAttemptAt.toLocal()),
                 ),
               )
-            : LinearProgressIndicator(value: fraction),
-        trailing: fraction == null
-            ? null
-            : Text(vm.locales.transferPercent((fraction * 100).floor())),
+            : null,
       );
     }).toList();
     var exclusions = vm.sync.exclusions

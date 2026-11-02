@@ -111,6 +111,10 @@ class MainScreen extends StatelessWidget {
                                   ),
                                   label: Text(vm.locales.sync),
                                 ),
+                                _navItem(
+                                  Symbols.campaign,
+                                  vm.locales.announcements,
+                                ),
                                 _navItem(Symbols.settings, vm.locales.settings),
                               ],
                             );

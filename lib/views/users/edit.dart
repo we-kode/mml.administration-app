@@ -10,10 +10,7 @@ class UsersEditDialog extends StatelessWidget {
   final int? userId;
 
   /// Initializes the view for the user create/edit dialog.
-  const UsersEditDialog({
-    super.key,
-    required this.userId,
-  });
+  const UsersEditDialog({super.key, required this.userId});
 
   /// Builds the user create/edit dialog.
   @override
@@ -25,18 +22,14 @@ class UsersEditDialog extends StatelessWidget {
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
-          title: Text(
-            userId != null ? locales.editUser : locales.createUser,
-          ),
+          title: Text(userId != null ? locales.editUser : locales.createUser),
           content: FutureBuilder(
             future: vm.init(context, userId),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 

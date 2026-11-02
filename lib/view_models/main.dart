@@ -53,7 +53,9 @@ class MainViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     _context = context;
     locales = AppLocalizations.of(_context)!;
-    _syncRouteIndex = _routerService.nestedRoutes.keys.toList().indexOf(SyncOverviewViewModel.route);
+    _syncRouteIndex = _routerService.nestedRoutes.keys.toList().indexOf(
+      SyncOverviewViewModel.route,
+    );
     if (_federationEvents == null) {
       var federationEvents = FederationEventService.getInstance();
       _federationEvents = federationEvents.events.listen(_onFederationEvent);
@@ -73,7 +75,8 @@ class MainViewModel extends ChangeNotifier {
   }
 
   void _onFederationEvent(FederationEvent event) {
-    var isNewEntry = event.type == FederationEventType.requestReceived ||
+    var isNewEntry =
+        event.type == FederationEventType.requestReceived ||
         (event.type == FederationEventType.auditAdded &&
             (event.entry?.isNotable ?? false));
     if (!isNewEntry) {

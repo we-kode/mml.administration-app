@@ -21,10 +21,7 @@ class GroupsOverviewScreen extends StatelessWidget {
         var vm = Provider.of<GroupsOverviewViewModel>(context, listen: false);
 
         return AsyncListView(
-          deleteItems: <T>(List<T> items) => vm.deleteGroups(
-            context,
-            items,
-          ),
+          deleteItems: <T>(List<T> items) => vm.deleteGroups(context, items),
           addItem: () async {
             return await showDialog(
               barrierDismissible: false,
@@ -39,9 +36,7 @@ class GroupsOverviewScreen extends StatelessWidget {
               barrierDismissible: false,
               context: context,
               builder: (BuildContext context) {
-                return GroupEditDialog(
-                  groupId: (group as Group).id,
-                );
+                return GroupEditDialog(groupId: (group as Group).id);
               },
             );
           },
