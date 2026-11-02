@@ -38,26 +38,21 @@ class LiveStreamsViewModel extends ChangeNotifier {
     int? take,
     Subfilter? subfilter,
   }) async {
-    return _service.get(
-      filter,
-      offset,
-      take,
-    );
+    return _service.get(filter, offset, take);
   }
 
   /// Deletes [items].
-  Future<bool> delete<T>(
-    BuildContext context,
-    List<T> items,
-  ) async {
+  Future<bool> delete<T>(BuildContext context, List<T> items) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete && items.isNotEmpty) {
       try {
         showProgressIndicator();
-        await _service.delete(items
-            .map<String>((T e) => (e as Livestream).getIdentifier())
-            .toList());
+        await _service.delete(
+          items
+              .map<String>((T e) => (e as Livestream).getIdentifier())
+              .toList(),
+        );
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();
@@ -71,11 +66,7 @@ class LiveStreamsViewModel extends ChangeNotifier {
 
   /// Updates the groups of the [item].
   void groupsChanged(ModelBase item, List<ModelBase> changedGroups) async {
-    (item as Livestream).groups = changedGroups
-        .map(
-          (e) => e as Group,
-        )
-        .toList();
+    (item as Livestream).groups = changedGroups.map((e) => e as Group).toList();
     _service.update(item);
   }
 
@@ -99,9 +90,7 @@ class LiveStreamsViewModel extends ChangeNotifier {
 
   /// Loads the assigned groups.
   Future<List<String>> loadAssignedGroups(List<String> items) async {
-    var groups = await _service.assignedGroups(
-      items,
-    );
+    var groups = await _service.assignedGroups(items);
 
     return groups.map((e) => (e as Group).id!).toList();
   }

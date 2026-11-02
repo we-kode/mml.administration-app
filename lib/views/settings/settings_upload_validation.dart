@@ -16,8 +16,10 @@ class SettingsUploadValidationScreen extends StatelessWidget {
     return ChangeNotifierProvider<SettingsUploadValidationViewModel>(
       create: (context) => SettingsUploadValidationViewModel(),
       builder: (context, _) {
-        var vm = Provider.of<SettingsUploadValidationViewModel>(context,
-            listen: false);
+        var vm = Provider.of<SettingsUploadValidationViewModel>(
+          context,
+          listen: false,
+        );
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
@@ -28,9 +30,7 @@ class SettingsUploadValidationScreen extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -83,7 +83,8 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                               builder: (context, vm, _) {
                                 return TextFormField(
                                   onFieldSubmitted: (_) => vm.save(),
-                                  enabled: vm.model.validateAlbum != null &&
+                                  enabled:
+                                      vm.model.validateAlbum != null &&
                                       vm.model.validateAlbum !=
                                           RecordValidationState.doNotValidate,
                                   decoration: InputDecoration(
@@ -112,7 +113,8 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                               builder: (context, vm, _) {
                                 return TextFormField(
                                   onFieldSubmitted: (_) => vm.save(),
-                                  enabled: vm.model.validateGenre != null &&
+                                  enabled:
+                                      vm.model.validateGenre != null &&
                                       vm.model.validateGenre !=
                                           RecordValidationState.doNotValidate,
                                   decoration: InputDecoration(
@@ -137,21 +139,22 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                                 labelText: vm.locales.uploadValidFilename,
                                 hintText: vm.locales.uploadValidFilenameInfo,
                               ),
-                              initialValue: vm.model.fileNameTemplate == null ||
+                              initialValue:
+                                  vm.model.fileNameTemplate == null ||
                                       vm.model.fileNameTemplate!.isEmpty
                                   ? '(.*)'
                                   : vm.model.fileNameTemplate,
                               onSaved: (String? value) {
                                 vm.model.fileNameTemplate =
                                     value == null || value.isEmpty
-                                        ? '(.*)'
-                                        : value;
+                                    ? '(.*)'
+                                    : value;
                               },
                               onChanged: (String? value) {
                                 vm.model.fileNameTemplate =
                                     value == null || value.isEmpty
-                                        ? '(.*)'
-                                        : value;
+                                    ? '(.*)'
+                                    : value;
                               },
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
@@ -171,17 +174,16 @@ class SettingsUploadValidationScreen extends StatelessWidget {
 
   /// Creates a switch form field
   FormField<RecordValidationState> _switchFormField(
-      SettingsUploadValidationViewModel vm,
-      String title,
-      IconData icon,
-      String modelValue) {
+    SettingsUploadValidationViewModel vm,
+    String title,
+    IconData icon,
+    String modelValue,
+  ) {
     return FormField<RecordValidationState>(
       initialValue: vm.model[modelValue],
       builder: (FormFieldState<RecordValidationState> field) {
         return InputDecorator(
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-          ),
+          decoration: const InputDecoration(border: InputBorder.none),
           child: ListTile(
             leading: Icon(icon),
             title: Text(title),
@@ -197,13 +199,11 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                     [Theme.of(context).colorScheme.primaryContainer],
                   ],
                   inactiveBgColor: Theme.of(context).colorScheme.surface,
-                  inactiveFgColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  inactiveFgColor: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerHighest,
                   totalSwitches: 3,
-                  icons: const [
-                    Symbols.close,
-                    Symbols.check,
-                    Symbols.done_all,
-                  ],
+                  icons: const [Symbols.close, Symbols.check, Symbols.done_all],
                   onToggle: (index) {
                     vm.update(modelValue, index);
                   },
@@ -225,14 +225,8 @@ class SettingsUploadValidationScreen extends StatelessWidget {
     var locales = AppLocalizations.of(context)!;
 
     return [
-      TextButton(
-        onPressed: vm.abort,
-        child: Text(locales.cancel),
-      ),
-      TextButton(
-        onPressed: vm.save,
-        child: Text(locales.save),
-      ),
+      TextButton(onPressed: vm.abort, child: Text(locales.cancel)),
+      TextButton(onPressed: vm.save, child: Text(locales.save)),
     ];
   }
 }

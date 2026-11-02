@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/view_models/announcements/overview.dart';
 import 'package:mml_admin/view_models/change_password.dart';
 import 'package:mml_admin/view_models/clients/overview.dart';
 import 'package:mml_admin/view_models/groups/overview.dart';
@@ -8,6 +9,7 @@ import 'package:mml_admin/view_models/records/overview.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
 import 'package:mml_admin/view_models/sync/overview.dart';
 import 'package:mml_admin/view_models/users/overview.dart';
+import 'package:mml_admin/views/announcements/overview.dart';
 import 'package:mml_admin/views/change_password.dart';
 import 'package:mml_admin/views/clients/overview.dart';
 import 'package:mml_admin/views/groups/overview.dart';
@@ -58,7 +60,8 @@ class RouterService {
         transitionDuration: const Duration(seconds: 0),
       ),
       LiveStreamsViewModel.route: PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => const LiveStreamsScreen(),
+        pageBuilder: (context, animation1, animation2) =>
+            const LiveStreamsScreen(),
         transitionDuration: const Duration(seconds: 0),
       ),
       ClientsViewModel.route: PageRouteBuilder(
@@ -78,6 +81,11 @@ class RouterService {
       SyncOverviewViewModel.route: PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) =>
             const SyncOverviewScreen(),
+        transitionDuration: const Duration(seconds: 0),
+      ),
+      AnnouncementsViewModel.route: PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            const AnnouncementsScreen(),
         transitionDuration: const Duration(seconds: 0),
       ),
       SettingsViewModel.route: PageRouteBuilder(

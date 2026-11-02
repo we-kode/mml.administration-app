@@ -128,22 +128,24 @@ class _ChipChoicesState extends State<ChipChoices> {
   void _loadData() {
     var dataFuture = widget.loadData!();
 
-    dataFuture.then((value) {
-      if (!mounted) {
-        return;
-      }
+    dataFuture
+        .then((value) {
+          if (!mounted) {
+            return;
+          }
 
-      setState(() {
-        _items = value;
-      });
-    }).onError((e, _) {
-      if (!mounted) {
-        return;
-      }
+          setState(() {
+            _items = value;
+          });
+        })
+        .onError((e, _) {
+          if (!mounted) {
+            return;
+          }
 
-      setState(() {
-        _items = ModelList([], 0, 0);
-      });
-    });
+          setState(() {
+            _items = ModelList([], 0, 0);
+          });
+        });
   }
 }

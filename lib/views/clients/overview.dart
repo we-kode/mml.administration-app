@@ -37,10 +37,7 @@ class ClientsScreen extends StatelessWidget {
                     tagFilter: vm.tagFilter,
                   ),
                   deleteItems: <T>(List<T> items) =>
-                      vm.deleteClients(
-                    items,
-                    context,
-                  ),
+                      vm.deleteClients(items, context),
                   addItem: () async {
                     return await showDialog(
                       barrierDismissible: false,
@@ -56,7 +53,8 @@ class ClientsScreen extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return ClientEditDialog(
-                            clientId: (client as Client).clientId);
+                          clientId: (client as Client).clientId,
+                        );
                       },
                     );
                   },

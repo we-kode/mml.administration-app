@@ -3,6 +3,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
+import 'package:mml_admin/views/settings/licenses.dart';
 import 'package:mml_admin/views/settings/settings_compression.dart';
 import 'package:mml_admin/views/settings/settings_connection.dart';
 import 'package:mml_admin/views/settings/settings_genre_bitrate.dart';
@@ -213,6 +214,14 @@ class SettingsScreen extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Symbols.new_releases),
                     title: Text(SettingsViewModel.version),
+                  ),
+                  ListTile(
+                    leading: const Icon(Symbols.license),
+                    title: Text(vm.locales.licenses),
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => const LicensesDialog(),
+                    ),
                   ),
                 ],
               );

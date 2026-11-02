@@ -1869,6 +1869,144 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Bei {count} Instanzen aufgehoben'**
   String syncRevokedCount(int count);
+
+  /// No description provided for @changeCover.
+  ///
+  /// In de, this message translates to:
+  /// **'Cover ändern'**
+  String get changeCover;
+
+  /// No description provided for @removeCover.
+  ///
+  /// In de, this message translates to:
+  /// **'Cover entfernen'**
+  String get removeCover;
+
+  /// No description provided for @invalidCover.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Cover muss ein JPEG- oder PNG-Bild sein und darf nicht größer sein, als der Server erlaubt (standardmäßig 8 MB).'**
+  String get invalidCover;
+
+  /// No description provided for @licenses.
+  ///
+  /// In de, this message translates to:
+  /// **'Lizenzen'**
+  String get licenses;
+
+  /// No description provided for @announcements.
+  ///
+  /// In de, this message translates to:
+  /// **'Mitteilungen'**
+  String get announcements;
+
+  /// No description provided for @createAnnouncement.
+  ///
+  /// In de, this message translates to:
+  /// **'Mitteilung erstellen'**
+  String get createAnnouncement;
+
+  /// No description provided for @editAnnouncement.
+  ///
+  /// In de, this message translates to:
+  /// **'Mitteilung bearbeiten'**
+  String get editAnnouncement;
+
+  /// No description provided for @announcementsNotSupported.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Server unterstützt keine Mitteilungen. Aktualisieren Sie den Server, um Mitteilungen zu verwenden.'**
+  String get announcementsNotSupported;
+
+  /// No description provided for @announcementActive.
+  ///
+  /// In de, this message translates to:
+  /// **'aktiv'**
+  String get announcementActive;
+
+  /// No description provided for @announcementTargetInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Ohne ausgewählte Gruppen und Geräte wird die Mitteilung allen Geräten angezeigt.'**
+  String get announcementTargetInfo;
+
+  /// No description provided for @message.
+  ///
+  /// In de, this message translates to:
+  /// **'Nachricht'**
+  String get message;
+
+  /// No description provided for @invalidMessage.
+  ///
+  /// In de, this message translates to:
+  /// **'Eine Nachricht muss angegeben werden.'**
+  String get invalidMessage;
+
+  /// No description provided for @severity.
+  ///
+  /// In de, this message translates to:
+  /// **'Art'**
+  String get severity;
+
+  /// No description provided for @severityInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Information'**
+  String get severityInfo;
+
+  /// No description provided for @severityMaintenance.
+  ///
+  /// In de, this message translates to:
+  /// **'Wartung'**
+  String get severityMaintenance;
+
+  /// No description provided for @severityImportant.
+  ///
+  /// In de, this message translates to:
+  /// **'Wichtig'**
+  String get severityImportant;
+
+  /// No description provided for @limitPeriod.
+  ///
+  /// In de, this message translates to:
+  /// **'Zeitraum begrenzen'**
+  String get limitPeriod;
+
+  /// No description provided for @limitPeriodInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Mitteilung wird nach Ablauf automatisch gelöscht.'**
+  String get limitPeriodInfo;
+
+  /// No description provided for @validUntilDeleted.
+  ///
+  /// In de, this message translates to:
+  /// **'Gültig, bis sie gelöscht wird'**
+  String get validUntilDeleted;
+
+  /// No description provided for @validFrom.
+  ///
+  /// In de, this message translates to:
+  /// **'Gültig ab'**
+  String get validFrom;
+
+  /// No description provided for @validTo.
+  ///
+  /// In de, this message translates to:
+  /// **'Gültig bis'**
+  String get validTo;
+
+  /// No description provided for @invalidPeriod.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Ende muss nach dem Beginn liegen.'**
+  String get invalidPeriod;
+
+  /// No description provided for @noDevicesSelected.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Geräte ausgewählt'**
+  String get noDevicesSelected;
 }
 
 class _AppLocalizationsDelegate

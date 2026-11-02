@@ -38,7 +38,6 @@ class UsersEditDialogViewModel extends ChangeNotifier {
   /// Map of errors from the server.
   Map<String, List<String>> errors = {};
 
-
   /// Initializes the ViewModel and loads the user with the given [userId] or
   /// creates an new user model if the id is not passed.
   Future<bool> init(BuildContext context, int? userId) async {

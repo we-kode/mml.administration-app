@@ -15,8 +15,10 @@ class SettingsGenreBitrate extends StatelessWidget {
     return ChangeNotifierProvider<SettingsGenreBitrateViewModel>(
       create: (context) => SettingsGenreBitrateViewModel(),
       builder: (context, _) {
-        var vm =
-            Provider.of<SettingsGenreBitrateViewModel>(context, listen: false);
+        var vm = Provider.of<SettingsGenreBitrateViewModel>(
+          context,
+          listen: false,
+        );
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
@@ -24,10 +26,7 @@ class SettingsGenreBitrate extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(locales.bitrates),
-              TextButton(
-                onPressed: vm.add,
-                child: const Icon(Symbols.add),
-              ),
+              TextButton(onPressed: vm.add, child: const Icon(Symbols.add)),
             ],
           ),
           content: FutureBuilder(
@@ -36,17 +35,15 @@ class SettingsGenreBitrate extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
               return snapshot.data!
                   ? ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context).copyWith(
-                        scrollbars: false,
-                      ),
+                      behavior: ScrollConfiguration.of(
+                        context,
+                      ).copyWith(scrollbars: false),
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.4,
                         width: MediaQuery.of(context).size.width * 0.5,
@@ -54,9 +51,7 @@ class SettingsGenreBitrate extends StatelessWidget {
                           builder: (context, vm, child) {
                             return ListView.separated(
                               separatorBuilder: (context, index) {
-                                return const Divider(
-                                  height: 1,
-                                );
+                                return const Divider(height: 1);
                               },
                               itemBuilder: (context, index) {
                                 return ListTile(
@@ -84,7 +79,7 @@ class SettingsGenreBitrate extends StatelessWidget {
                                       onFieldSubmitted: (_) => vm.save(),
                                       key: GlobalKey(),
                                       inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly
+                                        FilteringTextInputFormatter.digitsOnly,
                                       ],
                                       textAlign: TextAlign.right,
                                       keyboardType: TextInputType.number,
@@ -92,18 +87,21 @@ class SettingsGenreBitrate extends StatelessWidget {
                                       decoration: InputDecoration(
                                         labelText: locales.compressionRate,
                                       ),
-                                      initialValue: vm.bitrates[index].bitrate
+                                      initialValue:
+                                          vm.bitrates[index].bitrate
                                               ?.toString() ??
                                           '',
                                       onSaved: (String? compressionRate) {
                                         var bitrate = int.tryParse(
-                                            (compressionRate ?? '0'));
+                                          (compressionRate ?? '0'),
+                                        );
                                         vm.bitrates[index].bitrate =
                                             (bitrate ?? 0) > 0 ? bitrate : null;
                                       },
                                       onChanged: (String? compressionRate) {
                                         var bitrate = int.tryParse(
-                                            (compressionRate ?? '0'));
+                                          (compressionRate ?? '0'),
+                                        );
                                         vm.bitrates[index].bitrate =
                                             (bitrate ?? 0) > 0 ? bitrate : null;
                                       },
@@ -141,14 +139,8 @@ class SettingsGenreBitrate extends StatelessWidget {
     var locales = AppLocalizations.of(context)!;
 
     return [
-      TextButton(
-        onPressed: vm.abort,
-        child: Text(locales.cancel),
-      ),
-      TextButton(
-        onPressed: vm.save,
-        child: Text(locales.save),
-      ),
+      TextButton(onPressed: vm.abort, child: Text(locales.cancel)),
+      TextButton(onPressed: vm.save, child: Text(locales.save)),
     ];
   }
 }

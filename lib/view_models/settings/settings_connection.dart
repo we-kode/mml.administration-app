@@ -16,18 +16,17 @@ class SettingsConnectionViewModel extends ChangeNotifier {
 
   /// Initialize the registration client view model.
   Future<bool> init(BuildContext context) async {
-     return Future<bool>.microtask(() async {
+    return Future<bool>.microtask(() async {
       _context = context;
       try {
-        connectionSettings =
-            await ClientService.getInstance().getConnectionSettings();
+        connectionSettings = await ClientService.getInstance()
+            .getConnectionSettings();
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
       }
       return true;
     });
   }
-
 
   /// Closes the view.
   void abort() async {

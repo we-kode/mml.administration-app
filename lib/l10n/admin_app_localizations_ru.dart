@@ -1020,4 +1020,77 @@ class AppLocalizationsRu extends AppLocalizations {
   String syncRevokedCount(int count) {
     return 'Отменено для экземпляров: $count';
   }
+
+  @override
+  String get changeCover => 'Изменить обложку';
+
+  @override
+  String get removeCover => 'Удалить обложку';
+
+  @override
+  String get invalidCover =>
+      'Обложка должна быть изображением JPEG или PNG и не превышать размер, разрешённый сервером (по умолчанию 8 МБ).';
+
+  @override
+  String get licenses => 'Лицензии';
+
+  @override
+  String get announcements => 'Объявления';
+
+  @override
+  String get createAnnouncement => 'Создать объявление';
+
+  @override
+  String get editAnnouncement => 'Редактировать объявление';
+
+  @override
+  String get announcementsNotSupported =>
+      'Сервер не поддерживает объявления. Обновите сервер, чтобы использовать объявления.';
+
+  @override
+  String get announcementActive => 'активно';
+
+  @override
+  String get announcementTargetInfo =>
+      'Если группы и устройства не выбраны, объявление показывается всем устройствам.';
+
+  @override
+  String get message => 'Сообщение';
+
+  @override
+  String get invalidMessage => 'Необходимо указать сообщение.';
+
+  @override
+  String get severity => 'Тип';
+
+  @override
+  String get severityInfo => 'Информация';
+
+  @override
+  String get severityMaintenance => 'Техническое обслуживание';
+
+  @override
+  String get severityImportant => 'Важно';
+
+  @override
+  String get limitPeriod => 'Ограничить период';
+
+  @override
+  String get limitPeriodInfo =>
+      'Объявление автоматически удаляется по истечении срока.';
+
+  @override
+  String get validUntilDeleted => 'Действует до удаления';
+
+  @override
+  String get validFrom => 'Действует с';
+
+  @override
+  String get validTo => 'Действует до';
+
+  @override
+  String get invalidPeriod => 'Окончание должно быть позже начала.';
+
+  @override
+  String get noDevicesSelected => 'Устройства не выбраны';
 }

@@ -36,8 +36,9 @@ class MessengerService {
   /// Returns the translated string for unexpected errors with the passed
   /// [message].
   String unexpectedError(String message) {
-    return AppLocalizations.of(snackbarKey.currentContext!)!
-        .unexpectedError(message);
+    return AppLocalizations.of(
+      snackbarKey.currentContext!,
+    )!.unexpectedError(message);
   }
 
   /// Translated string for forbidden errors.
@@ -47,8 +48,9 @@ class MessengerService {
 
   /// Translated string for incorrect credentials errors.
   String get incorrectCredentials {
-    return AppLocalizations.of(snackbarKey.currentContext!)!
-        .incorrectCredentials;
+    return AppLocalizations.of(
+      snackbarKey.currentContext!,
+    )!.incorrectCredentials;
   }
 
   /// Translated string for a message if the user gets automatically logged out.
@@ -58,14 +60,16 @@ class MessengerService {
 
   /// Translated string for to large file errors for [fileName].
   String fileToLarge(String fileName) {
-    return AppLocalizations.of(snackbarKey.currentContext!)!
-        .toLargeFile(fileName);
+    return AppLocalizations.of(
+      snackbarKey.currentContext!,
+    )!.toLargeFile(fileName);
   }
 
   /// Translated string for [error] accured on [fileName].
   String uploadingFileFailed(String fileName, String error) {
-    return AppLocalizations.of(snackbarKey.currentContext!)!
-        .uploadingFileFailed(fileName, error);
+    return AppLocalizations.of(
+      snackbarKey.currentContext!,
+    )!.uploadingFileFailed(fileName, error);
   }
 
   /// Translated string for a message if the cache is cleared successfully.

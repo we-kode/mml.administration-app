@@ -20,11 +20,7 @@ class LivestreamService {
   }
 
   /// Loads a list of livestream items filtered by [filter] with given [offset].
-  Future<ModelList> get(
-    String? filter,
-    int? offset,
-    int? take,
-  ) async {
+  Future<ModelList> get(String? filter, int? offset, int? take) async {
     var params = <String, String?>{};
 
     if (filter != null) {
@@ -42,9 +38,7 @@ class LivestreamService {
     var response = await _apiService.request(
       '/media/livestream/list',
       queryParameters: params,
-      options: Options(
-        method: 'POST',
-      ),
+      options: Options(method: 'POST'),
     );
 
     return ModelList(
@@ -61,10 +55,7 @@ class LivestreamService {
     await _apiService.request(
       '/media/livestream/deleteList',
       data: ids,
-      options: Options(
-        method: 'POST',
-        contentType: 'application/json',
-      ),
+      options: Options(method: 'POST', contentType: 'application/json'),
     );
   }
 
@@ -72,9 +63,7 @@ class LivestreamService {
   Future<Livestream> getLivestream(String id) async {
     var response = await _apiService.request(
       '/media/livestream/$id',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return Livestream.fromJson(response.data);
@@ -85,9 +74,7 @@ class LivestreamService {
     await _apiService.request(
       '/media/livestream',
       data: stream.toJson(),
-      options: Options(
-        method: 'POST',
-      ),
+      options: Options(method: 'POST'),
     );
   }
 
@@ -104,10 +91,7 @@ class LivestreamService {
         "groups": groups,
         "initGroups": initGroups,
       },
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -116,10 +100,7 @@ class LivestreamService {
     var response = await _apiService.request(
       '/media/livestream/assignedGroups',
       data: items,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
 
     return ModelList(

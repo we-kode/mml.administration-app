@@ -27,18 +27,13 @@ class LiveStreamsScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             return AsyncListView(
-              deleteItems: <T>(List<T> items) => vm.delete(
-                context,
-                items,
-              ),
+              deleteItems: <T>(List<T> items) => vm.delete(context, items),
               addItem: () async {
                 return await showDialog(
                   barrierDismissible: false,
                   context: context,
                   builder: (BuildContext context) {
-                    return const LivestreamEditDialog(
-                      id: null,
-                    );
+                    return const LivestreamEditDialog(id: null);
                   },
                 );
               },

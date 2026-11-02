@@ -16,19 +16,29 @@ class UsersOverviewViewModel extends ChangeNotifier {
 
   /// Loads the user with the passing [filter] starting at [offset] and loading
   /// [take] data.
-  Future<ModelList> loadUsers({String? filter, int? offset, int? take, dynamic subfilter}) async {
+  Future<ModelList> loadUsers({
+    String? filter,
+    int? offset,
+    int? take,
+    dynamic subfilter,
+  }) async {
     return await _userService.getUsers(filter, offset, take);
   }
 
   /// Deletes the users with the passed [users] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> deleteUsers<ModelBase>(BuildContext context, List<ModelBase> users) async {
+  Future<bool> deleteUsers<ModelBase>(
+    BuildContext context,
+    List<ModelBase> users,
+  ) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete) {
       try {
         showProgressIndicator();
-        await _userService.deleteUsers(users.map<int>((ModelBase e) => (e as User).getIdentifier()).toList());
+        await _userService.deleteUsers(
+          users.map<int>((ModelBase e) => (e as User).getIdentifier()).toList(),
+        );
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();

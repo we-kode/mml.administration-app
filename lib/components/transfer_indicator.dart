@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mml_admin/components/progress_ring.dart';
 import 'package:mml_admin/models/federation/audit_status.dart';
 import 'package:mml_admin/models/federation/record_sync_state.dart';
 import 'package:mml_admin/models/record.dart';
@@ -95,19 +96,21 @@ class _TransferIndicatorState extends State<TransferIndicator> {
     return Tooltip(
       message: widget.message,
       child: Container(
-        width: 20,
-        height: 20,
+        width: value == null ? 20 : 26,
+        height: value == null ? 20 : 26,
         decoration: BoxDecoration(
           color: colors.surface,
           shape: BoxShape.circle,
         ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            CircularProgressIndicator(value: value, strokeWidth: 2),
-            Icon(widget.icon, size: 12, color: colors.primary),
-          ],
-        ),
+        child: value == null
+            ? Stack(
+                alignment: Alignment.center,
+                children: [
+                  const CircularProgressIndicator(strokeWidth: 2),
+                  Icon(widget.icon, size: 12, color: colors.primary),
+                ],
+              )
+            : ProgressRing(value: value, size: 26),
       ),
     );
   }

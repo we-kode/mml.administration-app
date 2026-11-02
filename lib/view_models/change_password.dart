@@ -62,20 +62,16 @@ class ChangePasswordViewModel extends ChangeNotifier {
       }
 
       var args =
-          ModalRoute.of(_context)!.settings.arguments as ChangePasswordArguments;
+          ModalRoute.of(_context)!.settings.arguments
+              as ChangePasswordArguments;
       user = args.user;
       isCloseable = args.isManualTriggered;
       locales = AppLocalizations.of(_context)!;
 
       // Redirect to main page, if the logged in user is confirmed.
       if (user.isConfirmed == true && !args.isManualTriggered) {
-        RouterService.getInstance()
-            .navigatorKey
-            .currentState!
-            .pushReplacementNamed(
-              MainViewModel.route,
-              arguments: user,
-            );
+        RouterService.getInstance().navigatorKey.currentState!
+            .pushReplacementNamed(MainViewModel.route, arguments: user);
         return false;
       }
 
@@ -189,9 +185,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
 
   /// Redirects to the [MainScreen].
   Future afterConfirmation() async {
-    await RouterService.getInstance()
-        .navigatorKey
-        .currentState!
+    await RouterService.getInstance().navigatorKey.currentState!
         .pushReplacementNamed(MainViewModel.route);
   }
 

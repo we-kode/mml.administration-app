@@ -102,17 +102,11 @@ class LoginViewModel extends ChangeNotifier {
 
       // Store the passed client informations if changed by the user.
       if ((appKey ?? '').isNotEmpty) {
-        await _storage.set(
-          SecureStorageService.appKeyStorageKey,
-          appKey,
-        );
+        await _storage.set(SecureStorageService.appKeyStorageKey, appKey);
       }
 
       if ((clientId ?? '').isNotEmpty) {
-        await _storage.set(
-          SecureStorageService.clientIdStorageKey,
-          clientId,
-        );
+        await _storage.set(SecureStorageService.clientIdStorageKey, clientId);
       }
 
       if ((serverName ?? '').isNotEmpty) {
@@ -141,9 +135,7 @@ class LoginViewModel extends ChangeNotifier {
 
   /// Redirects the logged in [user] to the [ChangePasswordScreen].
   Future afterLogin(User user) async {
-    await RouterService.getInstance()
-        .navigatorKey
-        .currentState!
+    await RouterService.getInstance().navigatorKey.currentState!
         .pushReplacementNamed(
           ChangePasswordViewModel.route,
           arguments: ChangePasswordArguments(user),
@@ -236,6 +228,8 @@ class LoginViewModel extends ChangeNotifier {
 
   /// Determines if the advanced settings on the login screen will be inital expanded or collapsed.
   bool get showAdvanced {
-    return (_persistedAppKey ?? '').isEmpty || (_persistedClientId ?? '').isEmpty || (_persistedServerName ?? '').isEmpty;
+    return (_persistedAppKey ?? '').isEmpty ||
+        (_persistedClientId ?? '').isEmpty ||
+        (_persistedServerName ?? '').isEmpty;
   }
 }

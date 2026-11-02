@@ -31,11 +31,9 @@ class LoginScreen extends StatelessWidget {
               // logged in on startup and hence the user id is set.
               var user = snapshot.data as User;
               if (user.id != null) {
-                Future.microtask(
-                  () async {
-                    await vm.afterLogin(user);
-                  },
-                );
+                Future.microtask(() async {
+                  await vm.afterLogin(user);
+                });
                 return Container();
               }
 

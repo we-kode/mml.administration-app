@@ -38,7 +38,6 @@ class GroupEditDialogViewModel extends ChangeNotifier {
   /// Map of errors from the server.
   Map<String, List<String>> errors = {};
 
-
   /// Initializes the ViewModel and loads the group with the given [groupId] or
   /// creates an new group model if the id is not passed.
   Future<bool> init(BuildContext context, String? groupId) async {

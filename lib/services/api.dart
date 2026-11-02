@@ -43,13 +43,15 @@ class ApiService {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) {
-    return _dio.request<T>(path,
-        data: data,
-        queryParameters: queryParameters,
-        cancelToken: cancelToken,
-        options: options,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress);
+    return _dio.request<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      cancelToken: cancelToken,
+      options: options,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
   }
 
   /// Initializes the [dio] instance with interceptors for the default handling.
@@ -67,31 +69,34 @@ class ApiService {
   /// to a request send with the passed instance.
   void _addRequestOptionsInterceptor(Dio dio) {
     dio.interceptors.add(
-      InterceptorsWrapper(onRequest: (options, handler) async {
-        var serverName = await _store.get(
-          SecureStorageService.serverNameStorageKey,
-        );
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          var serverName = await _store.get(
+            SecureStorageService.serverNameStorageKey,
+          );
 
-        options.baseUrl = 'https://$serverName/api/v1.0/';
-        options.headers['Accept-Language'] =
-            Intl.shortLocale(Platform.localeName);
+          options.baseUrl = 'https://$serverName/api/v1.0/';
+          options.headers['Accept-Language'] = Intl.shortLocale(
+            Platform.localeName,
+          );
 
-        var accessToken = await _store.get(
-          SecureStorageService.accessTokenStorageKey,
-        );
+          var accessToken = await _store.get(
+            SecureStorageService.accessTokenStorageKey,
+          );
 
-        if (accessToken != null) {
-          options.headers['Authorization'] = "Bearer $accessToken";
-        }
+          if (accessToken != null) {
+            options.headers['Authorization'] = "Bearer $accessToken";
+          }
 
-        var appKey = await _store.get(SecureStorageService.appKeyStorageKey);
+          var appKey = await _store.get(SecureStorageService.appKeyStorageKey);
 
-        if (appKey != null) {
-          options.headers['App-Key'] = appKey;
-        }
+          if (appKey != null) {
+            options.headers['App-Key'] = appKey;
+          }
 
-        return handler.next(options);
-      }),
+          return handler.next(options);
+        },
+      ),
     );
   }
 
@@ -99,73 +104,77 @@ class ApiService {
   /// during requests send with the passed instance.
   void _addDefaultErrorHandlerInterceptor(Dio dio) {
     dio.interceptors.add(
-      InterceptorsWrapper(onError: (DioException e, handler) async {
-        if (e.response != null) {
-          var statusCode = e.response!.statusCode;
-          if (statusCode == HttpStatus.unauthorized) {
-            RequestOptions requestOptions = e.requestOptions;
+      InterceptorsWrapper(
+        onError: (DioException e, handler) async {
+          if (e.response != null) {
+            var statusCode = e.response!.statusCode;
+            if (statusCode == HttpStatus.unauthorized) {
+              RequestOptions requestOptions = e.requestOptions;
 
-            if (await _store.has(SecureStorageService.refreshTokenStorageKey)) {
-              await UserService.getInstance().refreshToken();
-
-              if (!(await _store.has(
+              if (await _store.has(
                 SecureStorageService.refreshTokenStorageKey,
-              ))) {
-                // Logout was called, since token incorrect or expired!
-                return handler.reject(e);
-              }
+              )) {
+                await UserService.getInstance().refreshToken();
 
-              // Retry request with the new token.
-              var retryDio = Dio();
-              initDio(retryDio, true);
+                if (!(await _store.has(
+                  SecureStorageService.refreshTokenStorageKey,
+                ))) {
+                  // Logout was called, since token incorrect or expired!
+                  return handler.reject(e);
+                }
 
-              var options = Options(
-                method: requestOptions.method,
-                contentType: requestOptions.contentType,
-                headers: requestOptions.headers,
-              );
+                // Retry request with the new token.
+                var retryDio = Dio();
+                initDio(retryDio, true);
 
-              try {
-                var retryResponse = await retryDio.request(
-                  requestOptions.path,
-                  cancelToken: requestOptions.cancelToken,
-                  onReceiveProgress: requestOptions.onReceiveProgress,
-                  options: options,
-                  data: requestOptions.data is FormData
-                      ? _reinitFormData(requestOptions.data)
-                      : (requestOptions.data is Map
-                          ? Map<String, dynamic>.from(requestOptions.data)
-                          : requestOptions.data),
-                  queryParameters: requestOptions.queryParameters,
+                var options = Options(
+                  method: requestOptions.method,
+                  contentType: requestOptions.contentType,
+                  headers: requestOptions.headers,
                 );
 
-                return handler.resolve(retryResponse);
-              } catch (e) {
-                return handler.reject(e as DioException);
+                try {
+                  var retryResponse = await retryDio.request(
+                    requestOptions.path,
+                    cancelToken: requestOptions.cancelToken,
+                    onReceiveProgress: requestOptions.onReceiveProgress,
+                    options: options,
+                    data: requestOptions.data is FormData
+                        ? _reinitFormData(requestOptions.data)
+                        : (requestOptions.data is Map
+                              ? Map<String, dynamic>.from(requestOptions.data)
+                              : requestOptions.data),
+                    queryParameters: requestOptions.queryParameters,
+                  );
+
+                  return handler.resolve(retryResponse);
+                } catch (e) {
+                  return handler.reject(e as DioException);
+                }
               }
+
+              // Unauthorized on login page, must be handled extra!
+              _messenger.showMessage(_messenger.incorrectCredentials);
+              return handler.reject(e);
+            } else if (statusCode == HttpStatus.forbidden) {
+              _messenger.showMessage(_messenger.forbidden);
+              return handler.reject(e);
+            } else if (statusCode != null &&
+                statusCode >= HttpStatus.badRequest &&
+                statusCode < HttpStatus.internalServerError) {
+              // Client errors should be handled by the specific widget!
+              return handler.reject(e);
             }
-
-            // Unauthorized on login page, must be handled extra!
-            _messenger.showMessage(_messenger.incorrectCredentials);
-            return handler.reject(e);
-          } else if (statusCode == HttpStatus.forbidden) {
-            _messenger.showMessage(_messenger.forbidden);
-            return handler.reject(e);
-          } else if (statusCode != null &&
-              statusCode >= HttpStatus.badRequest &&
-              statusCode < HttpStatus.internalServerError) {
-            // Client errors should be handled by the specific widget!
-            return handler.reject(e);
           }
-        }
 
-        // All other errors except certificate errors!
-        if (e.type is! HandshakeException) {
-          _messenger.showMessage(_messenger.unexpectedError(e.message ?? ""));
-        }
+          // All other errors except certificate errors!
+          if (e.type is! HandshakeException) {
+            _messenger.showMessage(_messenger.unexpectedError(e.message ?? ""));
+          }
 
-        return handler.reject(e);
-      }),
+          return handler.reject(e);
+        },
+      ),
     );
   }
 

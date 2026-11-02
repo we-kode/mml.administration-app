@@ -1028,4 +1028,77 @@ class AppLocalizationsDe extends AppLocalizations {
   String syncRevokedCount(int count) {
     return 'Bei $count Instanzen aufgehoben';
   }
+
+  @override
+  String get changeCover => 'Cover ändern';
+
+  @override
+  String get removeCover => 'Cover entfernen';
+
+  @override
+  String get invalidCover =>
+      'Das Cover muss ein JPEG- oder PNG-Bild sein und darf nicht größer sein, als der Server erlaubt (standardmäßig 8 MB).';
+
+  @override
+  String get licenses => 'Lizenzen';
+
+  @override
+  String get announcements => 'Mitteilungen';
+
+  @override
+  String get createAnnouncement => 'Mitteilung erstellen';
+
+  @override
+  String get editAnnouncement => 'Mitteilung bearbeiten';
+
+  @override
+  String get announcementsNotSupported =>
+      'Der Server unterstützt keine Mitteilungen. Aktualisieren Sie den Server, um Mitteilungen zu verwenden.';
+
+  @override
+  String get announcementActive => 'aktiv';
+
+  @override
+  String get announcementTargetInfo =>
+      'Ohne ausgewählte Gruppen und Geräte wird die Mitteilung allen Geräten angezeigt.';
+
+  @override
+  String get message => 'Nachricht';
+
+  @override
+  String get invalidMessage => 'Eine Nachricht muss angegeben werden.';
+
+  @override
+  String get severity => 'Art';
+
+  @override
+  String get severityInfo => 'Information';
+
+  @override
+  String get severityMaintenance => 'Wartung';
+
+  @override
+  String get severityImportant => 'Wichtig';
+
+  @override
+  String get limitPeriod => 'Zeitraum begrenzen';
+
+  @override
+  String get limitPeriodInfo =>
+      'Die Mitteilung wird nach Ablauf automatisch gelöscht.';
+
+  @override
+  String get validUntilDeleted => 'Gültig, bis sie gelöscht wird';
+
+  @override
+  String get validFrom => 'Gültig ab';
+
+  @override
+  String get validTo => 'Gültig bis';
+
+  @override
+  String get invalidPeriod => 'Das Ende muss nach dem Beginn liegen.';
+
+  @override
+  String get noDevicesSelected => 'Keine Geräte ausgewählt';
 }

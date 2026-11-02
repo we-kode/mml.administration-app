@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
@@ -57,6 +59,20 @@ class RecordEditViewModel extends ChangeNotifier {
   /// Returns whether the server supports the synchronization.
   bool get isSyncSupported => instance != null;
 
+  /// The new cover chosen by the user or null, if the cover is not replaced.
+  Uint8List? newCover;
+
+  /// Whether the user removed the cover.
+  bool coverRemoved = false;
+
+  /// Returns whether the cover of the record can be changed.
+  bool get canChangeCover => isEditable && !record.isLegacy;
+
+  /// Returns whether the record has a cover after saving.
+  bool get hasCover =>
+      newCover != null ||
+      (!coverRemoved && (record.cover?.isNotEmpty ?? false));
+
   /// Initialize the edit record view model.
   Future<bool> init(BuildContext context, String? recordId) async {
     _context = context;
@@ -111,12 +127,18 @@ class RecordEditViewModel extends ChangeNotifier {
     var shouldClose = false;
 
     try {
-      await _service.updateRecord(record);
+      await _service.updateRecord(
+        record,
+        cover: newCover,
+        removeCover: coverRemoved,
+      );
       shouldClose = true;
     } on DioException catch (e) {
       var statusCode = e.response?.statusCode;
 
-      if (statusCode == HttpStatus.notFound) {
+      if (statusCode == HttpStatus.badRequest) {
+        MessengerService.getInstance().showMessage(locales.invalidCover);
+      } else if (statusCode == HttpStatus.notFound) {
         var messenger = MessengerService.getInstance();
         messenger.showMessage(messenger.notFound);
         shouldClose = true;
@@ -128,6 +150,31 @@ class RecordEditViewModel extends ChangeNotifier {
         nav.pop(true);
       }
     }
+  }
+
+  /// Lets the user choose a JPEG or PNG image as new cover.
+  Future<void> pickCover() async {
+    var result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+      dialogTitle: locales.changeCover,
+      withData: true,
+    );
+    var bytes = result?.files.single.bytes;
+    if (bytes == null) {
+      return;
+    }
+
+    newCover = bytes;
+    coverRemoved = false;
+    notifyListeners();
+  }
+
+  /// Removes the cover of the record when saving.
+  void removeCover() {
+    newCover = null;
+    coverRemoved = true;
+    notifyListeners();
   }
 
   /// Loads all groups from the server.

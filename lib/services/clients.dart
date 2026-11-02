@@ -48,9 +48,7 @@ class ClientService {
       '/identity/client/list',
       queryParameters: params,
       data: tagfilter != null ? tagfilter.toJson() : <String, dynamic>{},
-      options: Options(
-        method: 'POST',
-      ),
+      options: Options(method: 'POST'),
     );
 
     return ModelList(
@@ -67,10 +65,7 @@ class ClientService {
     await _apiService.request(
       '/identity/client/deleteList',
       data: clientIds,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -79,9 +74,7 @@ class ClientService {
     await _apiService.request(
       '/identity/client',
       data: client.toJson(),
-      options: Options(
-        method: 'POST',
-      ),
+      options: Options(method: 'POST'),
     );
   }
 
@@ -91,9 +84,7 @@ class ClientService {
   Future<Client> getClient(String id) async {
     var response = await _apiService.request(
       '/identity/client/$id',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return Client.fromJson(response.data);
@@ -103,9 +94,7 @@ class ClientService {
   Future<ConnectionSettings> getConnectionSettings() async {
     var response = await _apiService.request(
       '/identity/client/connection_settings',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     response.data['serverName'] = await SecureStorageService.getInstance().get(
@@ -128,10 +117,7 @@ class ClientService {
         "groups": groups,
         "initGroups": initialGroups,
       },
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -140,10 +126,7 @@ class ClientService {
     var response = await _apiService.request(
       '/identity/client/assignedGroups',
       data: clients,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
 
     return ModelList(

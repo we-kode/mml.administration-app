@@ -5,6 +5,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/async_select_list_dialog.dart';
 import 'package:mml_admin/components/date_range_dialog.dart';
 import 'package:mml_admin/components/horizontal_spacer.dart';
+import 'package:mml_admin/components/progress_ring.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/federation/audit_action.dart';
@@ -343,14 +344,12 @@ class _AuditTableState extends State<AuditTable> {
             return icon;
           }
 
-          return Row(
-            children: [
-              icon,
-              horizontalSpacer,
-              Expanded(child: LinearProgressIndicator(value: fraction)),
-              horizontalSpacer,
-              Text(locales.transferPercent((fraction * 100).floor())),
-            ],
+          return Align(
+            alignment: Alignment.centerLeft,
+            child: Tooltip(
+              message: entry.statusName(locales),
+              child: ProgressRing(value: fraction),
+            ),
           );
         },
       ),

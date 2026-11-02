@@ -5,9 +5,7 @@ import 'package:mml_admin/gen/assets.gen.dart';
 /// Animation for the file uploading.
 class UploadAnimation extends StatelessWidget {
   /// Initializes the animation.
-  const UploadAnimation({
-    super.key,
-  });
+  const UploadAnimation({super.key});
 
   @override
   Widget build(BuildContext context) {

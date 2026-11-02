@@ -31,9 +31,7 @@ class ClientEditDialog extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -94,20 +92,13 @@ class ClientEditDialog extends StatelessWidget {
             validator: vm.validateDeviceIdentifier,
           ),
           verticalSpacer,
-          Text(
-            vm.locales.groups,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(vm.locales.groups, style: Theme.of(context).textTheme.bodySmall),
           verticalSpacer,
           ChipChoices(
             loadData: vm.getGroups,
             initialSelectedItems: vm.client.groups,
-            onSelectionChanged: (selectableItems) =>
-                vm.client.groups = selectableItems
-                    .map(
-                      (e) => e as Group,
-                    )
-                    .toList(),
+            onSelectionChanged: (selectableItems) => vm.client.groups =
+                selectableItems.map((e) => e as Group).toList(),
           ),
         ],
       ),

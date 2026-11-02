@@ -27,7 +27,7 @@ class SettingsUploadValidationViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
-       if (!_context.mounted) {
+      if (!_context.mounted) {
         return false;
       }
       locales = AppLocalizations.of(_context)!;

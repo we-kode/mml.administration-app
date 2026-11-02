@@ -1022,4 +1022,77 @@ class AppLocalizationsEn extends AppLocalizations {
   String syncRevokedCount(int count) {
     return 'Revoked for $count instances';
   }
+
+  @override
+  String get changeCover => 'Change cover';
+
+  @override
+  String get removeCover => 'Remove cover';
+
+  @override
+  String get invalidCover =>
+      'The cover must be a JPEG or PNG image and must not be larger than the server allows (8 MB by default).';
+
+  @override
+  String get licenses => 'Licenses';
+
+  @override
+  String get announcements => 'Announcements';
+
+  @override
+  String get createAnnouncement => 'Create announcement';
+
+  @override
+  String get editAnnouncement => 'Edit announcement';
+
+  @override
+  String get announcementsNotSupported =>
+      'The server does not support announcements. Update the server to use announcements.';
+
+  @override
+  String get announcementActive => 'active';
+
+  @override
+  String get announcementTargetInfo =>
+      'Without selected groups and devices the announcement is shown to all devices.';
+
+  @override
+  String get message => 'Message';
+
+  @override
+  String get invalidMessage => 'A message must be specified.';
+
+  @override
+  String get severity => 'Type';
+
+  @override
+  String get severityInfo => 'Information';
+
+  @override
+  String get severityMaintenance => 'Maintenance';
+
+  @override
+  String get severityImportant => 'Important';
+
+  @override
+  String get limitPeriod => 'Limit period';
+
+  @override
+  String get limitPeriodInfo =>
+      'The announcement is deleted automatically when it expires.';
+
+  @override
+  String get validUntilDeleted => 'Valid until deleted';
+
+  @override
+  String get validFrom => 'Valid from';
+
+  @override
+  String get validTo => 'Valid to';
+
+  @override
+  String get invalidPeriod => 'The end must be after the start.';
+
+  @override
+  String get noDevicesSelected => 'No devices selected';
 }

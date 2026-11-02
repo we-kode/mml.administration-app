@@ -72,11 +72,14 @@ Widget floatingExtendedChipUpdate({
                 ),
               const SizedBox(width: 10),
               ElevatedButton.icon(
-                onPressed:
-                    status == UpdatStatus.downloading ? null : startUpdate,
-                icon: Icon(status == UpdatStatus.downloading
-                    ? Symbols.downloading
-                    : Symbols.install_desktop),
+                onPressed: status == UpdatStatus.downloading
+                    ? null
+                    : startUpdate,
+                icon: Icon(
+                  status == UpdatStatus.downloading
+                      ? Symbols.downloading
+                      : Symbols.install_desktop,
+                ),
                 label: Text(
                   status == UpdatStatus.downloading
                       ? locales.downloading

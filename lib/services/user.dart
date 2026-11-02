@@ -25,6 +25,9 @@ class UserService {
   /// Instance of the messenger service, to show messages with.
   final MessengerService _messenger = MessengerService.getInstance();
 
+  /// The running refresh of the tokens or null.
+  Future<void>? _refresh;
+
   /// Private constructor of the service.
   UserService._();
 
@@ -38,14 +41,8 @@ class UserService {
   Future<ModelList> getUsers(String? filter, int? offset, int? take) async {
     var response = await _apiService.request(
       '/identity/user/list',
-      queryParameters: {
-        'filter': filter,
-        'skip': offset,
-        'take': take,
-      },
-      options: Options(
-        method: 'GET',
-      ),
+      queryParameters: {'filter': filter, 'skip': offset, 'take': take},
+      options: Options(method: 'GET'),
     );
 
     return ModelList(
@@ -63,9 +60,7 @@ class UserService {
   Future<User> getUser(int id) async {
     var response = await _apiService.request(
       '/identity/user/$id',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return User.fromJson(response.data);
@@ -76,10 +71,7 @@ class UserService {
     await _apiService.request(
       '/identity/user/deleteList',
       data: userIds,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -118,7 +110,7 @@ class UserService {
         'client_id': clientId,
         'scope': 'offline_access',
         'username': username,
-        'password': password
+        'password': password,
       },
       options: Options(
         method: 'POST',
@@ -185,15 +177,22 @@ class UserService {
   }
 
   /// Tries to refresh the tokens with the credentials stored in the secure
-  /// storage.
-  Future refreshToken() async {
+  /// storage. Concurrent calls wait for the same refresh.
+  Future<void> refreshToken() {
+    return _refresh ??= _refreshToken().whenComplete(() => _refresh = null);
+  }
+
+  // A refresh token can only be redeemed once and the secure storage must not
+  // be written concurrently, so only one refresh runs at a time.
+  Future<void> _refreshToken() async {
     var dio = Dio();
     _apiService.initDio(dio, false);
 
     try {
       // Get new tokens.
-      var clientId =
-          await _storage.get(SecureStorageService.clientIdStorageKey);
+      var clientId = await _storage.get(
+        SecureStorageService.clientIdStorageKey,
+      );
       var refreshToken = await _storage.get(
         SecureStorageService.refreshTokenStorageKey,
       );
@@ -204,7 +203,7 @@ class UserService {
           "grant_type": "refresh_token",
           "client_id": clientId,
           "refresh_token": refreshToken,
-          "scope": "offline_access"
+          "scope": "offline_access",
         },
         options: Options(
           method: 'POST',
@@ -214,11 +213,11 @@ class UserService {
 
       // Store the tokens on successfull request.
       if (response.statusCode == HttpStatus.ok) {
-       await _storage.set(
+        await _storage.set(
           SecureStorageService.accessTokenStorageKey,
           response.data?['access_token'],
         );
-       await _storage.set(
+        await _storage.set(
           SecureStorageService.refreshTokenStorageKey,
           response.data?['refresh_token'],
         );

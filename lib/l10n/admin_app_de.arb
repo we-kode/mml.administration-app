@@ -579,5 +579,28 @@
         "type": "int"
       }
     }
-  }
+  },
+  "changeCover": "Cover ändern",
+  "removeCover": "Cover entfernen",
+  "invalidCover": "Das Cover muss ein JPEG- oder PNG-Bild sein und darf nicht größer sein, als der Server erlaubt (standardmäßig 8 MB).",
+  "licenses": "Lizenzen",
+  "announcements": "Mitteilungen",
+  "createAnnouncement": "Mitteilung erstellen",
+  "editAnnouncement": "Mitteilung bearbeiten",
+  "announcementsNotSupported": "Der Server unterstützt keine Mitteilungen. Aktualisieren Sie den Server, um Mitteilungen zu verwenden.",
+  "announcementActive": "aktiv",
+  "announcementTargetInfo": "Ohne ausgewählte Gruppen und Geräte wird die Mitteilung allen Geräten angezeigt.",
+  "message": "Nachricht",
+  "invalidMessage": "Eine Nachricht muss angegeben werden.",
+  "severity": "Art",
+  "severityInfo": "Information",
+  "severityMaintenance": "Wartung",
+  "severityImportant": "Wichtig",
+  "limitPeriod": "Zeitraum begrenzen",
+  "limitPeriodInfo": "Die Mitteilung wird nach Ablauf automatisch gelöscht.",
+  "validUntilDeleted": "Gültig, bis sie gelöscht wird",
+  "validFrom": "Gültig ab",
+  "validTo": "Gültig bis",
+  "invalidPeriod": "Das Ende muss nach dem Beginn liegen.",
+  "noDevicesSelected": "Keine Geräte ausgewählt"
 }
