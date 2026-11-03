@@ -2007,6 +2007,210 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Keine Geräte ausgewählt'**
   String get noDevicesSelected;
+
+  /// No description provided for @share.
+  ///
+  /// In de, this message translates to:
+  /// **'Teilen'**
+  String get share;
+
+  /// No description provided for @shareValidFor.
+  ///
+  /// In de, this message translates to:
+  /// **'Gültigkeit'**
+  String get shareValidFor;
+
+  /// No description provided for @shareValid1Hour.
+  ///
+  /// In de, this message translates to:
+  /// **'1 Stunde'**
+  String get shareValid1Hour;
+
+  /// No description provided for @shareValid1Day.
+  ///
+  /// In de, this message translates to:
+  /// **'1 Tag'**
+  String get shareValid1Day;
+
+  /// No description provided for @shareValid7Days.
+  ///
+  /// In de, this message translates to:
+  /// **'7 Tage'**
+  String get shareValid7Days;
+
+  /// No description provided for @shareValid30Days.
+  ///
+  /// In de, this message translates to:
+  /// **'30 Tage'**
+  String get shareValid30Days;
+
+  /// No description provided for @shareValid90Days.
+  ///
+  /// In de, this message translates to:
+  /// **'90 Tage'**
+  String get shareValid90Days;
+
+  /// No description provided for @shareSingleUse.
+  ///
+  /// In de, this message translates to:
+  /// **'Einmal-Link'**
+  String get shareSingleUse;
+
+  /// No description provided for @shareSingleUseHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Link kann nur einmal zum Herunterladen geöffnet werden.'**
+  String get shareSingleUseHint;
+
+  /// No description provided for @shareUseAsDefault.
+  ///
+  /// In de, this message translates to:
+  /// **'Als Standard verwenden und beim Teilen nicht mehr fragen'**
+  String get shareUseAsDefault;
+
+  /// No description provided for @shareLinkCreated.
+  ///
+  /// In de, this message translates to:
+  /// **'Share-Link erstellt'**
+  String get shareLinkCreated;
+
+  /// No description provided for @shareLinkHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Wer den Link öffnet, kann die Aufnahmen auch ohne die App herunterladen. Mehrere Aufnahmen werden als ZIP-Archiv bereitgestellt.'**
+  String get shareLinkHint;
+
+  /// No description provided for @linkCopied.
+  ///
+  /// In de, this message translates to:
+  /// **'Link kopiert.'**
+  String get linkCopied;
+
+  /// No description provided for @shareRulesInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Clients der gewählten Gruppen dürfen Aufnahmen teilen, die zur Regel passen. Innerhalb eines Kriteriums genügt ein Treffer, zwischen den Kriterien müssen alle zutreffen. Ohne Regel dürfen Clients nicht teilen.'**
+  String get shareRulesInfo;
+
+  /// No description provided for @addShareRule.
+  ///
+  /// In de, this message translates to:
+  /// **'Regel hinzufügen'**
+  String get addShareRule;
+
+  /// No description provided for @editShareRule.
+  ///
+  /// In de, this message translates to:
+  /// **'Regel bearbeiten'**
+  String get editShareRule;
+
+  /// No description provided for @shareRuleNoGroup.
+  ///
+  /// In de, this message translates to:
+  /// **'Jede Regel braucht mindestens eine Gruppe.'**
+  String get shareRuleNoGroup;
+
+  /// No description provided for @shareRuleEmpty.
+  ///
+  /// In de, this message translates to:
+  /// **'Jede Regel braucht mindestens ein Genre, Album oder einen Interpreten, oder sie gilt für alle Aufnahmen.'**
+  String get shareRuleEmpty;
+
+  /// No description provided for @shareAllRecords.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Aufnahmen teilen'**
+  String get shareAllRecords;
+
+  /// No description provided for @shareAllRecordsInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Clients der Gruppen dürfen alle Aufnahmen teilen, auf die sie Zugriff haben. Genre, Album und Interpret werden dann nicht berücksichtigt.'**
+  String get shareAllRecordsInfo;
+
+  /// No description provided for @shareSettings.
+  ///
+  /// In de, this message translates to:
+  /// **'Share-Links'**
+  String get shareSettings;
+
+  /// No description provided for @shareMyLinks.
+  ///
+  /// In de, this message translates to:
+  /// **'Meine aktiven Links'**
+  String get shareMyLinks;
+
+  /// No description provided for @shareNoLinks.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine aktiven Links.'**
+  String get shareNoLinks;
+
+  /// No description provided for @shareLinkRecords.
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =1{1 Aufnahme} other{{count} Aufnahmen}}'**
+  String shareLinkRecords(int count);
+
+  /// No description provided for @shareLinkCreatedAt.
+  ///
+  /// In de, this message translates to:
+  /// **'Erstellt am {date}'**
+  String shareLinkCreatedAt(String date);
+
+  /// No description provided for @shareLinkDeleteInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Link wird sofort ungültig. Wer ihn bereits erhalten hat, kann nichts mehr herunterladen.'**
+  String get shareLinkDeleteInfo;
+
+  /// No description provided for @shareAdminLinks.
+  ///
+  /// In de, this message translates to:
+  /// **'Meine Links'**
+  String get shareAdminLinks;
+
+  /// No description provided for @shareClientLinks.
+  ///
+  /// In de, this message translates to:
+  /// **'Links von Clients'**
+  String get shareClientLinks;
+
+  /// No description provided for @shareSearchLinks.
+  ///
+  /// In de, this message translates to:
+  /// **'Such-Links'**
+  String get shareSearchLinks;
+
+  /// No description provided for @shareSearchLinksInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Links zu Suchen enthalten nur ein kurzes Token. Der Server speichert die Filter der Suche, gleiche Suchen erhalten dasselbe Token. Wird ein Link so lange nicht geöffnet, wird er gelöscht und funktioniert nicht mehr.'**
+  String get shareSearchLinksInfo;
+
+  /// No description provided for @shareSearchLinkRetention.
+  ///
+  /// In de, this message translates to:
+  /// **'Aufbewahren nach dem letzten Öffnen'**
+  String get shareSearchLinkRetention;
+
+  /// No description provided for @shareUserSettingsAllowed.
+  ///
+  /// In de, this message translates to:
+  /// **'Clients wählen die Link-Einstellungen selbst'**
+  String get shareUserSettingsAllowed;
+
+  /// No description provided for @shareUserSettingsInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Aus: Für Links von Clients gelten die folgenden Einstellungen. An: Clients stellen Gültigkeit und Einmal-Link in der App selbst ein.'**
+  String get shareUserSettingsInfo;
+
+  /// No description provided for @shareTooMany.
+  ///
+  /// In de, this message translates to:
+  /// **'Ein Link kann höchstens {limit} Aufnahmen enthalten. Wählen Sie weniger Aufnahmen oder einen kleineren Ordner aus und erstellen Sie bei Bedarf mehrere Links.'**
+  String shareTooMany(int limit);
 }
 
 class _AppLocalizationsDelegate

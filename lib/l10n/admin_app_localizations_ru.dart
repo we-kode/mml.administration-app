@@ -1093,4 +1093,130 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get noDevicesSelected => 'Устройства не выбраны';
+
+  @override
+  String get share => 'Поделиться';
+
+  @override
+  String get shareValidFor => 'Срок действия';
+
+  @override
+  String get shareValid1Hour => '1 час';
+
+  @override
+  String get shareValid1Day => '1 день';
+
+  @override
+  String get shareValid7Days => '7 дней';
+
+  @override
+  String get shareValid30Days => '30 дней';
+
+  @override
+  String get shareValid90Days => '90 дней';
+
+  @override
+  String get shareSingleUse => 'Одноразовая ссылка';
+
+  @override
+  String get shareSingleUseHint =>
+      'Ссылку можно открыть для скачивания только один раз.';
+
+  @override
+  String get shareUseAsDefault =>
+      'Использовать по умолчанию и больше не спрашивать';
+
+  @override
+  String get shareLinkCreated => 'Ссылка создана';
+
+  @override
+  String get shareLinkHint =>
+      'Любой, кто откроет ссылку, сможет скачать записи без приложения. Несколько записей предоставляются в виде ZIP-архива.';
+
+  @override
+  String get linkCopied => 'Ссылка скопирована.';
+
+  @override
+  String get shareRulesInfo =>
+      'Клиенты выбранных групп могут делиться записями, подходящими под правило. Внутри критерия достаточно одного совпадения, критерии должны совпасть все. Без правила клиенты делиться не могут.';
+
+  @override
+  String get addShareRule => 'Добавить правило';
+
+  @override
+  String get editShareRule => 'Изменить правило';
+
+  @override
+  String get shareRuleNoGroup => 'Каждому правилу нужна хотя бы одна группа.';
+
+  @override
+  String get shareRuleEmpty =>
+      'Каждому правилу нужен хотя бы один жанр, альбом или исполнитель, либо оно действует для всех записей.';
+
+  @override
+  String get shareAllRecords => 'Делиться всеми записями';
+
+  @override
+  String get shareAllRecordsInfo =>
+      'Клиенты групп могут делиться всеми записями, к которым у них есть доступ. Жанр, альбом и исполнитель тогда не учитываются.';
+
+  @override
+  String get shareSettings => 'Ссылки для обмена';
+
+  @override
+  String get shareMyLinks => 'Мои активные ссылки';
+
+  @override
+  String get shareNoLinks => 'Нет активных ссылок.';
+
+  @override
+  String shareLinkRecords(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count записи',
+      many: '$count записей',
+      few: '$count записи',
+      one: '1 запись',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shareLinkCreatedAt(String date) {
+    return 'Создана $date';
+  }
+
+  @override
+  String get shareLinkDeleteInfo =>
+      'Ссылка сразу станет недействительной. Тот, кто уже получил её, больше ничего не сможет скачать.';
+
+  @override
+  String get shareAdminLinks => 'Мои ссылки';
+
+  @override
+  String get shareClientLinks => 'Ссылки клиентов';
+
+  @override
+  String get shareSearchLinks => 'Ссылки на поиск';
+
+  @override
+  String get shareSearchLinksInfo =>
+      'Ссылки на поиск содержат только короткий токен. Сервер хранит фильтры поиска, одинаковые поиски получают один и тот же токен. Если ссылку не открывали в течение этого времени, она удаляется и перестаёт работать.';
+
+  @override
+  String get shareSearchLinkRetention => 'Хранить после последнего открытия';
+
+  @override
+  String get shareUserSettingsAllowed =>
+      'Клиенты сами выбирают настройки ссылок';
+
+  @override
+  String get shareUserSettingsInfo =>
+      'Выкл.: для ссылок клиентов действуют следующие настройки. Вкл.: клиенты сами выбирают срок и одноразовость в приложении.';
+
+  @override
+  String shareTooMany(int limit) {
+    return 'Ссылка может содержать не более $limit записей. Выберите меньше записей или меньшую папку и при необходимости создайте несколько ссылок.';
+  }
 }

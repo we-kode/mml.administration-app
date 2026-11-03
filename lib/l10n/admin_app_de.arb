@@ -602,5 +602,59 @@
   "validFrom": "Gültig ab",
   "validTo": "Gültig bis",
   "invalidPeriod": "Das Ende muss nach dem Beginn liegen.",
-  "noDevicesSelected": "Keine Geräte ausgewählt"
+  "noDevicesSelected": "Keine Geräte ausgewählt",
+  "share": "Teilen",
+  "shareValidFor": "Gültigkeit",
+  "shareValid1Hour": "1 Stunde",
+  "shareValid1Day": "1 Tag",
+  "shareValid7Days": "7 Tage",
+  "shareValid30Days": "30 Tage",
+  "shareValid90Days": "90 Tage",
+  "shareSingleUse": "Einmal-Link",
+  "shareSingleUseHint": "Der Link kann nur einmal zum Herunterladen geöffnet werden.",
+  "shareUseAsDefault": "Als Standard verwenden und beim Teilen nicht mehr fragen",
+  "shareLinkCreated": "Share-Link erstellt",
+  "shareLinkHint": "Wer den Link öffnet, kann die Aufnahmen auch ohne die App herunterladen. Mehrere Aufnahmen werden als ZIP-Archiv bereitgestellt.",
+  "linkCopied": "Link kopiert.",
+  "shareRulesInfo": "Clients der gewählten Gruppen dürfen Aufnahmen teilen, die zur Regel passen. Innerhalb eines Kriteriums genügt ein Treffer, zwischen den Kriterien müssen alle zutreffen. Ohne Regel dürfen Clients nicht teilen.",
+  "addShareRule": "Regel hinzufügen",
+  "editShareRule": "Regel bearbeiten",
+  "shareRuleNoGroup": "Jede Regel braucht mindestens eine Gruppe.",
+  "shareRuleEmpty": "Jede Regel braucht mindestens ein Genre, Album oder einen Interpreten, oder sie gilt für alle Aufnahmen.",
+  "shareAllRecords": "Alle Aufnahmen teilen",
+  "shareAllRecordsInfo": "Clients der Gruppen dürfen alle Aufnahmen teilen, auf die sie Zugriff haben. Genre, Album und Interpret werden dann nicht berücksichtigt.",
+  "shareSettings": "Share-Links",
+  "shareMyLinks": "Meine aktiven Links",
+  "shareNoLinks": "Keine aktiven Links.",
+  "shareLinkRecords": "{count, plural, =1{1 Aufnahme} other{{count} Aufnahmen}}",
+  "@shareLinkRecords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shareLinkCreatedAt": "Erstellt am {date}",
+  "@shareLinkCreatedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "shareLinkDeleteInfo": "Der Link wird sofort ungültig. Wer ihn bereits erhalten hat, kann nichts mehr herunterladen.",  "shareAdminLinks": "Meine Links",
+  "shareClientLinks": "Links von Clients",
+  "shareSearchLinks": "Such-Links",
+  "shareSearchLinksInfo": "Links zu Suchen enthalten nur ein kurzes Token. Der Server speichert die Filter der Suche, gleiche Suchen erhalten dasselbe Token. Wird ein Link so lange nicht geöffnet, wird er gelöscht und funktioniert nicht mehr.",
+  "shareSearchLinkRetention": "Aufbewahren nach dem letzten Öffnen",
+  "shareUserSettingsAllowed": "Clients wählen die Link-Einstellungen selbst",
+  "shareUserSettingsInfo": "Aus: Für Links von Clients gelten die folgenden Einstellungen. An: Clients stellen Gültigkeit und Einmal-Link in der App selbst ein.",
+  "shareTooMany": "Ein Link kann höchstens {limit} Aufnahmen enthalten. Wählen Sie weniger Aufnahmen oder einen kleineren Ordner aus und erstellen Sie bei Bedarf mehrere Links.",
+  "@shareTooMany": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  }
 }
