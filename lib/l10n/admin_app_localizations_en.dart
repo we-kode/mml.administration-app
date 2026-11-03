@@ -1095,4 +1095,128 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noDevicesSelected => 'No devices selected';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get shareValidFor => 'Validity';
+
+  @override
+  String get shareValid1Hour => '1 hour';
+
+  @override
+  String get shareValid1Day => '1 day';
+
+  @override
+  String get shareValid7Days => '7 days';
+
+  @override
+  String get shareValid30Days => '30 days';
+
+  @override
+  String get shareValid90Days => '90 days';
+
+  @override
+  String get shareSingleUse => 'Single-use link';
+
+  @override
+  String get shareSingleUseHint =>
+      'The link can be opened for download only once.';
+
+  @override
+  String get shareUseAsDefault =>
+      'Use as default and do not ask again when sharing';
+
+  @override
+  String get shareLinkCreated => 'Share link created';
+
+  @override
+  String get shareLinkHint =>
+      'Anyone who opens the link can download the records without the app. Multiple records are provided as a ZIP archive.';
+
+  @override
+  String get linkCopied => 'Link copied.';
+
+  @override
+  String get shareRulesInfo =>
+      'Clients of the selected groups may share records that match the rule. Within a criterion one match is enough, all criteria must match. Without a rule clients must not share.';
+
+  @override
+  String get addShareRule => 'Add rule';
+
+  @override
+  String get editShareRule => 'Edit rule';
+
+  @override
+  String get shareRuleNoGroup => 'Every rule needs at least one group.';
+
+  @override
+  String get shareRuleEmpty =>
+      'Every rule needs at least one genre, album or artist, or it applies to all records.';
+
+  @override
+  String get shareAllRecords => 'Share all records';
+
+  @override
+  String get shareAllRecordsInfo =>
+      'Clients of the groups may share all records they can access. Genre, album and artist are not considered then.';
+
+  @override
+  String get shareSettings => 'Share links';
+
+  @override
+  String get shareMyLinks => 'My active links';
+
+  @override
+  String get shareNoLinks => 'No active links.';
+
+  @override
+  String shareLinkRecords(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count recordings',
+      one: '1 recording',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shareLinkCreatedAt(String date) {
+    return 'Created on $date';
+  }
+
+  @override
+  String get shareLinkDeleteInfo =>
+      'The link becomes invalid immediately. Whoever already received it can no longer download anything.';
+
+  @override
+  String get shareAdminLinks => 'My links';
+
+  @override
+  String get shareClientLinks => 'Links of clients';
+
+  @override
+  String get shareSearchLinks => 'Search links';
+
+  @override
+  String get shareSearchLinksInfo =>
+      'Links to searches contain only a short token. The server stores the filters of the search, equal searches get the same token. If a link is not opened for this time, it is deleted and stops working.';
+
+  @override
+  String get shareSearchLinkRetention => 'Keep after last opened';
+
+  @override
+  String get shareUserSettingsAllowed =>
+      'Clients choose the link settings themselves';
+
+  @override
+  String get shareUserSettingsInfo =>
+      'Off: the following settings apply to links of clients. On: clients choose validity and single-use link in the app themselves.';
+
+  @override
+  String shareTooMany(int limit) {
+    return 'A link can contain $limit records at most. Select fewer records or a smaller folder and create several links if needed.';
+  }
 }

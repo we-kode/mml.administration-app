@@ -32,6 +32,16 @@ class SecureStorageService {
   /// Key under which the cache remove time is stored.
   static const String cacheDurationStorageKey = 'cacheDuration';
 
+  /// Key under which the default validity in hours of share links is stored.
+  static const String shareValidForHoursStorageKey = 'shareValidForHours';
+
+  /// Key under which the default single use flag of share links is stored.
+  static const String shareSingleUseStorageKey = 'shareSingleUse';
+
+  /// Key under which the flag is stored, that share links are created with
+  /// the defaults without asking.
+  static const String shareUseDefaultsStorageKey = 'shareUseDefaults';
+
   /// Private constructor of the service.
   SecureStorageService._();
 

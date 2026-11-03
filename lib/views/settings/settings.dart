@@ -5,6 +5,8 @@ import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
 import 'package:mml_admin/views/settings/licenses.dart';
 import 'package:mml_admin/views/settings/settings_compression.dart';
+import 'package:mml_admin/views/settings/share_links.dart';
+import 'package:mml_admin/views/settings/settings_share.dart';
 import 'package:mml_admin/views/settings/settings_connection.dart';
 import 'package:mml_admin/views/settings/settings_genre_bitrate.dart';
 import 'package:mml_admin/views/settings/settings_upload_validation.dart';
@@ -108,6 +110,38 @@ class SettingsScreen extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return const SettingsUploadValidationScreen();
+                      },
+                    ),
+                  ),
+                  const Divider(),
+                  verticalSpacer,
+                  ListTile(
+                    dense: true,
+                    visualDensity: const VisualDensity(vertical: -4),
+                    title: Text(
+                      vm.locales.share,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Symbols.share),
+                    title: Text(vm.locales.shareSettings),
+                    onTap: () => showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const SettingsShareScreen();
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Symbols.link),
+                    title: Text(vm.locales.shareMyLinks),
+                    onTap: () => showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const ShareLinksScreen();
                       },
                     ),
                   ),

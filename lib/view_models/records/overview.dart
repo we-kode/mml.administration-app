@@ -16,6 +16,7 @@ import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
 import 'package:mml_admin/services/sync.dart';
+import 'package:mml_admin/view_models/records/share.dart';
 import 'package:mml_admin/view_models/sync/overview.dart';
 
 /// View model for the records overview screen.
@@ -188,6 +189,17 @@ class RecordsViewModel extends ChangeNotifier {
   /// active.
   Future<bool> synchronize(List items, BuildContext context) async {
     await synchronizeRecords(
+      context,
+      recordIds: items.whereType<Record>().map((e) => e.recordId!).toList(),
+      folders: items.whereType<RecordFolder>().toList(),
+    );
+    return false;
+  }
+
+  /// Creates a share link for the selected [items] and shows it. Returns false,
+  /// so the selection stays active.
+  Future<bool> share(List items, BuildContext context) async {
+    await shareRecords(
       context,
       recordIds: items.whereType<Record>().map((e) => e.recordId!).toList(),
       folders: items.whereType<RecordFolder>().toList(),

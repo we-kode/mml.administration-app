@@ -116,6 +116,15 @@ class AsyncListView extends StatefulWidget {
   /// returned.
   final ActionPerformedFunction? revokeSyncItems;
 
+  /// Function that creates a share link for the items with the passed
+  /// [itemIdentifiers].
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful operation or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
+  final ActionPerformedFunction? shareItems;
+
   /// Indicates, whether the add button should be shown or not.
   final bool showAddButton;
 
@@ -167,6 +176,7 @@ class AsyncListView extends StatefulWidget {
     this.lockItems,
     this.syncItems,
     this.revokeSyncItems,
+    this.shareItems,
     this.addItem,
     this.showAddButton = true,
     this.subactions,
@@ -493,6 +503,12 @@ class _AsyncListViewState extends State<AsyncListView> {
                       icon: const Icon(Symbols.check_box),
                       tooltip: AppLocalizations.of(context)!.selectLoaded,
                     ),
+                    if (widget.shareItems != null)
+                      _createSelectionAction(
+                        widget.shareItems!,
+                        Symbols.share,
+                        AppLocalizations.of(context)!.share,
+                      ),
                     if (widget.syncItems != null)
                       _createSelectionAction(
                         widget.syncItems!,

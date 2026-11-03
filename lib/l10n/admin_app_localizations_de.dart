@@ -1101,4 +1101,128 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get noDevicesSelected => 'Keine Geräte ausgewählt';
+
+  @override
+  String get share => 'Teilen';
+
+  @override
+  String get shareValidFor => 'Gültigkeit';
+
+  @override
+  String get shareValid1Hour => '1 Stunde';
+
+  @override
+  String get shareValid1Day => '1 Tag';
+
+  @override
+  String get shareValid7Days => '7 Tage';
+
+  @override
+  String get shareValid30Days => '30 Tage';
+
+  @override
+  String get shareValid90Days => '90 Tage';
+
+  @override
+  String get shareSingleUse => 'Einmal-Link';
+
+  @override
+  String get shareSingleUseHint =>
+      'Der Link kann nur einmal zum Herunterladen geöffnet werden.';
+
+  @override
+  String get shareUseAsDefault =>
+      'Als Standard verwenden und beim Teilen nicht mehr fragen';
+
+  @override
+  String get shareLinkCreated => 'Share-Link erstellt';
+
+  @override
+  String get shareLinkHint =>
+      'Wer den Link öffnet, kann die Aufnahmen auch ohne die App herunterladen. Mehrere Aufnahmen werden als ZIP-Archiv bereitgestellt.';
+
+  @override
+  String get linkCopied => 'Link kopiert.';
+
+  @override
+  String get shareRulesInfo =>
+      'Clients der gewählten Gruppen dürfen Aufnahmen teilen, die zur Regel passen. Innerhalb eines Kriteriums genügt ein Treffer, zwischen den Kriterien müssen alle zutreffen. Ohne Regel dürfen Clients nicht teilen.';
+
+  @override
+  String get addShareRule => 'Regel hinzufügen';
+
+  @override
+  String get editShareRule => 'Regel bearbeiten';
+
+  @override
+  String get shareRuleNoGroup => 'Jede Regel braucht mindestens eine Gruppe.';
+
+  @override
+  String get shareRuleEmpty =>
+      'Jede Regel braucht mindestens ein Genre, Album oder einen Interpreten, oder sie gilt für alle Aufnahmen.';
+
+  @override
+  String get shareAllRecords => 'Alle Aufnahmen teilen';
+
+  @override
+  String get shareAllRecordsInfo =>
+      'Clients der Gruppen dürfen alle Aufnahmen teilen, auf die sie Zugriff haben. Genre, Album und Interpret werden dann nicht berücksichtigt.';
+
+  @override
+  String get shareSettings => 'Share-Links';
+
+  @override
+  String get shareMyLinks => 'Meine aktiven Links';
+
+  @override
+  String get shareNoLinks => 'Keine aktiven Links.';
+
+  @override
+  String shareLinkRecords(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Aufnahmen',
+      one: '1 Aufnahme',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shareLinkCreatedAt(String date) {
+    return 'Erstellt am $date';
+  }
+
+  @override
+  String get shareLinkDeleteInfo =>
+      'Der Link wird sofort ungültig. Wer ihn bereits erhalten hat, kann nichts mehr herunterladen.';
+
+  @override
+  String get shareAdminLinks => 'Meine Links';
+
+  @override
+  String get shareClientLinks => 'Links von Clients';
+
+  @override
+  String get shareSearchLinks => 'Such-Links';
+
+  @override
+  String get shareSearchLinksInfo =>
+      'Links zu Suchen enthalten nur ein kurzes Token. Der Server speichert die Filter der Suche, gleiche Suchen erhalten dasselbe Token. Wird ein Link so lange nicht geöffnet, wird er gelöscht und funktioniert nicht mehr.';
+
+  @override
+  String get shareSearchLinkRetention => 'Aufbewahren nach dem letzten Öffnen';
+
+  @override
+  String get shareUserSettingsAllowed =>
+      'Clients wählen die Link-Einstellungen selbst';
+
+  @override
+  String get shareUserSettingsInfo =>
+      'Aus: Für Links von Clients gelten die folgenden Einstellungen. An: Clients stellen Gültigkeit und Einmal-Link in der App selbst ein.';
+
+  @override
+  String shareTooMany(int limit) {
+    return 'Ein Link kann höchstens $limit Aufnahmen enthalten. Wählen Sie weniger Aufnahmen oder einen kleineren Ordner aus und erstellen Sie bei Bedarf mehrere Links.';
+  }
 }

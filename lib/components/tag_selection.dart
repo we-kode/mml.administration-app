@@ -10,7 +10,7 @@ class TagSelection<T extends ModelBase> extends StatefulWidget {
   /// Label of the selection.
   final String label;
 
-  /// Hint shown below the selection.
+  /// Hint shown below the selection as long as nothing is selected.
   final String? helperText;
 
   /// The selected items, which are changed by the selection.
@@ -106,7 +106,7 @@ class _TagSelectionState<T extends ModelBase> extends State<TagSelection<T>> {
                 )
                 .toList(),
           ),
-        if (widget.helperText != null)
+        if (widget.helperText != null && widget.values.isEmpty)
           Text(widget.helperText!, style: theme.textTheme.bodySmall),
       ],
     );
