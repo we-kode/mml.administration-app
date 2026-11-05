@@ -216,6 +216,9 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Filter to send to the sever.
   String? _filter;
 
+  /// Controller of the input of the [_filter].
+  final TextEditingController _filterController = TextEditingController();
+
   /// Offset to start loading data from.
   int _offset = 0;
 
@@ -225,9 +228,6 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Indicates, whether data is loading and an loading indicator should be
   /// shown.
   bool _isLoadingData = true;
-
-  /// The actual item group if list items should be grouped.
-  String? _actualGroup;
 
   /// Indicates whether fast actions are enabled in list items or not.
   bool fastActionsEnabled = false;
@@ -251,6 +251,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     super.dispose();
     widget.subfilter?.filter.removeListener(() {});
     widget.navState?.removeListener(_handleNavState);
+    _filterController.dispose();
   }
 
   @override
@@ -424,6 +425,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                             MediaQuery.of(context).size.width *
                             (widget.navState != null ? 0.838 : 0.863),
                         child: TextField(
+                          controller: _filterController,
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.filter,
                             icon: const Icon(Symbols.filter_list_alt),
@@ -758,20 +760,12 @@ class _AsyncListViewState extends State<AsyncListView> {
 
     // Grouping if first element or
     // group is a new one and the predecessor has another group
-    if (index == 0 ||
-        (itemGroup != _actualGroup &&
-            _items![index - 1]?.getGroup(context) != itemGroup) ||
-        _items![index - 1]?.getGroup(context) != itemGroup) {
-      _actualGroup = itemGroup;
+    if (index == 0 || _items![index - 1]?.getGroup(context) != itemGroup) {
       return Column(
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-            child: Chip(
-              side: BorderSide.none,
-              backgroundColor: Theme.of(context).colorScheme.outlineVariant,
-              label: Text(item.getGroup(context)!),
-            ),
+            child: _groupChip(item, itemGroup),
           ),
           _listTile(leadingTile, item, index),
         ],
@@ -779,6 +773,33 @@ class _AsyncListViewState extends State<AsyncListView> {
     }
 
     return _listTile(leadingTile, item, index);
+  }
+
+  Widget _groupChip(ModelBase item, String group) {
+    final color = Theme.of(context).colorScheme.outlineVariant;
+    final filter = widget.subfilter == null || _isInMultiSelectMode
+        ? null
+        : item.getGroupFilter();
+
+    return filter == null
+        ? Chip(
+            side: BorderSide.none,
+            backgroundColor: color,
+            label: Text(group),
+          )
+        : ActionChip(
+            mouseCursor: SystemMouseCursors.click,
+            side: BorderSide.none,
+            backgroundColor: color,
+            label: Text(group),
+            onPressed: () => _selectGroup(filter),
+          );
+  }
+
+  void _selectGroup(Subfilter filter) {
+    _filterController.clear();
+    _filter = null;
+    widget.subfilter!.filter.replaceWith(filter);
   }
 
   /// Creates a tile widget for one list [item] at the given [index].

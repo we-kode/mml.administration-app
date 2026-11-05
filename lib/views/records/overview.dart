@@ -180,7 +180,9 @@ class RecordsScreen extends StatelessWidget {
                 );
                 return true;
               },
-              shareItems: <T>(List<T> items) => vm.share(items, context),
+              shareItems: vm.isShareSupported
+                  ? <T>(List<T> items) => vm.share(items, context)
+                  : null,
               syncItems: vm.isSyncSupported
                   ? <T>(List<T> items) => vm.synchronize(items, context)
                   : null,

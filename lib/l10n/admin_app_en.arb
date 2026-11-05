@@ -336,6 +336,7 @@
   "editShareRule": "Edit rule",
   "shareRuleNoGroup": "Every rule needs at least one group.",
   "shareRuleEmpty": "Every rule needs at least one genre, album or artist, or it applies to all records.",
+  "shareNotSupported": "The server does not support sharing. Update the server to share records.",
   "shareAllRecords": "Share all records",
   "shareAllRecordsInfo": "Clients of the groups may share all records they can access. Genre, album and artist are not considered then.",
   "shareSettings": "Share links",

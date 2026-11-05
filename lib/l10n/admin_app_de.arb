@@ -621,6 +621,7 @@
   "editShareRule": "Regel bearbeiten",
   "shareRuleNoGroup": "Jede Regel braucht mindestens eine Gruppe.",
   "shareRuleEmpty": "Jede Regel braucht mindestens ein Genre, Album oder einen Interpreten, oder sie gilt für alle Aufnahmen.",
+  "shareNotSupported": "Der Server unterstützt kein Teilen. Aktualisieren Sie den Server, um Aufnahmen zu teilen.",
   "shareAllRecords": "Alle Aufnahmen teilen",
   "shareAllRecordsInfo": "Clients der Gruppen dürfen alle Aufnahmen teilen, auf die sie Zugriff haben. Genre, Album und Interpret werden dann nicht berücksichtigt.",
   "shareSettings": "Share-Links",

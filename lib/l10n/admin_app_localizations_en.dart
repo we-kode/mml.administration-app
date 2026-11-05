@@ -1156,6 +1156,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Every rule needs at least one genre, album or artist, or it applies to all records.';
 
   @override
+  String get shareNotSupported =>
+      'The server does not support sharing. Update the server to share records.';
+
+  @override
   String get shareAllRecords => 'Share all records';
 
   @override

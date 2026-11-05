@@ -15,6 +15,7 @@ import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
+import 'package:mml_admin/services/share.dart';
 import 'package:mml_admin/services/sync.dart';
 import 'package:mml_admin/view_models/records/share.dart';
 import 'package:mml_admin/view_models/sync/overview.dart';
@@ -43,6 +44,9 @@ class RecordsViewModel extends ChangeNotifier {
   /// Whether the server supports the synchronization.
   bool isSyncSupported = true;
 
+  /// Whether the server supports share links.
+  bool isShareSupported = true;
+
   /// Initializes the view model.
   Future<bool> init(BuildContext context) {
     return Future.microtask(() async {
@@ -53,6 +57,7 @@ class RecordsViewModel extends ChangeNotifier {
           'true';
       groups = await _groupService.getMediaGroups(null, 0, -1);
       isSyncSupported = await SyncService.getInstance().get() != null;
+      isShareSupported = await ShareService.getInstance().isSupported();
       return true;
     });
   }
