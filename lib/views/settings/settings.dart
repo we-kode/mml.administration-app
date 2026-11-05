@@ -114,38 +114,40 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   const Divider(),
-                  verticalSpacer,
-                  ListTile(
-                    dense: true,
-                    visualDensity: const VisualDensity(vertical: -4),
-                    title: Text(
-                      vm.locales.share,
-                      style: Theme.of(context).textTheme.titleSmall,
+                  if (vm.isShareSupported) ...[
+                    verticalSpacer,
+                    ListTile(
+                      dense: true,
+                      visualDensity: const VisualDensity(vertical: -4),
+                      title: Text(
+                        vm.locales.share,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Symbols.share),
-                    title: Text(vm.locales.shareSettings),
-                    onTap: () => showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const SettingsShareScreen();
-                      },
+                    ListTile(
+                      leading: const Icon(Symbols.share),
+                      title: Text(vm.locales.shareSettings),
+                      onTap: () => showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const SettingsShareScreen();
+                        },
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Symbols.link),
-                    title: Text(vm.locales.shareMyLinks),
-                    onTap: () => showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const ShareLinksScreen();
-                      },
+                    ListTile(
+                      leading: const Icon(Symbols.link),
+                      title: Text(vm.locales.shareMyLinks),
+                      onTap: () => showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const ShareLinksScreen();
+                        },
+                      ),
                     ),
-                  ),
-                  const Divider(),
+                    const Divider(),
+                  ],
                   if (vm.instance != null) ...[
                     verticalSpacer,
                     ListTile(

@@ -21,7 +21,15 @@ class RecordTagFilterViewModel extends ChangeNotifier {
   final SecureStorageService _storage = SecureStorageService.getInstance();
 
   /// Initializes the view model.
-  RecordTagFilterViewModel(this.tagFilter);
+  RecordTagFilterViewModel(this.tagFilter) {
+    tagFilter.addListener(notifyListeners);
+  }
+
+  @override
+  void dispose() {
+    tagFilter.removeListener(notifyListeners);
+    super.dispose();
+  }
 
   /// Clears the filter value of the [identifier].
   void clear(String identifier) async {

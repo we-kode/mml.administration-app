@@ -1162,6 +1162,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Jede Regel braucht mindestens ein Genre, Album oder einen Interpreten, oder sie gilt für alle Aufnahmen.';
 
   @override
+  String get shareNotSupported =>
+      'Der Server unterstützt kein Teilen. Aktualisieren Sie den Server, um Aufnahmen zu teilen.';
+
+  @override
   String get shareAllRecords => 'Alle Aufnahmen teilen';
 
   @override

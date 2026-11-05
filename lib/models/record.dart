@@ -14,7 +14,9 @@ import 'package:mml_admin/manager/image_cache_manager.dart';
 import 'package:mml_admin/models/federation/record_sync_state.dart';
 import 'package:mml_admin/models/federation/sync_direction.dart';
 import 'package:mml_admin/models/group.dart';
+import 'package:mml_admin/models/id3_tag_filter.dart';
 import 'package:mml_admin/models/model_base.dart';
+import 'package:mml_admin/models/subfilter.dart';
 
 part 'record.g.dart';
 
@@ -44,6 +46,10 @@ class Record extends ModelBase {
 
   /// Album of the record or null if no one provided.
   String? album;
+
+  /// Id of the album or null if no one provided or the server does not send it.
+  @JsonKey(includeToJson: false)
+  String? albumId;
 
   /// Language of the record or null if no one provided.
   String? language;
@@ -81,6 +87,7 @@ class Record extends ModelBase {
     this.date,
     this.duration = 0,
     this.album,
+    this.albumId,
     this.artist,
     this.genre,
     this.language,
@@ -157,7 +164,23 @@ class Record extends ModelBase {
 
   @override
   String? getGroup(BuildContext context) {
-    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}${album?.isNotEmpty ?? false ? ':' : ''} $album';
+    final suffix = album?.isNotEmpty ?? false ? ': $album' : '';
+    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}$suffix';
+  }
+
+  @override
+  Subfilter? getGroupFilter() {
+    final hasAlbum = album?.isNotEmpty ?? false;
+    if (date == null || (hasAlbum && albumId == null)) {
+      return null;
+    }
+
+    final day = DateTime.utc(date!.year, date!.month, date!.day);
+    return ID3TagFilter(
+      albums: hasAlbum ? [albumId!] : null,
+      startDate: day,
+      endDate: day,
+    );
   }
 
   @override

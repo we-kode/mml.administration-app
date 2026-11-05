@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/models/record_folder.dart';
 import 'package:mml_admin/models/share_link.dart';
@@ -15,17 +18,36 @@ class ShareService {
   static final ShareService _instance = ShareService._();
 
   /// Instance of the [ApiService] to access the server with.
-  final ApiService _apiService = ApiService.getInstance();
+  final ApiService _apiService;
 
   /// Instance of the [SecureStorageService] the local defaults are stored in.
   final SecureStorageService _storage = SecureStorageService.getInstance();
 
   /// Private constructor of the service.
-  ShareService._();
+  ShareService._([ApiService? apiService])
+    : _apiService = apiService ?? ApiService.getInstance();
+
+  /// Creates a service, that accesses the server with the [apiService].
+  @visibleForTesting
+  factory ShareService.withApi(ApiService apiService) {
+    return ShareService._(apiService);
+  }
 
   /// Returns the singleton instance of the [ShareService].
   static ShareService getInstance() {
     return _instance;
+  }
+
+  /// Checks whether the server supports share links. Servers without share
+  /// links answer with not found.
+  Future<bool> isSupported() async {
+    try {
+      await getSettings();
+    } on DioException catch (e) {
+      return e.response?.statusCode != HttpStatus.notFound;
+    }
+
+    return true;
   }
 
   /// Loads the options used as defaults for new share links.

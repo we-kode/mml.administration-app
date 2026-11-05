@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mml_admin/models/subfilter.dart';
 
 /// Base model with abstract methods that should be implemented by all models.
 abstract class ModelBase {
@@ -42,6 +43,12 @@ abstract class ModelBase {
 
   /// Returns meta data information, e.g. genre or language.
   String? getSubMetadata(BuildContext context) {
+    return null;
+  }
+
+  /// Returns the filter matching the elements of [getGroup] or null if the
+  /// group can not be filtered.
+  Subfilter? getGroupFilter() {
     return null;
   }
 

@@ -2116,6 +2116,12 @@ abstract class AppLocalizations {
   /// **'Jede Regel braucht mindestens ein Genre, Album oder einen Interpreten, oder sie gilt für alle Aufnahmen.'**
   String get shareRuleEmpty;
 
+  /// No description provided for @shareNotSupported.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Server unterstützt kein Teilen. Aktualisieren Sie den Server, um Aufnahmen zu teilen.'**
+  String get shareNotSupported;
+
   /// No description provided for @shareAllRecords.
   ///
   /// In de, this message translates to:

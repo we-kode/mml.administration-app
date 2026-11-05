@@ -7,6 +7,7 @@ import 'package:mml_admin/services/federation.dart';
 import 'package:mml_admin/services/sync.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
+import 'package:mml_admin/services/share.dart';
 import 'package:mml_admin/services/user.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/view_models/change_password.dart';
@@ -29,6 +30,9 @@ class SettingsViewModel extends ChangeNotifier {
   late User? user;
 
   String? instance = '';
+
+  /// Whether the server supports share links.
+  bool isShareSupported = true;
 
   /// Days the audit log of the synchronization is kept, 0 keeps it until it
   /// is deleted manually.
@@ -53,6 +57,7 @@ class SettingsViewModel extends ChangeNotifier {
       locales = AppLocalizations.of(_context)!;
       try {
         user = await _userService.getUserInfo();
+        isShareSupported = await ShareService.getInstance().isSupported();
         instance = await SyncService.getInstance().get();
         auditRetentionDays = await FederationService.getInstance()
             .getAuditRetention();

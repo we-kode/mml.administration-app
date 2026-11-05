@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mml_admin/components/async_list_view.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/models/share_rule.dart';
 import 'package:mml_admin/models/subfilter.dart';
@@ -25,6 +26,12 @@ class ShareRulesScreen extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
+            }
+
+            if (!vm.isSupported) {
+              return Center(
+                child: Text(AppLocalizations.of(context)!.shareNotSupported),
+              );
             }
 
             return AsyncListView(

@@ -1154,6 +1154,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Каждому правилу нужен хотя бы один жанр, альбом или исполнитель, либо оно действует для всех записей.';
 
   @override
+  String get shareNotSupported =>
+      'Сервер не поддерживает обмен. Обновите сервер, чтобы делиться записями.';
+
+  @override
   String get shareAllRecords => 'Делиться всеми записями';
 
   @override

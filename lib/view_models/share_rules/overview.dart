@@ -19,6 +19,9 @@ class ShareRulesViewModel extends ChangeNotifier {
   /// [ShareService] used to load and save the rules.
   final ShareService _service = ShareService.getInstance();
 
+  /// Whether the server supports share rules.
+  bool isSupported = true;
+
   /// Available groups, which can be assigned in the list.
   ModelList groups = ModelList([], 0, 0);
 
@@ -26,6 +29,11 @@ class ShareRulesViewModel extends ChangeNotifier {
   late final Future<bool> loaded = _load();
 
   Future<bool> _load() async {
+    isSupported = await _service.isSupported();
+    if (!isSupported) {
+      return true;
+    }
+
     try {
       groups = await GroupService.getInstance().getMediaGroups(null, 0, -1);
     } catch (_) {
