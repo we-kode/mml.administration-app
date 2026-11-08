@@ -114,7 +114,7 @@ class ShareService {
     );
 
     return ShareResponse(
-      url: 'https://$serverName/s/download/${response.data['token']}',
+      url: 'https://$serverName/media/s/download/${response.data['token']}',
       shared: response.data['shared'],
       skipped: response.data['skipped'],
     );
