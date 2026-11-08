@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/client_tag_filter.dart';
 import 'package:mml_admin/models/connection_settings.dart';
@@ -13,10 +14,17 @@ class ClientService {
   static final ClientService _instance = ClientService._();
 
   /// Instance of the [ApiService] to access the server with.
-  final ApiService _apiService = ApiService.getInstance();
+  final ApiService _apiService;
 
   /// Private constructor of the service.
-  ClientService._();
+  ClientService._([ApiService? apiService])
+    : _apiService = apiService ?? ApiService.getInstance();
+
+  /// Creates a service, that accesses the server with the [apiService].
+  @visibleForTesting
+  factory ClientService.withApi(ApiService apiService) {
+    return ClientService._(apiService);
+  }
 
   /// Returns the singleton instance of the [ClientService].
   static ClientService getInstance() {
@@ -91,15 +99,17 @@ class ClientService {
   }
 
   /// Loads the connection settings for a client app.
+  ///
+  /// Uses the server name announced by the server or the server of the admin
+  /// app, if none is announced.
   Future<ConnectionSettings> getConnectionSettings() async {
     var response = await _apiService.request(
       '/identity/client/connection_settings',
       options: Options(method: 'GET'),
     );
 
-    response.data['serverName'] = await SecureStorageService.getInstance().get(
-      SecureStorageService.serverNameStorageKey,
-    );
+    response.data['serverName'] ??= await SecureStorageService.getInstance()
+        .get(SecureStorageService.serverNameStorageKey);
 
     return ConnectionSettings.fromJson(response.data);
   }

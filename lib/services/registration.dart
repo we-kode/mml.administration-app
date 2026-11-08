@@ -49,8 +49,9 @@ class RegistrationService {
     _connection = builder.build();
     _connection.on('REGISTER_TOKEN_UPDATED', (args) {
       if (args.isNotEmpty) {
-        var tokenInfo = ClientRegistration.fromJson(args.first);
-        tokenInfo.endpoint = serverName;
+        var info = args.first as Map<String, dynamic>;
+        var tokenInfo = ClientRegistration.fromJson(info);
+        tokenInfo.endpoint = info['serverName'] ?? serverName;
         onUpdate(tokenInfo);
       }
     });
