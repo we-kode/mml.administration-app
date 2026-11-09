@@ -154,18 +154,16 @@ class RecordEditViewModel extends ChangeNotifier {
 
   /// Lets the user choose a JPEG or PNG image as new cover.
   Future<void> pickCover() async {
-    var result = await FilePicker.platform.pickFiles(
+    var file = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png'],
       dialogTitle: locales.changeCover,
-      withData: true,
     );
-    var bytes = result?.files.single.bytes;
-    if (bytes == null) {
+    if (file == null) {
       return;
     }
 
-    newCover = bytes;
+    newCover = await file.readAsBytes();
     coverRemoved = false;
     notifyListeners();
   }
