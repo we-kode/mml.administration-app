@@ -420,10 +420,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                         onPressed: () => _reloadData(),
                         icon: const Icon(Symbols.refresh),
                       ),
-                      SizedBox(
-                        width:
-                            MediaQuery.of(context).size.width *
-                            (widget.navState != null ? 0.838 : 0.863),
+                      Expanded(
                         child: TextField(
                           controller: _filterController,
                           decoration: InputDecoration(
