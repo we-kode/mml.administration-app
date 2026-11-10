@@ -35,7 +35,13 @@ class RecordService {
   }
 
   /// Uploads a [file] with the given [fileName] and associated [groups] to the server.
-  Future upload(File file, String fileName, List<String> groups) async {
+  /// A running upload is aborted when the [cancelToken] is canceled.
+  Future upload(
+    File file,
+    String fileName,
+    List<String> groups, {
+    CancelToken? cancelToken,
+  }) async {
     final lastModified = await file.lastModified();
     FormData formData = FormData.fromMap({
       "file": MultipartFileExtended.fromFileSync(file.path, filename: fileName),
@@ -47,6 +53,7 @@ class RecordService {
     await _apiService.request(
       '/media/upload',
       data: formData,
+      cancelToken: cancelToken,
       options: Options(method: 'POST'),
     );
   }

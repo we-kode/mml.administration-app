@@ -140,6 +140,7 @@
   "checkUpdate": "Check new features and improvements.",
   "updateInstall": "Update and install",
   "downloading": "Downloading...",
+  "updateDownloadFailed": "Download failed. Try again.",
   "newVersion": "A new Version {latestVersion} is available.",
   "oldVersion": "You are currently running version {appVersion}.",
   "inactive": "Inactive",

@@ -106,6 +106,10 @@ class ApiService {
     dio.interceptors.add(
       InterceptorsWrapper(
         onError: (DioException e, handler) async {
+          if (e.type == DioExceptionType.cancel) {
+            return handler.reject(e);
+          }
+
           if (e.response != null) {
             var statusCode = e.response!.statusCode;
             if (statusCode == HttpStatus.unauthorized) {

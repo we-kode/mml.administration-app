@@ -455,6 +455,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get downloading => 'Herunterladen...';
 
   @override
+  String get updateDownloadFailed =>
+      'Download fehlgeschlagen. Versuche es erneut.';
+
+  @override
   String newVersion(String latestVersion) {
     return 'Eine neue Version $latestVersion ist verfügbar.';
   }

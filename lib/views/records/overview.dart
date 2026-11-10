@@ -1,5 +1,5 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/components/async_select_list_dialog.dart';
@@ -53,11 +53,13 @@ class RecordsScreen extends StatelessWidget {
                 ActionButton(
                   icon: const Icon(Symbols.drive_folder_upload),
                   onPressed: () async {
-                    String? selected = await FilePicker.platform
-                        .getDirectoryPath(
-                          lockParentWindow: true,
-                          dialogTitle: locales.uploadFolder,
-                        );
+                    String? selected = await FilePicker.getDirectoryPath(
+                      dialogTitle: locales.uploadFolder,
+                      windowsOptions: const WindowsOptions(
+                        lockParentWindow: true,
+                      ),
+                      linuxOptions: const LinuxOptions(lockParentWindow: true),
+                    );
                     if (selected == null) {
                       return;
                     }
@@ -81,15 +83,13 @@ class RecordsScreen extends StatelessWidget {
                 ActionButton(
                   icon: const Icon(Symbols.file_upload),
                   onPressed: () async {
-                    FilePickerResult? selected = await FilePicker.platform
-                        .pickFiles(
-                          allowMultiple: true,
-                          type: FileType.custom,
-                          allowedExtensions: ['mp3'],
-                          dialogTitle: locales.uploadFiles,
-                        );
+                    List<PlatformFile> selected = await FilePicker.pickFiles(
+                      type: FileType.custom,
+                      allowedExtensions: ['mp3'],
+                      dialogTitle: locales.uploadFiles,
+                    );
 
-                    if (selected == null || !context.mounted) {
+                    if (selected.isEmpty || !context.mounted) {
                       return;
                     }
 
@@ -99,7 +99,7 @@ class RecordsScreen extends StatelessWidget {
                       builder: (BuildContext context) {
                         return RecordUploadDialog(
                           folderPath: null,
-                          files: selected.files,
+                          files: selected,
                         );
                       },
                     );

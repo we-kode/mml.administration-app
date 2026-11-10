@@ -1,5 +1,5 @@
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/gen/assets.gen.dart';
 import 'package:mml_admin/view_models/settings/settings_connection.dart';
 import 'package:provider/provider.dart';

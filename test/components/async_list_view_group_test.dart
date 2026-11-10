@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/components/list_subfilter_view.dart';
@@ -85,5 +85,37 @@ void main() {
 
     expect(find.byType(ActionChip), findsNothing);
     expect(find.byType(Chip), findsOneWidget);
+  });
+
+  testWidgets('list header fits beside a navigation rail', (tester) async {
+    tester.view.physicalSize = const Size(1600, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('en'),
+        home: Row(
+          children: [
+            const SizedBox(width: 200),
+            Expanded(
+              child: AsyncListView(
+                enableFastActionSwitch: true,
+                deleteItems: <T>(List<T> items) async => false,
+                editItem: (item, subfilter) async => false,
+                loadData:
+                    ({String? filter, int? offset, int? take, subfilter}) =>
+                        Future.value(ModelList([], 0, 0)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(TextField), findsOneWidget);
   });
 }

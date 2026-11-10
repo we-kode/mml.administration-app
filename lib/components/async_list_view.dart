@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
@@ -420,10 +420,7 @@ class _AsyncListViewState extends State<AsyncListView> {
                         onPressed: () => _reloadData(),
                         icon: const Icon(Symbols.refresh),
                       ),
-                      SizedBox(
-                        width:
-                            MediaQuery.of(context).size.width *
-                            (widget.navState != null ? 0.838 : 0.863),
+                      Expanded(
                         child: TextField(
                           controller: _filterController,
                           decoration: InputDecoration(

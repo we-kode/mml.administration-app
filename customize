@@ -19,6 +19,8 @@ COLOR_SCHEME=./config/lib_color_schemes.g.dart
 if test -f "$COLOR_SCHEME"; then
     echo "Replacing color scheme"
     cp "$COLOR_SCHEME" "$DIR/lib/lib_color_schemes.g.dart"
+    # Color schemes created before the material_ui migration import Flutter's material library.
+    sed -i "s#package:flutter/material.dart#package:material_ui/material_ui.dart#" "$DIR/lib/lib_color_schemes.g.dart"
 fi
 
 # replace titles
@@ -37,7 +39,7 @@ do
 		sed -i -E "s/\"appTitle\": .*/\"appTitle\": \"$value\",/" "$DIR/lib/l10n/admin_app_de.arb"
 		;;
 	appTitle)
-		sed -i -E "s/  if \(!window.Create\(L\".*\", origin, size\)\) \{/  if \(!window.CreateAndShow\(L\"$value\", origin, size\)\) \{/" "$DIR/windows/runner/main.cpp"
+		sed -i -E "s/  if \(!window.Create\(L\".*\", origin, size\)\) \{/  if \(!window.Create\(L\"$value\", origin, size\)\) \{/" "$DIR/windows/runner/main.cpp"
 		sed -i -E "s/    gtk_header_bar_set_title\(header_bar, \".*\"\);/    gtk_header_bar_set_title\(header_bar, \"$value\"\);/" "$DIR/linux/my_application.cc"
 		sed -i -E "s/    gtk_window_set_title\(window, \".*\"\);/    gtk_window_set_title\(window, \"$value\"\);/" "$DIR/linux/my_application.cc"
 		sed -i -E "s/PRODUCT_NAME = .*/PRODUCT_NAME = $value/" "$DIR/macos/Runner/Configs/AppInfo.xcconfig"

@@ -450,6 +450,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get downloading => 'Downloading...';
 
   @override
+  String get updateDownloadFailed => 'Download failed. Try again.';
+
+  @override
   String newVersion(String latestVersion) {
     return 'A new Version $latestVersion is available.';
   }

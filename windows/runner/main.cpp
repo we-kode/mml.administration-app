@@ -38,6 +38,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     ::DispatchMessage(&msg);
   }
 
+  // A quit request can end the loop while the window still exists. Shut down
+  // the Flutter engine before COM is uninitialized.
+  window.Destroy();
   ::CoUninitialize();
   return EXIT_SUCCESS;
 }
