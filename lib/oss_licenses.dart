@@ -432,14 +432,14 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// android_file_picker 2.1.4
+/// android_file_picker 2.1.5
 const _android_file_picker = Package(
     name: 'android_file_picker',
     description: 'Android implementation of the file_picker plugin, supporting file picking, saving, and Storage Access Framework (SAF) URI grants.',
     homepage: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_android',
     repository: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_android',
     authors: [],
-    version: '2.1.4',
+    version: '2.1.5',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -3728,14 +3728,14 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// file_picker 13.3.2
+/// file_picker 13.3.3
 const _file_picker = Package(
     name: 'file_picker',
     description: 'A package that allows you to use a native file explorer to pick single or multiple absolute file paths, with extension filtering support.',
     homepage: 'https://github.com/vicajilau/flutter_file_picker',
     repository: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker',
     authors: [],
-    version: '13.3.2',
+    version: '13.3.3',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -3764,14 +3764,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// file_picker_darwin 2.5.0
+/// file_picker_darwin 2.5.1
 const _file_picker_darwin = Package(
     name: 'file_picker_darwin',
     description: 'Darwin (iOS and macOS) implementation of the file_picker plugin, supporting native file picking, saving, and directory selection.',
     homepage: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_darwin',
     repository: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_darwin',
     authors: [],
-    version: '2.5.0',
+    version: '2.5.1',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -3800,14 +3800,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// file_picker_linux 2.0.3
+/// file_picker_linux 2.0.4
 const _file_picker_linux = Package(
     name: 'file_picker_linux',
     description: 'Linux implementation of the file_picker plugin using GTK3 and XDG Desktop Portals for native file and directory picking.',
     homepage: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_linux',
     repository: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_linux',
     authors: [],
-    version: '2.0.3',
+    version: '2.0.4',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -3872,14 +3872,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// file_picker_web 4.2.0
+/// file_picker_web 4.2.1
 const _file_picker_web = Package(
     name: 'file_picker_web',
     description: 'Web platform implementation of the file_picker plugin, providing browser file selection, file streaming, and file loading.',
     homepage: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_web',
     repository: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_web',
     authors: [],
-    version: '4.2.0',
+    version: '4.2.1',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -8804,13 +8804,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// sqflite 2.4.5+1
+/// sqflite 2.4.6
 const _sqflite = Package(
     name: 'sqflite',
     description: 'Flutter plugin for SQLite, a self-contained, high-reliability, embedded, SQL database engine.',
     repository: 'https://github.com/tekartik/sqflite/tree/master/sqflite',
     authors: [],
-    version: '2.4.5+1',
+    version: '2.4.6',
     spdxIdentifiers: ['BSD-2-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -8882,13 +8882,13 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// sqflite_common 2.5.16
+/// sqflite_common 2.5.17
 const _sqflite_common = Package(
     name: 'sqflite_common',
     description: 'Dart wrapper on SQLite, a self-contained, high-reliability, embedded, SQL database engine.',
     homepage: 'https://github.com/tekartik/sqflite/tree/master/sqflite_common',
     authors: [],
-    version: '2.5.16',
+    version: '2.5.17',
     spdxIdentifiers: ['BSD-2-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -9927,14 +9927,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// windows_file_picker 2.0.1
+/// windows_file_picker 2.0.2
 const _windows_file_picker = Package(
     name: 'windows_file_picker',
     description: 'Windows implementation of the file_picker plugin using Win32 COM APIs for native file and directory picking.',
     homepage: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_windows',
     repository: 'https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_windows',
     authors: [],
-    version: '2.0.1',
+    version: '2.0.2',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,

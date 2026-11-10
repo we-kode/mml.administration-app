@@ -47,7 +47,7 @@ dependencies:
   barcode_widget: ^2.0.4
   signalr_pure: ^1.1.0
   lottie: ^3.8.2
-  file_picker: ^13.3.2
+  file_picker: ^13.3.3
   mime: ^2.0.0
   http_parser: ^4.1.2
   package_info_plus: ^10.2.2
