@@ -171,6 +171,7 @@
   "checkUpdate": "Neue Funktionen und Verbesserungen prüfen.",
   "updateInstall": "Aktualisieren",
   "downloading": "Herunterladen...",
+  "updateDownloadFailed": "Download fehlgeschlagen. Versuche es erneut.",
   "newVersion": "Eine neue Version {latestVersion} ist verfügbar.",
   "@newVersion": {
     "placeholders": {

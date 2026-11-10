@@ -67,9 +67,11 @@ class AppUpdateViewModel extends ChangeNotifier {
   /// Hides the available update until the next start of the app.
   void dismiss() => _setStatus(AppUpdateStatus.dismissed);
 
-  /// Downloads the installer of the [latestVersion] and opens it.
+  /// Downloads the installer of the [latestVersion] and opens it. A failed
+  /// download sets the [status] to [AppUpdateStatus.downloadFailed].
   Future<void> startUpdate() async {
-    if (status != AppUpdateStatus.available) {
+    if (status != AppUpdateStatus.available &&
+        status != AppUpdateStatus.downloadFailed) {
       return;
     }
 
@@ -82,11 +84,10 @@ class AppUpdateViewModel extends ChangeNotifier {
         ),
         '$file${MainViewModel.extension}',
       );
-      _setStatus(AppUpdateStatus.readyToInstall);
       await _service.openInstaller(installer);
       _setStatus(AppUpdateStatus.dismissed);
     } catch (_) {
-      _setStatus(AppUpdateStatus.error);
+      _setStatus(AppUpdateStatus.downloadFailed);
     }
   }
 

@@ -11,14 +11,16 @@ class FloatingExtendedChipUpdate extends StatelessWidget {
   /// Initializes the instance.
   const FloatingExtendedChipUpdate({super.key});
 
-  /// Builds the card while an update is available or downloading.
+  /// Builds the card while an update is available, downloading or its
+  /// download failed.
   @override
   Widget build(BuildContext context) {
     final locales = AppLocalizations.of(context)!;
     final vm = context.watch<AppUpdateViewModel>();
     final downloading = vm.status == AppUpdateStatus.downloading;
+    final failed = vm.status == AppUpdateStatus.downloadFailed;
 
-    if (vm.status != AppUpdateStatus.available && !downloading) {
+    if (vm.status != AppUpdateStatus.available && !downloading && !failed) {
       return const SizedBox.shrink();
     }
 
@@ -73,6 +75,15 @@ class FloatingExtendedChipUpdate extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
+            if (failed) ...[
+              const SizedBox(height: 8),
+              Text(
+                locales.updateDownloadFailed,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ],
             const SizedBox(height: 15),
             Row(
               children: [

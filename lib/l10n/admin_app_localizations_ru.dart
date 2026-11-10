@@ -451,6 +451,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get downloading => 'Скачивание...';
 
   @override
+  String get updateDownloadFailed =>
+      'Не удалось загрузить. Попробуйте ещё раз.';
+
+  @override
   String newVersion(String latestVersion) {
     return 'Доступна новая версия $latestVersion.';
   }

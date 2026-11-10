@@ -15,6 +15,7 @@ class _FakeUpdateService implements AppUpdateService {
   String? downloaded;
   File? opened;
   Completer<void>? release;
+  int failingDownloads = 0;
 
   @override
   Future<Map<String, dynamic>> getRelease(Uri uri) async {
@@ -25,6 +26,10 @@ class _FakeUpdateService implements AppUpdateService {
 
   @override
   Future<File> download(Uri uri, String fileName) async {
+    if (failingDownloads > 0) {
+      failingDownloads--;
+      throw const SocketException('offline');
+    }
     downloaded = fileName;
     return File(fileName);
   }
@@ -102,5 +107,21 @@ void main() {
     service.release!.complete();
 
     await expectLater(check, completes);
+  });
+
+  test('offers the download again after it failed', () async {
+    final service = _FakeUpdateService('1.2.0')..failingDownloads = 1;
+    final vm = AppUpdateViewModel('1.1.9', service: service);
+    await vm.check();
+
+    await vm.startUpdate();
+
+    expect(vm.status, AppUpdateStatus.downloadFailed);
+    expect(service.opened, isNull);
+
+    await vm.startUpdate();
+
+    expect(service.opened, isNotNull);
+    expect(vm.status, AppUpdateStatus.dismissed);
   });
 }

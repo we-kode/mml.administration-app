@@ -140,6 +140,7 @@
   "checkUpdate": "Посмотрите новые функции и улучшения.",
   "updateInstall": "Обновить и установить",
   "downloading": "Скачивание...",
+  "updateDownloadFailed": "Не удалось загрузить. Попробуйте ещё раз.",
   "newVersion": "Доступна новая версия {latestVersion}.",
   "oldVersion": "В данный момент используется версия {appVersion}.",
   "inactive": "Неактивный",

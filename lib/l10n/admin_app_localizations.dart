@@ -940,6 +940,12 @@ abstract class AppLocalizations {
   /// **'Herunterladen...'**
   String get downloading;
 
+  /// No description provided for @updateDownloadFailed.
+  ///
+  /// In de, this message translates to:
+  /// **'Download fehlgeschlagen. Versuche es erneut.'**
+  String get updateDownloadFailed;
+
   /// No description provided for @newVersion.
   ///
   /// In de, this message translates to:
