@@ -42,7 +42,7 @@ dependencies:
   dio: ^5.9.1
   json_annotation: ^4.11.0
   shimmer: ^3.0.0
-  window_manager: ^0.5.1
+  window_manager: ^0.6.0
   barcode_widget: ^2.0.4
   signalr_pure: ^1.1.0
   lottie: ^3.8.2
