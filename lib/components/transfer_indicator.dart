@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/progress_ring.dart';
 import 'package:mml_admin/models/federation/audit_status.dart';
 import 'package:mml_admin/models/federation/record_sync_state.dart';

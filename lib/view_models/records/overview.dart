@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/group.dart';

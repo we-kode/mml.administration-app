@@ -1,5 +1,5 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// Shows a dialog to select a range of days up to today, starting with the

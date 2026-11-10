@@ -1,5 +1,5 @@
 import '../view_models/sync_audit_test.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';

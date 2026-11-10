@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// Shows the progress of a transfer as a ring with the percentage in its

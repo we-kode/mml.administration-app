@@ -1,9 +1,8 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/lib_color_schemes.g.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'services/router.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
 /// Scroll behavior overrides default behavior, so drag scrolls can be made by mouse on windows system.
@@ -49,9 +48,7 @@ class AdminApp extends StatelessWidget {
       // Configure the localizations of the app.
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: const [
         Locale('en', ''),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A title followed by an info icon, which shows the [info] on hover or tap.
 class InfoTitle extends StatelessWidget {

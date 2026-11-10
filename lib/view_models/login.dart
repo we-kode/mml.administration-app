@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/extensions/is_valid_guid.dart';

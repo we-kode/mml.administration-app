@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/groups/edit.dart';
 import 'package:provider/provider.dart';

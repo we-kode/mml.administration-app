@@ -48,6 +48,7 @@ const allDependencies = <Package>[
   _crypto,
   _csslib,
   _cupertino_icons,
+  _cupertino_ui,
   _dart_pubspec_licenses,
   _dart_style,
   _dartx,
@@ -109,6 +110,7 @@ const allDependencies = <Package>[
   _matcher,
   _material_color_utilities,
   _material_symbols_icons,
+  _material_ui,
   _meta,
   _mime,
   _msix,
@@ -171,7 +173,6 @@ const allDependencies = <Package>[
   _test_api,
   _test_core,
   _time,
-  _toggle_switch,
   _tuple,
   _typed_data,
   _uuid,
@@ -263,6 +264,7 @@ const dependencies = <Package>[
   _flutter,
   _flutter_localizations,
   _intl,
+  _material_ui,
   _cupertino_icons,
   _provider,
   _flutter_secure_storage,
@@ -280,7 +282,6 @@ const dependencies = <Package>[
   _package_info_plus,
   _calendar_date_picker2,
   _id3tag,
-  _toggle_switch,
   _material_symbols_icons,
   _cached_network_image,
   _flutter_cache_manager
@@ -1469,17 +1470,17 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// cached_network_image 3.4.1
+/// cached_network_image 4.0.6
 const _cached_network_image = Package(
     name: 'cached_network_image',
     description: 'Flutter library to load and cache network images. Can also be used with placeholder and error widgets.',
     homepage: 'https://github.com/Baseflow/flutter_cached_network_image',
     authors: [],
-    version: '3.4.1',
+    version: '4.0.6',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
-    dependencies: [PackageRef('cached_network_image_platform_interface'), PackageRef('cached_network_image_web'), PackageRef('flutter'), PackageRef('flutter_cache_manager'), PackageRef('octo_image')],
+    dependencies: [PackageRef('cached_network_image_platform_interface'), PackageRef('cached_network_image_web'), PackageRef('flutter'), PackageRef('flutter_cache_manager'), PackageRef('octo_image'), PackageRef('material_ui')],
     devDependencies: [PackageRef('file'), PackageRef('flutter_lints'), PackageRef('flutter_test')],
     license: '''The MIT License (MIT)
 
@@ -1504,17 +1505,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// cached_network_image_platform_interface 4.1.1
+/// cached_network_image_platform_interface 5.0.3
 const _cached_network_image_platform_interface = Package(
     name: 'cached_network_image_platform_interface',
     description: 'Platform interface for CachedNetworkImage',
     homepage: 'https://github.com/Baseflow/flutter_cached_network_image',
     authors: [],
-    version: '4.1.1',
+    version: '5.0.3',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
-    dependencies: [PackageRef('flutter'), PackageRef('flutter_cache_manager')],
+    dependencies: [PackageRef('flutter'), PackageRef('flutter_cache_manager'), PackageRef('material_ui')],
     devDependencies: [PackageRef('file'), PackageRef('flutter_lints'), PackageRef('flutter_test')],
     license: '''The MIT License (MIT)
 
@@ -1539,17 +1540,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// cached_network_image_web 1.3.1
+/// cached_network_image_web 2.0.4
 const _cached_network_image_web = Package(
     name: 'cached_network_image_web',
     description: 'Web implementation of CachedNetworkImage',
     homepage: 'https://github.com/Baseflow/flutter_cached_network_image',
     authors: [],
-    version: '1.3.1',
+    version: '2.0.4',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
-    dependencies: [PackageRef('cached_network_image_platform_interface'), PackageRef('flutter'), PackageRef('flutter_cache_manager'), PackageRef('web')],
+    dependencies: [PackageRef('cached_network_image_platform_interface'), PackageRef('flutter'), PackageRef('flutter_cache_manager'), PackageRef('web'), PackageRef('material_ui')],
     devDependencies: [PackageRef('file'), PackageRef('flutter_lints'), PackageRef('flutter_test')],
     license: '''The MIT License (MIT)
 
@@ -1574,18 +1575,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// calendar_date_picker2 2.0.1
+/// calendar_date_picker2 4.0.0
 const _calendar_date_picker2 = Package(
     name: 'calendar_date_picker2',
     description: 'A lightweight and customizable calendar picker based on Flutter CalendarDatePicker, with support for single date picker, range picker and multi picker.',
     homepage: 'https://github.com/theideasaler/calendar_date_picker2',
     authors: [],
-    version: '2.0.1',
+    version: '4.0.0',
     spdxIdentifiers: ['Apache-2.0'],
     isMarkdown: false,
     isSdk: false,
-    dependencies: [PackageRef('flutter'), PackageRef('intl')],
-    devDependencies: [PackageRef('flutter_test'), PackageRef('flutter_lints')],
+    dependencies: [PackageRef('flutter'), PackageRef('intl'), PackageRef('material_ui')],
+    devDependencies: [PackageRef('flutter_test'), PackageRef('flutter_lints'), PackageRef('lints')],
     license: '''Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -2559,18 +2560,18 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// cupertino_icons 1.0.9
+/// cupertino_icons 2.0.0
 const _cupertino_icons = Package(
     name: 'cupertino_icons',
     description: 'Default icons asset for Cupertino widgets based on Apple styled icons',
     repository: 'https://github.com/flutter/packages/tree/main/third_party/packages/cupertino_icons',
     authors: [],
-    version: '1.0.9',
+    version: '2.0.0',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
     dependencies: [],
-    devDependencies: [PackageRef('collection'), PackageRef('flutter'), PackageRef('flutter_test'), PackageRef('path')],
+    devDependencies: [PackageRef('collection'), PackageRef('cupertino_ui'), PackageRef('flutter'), PackageRef('flutter_test'), PackageRef('path')],
     license: '''The MIT License (MIT)
 
 Copyright (c) 2016 Vladimir Kharlampidi
@@ -2591,6 +2592,45 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.''',
+  );
+
+/// cupertino_ui 1.1.6
+const _cupertino_ui = Package(
+    name: 'cupertino_ui',
+    description: 'The official Flutter Cupertino Design Library, implementing the iOS design system.',
+    repository: 'https://github.com/flutter/packages/tree/main/packages/cupertino_ui',
+    authors: [],
+    version: '1.1.6',
+    spdxIdentifiers: ['BSD-3-Clause'],
+    isMarkdown: false,
+    isSdk: false,
+    dependencies: [PackageRef('collection'), PackageRef('flutter'), PackageRef('flutter_localizations'), PackageRef('intl')],
+    devDependencies: [PackageRef('clock'), PackageRef('flutter_test'), PackageRef('leak_tracker_flutter_testing'), PackageRef('material_ui'), PackageRef('path')],
+    license: '''Copyright 2013 The Flutter Authors
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+    * Neither the name of Google Inc. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
 /// dart_pubspec_licenses 3.2.0
@@ -5616,7 +5656,7 @@ const _lottie = Package(
     isMarkdown: false,
     isSdk: false,
     dependencies: [PackageRef('archive'), PackageRef('flutter'), PackageRef('http'), PackageRef('path'), PackageRef('vector_math')],
-    devDependencies: [PackageRef('analyzer'), PackageRef('dart_style'), PackageRef('flutter_lints'), PackageRef('flutter_test'), PackageRef('pub_semver'), PackageRef('yaml')],
+    devDependencies: [PackageRef('analyzer'), PackageRef('dart_style'), PackageRef('flutter_lints'), PackageRef('flutter_test'), PackageRef('material_ui'), PackageRef('pub_semver'), PackageRef('yaml')],
     license: '''MIT License
 
 Copyright (c) [year] [fullname]
@@ -6151,6 +6191,45 @@ const _material_symbols_icons = Package(
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.''',
+  );
+
+/// material_ui 1.11.0
+const _material_ui = Package(
+    name: 'material_ui',
+    description: "The official Flutter Material UI Library, implementing Google's Material Design design system.",
+    repository: 'https://github.com/flutter/packages/tree/main/packages/material_ui',
+    authors: [],
+    version: '1.11.0',
+    spdxIdentifiers: ['BSD-3-Clause'],
+    isMarkdown: false,
+    isSdk: false,
+    dependencies: [PackageRef('collection'), PackageRef('cupertino_ui'), PackageRef('flutter'), PackageRef('flutter_localizations'), PackageRef('intl'), PackageRef('material_color_utilities'), PackageRef('vector_math')],
+    devDependencies: [PackageRef('args'), PackageRef('file'), PackageRef('flutter_test'), PackageRef('leak_tracker_flutter_testing'), PackageRef('meta'), PackageRef('path'), PackageRef('platform')],
+    license: '''Copyright 2013 The Flutter Authors
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+    * Neither the name of Google Inc. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
 /// meta 1.19.0
@@ -8276,18 +8355,18 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// shimmer 3.0.0
+/// shimmer 4.0.0
 const _shimmer = Package(
     name: 'shimmer',
-    description: 'A package provides an easy way to add shimmer effect in Flutter project',
+    description: 'A lightweight Flutter widget that paints a moving highlight over skeleton placeholders and call-to-action text.',
     homepage: 'https://github.com/hnvn/flutter_shimmer',
     repository: 'https://github.com/hnvn/flutter_shimmer',
     authors: [],
-    version: '3.0.0',
+    version: '4.0.0',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
-    dependencies: [PackageRef('flutter')],
+    dependencies: [PackageRef('flutter'), PackageRef('material_ui')],
     devDependencies: [PackageRef('flutter_test')],
     license: '''Copyright 2013, the Dart project authors. All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -9304,41 +9383,6 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.''',
-  );
-
-/// toggle_switch 2.3.0
-const _toggle_switch = Package(
-    name: 'toggle_switch',
-    description: 'Toggle Switch - A simple toggle switch widget. It can be fully customized with desired icons, width, colors, text, corner radius etc. It also maintains selection state.',
-    homepage: 'https://github.com/PramodJoshi/toggle_switch',
-    authors: [],
-    version: '2.3.0',
-    spdxIdentifiers: ['MIT'],
-    isMarkdown: false,
-    isSdk: false,
-    dependencies: [PackageRef('flutter')],
-    devDependencies: [PackageRef('flutter_test')],
-    license: '''MIT License
-
-Copyright (c) 2019 Pramod Joshi
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.''',
   );
 
 /// tuple 2.0.2
@@ -42154,7 +42198,7 @@ const _mml_admin = Package(
     spdxIdentifiers: ['GPL-3.0'],
     isMarkdown: false,
     isSdk: false,
-    dependencies: [PackageRef('flutter'), PackageRef('flutter_localizations'), PackageRef('intl'), PackageRef('cupertino_icons'), PackageRef('provider'), PackageRef('flutter_secure_storage'), PackageRef('http'), PackageRef('dio'), PackageRef('json_annotation'), PackageRef('shimmer'), PackageRef('window_manager'), PackageRef('barcode_widget'), PackageRef('signalr_pure'), PackageRef('lottie'), PackageRef('file_picker'), PackageRef('mime'), PackageRef('http_parser'), PackageRef('package_info_plus'), PackageRef('calendar_date_picker2'), PackageRef('id3tag'), PackageRef('toggle_switch'), PackageRef('material_symbols_icons'), PackageRef('cached_network_image'), PackageRef('flutter_cache_manager')],
+    dependencies: [PackageRef('flutter'), PackageRef('flutter_localizations'), PackageRef('intl'), PackageRef('material_ui'), PackageRef('cupertino_icons'), PackageRef('provider'), PackageRef('flutter_secure_storage'), PackageRef('http'), PackageRef('dio'), PackageRef('json_annotation'), PackageRef('shimmer'), PackageRef('window_manager'), PackageRef('barcode_widget'), PackageRef('signalr_pure'), PackageRef('lottie'), PackageRef('file_picker'), PackageRef('mime'), PackageRef('http_parser'), PackageRef('package_info_plus'), PackageRef('calendar_date_picker2'), PackageRef('id3tag'), PackageRef('material_symbols_icons'), PackageRef('cached_network_image'), PackageRef('flutter_cache_manager')],
     devDependencies: [PackageRef('flutter_test'), PackageRef('flutter_lints'), PackageRef('build_runner'), PackageRef('json_serializable'), PackageRef('dart_pubspec_licenses'), PackageRef('msix'), PackageRef('flutter_gen'), PackageRef('flutter_gen_runner')],
     license: '''GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007

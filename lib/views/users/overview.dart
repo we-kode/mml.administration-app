@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/view_models/users/overview.dart';

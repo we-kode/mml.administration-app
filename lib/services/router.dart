@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/view_models/announcements/overview.dart';
 import 'package:mml_admin/view_models/change_password.dart';
 import 'package:mml_admin/view_models/clients/overview.dart';
