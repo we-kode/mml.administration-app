@@ -1,12 +1,26 @@
+import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
-import 'package:mml_admin/oss_licenses.dart';
 import 'package:mml_admin/views/settings/license.dart';
 import 'package:mml_admin/views/settings/licenses.dart';
 
 void main() {
-  testWidgets('lists the packages and opens a license', (tester) async {
+  setUp(() {
+    LicenseRegistry.reset();
+    LicenseRegistry.addLicense(
+      () => Stream.fromIterable([
+        const LicenseEntryWithLineBreaks(['zeta'], 'Zeta license'),
+        const LicenseEntryWithLineBreaks(['alpha', 'zeta'], 'Shared license'),
+      ]),
+    );
+  });
+
+  tearDown(LicenseRegistry.reset);
+
+  testWidgets('lists registered packages sorted and opens their licenses', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -15,14 +29,19 @@ void main() {
         home: Scaffold(body: LicensesDialog()),
       ),
     );
+    await tester.pumpAndSettle();
 
-    final first = allDependencies.first;
-    expect(find.text(first.name), findsOneWidget);
+    final names = tester
+        .widgetList<ListTile>(find.byType(ListTile))
+        .map((tile) => (tile.title as Text).data)
+        .toList();
+    expect(names, ['alpha', 'zeta']);
 
-    await tester.tap(find.text(first.name));
+    await tester.tap(find.text('zeta'));
     await tester.pumpAndSettle();
 
     expect(find.byType(LicenseDialog), findsOneWidget);
-    expect(find.text(first.license ?? ''), findsOneWidget);
+    expect(find.text('Zeta license'), findsOneWidget);
+    expect(find.text('Shared license'), findsOneWidget);
   });
 }
