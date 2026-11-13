@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
@@ -19,12 +19,13 @@ import 'package:shimmer/shimmer.dart';
 
 /// Function to load data with the passed [filter], starting from [offset] and
 /// loading an amount of [take] data. Also a [subfilter] can be added to filter the list more specific.
-typedef LoadDataFunction = Future<ModelList> Function({
-  String? filter,
-  int? offset,
-  int? take,
-  Subfilter? subfilter,
-});
+typedef LoadDataFunction =
+    Future<ModelList> Function({
+      String? filter,
+      int? offset,
+      int? take,
+      Subfilter? subfilter,
+    });
 
 /// Function that deletes the items with the passed [itemIdentifiers].
 ///
@@ -40,12 +41,11 @@ typedef DeleteFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
 /// after successful action or false on cancel.
 /// The list will reload the data starting from beginning, if true will be
 /// returned.
-typedef ActionPerformedFunction = Future<bool> Function<T>(List<T> itemIdentifiers);
+typedef ActionPerformedFunction =
+    Future<bool> Function<T>(List<T> itemIdentifiers);
 
 /// Function to be called when the back button is pressed. And the list should navigate up in folder structure.
-typedef MoveUpFunction = Function(
-  Subfilter? subFilter,
-);
+typedef MoveUpFunction = Function(Subfilter? subFilter);
 
 /// Function that updates the passed [item].
 ///
@@ -53,8 +53,8 @@ typedef MoveUpFunction = Function(
 /// after successful update or false on cancel.
 /// The list will reload the data starting from beginning, if true will be
 /// returned.
-typedef EditFunction = Future<bool> Function(
-    ModelBase item, Subfilter? subFilter);
+typedef EditFunction =
+    Future<bool> Function(ModelBase item, Subfilter? subFilter);
 
 /// Function that creates an new item.
 ///
@@ -65,8 +65,8 @@ typedef EditFunction = Future<bool> Function(
 typedef AddFunction = Future<bool> Function();
 
 /// Function called if selectable tags of [item] changed.
-typedef AvailableTagsChangedFunction = void Function(
-    ModelBase item, List<ModelBase> changedTags);
+typedef AvailableTagsChangedFunction =
+    void Function(ModelBase item, List<ModelBase> changedTags);
 
 /// List that supports async loading of data, when necessary in chunks.
 class AsyncListView extends StatefulWidget {
@@ -97,6 +97,33 @@ class AsyncListView extends StatefulWidget {
   /// The list will reload the data starting from beginning, if true will be
   /// returned.
   final ActionPerformedFunction? lockItems;
+
+  /// Function that synchronizes the items with the passed [itemIdentifiers]
+  /// with partner instances.
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful operation or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
+  final ActionPerformedFunction? syncItems;
+
+  /// Function that revokes the synchronization of the items with the passed
+  /// [itemIdentifiers] with partner instances.
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful operation or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
+  final ActionPerformedFunction? revokeSyncItems;
+
+  /// Function that creates a share link for the items with the passed
+  /// [itemIdentifiers].
+  ///
+  /// This function should return a [Future], that either resolves with true
+  /// after successful operation or false on cancel.
+  /// The list will reload the data starting from beginning, if true will be
+  /// returned.
+  final ActionPerformedFunction? shareItems;
 
   /// Indicates, whether the add button should be shown or not.
   final bool showAddButton;
@@ -147,6 +174,9 @@ class AsyncListView extends StatefulWidget {
     required this.editItem,
     this.assignItems,
     this.lockItems,
+    this.syncItems,
+    this.revokeSyncItems,
+    this.shareItems,
     this.addItem,
     this.showAddButton = true,
     this.subactions,
@@ -186,6 +216,9 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Filter to send to the sever.
   String? _filter;
 
+  /// Controller of the input of the [_filter].
+  final TextEditingController _filterController = TextEditingController();
+
   /// Offset to start loading data from.
   int _offset = 0;
 
@@ -195,9 +228,6 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Indicates, whether data is loading and an loading indicator should be
   /// shown.
   bool _isLoadingData = true;
-
-  /// The actual item group if list items should be grouped.
-  String? _actualGroup;
 
   /// Indicates whether fast actions are enabled in list items or not.
   bool fastActionsEnabled = false;
@@ -221,6 +251,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     super.dispose();
     widget.subfilter?.filter.removeListener(() {});
     widget.navState?.removeListener(_handleNavState);
+    _filterController.dispose();
   }
 
   @override
@@ -229,7 +260,7 @@ class _AsyncListViewState extends State<AsyncListView> {
       autofocus: true,
       focusNode: FocusNode(),
       onKeyEvent: (event) => {
-        if (event.logicalKey == LogicalKeyboardKey.f5) {_reloadData()}
+        if (event.logicalKey == LogicalKeyboardKey.f5) {_reloadData()},
       },
       child: Scaffold(
         body: Column(
@@ -242,8 +273,8 @@ class _AsyncListViewState extends State<AsyncListView> {
               child: _isLoadingData
                   ? _createLoadingWidget()
                   : (_items!.totalCount > 0
-                      ? _createListViewWidget()
-                      : _createNoDataWidget()),
+                        ? _createListViewWidget()
+                        : _createNoDataWidget()),
             ),
           ],
         ),
@@ -270,7 +301,8 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// the identifier was in the list of selected items.
   void _onItemChecked(int index) {
     if (_selectedItems.any(
-        (item) => item.getIdentifier() == _items![index]?.getIdentifier())) {
+      (item) => item.getIdentifier() == _items![index]?.getIdentifier(),
+    )) {
       _selectedItems.remove(_items![index]);
     } else if (_items![index] != null) {
       _selectedItems.add(_items![index]!);
@@ -298,10 +330,7 @@ class _AsyncListViewState extends State<AsyncListView> {
   /// Shows a loading indicator instead of the list during load, if
   /// [showLoadingOverlay] is true.
   /// Otherwise the data will be loaded lazy in the background.
-  void _loadData({
-    bool showLoadingOverlay = true,
-    Subfilter? subfilter,
-  }) {
+  void _loadData({bool showLoadingOverlay = true, Subfilter? subfilter}) {
     if (showLoadingOverlay) {
       setState(() {
         _isLoadingData = true;
@@ -315,25 +344,27 @@ class _AsyncListViewState extends State<AsyncListView> {
       subfilter: subfilter,
     );
 
-    dataFuture.then((value) {
-      if (!mounted) {
-        return;
-      }
+    dataFuture
+        .then((value) {
+          if (!mounted) {
+            return;
+          }
 
-      setState(() {
-        _isLoadingData = false;
-        _items = value;
-      });
-    }).onError((e, _) {
-      if (!mounted) {
-        return;
-      }
+          setState(() {
+            _isLoadingData = false;
+            _items = value;
+          });
+        })
+        .onError((e, _) {
+          if (!mounted) {
+            return;
+          }
 
-      setState(() {
-        _isLoadingData = false;
-        _items = ModelList([], _initialOffset, 0);
-      });
-    });
+          setState(() {
+            _isLoadingData = false;
+            _items = ModelList([], _initialOffset, 0);
+          });
+        });
   }
 
   /// Show a floating action button or an expanding fab.
@@ -344,10 +375,7 @@ class _AsyncListViewState extends State<AsyncListView> {
     return Visibility(
       visible: widget.showAddButton,
       child: widget.subactions != null && widget.subactions!.isNotEmpty
-          ? ExpandableFab(
-              distance: 96.0,
-              children: widget.subactions!,
-            )
+          ? ExpandableFab(distance: 96.0, children: widget.subactions!)
           : FloatingActionButton(
               onPressed: () {
                 if (widget.addItem == null) {
@@ -392,10 +420,9 @@ class _AsyncListViewState extends State<AsyncListView> {
                         onPressed: () => _reloadData(),
                         icon: const Icon(Symbols.refresh),
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width *
-                            (widget.navState != null ? 0.838 : 0.863),
+                      Expanded(
                         child: TextField(
+                          controller: _filterController,
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.filter,
                             icon: const Icon(Symbols.filter_list_alt),
@@ -414,9 +441,11 @@ class _AsyncListViewState extends State<AsyncListView> {
                               onPressed: () => setState(() {
                                 fastActionsEnabled = !fastActionsEnabled;
                               }),
-                              icon: Icon(fastActionsEnabled
-                                  ? Symbols.edit_off
-                                  : Symbols.edit),
+                              icon: Icon(
+                                fastActionsEnabled
+                                    ? Symbols.edit_off
+                                    : Symbols.edit,
+                              ),
                             )
                           : const SizedBox.shrink(),
                     ],
@@ -427,11 +456,10 @@ class _AsyncListViewState extends State<AsyncListView> {
                   if (widget.navState?.path != null)
                     Chip(
                       side: BorderSide.none,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.outlineVariant,
-                      label: Text(
-                        widget.navState!.path!,
-                      ),
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.outlineVariant,
+                      label: Text(widget.navState!.path!),
                     ),
                 ],
               ),
@@ -474,115 +502,72 @@ class _AsyncListViewState extends State<AsyncListView> {
                       icon: const Icon(Symbols.check_box),
                       tooltip: AppLocalizations.of(context)!.selectLoaded,
                     ),
+                    if (widget.shareItems != null)
+                      _createSelectionAction(
+                        widget.shareItems!,
+                        Symbols.share,
+                        AppLocalizations.of(context)!.share,
+                      ),
+                    if (widget.syncItems != null)
+                      _createSelectionAction(
+                        widget.syncItems!,
+                        Symbols.sync,
+                        AppLocalizations.of(context)!.synchronize,
+                      ),
+                    if (widget.revokeSyncItems != null)
+                      _createSelectionAction(
+                        widget.revokeSyncItems!,
+                        Symbols.sync_disabled,
+                        AppLocalizations.of(context)!.revokeSync,
+                      ),
                     if (widget.lockItems != null)
-                      IconButton(
-                        onPressed: () {
-                          showProgressIndicator();
-                          widget.lockItems!(_selectedItems).then((value) {
-                            if (!mounted) {
-                              return;
-                            }
-
-                            RouterService.getInstance()
-                                .navigatorKey
-                                .currentState!
-                                .pop();
-
-                            if (!value) {
-                              return;
-                            }
-
-                            setState(() {
-                              _isInMultiSelectMode = false;
-                              _selectedItems = [];
-                            });
-
-                            _reloadData();
-                          }).onError((error, stackTrace) {
-                            if (!mounted) {
-                              return;
-                            }
-
-                            RouterService.getInstance()
-                                .navigatorKey
-                                .currentState!
-                                .pop();
-                          });
-                        },
-                        icon: const Icon(Symbols.lock_outline),
-                        tooltip: AppLocalizations.of(context)!.lock,
+                      _createSelectionAction(
+                        widget.lockItems!,
+                        Symbols.lock_outline,
+                        AppLocalizations.of(context)!.lock,
                       ),
                     if (widget.assignItems != null)
-                      IconButton(
-                        onPressed: () {
-                          showProgressIndicator();
-                          widget.assignItems!(_selectedItems).then((value) {
-                            if (!mounted) {
-                              return;
-                            }
-
-                            RouterService.getInstance()
-                                .navigatorKey
-                                .currentState!
-                                .pop();
-
-                            if (!value) {
-                              return;
-                            }
-
-                            setState(() {
-                              _isInMultiSelectMode = false;
-                              _selectedItems = [];
-                            });
-
-                            _reloadData();
-                          }).onError((error, stackTrace) {
-                            if (!mounted) {
-                              return;
-                            }
-
-                            RouterService.getInstance()
-                                .navigatorKey
-                                .currentState!
-                                .pop();
-                          });
-                        },
-                        icon: const Icon(Symbols.assignment_add),
-                        tooltip: AppLocalizations.of(context)!.assignTo,
+                      _createSelectionAction(
+                        widget.assignItems!,
+                        Symbols.assignment_add,
+                        AppLocalizations.of(context)!.assignTo,
                       ),
                     IconButton(
                       onPressed: () {
                         showProgressIndicator();
-                        widget.deleteItems(_selectedItems).then((value) {
-                          if (!mounted) {
-                            return;
-                          }
+                        widget
+                            .deleteItems(_selectedItems)
+                            .then((value) {
+                              if (!mounted) {
+                                return;
+                              }
 
-                          RouterService.getInstance()
-                              .navigatorKey
-                              .currentState!
-                              .pop();
+                              RouterService.getInstance()
+                                  .navigatorKey
+                                  .currentState!
+                                  .pop();
 
-                          if (!value) {
-                            return;
-                          }
+                              if (!value) {
+                                return;
+                              }
 
-                          setState(() {
-                            _isInMultiSelectMode = false;
-                            _selectedItems = [];
-                          });
+                              setState(() {
+                                _isInMultiSelectMode = false;
+                                _selectedItems = [];
+                              });
 
-                          _reloadData();
-                        }).onError((error, stackTrace) {
-                          if (!mounted) {
-                            return;
-                          }
+                              _reloadData();
+                            })
+                            .onError((error, stackTrace) {
+                              if (!mounted) {
+                                return;
+                              }
 
-                          RouterService.getInstance()
-                              .navigatorKey
-                              .currentState!
-                              .pop();
-                        });
+                              RouterService.getInstance()
+                                  .navigatorKey
+                                  .currentState!
+                                  .pop();
+                            });
                       },
                       icon: const Icon(Symbols.delete),
                       tooltip: AppLocalizations.of(context)!.remove,
@@ -597,17 +582,54 @@ class _AsyncListViewState extends State<AsyncListView> {
     );
   }
 
+  /// Creates a button performing the [action] on the selected items.
+  Widget _createSelectionAction(
+    ActionPerformedFunction action,
+    IconData icon,
+    String tooltip,
+  ) {
+    return IconButton(
+      onPressed: () {
+        showProgressIndicator();
+        action(_selectedItems)
+            .then((value) {
+              if (!mounted) {
+                return;
+              }
+
+              RouterService.getInstance().navigatorKey.currentState!.pop();
+
+              if (!value) {
+                return;
+              }
+
+              setState(() {
+                _isInMultiSelectMode = false;
+                _selectedItems = [];
+              });
+
+              _reloadData();
+            })
+            .onError((error, stackTrace) {
+              if (!mounted) {
+                return;
+              }
+
+              RouterService.getInstance().navigatorKey.currentState!.pop();
+            });
+      },
+      icon: Icon(icon),
+      tooltip: tooltip,
+    );
+  }
+
   /// Creates the list view widget.
   Widget _createListViewWidget() {
     return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(
-        scrollbars: false,
-      ),
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: ListView.separated(
         separatorBuilder: (context, index) {
-          return const Divider(
-            height: 1,
-          );
+          return const Divider(height: 1);
         },
         itemBuilder: (context, index) {
           var endNotReached = (_offset + _take) <= _items!.totalCount;
@@ -649,9 +671,7 @@ class _AsyncListViewState extends State<AsyncListView> {
 
   /// Creates a loading indicator widget.
   Widget _createLoadingWidget() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+    return const Center(child: CircularProgressIndicator());
   }
 
   /// Creates a widget that will be shown, if no data were loaded or an error
@@ -683,20 +703,20 @@ class _AsyncListViewState extends State<AsyncListView> {
 
     var leadingTile = item.getAvatar(context) == null
         ? !_isInMultiSelectMode
-            ? item.getPrefixIcon(context)
-            : _selectCheckbox(index, item)
+              ? item.getPrefixIcon(context)
+              : _selectCheckbox(index, item)
         : Column(
             children: [
               Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                     child: Container(
                       height: 42,
                       width: 42,
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
                       child: item.getAvatar(context),
                     ),
                   ),
@@ -737,26 +757,12 @@ class _AsyncListViewState extends State<AsyncListView> {
 
     // Grouping if first element or
     // group is a new one and the predecessor has another group
-    if (index == 0 ||
-        (itemGroup != _actualGroup &&
-            _items![index - 1]?.getGroup(context) != itemGroup) ||
-        _items![index - 1]?.getGroup(context) != itemGroup) {
-      _actualGroup = itemGroup;
+    if (index == 0 || _items![index - 1]?.getGroup(context) != itemGroup) {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              top: 10,
-              left: 10,
-              right: 10,
-            ),
-            child: Chip(
-              side: BorderSide.none,
-              backgroundColor: Theme.of(context).colorScheme.outlineVariant,
-              label: Text(
-                item.getGroup(context)!,
-              ),
-            ),
+            padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+            child: _groupChip(item, itemGroup),
           ),
           _listTile(leadingTile, item, index),
         ],
@@ -764,6 +770,33 @@ class _AsyncListViewState extends State<AsyncListView> {
     }
 
     return _listTile(leadingTile, item, index);
+  }
+
+  Widget _groupChip(ModelBase item, String group) {
+    final color = Theme.of(context).colorScheme.outlineVariant;
+    final filter = widget.subfilter == null || _isInMultiSelectMode
+        ? null
+        : item.getGroupFilter();
+
+    return filter == null
+        ? Chip(
+            side: BorderSide.none,
+            backgroundColor: color,
+            label: Text(group),
+          )
+        : ActionChip(
+            mouseCursor: SystemMouseCursors.click,
+            side: BorderSide.none,
+            backgroundColor: color,
+            label: Text(group),
+            onPressed: () => _selectGroup(filter),
+          );
+  }
+
+  void _selectGroup(Subfilter filter) {
+    _filterController.clear();
+    _filter = null;
+    widget.subfilter!.filter.replaceWith(filter);
   }
 
   /// Creates a tile widget for one list [item] at the given [index].
@@ -795,18 +828,30 @@ class _AsyncListViewState extends State<AsyncListView> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.only(top: 2),
-                    child: Text(
-                      item.getSubtitle(context)!,
+                    child: Text.rich(
+                      TextSpan(
+                        text: item.getSubtitle(context)!,
+                        children: [
+                          if (item.getSubtitleNote(context) != null)
+                            TextSpan(
+                              text: ' · ${item.getSubtitleNote(context)}',
+                              style: const TextStyle(
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                        ],
+                      ),
                       overflow: TextOverflow.fade,
                       maxLines: 1,
                       softWrap: false,
                     ),
                   ),
-                _getGroupTags(item) ?? const SizedBox.shrink()
+                _getGroupTags(item) ?? const SizedBox.shrink(),
               ],
             )
           : null,
-      trailing: (item.getMetadata(context) != null ||
+      trailing:
+          (item.getMetadata(context) != null ||
               item.getSubMetadata(context) != null)
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -868,12 +913,10 @@ class _AsyncListViewState extends State<AsyncListView> {
               selectableItems: widget.availableTags!,
               initialSelectedItems: item.getTags()!,
               onSelectionChanged: (selectedItems) =>
-                  widget.onChangedAvailableTags!(
-                item,
-                selectedItems,
-              ),
+                  widget.onChangedAvailableTags!(item, selectedItems),
               isEditable: fastActionsEnabled,
-            ))
+            ),
+          )
         : null;
   }
 
@@ -882,15 +925,14 @@ class _AsyncListViewState extends State<AsyncListView> {
       splashRadius: 0,
       side: BorderSide.none,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(5.0),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
       ),
       onChanged: (_) {
         _onItemChecked(index);
       },
-      value: _selectedItems
-          .any((elem) => elem.getIdentifier() == item.getIdentifier()),
+      value: _selectedItems.any(
+        (elem) => elem.getIdentifier() == item.getIdentifier(),
+      ),
     );
   }
 

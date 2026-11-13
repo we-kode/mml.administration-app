@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/record_validation.dart';
 import 'package:mml_admin/services/record.dart';
@@ -27,6 +27,9 @@ class SettingsUploadValidationViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
+      if (!_context.mounted) {
+        return false;
+      }
       locales = AppLocalizations.of(_context)!;
       try {
         model = await _recordService.getValidationSettings();

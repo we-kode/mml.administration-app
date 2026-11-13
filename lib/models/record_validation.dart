@@ -123,8 +123,9 @@ class RecordValidation {
     // Check if language is required and language is part of known languages.
     if (validateLanguage != null &&
         validateLanguage != RecordValidationState.doNotValidate) {
-      final isAnyLanguage =
-          metadata.frames.any((element) => element.frameName == "TLAN");
+      final isAnyLanguage = metadata.frames.any(
+        (element) => element.frameName == "TLAN",
+      );
       var isValidLanguage = validateLanguage == RecordValidationState.required
           ? isAnyLanguage
           : true;
@@ -136,8 +137,8 @@ class RecordValidation {
         final languages = language.value.asFlag();
         isValidLanguage &=
             (validateLanguage == RecordValidationState.required &&
-                    language.value.isNotEmpty) ||
-                languages.isNotEmpty && !languages.contains('🏁');
+                language.value.isNotEmpty) ||
+            languages.isNotEmpty && !languages.contains('🏁');
       }
 
       isValid &= isValidLanguage;
@@ -191,15 +192,17 @@ class RecordValidation {
     if (validateAlbum != null &&
         validateAlbum != RecordValidationState.doNotValidate) {
       var isAnyAlbum = metadata.album?.isNotEmpty ?? false;
-      isValid &=
-          validateAlbum == RecordValidationState.required ? isAnyAlbum : true;
+      isValid &= validateAlbum == RecordValidationState.required
+          ? isAnyAlbum
+          : true;
       if (validateAlbum == RecordValidationState.required && !isAnyAlbum) {
         validationErrors.add(RecordValidationErrors.album);
       }
 
       if (albums != null) {
         final albumsList = albums!.split(',');
-        final isValidAlbums = albumsList.isEmpty ||
+        final isValidAlbums =
+            albumsList.isEmpty ||
             albumsList.contains(metadata.album) ||
             validateAlbum == RecordValidationState.validate &&
                 (metadata.album == null || metadata.album!.isEmpty);
@@ -216,13 +219,14 @@ class RecordValidation {
       final isAnyGenre = metadata.frames.any(
         (element) => element.frameName == "TCON",
       );
-      var isValidGenre =
-          validateGenre == RecordValidationState.required ? isAnyGenre : true;
+      var isValidGenre = validateGenre == RecordValidationState.required
+          ? isAnyGenre
+          : true;
       TextInformation? genre;
       if (isAnyGenre) {
-        genre = metadata.frames.firstWhere(
-          (element) => element.frameName == "TCON",
-        ) as TextInformation;
+        genre =
+            metadata.frames.firstWhere((element) => element.frameName == "TCON")
+                as TextInformation;
         isValidGenre &= validateGenre == RecordValidationState.required
             ? genre.value.isNotEmpty
             : true;
@@ -235,7 +239,8 @@ class RecordValidation {
 
       if (genres != null) {
         final genreList = genres!.split(',');
-        final isValidGenres = genreList.isEmpty ||
+        final isValidGenres =
+            genreList.isEmpty ||
             genreList.contains(genre?.value) ||
             validateGenre == RecordValidationState.validate && genre == null;
         isValid &= isValidGenres;

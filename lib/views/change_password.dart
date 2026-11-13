@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/change_password.dart';
@@ -41,6 +41,7 @@ class ChangePasswordScreen extends StatelessWidget {
                         ),
                         verticalSpacer,
                         TextFormField(
+                          onFieldSubmitted: (_) => vm.confirmPassword(),
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.actualPassword,
@@ -58,6 +59,7 @@ class ChangePasswordScreen extends StatelessWidget {
                         ),
                         verticalSpacer,
                         TextFormField(
+                          onFieldSubmitted: (_) => vm.confirmPassword(),
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.newPassword,
@@ -75,6 +77,7 @@ class ChangePasswordScreen extends StatelessWidget {
                         ),
                         verticalSpacer,
                         TextFormField(
+                          onFieldSubmitted: (_) => vm.confirmPassword(),
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: vm.locales.confirmNewPassword,

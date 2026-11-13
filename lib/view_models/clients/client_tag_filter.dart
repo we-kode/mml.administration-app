@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/models/client_tag_filter.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/group.dart';
@@ -12,13 +12,13 @@ class ClientTagFilterViewModel extends ChangeNotifier {
   ClientTagFilterViewModel(this.tagFilter);
 
   /// Clears the filter value of the [identifier].
-  void clear(String identifier) async{
+  void clear(String identifier) async {
     tagFilter.clear(identifier);
     notifyListeners();
   }
 
   /// Updates the tag filter [identifier] with the [selectedValues].
-  Future updateFilter(String identifier, dynamic selectedValues) async{
+  Future updateFilter(String identifier, dynamic selectedValues) async {
     tagFilter[identifier] = selectedValues;
     notifyListeners();
   }

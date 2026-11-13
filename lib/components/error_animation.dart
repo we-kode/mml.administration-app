@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mml_admin/gen/assets.gen.dart';
-import 'package:rive/rive.dart';
 
 /// Function called when animation ends.
 typedef StopFunction = Future Function();
@@ -11,36 +11,50 @@ class ErrorAnimation extends StatefulWidget {
   final StopFunction? onStop;
 
   /// Initializes the animation.
-  const ErrorAnimation({
-    super.key,
-    this.onStop,
-  });
+  const ErrorAnimation({super.key, this.onStop});
 
   @override
   ErrorAnimationState createState() => ErrorAnimationState();
 }
 
 /// State of the [ErrorAnimation].
-class ErrorAnimationState extends State<ErrorAnimation> {
+class ErrorAnimationState extends State<ErrorAnimation>
+    with SingleTickerProviderStateMixin {
   /// Controller for playback
-  late RiveAnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = OneShotAnimation('show', onStop: () async {
-      if (widget.onStop != null) {
-        await widget.onStop!();
+    _controller = AnimationController(vsync: this);
+
+    _controller.addStatusListener((status) async {
+      if (status == AnimationStatus.completed) {
+        if (widget.onStop != null) {
+          await widget.onStop!();
+        }
+        setState(() => {});
       }
-      setState(() => {});
     });
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return RiveAnimation.asset(
+    return Lottie.asset(
       Assets.animations.error,
-      controllers: [_controller],
+      controller: _controller,
+      repeat: false,
+      onLoaded: (composition) {
+        _controller.duration = composition.duration;
+        _controller.forward(from: 0);
+      },
+      fit: BoxFit.contain,
     );
   }
 }

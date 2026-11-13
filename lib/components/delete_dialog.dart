@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 
-/// Shows a confirmation dialog for deletion.
-showDeleteDialog(BuildContext context) async{
+/// Shows a confirmation dialog for deletion. A custom [message] replaces the
+/// default confirmation text.
+Future<bool> showDeleteDialog(BuildContext context, {String? message}) async {
   var localization = AppLocalizations.of(context)!;
   var shouldDelete = await showDialog<bool>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
       title: Text(localization.remove),
-      content: Text(localization.deleteConfirmation),
+      content: Text(message ?? localization.deleteConfirmation),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, false),
@@ -22,5 +23,5 @@ showDeleteDialog(BuildContext context) async{
     ),
   );
 
-  return shouldDelete;
+  return shouldDelete ?? false;
 }

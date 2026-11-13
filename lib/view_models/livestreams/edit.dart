@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/livestream.dart';
@@ -38,7 +38,7 @@ class LivestreamEditDialogViewModel extends ChangeNotifier {
   /// Name of the Livestream name field in the errors response.
   final String nameField = 'DisplayName';
 
-   /// Name of the groups field in the errors response.
+  /// Name of the groups field in the errors response.
   final String groupsField = 'Groups';
 
   /// Map of errors from the server.
@@ -134,12 +134,12 @@ class LivestreamEditDialogViewModel extends ChangeNotifier {
 
   /// Loads all groups from the server
   Future<ModelList> getGroups() async {
-    return await _groupService.getGroups(null, 0, -1);
+    return await _groupService.getMediaGroups(null, 0, -1);
   }
 
   /// Clears the errors from the backend for the field with the passed
   /// [fieldName].
-  clearBackendErrors(String fieldName) {
+  void clearBackendErrors(String fieldName) {
     errors.remove(fieldName);
   }
 

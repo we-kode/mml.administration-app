@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/models/record_validation.dart';
 import 'package:mml_admin/view_models/settings/settings_upload_validation.dart';
 import 'package:provider/provider.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class SettingsUploadValidationScreen extends StatelessWidget {
   /// Initializes the instance.
@@ -16,8 +15,10 @@ class SettingsUploadValidationScreen extends StatelessWidget {
     return ChangeNotifierProvider<SettingsUploadValidationViewModel>(
       create: (context) => SettingsUploadValidationViewModel(),
       builder: (context, _) {
-        var vm = Provider.of<SettingsUploadValidationViewModel>(context,
-            listen: false);
+        var vm = Provider.of<SettingsUploadValidationViewModel>(
+          context,
+          listen: false,
+        );
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
@@ -28,9 +29,7 @@ class SettingsUploadValidationScreen extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -82,7 +81,9 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                             Consumer<SettingsUploadValidationViewModel>(
                               builder: (context, vm, _) {
                                 return TextFormField(
-                                  enabled: vm.model.validateAlbum != null &&
+                                  onFieldSubmitted: (_) => vm.save(),
+                                  enabled:
+                                      vm.model.validateAlbum != null &&
                                       vm.model.validateAlbum !=
                                           RecordValidationState.doNotValidate,
                                   decoration: InputDecoration(
@@ -110,7 +111,9 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                             Consumer<SettingsUploadValidationViewModel>(
                               builder: (context, vm, _) {
                                 return TextFormField(
-                                  enabled: vm.model.validateGenre != null &&
+                                  onFieldSubmitted: (_) => vm.save(),
+                                  enabled:
+                                      vm.model.validateGenre != null &&
                                       vm.model.validateGenre !=
                                           RecordValidationState.doNotValidate,
                                   decoration: InputDecoration(
@@ -130,25 +133,27 @@ class SettingsUploadValidationScreen extends StatelessWidget {
                               },
                             ),
                             TextFormField(
+                              onFieldSubmitted: (_) => vm.save(),
                               decoration: InputDecoration(
                                 labelText: vm.locales.uploadValidFilename,
                                 hintText: vm.locales.uploadValidFilenameInfo,
                               ),
-                              initialValue: vm.model.fileNameTemplate == null ||
+                              initialValue:
+                                  vm.model.fileNameTemplate == null ||
                                       vm.model.fileNameTemplate!.isEmpty
                                   ? '(.*)'
                                   : vm.model.fileNameTemplate,
                               onSaved: (String? value) {
                                 vm.model.fileNameTemplate =
                                     value == null || value.isEmpty
-                                        ? '(.*)'
-                                        : value;
+                                    ? '(.*)'
+                                    : value;
                               },
                               onChanged: (String? value) {
                                 vm.model.fileNameTemplate =
                                     value == null || value.isEmpty
-                                        ? '(.*)'
-                                        : value;
+                                    ? '(.*)'
+                                    : value;
                               },
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
@@ -168,41 +173,42 @@ class SettingsUploadValidationScreen extends StatelessWidget {
 
   /// Creates a switch form field
   FormField<RecordValidationState> _switchFormField(
-      SettingsUploadValidationViewModel vm,
-      String title,
-      IconData icon,
-      String modelValue) {
+    SettingsUploadValidationViewModel vm,
+    String title,
+    IconData icon,
+    String modelValue,
+  ) {
     return FormField<RecordValidationState>(
       initialValue: vm.model[modelValue],
       builder: (FormFieldState<RecordValidationState> field) {
         return InputDecorator(
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-          ),
+          decoration: const InputDecoration(border: InputBorder.none),
           child: ListTile(
             leading: Icon(icon),
             title: Text(title),
             trailing: Consumer<SettingsUploadValidationViewModel>(
               builder: (context, vm, _) {
-                return ToggleSwitch(
-                  minHeight: 32,
-                  initialLabelIndex: vm.validationState(modelValue),
-                  activeFgColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                  activeBgColors: [
-                    [Theme.of(context).colorScheme.tertiaryContainer],
-                    [Theme.of(context).colorScheme.secondaryContainer],
-                    [Theme.of(context).colorScheme.primaryContainer],
+                final colors = Theme.of(context).colorScheme;
+                final selected = vm.validationState(modelValue);
+                final selectedColor = [
+                  colors.tertiaryContainer,
+                  colors.secondaryContainer,
+                  colors.primaryContainer,
+                ][selected];
+                return SegmentedButton<int>(
+                  showSelectedIcon: false,
+                  segments: const [
+                    ButtonSegment(value: 0, icon: Icon(Symbols.close)),
+                    ButtonSegment(value: 1, icon: Icon(Symbols.check)),
+                    ButtonSegment(value: 2, icon: Icon(Symbols.done_all)),
                   ],
-                  inactiveBgColor: Theme.of(context).colorScheme.surface,
-                  inactiveFgColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  totalSwitches: 3,
-                  icons: const [
-                    Symbols.close,
-                    Symbols.check,
-                    Symbols.done_all,
-                  ],
-                  onToggle: (index) {
-                    vm.update(modelValue, index);
+                  selected: {selected},
+                  style: SegmentedButton.styleFrom(
+                    selectedBackgroundColor: selectedColor,
+                    selectedForegroundColor: colors.onSurfaceVariant,
+                  ),
+                  onSelectionChanged: (selection) {
+                    vm.update(modelValue, selection.first);
                   },
                 );
               },
@@ -222,14 +228,8 @@ class SettingsUploadValidationScreen extends StatelessWidget {
     var locales = AppLocalizations.of(context)!;
 
     return [
-      TextButton(
-        onPressed: vm.abort,
-        child: Text(locales.cancel),
-      ),
-      TextButton(
-        onPressed: vm.save,
-        child: Text(locales.save),
-      ),
+      TextButton(onPressed: vm.abort, child: Text(locales.cancel)),
+      TextButton(onPressed: vm.save, child: Text(locales.save)),
     ];
   }
 }

@@ -7,23 +7,13 @@ part of 'album.dart';
 // **************************************************************************
 
 Album _$AlbumFromJson(Map<String, dynamic> json) => Album(
-      albumId: json['albumId'] as String?,
-      albumName: json['albumName'] as String?,
-      isDeletable: json['isDeletable'] as bool? ?? false,
-    );
+  albumId: json['albumId'] as String?,
+  albumName: json['albumName'] as String?,
+  isDeletable: json['isDeletable'] as bool? ?? false,
+);
 
-Map<String, dynamic> _$AlbumToJson(Album instance) {
-  final val = <String, dynamic>{
-    'isDeletable': instance.isDeletable,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('albumId', instance.albumId);
-  writeNotNull('albumName', instance.albumName);
-  return val;
-}
+Map<String, dynamic> _$AlbumToJson(Album instance) => <String, dynamic>{
+  'isDeletable': instance.isDeletable,
+  'albumId': ?instance.albumId,
+  'albumName': ?instance.albumName,
+};

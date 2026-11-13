@@ -16,12 +16,7 @@ class Group extends ModelBase {
   bool isDefault;
 
   /// Initializes the group model.
-  Group({
-    this.id,
-    this.name,
-    this.isDefault = false,
-    super.isDeletable
-  });
+  Group({this.id, this.name, this.isDefault = false, super.isDeletable});
 
   /// Converts a json object/map to the group model.
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
@@ -40,7 +35,7 @@ class Group extends ModelBase {
   }
 
   @override
-  bool operator==(Object other) {
+  bool operator ==(Object other) {
     return other is Group && other.id != null && other.id == id;
   }
 

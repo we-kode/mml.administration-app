@@ -25,9 +25,7 @@ class GroupService {
     var response = await _apiService.request(
       '/identity/group',
       queryParameters: {"filter": filter, "skip": offset, "take": take},
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return ModelList(
@@ -41,13 +39,15 @@ class GroupService {
 
   /// Returns a list of groups in the media service with the amount of [take]
   /// that match the given [filter] starting from the [offset].
-  Future<ModelList> getMediaGroups(String? filter, int? offset, int? take) async {
+  Future<ModelList> getMediaGroups(
+    String? filter,
+    int? offset,
+    int? take,
+  ) async {
     var response = await _apiService.request(
       '/media/group',
       queryParameters: {"filter": filter, "skip": offset, "take": take},
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return ModelList(
@@ -60,14 +60,11 @@ class GroupService {
   }
 
   /// Deletes the groups with the given [groupIds] on the server.
-  Future<void> deleteGroups<String>(List<String> groupIds) async {
+  Future<void> deleteGroups(List<String> groupIds) async {
     await _apiService.request(
       '/identity/group/deleteList',
       data: groupIds,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -76,9 +73,7 @@ class GroupService {
     await _apiService.request(
       '/identity/group/${group.id}',
       data: group.toJson(),
-      options: Options(
-        method: 'POST',
-      ),
+      options: Options(method: 'POST'),
     );
   }
 
@@ -87,9 +82,7 @@ class GroupService {
     await _apiService.request(
       '/identity/group',
       data: group.toJson(),
-      options: Options(
-        method: 'POST',
-      ),
+      options: Options(method: 'POST'),
     );
   }
 
@@ -97,9 +90,7 @@ class GroupService {
   Future<Group> getGroup(String id) async {
     var response = await _apiService.request(
       '/identity/group/$id',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return Group.fromJson(response.data);

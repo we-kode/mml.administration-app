@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
+import 'package:mml_admin/manager/image_cache_manager.dart';
 import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -15,11 +16,7 @@ class MMLHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (
-        X509Certificate cert,
-        String host,
-        int port,
-      ) {
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
         // Ignore bad certificates in debug mode!
         if (kReleaseMode) {
           final messenger = MessengerService.getInstance();
@@ -33,7 +30,6 @@ class MMLHttpOverrides extends HttpOverrides {
 /// Runs the admin application.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
   await findSystemLocale();
 
   var systemLocale = Locale(Intl.systemLocale);
@@ -43,21 +39,19 @@ void main() async {
 
   var appLocales = await AppLocalizations.delegate.load(locale);
 
-  WindowOptions windowOptions = WindowOptions(
-    size: const Size(1600, 900),
-    minimumSize: const Size(1600, 900),
-    center: true,
-    title: appLocales.appTitle,
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-  });
+  const windowSize = Size(1600, 900);
+  final window = WindowManager.instance.getCurrent();
+  if (window != null) {
+    window.title = appLocales.appTitle;
+    window.minimumSize = windowSize.toNative();
+    window.setSize(windowSize.toNative(), false);
+    window.center();
+  }
 
   HttpOverrides.global = MMLHttpOverrides();
 
   var pkgInfo = await PackageInfo.fromPlatform();
   SettingsViewModel.version = pkgInfo.version;
+  await ImageCacheManager.init();
   runApp(const AdminApp());
 }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
@@ -36,7 +36,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   late AppLocalizations locales;
 
   /// Socket connection to the server.
-  late RegistrationService _socket;
+  RegistrationService? _socket;
 
   /// [RegistrationState] of the current process.
   RegistrationState _state = RegistrationState.scan;
@@ -64,7 +64,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     final messenger = MessengerService.getInstance();
 
     try {
-      await _socket.connect();
+      await _socket!.connect();
     } on HttpException catch (e) {
       if (e.statusCode != HttpStatus.unauthorized) {
         messenger.showMessage(messenger.unexpectedError(e.message));
@@ -73,7 +73,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
 
       await UserService.getInstance().refreshToken();
       try {
-        await _socket.connect();
+        await _socket!.connect();
       } catch (_) {
         _closeOnError();
       }
@@ -84,11 +84,12 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     return true;
   }
 
-// on errors close Dialog
+  // on errors close Dialog
   void _closeOnError() {
     final messenger = MessengerService.getInstance();
-    messenger
-        .showMessage(messenger.unexpectedError(locales.retrieveTokenFailed));
+    messenger.showMessage(
+      messenger.unexpectedError(locales.retrieveTokenFailed),
+    );
     Navigator.of(_context).pop(false);
   }
 
@@ -136,9 +137,15 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   void abort() async {
     var nav = Navigator.of(_context);
     showProgressIndicator();
-    await _socket.close();
+    await _socket?.close();
     RouterService.getInstance().navigatorKey.currentState!.pop();
     nav.pop(false);
+  }
+
+  @override
+  void dispose() {
+    _socket?.close();
+    super.dispose();
   }
 
   /// Validates the given [displayName] and returns an error message or null if
@@ -190,7 +197,9 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     similarClients.removeWhere(
       (element) => element!.getIdentifier() == client!.clientId,
     );
-    _state = similarClients.isNotEmpty ? RegistrationState.preCheck : RegistrationState.register;
+    _state = similarClients.isNotEmpty
+        ? RegistrationState.preCheck
+        : RegistrationState.register;
     notifyListeners();
   }
 
@@ -211,19 +220,44 @@ class ClientsRegisterViewModel extends ChangeNotifier {
   }
 
   /// Deletes one client from list.
-  Future<bool> deleteClient(
-    int index,
-    BuildContext context,
-  ) async {
+  Future<bool> deleteClient(int index, BuildContext context) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete) {
       try {
         showProgressIndicator();
         var client = similarClients[index];
-        await _service.deleteClients(List<ModelBase>.of({client!})
-            .map<String>((ModelBase e) => (e as Client).getIdentifier())
-            .toList());
+        await _service.deleteClients(
+          List<ModelBase>.of({client!})
+              .map<String>((ModelBase e) => (e as Client).getIdentifier())
+              .toList(),
+        );
+        similarClients.removeAt(index);
+        RouterService.getInstance().navigatorKey.currentState!.pop();
+      } catch (e) {
+        RouterService.getInstance().navigatorKey.currentState!.pop();
+        // Do not reload list on error!
+        return false;
+      }
+    }
+
+    notifyListeners();
+    return shouldDelete;
+  }
+
+  Future<bool> assignAndDeleteClient(int index, BuildContext context) async {
+    var shouldDelete = await showDeleteDialog(context);
+
+    if (shouldDelete) {
+      try {
+        showProgressIndicator();
+        var client = similarClients[index];
+        this.client?.groups = (client as Client).groups;
+        await _service.deleteClients(
+          List<ModelBase>.of({client!})
+              .map<String>((ModelBase e) => (e as Client).getIdentifier())
+              .toList(),
+        );
         similarClients.removeAt(index);
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
@@ -239,10 +273,4 @@ class ClientsRegisterViewModel extends ChangeNotifier {
 }
 
 /// State of the registration process.
-enum RegistrationState {
-  scan,
-  register,
-  error,
-  success,
-  preCheck,
-}
+enum RegistrationState { scan, register, error, success, preCheck }

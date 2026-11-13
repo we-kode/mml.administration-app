@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/route_arguments/change_password.dart';
 import 'package:mml_admin/services/messenger.dart';
@@ -57,21 +57,21 @@ class ChangePasswordViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
+      if (!_context.mounted) {
+        return false;
+      }
+
       var args =
-          ModalRoute.of(context)!.settings.arguments as ChangePasswordArguments;
+          ModalRoute.of(_context)!.settings.arguments
+              as ChangePasswordArguments;
       user = args.user;
       isCloseable = args.isManualTriggered;
       locales = AppLocalizations.of(_context)!;
 
       // Redirect to main page, if the logged in user is confirmed.
       if (user.isConfirmed == true && !args.isManualTriggered) {
-        RouterService.getInstance()
-            .navigatorKey
-            .currentState!
-            .pushReplacementNamed(
-              MainViewModel.route,
-              arguments: user,
-            );
+        RouterService.getInstance().navigatorKey.currentState!
+            .pushReplacementNamed(MainViewModel.route, arguments: user);
         return false;
       }
 
@@ -185,9 +185,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
 
   /// Redirects to the [MainScreen].
   Future afterConfirmation() async {
-    await RouterService.getInstance()
-        .navigatorKey
-        .currentState!
+    await RouterService.getInstance().navigatorKey.currentState!
         .pushReplacementNamed(MainViewModel.route);
   }
 

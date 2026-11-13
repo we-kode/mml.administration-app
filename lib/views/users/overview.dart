@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/models/subfilter.dart';
 import 'package:mml_admin/view_models/users/overview.dart';
@@ -21,10 +21,7 @@ class UsersOverviewScreen extends StatelessWidget {
         var vm = Provider.of<UsersOverviewViewModel>(context, listen: false);
 
         return AsyncListView(
-          deleteItems: <ModelBase>(List<ModelBase> items) => vm.deleteUsers(
-            context,
-            items,
-          ),
+          deleteItems: <T>(List<T> items) => vm.deleteUsers(context, items),
           addItem: () async {
             return await showDialog(
               barrierDismissible: false,
@@ -39,9 +36,7 @@ class UsersOverviewScreen extends StatelessWidget {
               barrierDismissible: false,
               context: context,
               builder: (BuildContext context) {
-                return UsersEditDialog(
-                  userId: (user as User).id,
-                );
+                return UsersEditDialog(userId: (user as User).id);
               },
             );
           },

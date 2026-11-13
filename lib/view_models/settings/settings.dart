@@ -1,7 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:mml_admin/components/delete_dialog.dart';
+import 'package:mml_admin/manager/image_cache_manager.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/route_arguments/change_password.dart';
+import 'package:mml_admin/services/federation.dart';
+import 'package:mml_admin/services/sync.dart';
+import 'package:mml_admin/services/messenger.dart';
 import 'package:mml_admin/services/router.dart';
+import 'package:mml_admin/services/share.dart';
 import 'package:mml_admin/services/user.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/view_models/change_password.dart';
@@ -14,8 +20,23 @@ class SettingsViewModel extends ChangeNotifier {
   /// [UserService] used to load data of the current user.
   final UserService _userService = UserService.getInstance();
 
+  /// [MessengerService] used to show messages in the app snackbar.
+  final MessengerService _messengerService = MessengerService.getInstance();
+
+  /// Cache manager for the app images.
+  final ImageCacheManager cacheManager = ImageCacheManager();
+
   /// Current user
   late User? user;
+
+  String? instance = '';
+
+  /// Whether the server supports share links.
+  bool isShareSupported = true;
+
+  /// Days the audit log of the synchronization is kept, 0 keeps it until it
+  /// is deleted manually.
+  int auditRetentionDays = AuditRetention.defaultDays;
 
   /// Current build context.
   late BuildContext _context;
@@ -30,9 +51,16 @@ class SettingsViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
+      if (!_context.mounted) {
+        return false;
+      }
       locales = AppLocalizations.of(_context)!;
       try {
         user = await _userService.getUserInfo();
+        isShareSupported = await ShareService.getInstance().isSupported();
+        instance = await SyncService.getInstance().get();
+        auditRetentionDays = await FederationService.getInstance()
+            .getAuditRetention();
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
       }
@@ -43,8 +71,41 @@ class SettingsViewModel extends ChangeNotifier {
   /// Redirects the logged in [user] to the [ChangePasswordScreen].
   Future changePassword() async {
     await RouterService.getInstance().navigatorKey.currentState!.pushNamed(
-          ChangePasswordViewModel.route,
-          arguments: ChangePasswordArguments(user!, isManualTriggered: true),
-        );
+      ChangePasswordViewModel.route,
+      arguments: ChangePasswordArguments(user!, isManualTriggered: true),
+    );
+  }
+
+  /// Sets the cache limit to [value] and notifies listeners.
+  Future<void> updateCacheLimits({int? duration = 0}) async {
+    cacheManager.updateLimits(maxCacheTime: duration);
+    notifyListeners();
+  }
+
+  /// Sets the days the audit log of the synchronization is kept to [days].
+  Future<void> updateAuditRetention(int days) async {
+    try {
+      await FederationService.getInstance().setAuditRetention(days);
+      auditRetentionDays = days;
+    } catch (e) {
+      // Catch all errors and do nothing, since handled by api service!
+    }
+    notifyListeners();
+  }
+
+  /// Clears the cache of the app.
+  Future<void> clearCache() async {
+    var shouldDelete = await showDeleteDialog(_context);
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    try {
+      await cacheManager.clearCache();
+      _messengerService.showMessage(_messengerService.cacheCleared);
+    } catch (e) {
+      _messengerService.showMessage(_messengerService.cacheClearedFailed);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/users/edit.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +10,7 @@ class UsersEditDialog extends StatelessWidget {
   final int? userId;
 
   /// Initializes the view for the user create/edit dialog.
-  const UsersEditDialog({
-    super.key,
-    required this.userId,
-  });
+  const UsersEditDialog({super.key, required this.userId});
 
   /// Builds the user create/edit dialog.
   @override
@@ -25,18 +22,14 @@ class UsersEditDialog extends StatelessWidget {
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
-          title: Text(
-            userId != null ? locales.editUser : locales.createUser,
-          ),
+          title: Text(userId != null ? locales.editUser : locales.createUser),
           content: FutureBuilder(
             future: vm.init(context, userId),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -60,6 +53,7 @@ class UsersEditDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            onFieldSubmitted: (_) => vm.saveUser(),
             initialValue: vm.user.name,
             decoration: InputDecoration(
               labelText: vm.locales.username,
@@ -80,6 +74,7 @@ class UsersEditDialog extends StatelessWidget {
           Consumer<UsersEditDialogViewModel>(
             builder: (context, value, child) {
               return TextFormField(
+                onFieldSubmitted: (_) => vm.saveUser(),
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: vm.passwordLabel,

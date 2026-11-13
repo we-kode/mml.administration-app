@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
@@ -31,9 +31,7 @@ class ClientEditDialog extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -57,6 +55,7 @@ class ClientEditDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            onFieldSubmitted: (_) => vm.saveClient(),
             initialValue: vm.client.displayName,
             decoration: InputDecoration(
               labelText: vm.locales.displayName,
@@ -75,6 +74,7 @@ class ClientEditDialog extends StatelessWidget {
           ),
           verticalSpacer,
           TextFormField(
+            onFieldSubmitted: (_) => vm.saveClient(),
             initialValue: vm.client.deviceIdentifier,
             decoration: InputDecoration(
               labelText: vm.locales.deviceName,
@@ -92,20 +92,13 @@ class ClientEditDialog extends StatelessWidget {
             validator: vm.validateDeviceIdentifier,
           ),
           verticalSpacer,
-          Text(
-            vm.locales.groups,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(vm.locales.groups, style: Theme.of(context).textTheme.bodySmall),
           verticalSpacer,
           ChipChoices(
             loadData: vm.getGroups,
             initialSelectedItems: vm.client.groups,
-            onSelectionChanged: (selectableItems) =>
-                vm.client.groups = selectableItems
-                    .map(
-                      (e) => e as Group,
-                    )
-                    .toList(),
+            onSelectionChanged: (selectableItems) => vm.client.groups =
+                selectableItems.map((e) => e as Group).toList(),
           ),
         ],
       ),

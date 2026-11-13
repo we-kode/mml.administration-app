@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -62,8 +62,9 @@ class Client extends ModelBase {
   @override
   String? getSubtitle(BuildContext context) {
     var locales = AppLocalizations.of(context)!;
-    return locales
-        .lastTokenRefresh(DateFormat().format(lastTokenRefreshDate!.toLocal()));
+    return locales.lastTokenRefresh(
+      DateFormat().format(lastTokenRefreshDate!.toLocal()),
+    );
   }
 
   @override

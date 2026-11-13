@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/delete_dialog.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/group.dart';
@@ -15,6 +15,10 @@ import 'package:mml_admin/services/group.dart';
 import 'package:mml_admin/services/record.dart';
 import 'package:mml_admin/services/router.dart';
 import 'package:mml_admin/services/secure_storage.dart';
+import 'package:mml_admin/services/share.dart';
+import 'package:mml_admin/services/sync.dart';
+import 'package:mml_admin/view_models/records/share.dart';
+import 'package:mml_admin/view_models/sync/overview.dart';
 
 /// View model for the records overview screen.
 class RecordsViewModel extends ChangeNotifier {
@@ -37,16 +41,23 @@ class RecordsViewModel extends ChangeNotifier {
   /// Available groups.
   late ModelList groups;
 
+  /// Whether the server supports the synchronization.
+  bool isSyncSupported = true;
+
+  /// Whether the server supports share links.
+  bool isShareSupported = true;
+
   /// Initializes the view model.
   Future<bool> init(BuildContext context) {
     return Future.microtask(() async {
-      isFolderView = (await SecureStorageService.getInstance().get(
+      isFolderView =
+          (await SecureStorageService.getInstance().get(
             SecureStorageService.folderViewStorageKey,
-          ))
-              ?.toLowerCase() ==
+          ))?.toLowerCase() ==
           'true';
-      // TODO: Is exectued before logged in --> should be moved anywhere else
       groups = await _groupService.getMediaGroups(null, 0, -1);
+      isSyncSupported = await SyncService.getInstance().get() != null;
+      isShareSupported = await ShareService.getInstance().isSupported();
       return true;
     });
   }
@@ -76,23 +87,20 @@ class RecordsViewModel extends ChangeNotifier {
 
   /// Deletes the records with the passed [recordIds] or or aborts, if the user
   /// cancels the operation.
-  Future<bool> delete<ModelBase>(
-    List<ModelBase> items,
-    BuildContext context,
-  ) async {
+  Future<bool> delete<T>(List<T> items, BuildContext context) async {
     var shouldDelete = await showDeleteDialog(context);
 
     if (shouldDelete && items.isNotEmpty) {
       try {
         showProgressIndicator();
         if (items.first is Record) {
-          await _service.delete(items
-              .map<String>((ModelBase e) => (e as Record).getIdentifier())
-              .toList());
+          await _service.delete(
+            items.map<String>((T e) => (e as Record).getIdentifier()).toList(),
+          );
         } else {
-          await _service.deleteFolder(items
-              .map<RecordFolder>((ModelBase e) => (e as RecordFolder))
-              .toList());
+          await _service.deleteFolder(
+            items.map<RecordFolder>((T e) => (e as RecordFolder)).toList(),
+          );
         }
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
@@ -106,7 +114,7 @@ class RecordsViewModel extends ChangeNotifier {
   }
 
   /// Loads the next folder which is before actual date range filtered by [subFilter].
-  moveFolderUp(ID3TagFilter subFilter) {
+  void moveFolderUp(ID3TagFilter subFilter) {
     if (subFilter.startDate == null) {
       return;
     }
@@ -121,21 +129,15 @@ class RecordsViewModel extends ChangeNotifier {
           subFilter.endDate!.year,
           subFilter.endDate!.month,
           DateUtils.getDaysInMonth(
-              subFilter.endDate!.year, subFilter.endDate!.month),
+            subFilter.endDate!.year,
+            subFilter.endDate!.month,
+          ),
         ),
       );
     } else if (subFilter.startDate!.month == subFilter.endDate!.month) {
       subFilter[ID3TagFilters.date] = DateTimeRange(
-        start: DateTime(
-          subFilter.startDate!.year,
-          1,
-          1,
-        ),
-        end: DateTime(
-          subFilter.endDate!.year,
-          12,
-          31,
-        ),
+        start: DateTime(subFilter.startDate!.year, 1, 1),
+        end: DateTime(subFilter.endDate!.year, 12, 31),
       );
     } else {
       subFilter.clear(ID3TagFilters.date);
@@ -144,17 +146,13 @@ class RecordsViewModel extends ChangeNotifier {
 
   /// Updates the groups of the [item].
   void groupsChanged(ModelBase item, List<ModelBase> changedGroups) async {
-    (item as Record).groups = changedGroups
-        .map(
-          (e) => e as Group,
-        )
-        .toList();
+    (item as Record).groups = changedGroups.map((e) => e as Group).toList();
     _service.updateRecord(item);
   }
 
   /// Assigns groups to records.
-  Future assignGroups<ModelBase>(
-    List<ModelBase> items,
+  Future assignGroups<T>(
+    List<T> items,
     List<String> initialGroups,
     List<String> selectedGroups,
   ) async {
@@ -184,15 +182,46 @@ class RecordsViewModel extends ChangeNotifier {
   Future lockRecords(List items) async {
     var isRecords = items.any((element) => element is Record);
     if (isRecords) {
-      await _service.lock(
-        items.map((e) => (e as Record).recordId!).toList(),
-      );
+      await _service.lock(items.map((e) => (e as Record).recordId!).toList());
       return;
     }
 
-    await _service.lockFolders(
-      items.map((e) => (e as RecordFolder)).toList(),
+    await _service.lockFolders(items.map((e) => (e as RecordFolder)).toList());
+  }
+
+  /// Synchronizes the selected [items] with the partner instances the admin
+  /// selects and shows the result. Returns false, so the selection stays
+  /// active.
+  Future<bool> synchronize(List items, BuildContext context) async {
+    await synchronizeRecords(
+      context,
+      recordIds: items.whereType<Record>().map((e) => e.recordId!).toList(),
+      folders: items.whereType<RecordFolder>().toList(),
     );
+    return false;
+  }
+
+  /// Creates a share link for the selected [items] and shows it. Returns false,
+  /// so the selection stays active.
+  Future<bool> share(List items, BuildContext context) async {
+    await shareRecords(
+      context,
+      recordIds: items.whereType<Record>().map((e) => e.recordId!).toList(),
+      folders: items.whereType<RecordFolder>().toList(),
+    );
+    return false;
+  }
+
+  /// Revokes the synchronization of the selected [items] with the partner
+  /// instances the admin selects and shows the result. Returns true, so the
+  /// list is reloaded.
+  Future<bool> revokeSync(List items, BuildContext context) async {
+    await revokeRecords(
+      context,
+      recordIds: items.whereType<Record>().map((e) => e.recordId!).toList(),
+      folders: items.whereType<RecordFolder>().toList(),
+    );
+    return true;
   }
 
   /// Loads the assigned groups.
@@ -201,11 +230,11 @@ class RecordsViewModel extends ChangeNotifier {
     var groups = List.empty(growable: true);
     if (isRecords) {
       groups = await _service.assignedGroups(
-         items.map((e) => (e as Record).recordId!).toList(),
+        items.map((e) => (e as Record).recordId!).toList(),
       );
     } else {
       groups = await _service.assignedFolderGroups(
-         items.map((e) => (e as RecordFolder)).toList(),
+        items.map((e) => (e as RecordFolder)).toList(),
       );
     }
 

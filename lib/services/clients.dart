@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/client_tag_filter.dart';
 import 'package:mml_admin/models/connection_settings.dart';
@@ -13,10 +14,17 @@ class ClientService {
   static final ClientService _instance = ClientService._();
 
   /// Instance of the [ApiService] to access the server with.
-  final ApiService _apiService = ApiService.getInstance();
+  final ApiService _apiService;
 
   /// Private constructor of the service.
-  ClientService._();
+  ClientService._([ApiService? apiService])
+    : _apiService = apiService ?? ApiService.getInstance();
+
+  /// Creates a service, that accesses the server with the [apiService].
+  @visibleForTesting
+  factory ClientService.withApi(ApiService apiService) {
+    return ClientService._(apiService);
+  }
 
   /// Returns the singleton instance of the [ClientService].
   static ClientService getInstance() {
@@ -47,10 +55,8 @@ class ClientService {
     var response = await _apiService.request(
       '/identity/client/list',
       queryParameters: params,
-      data: tagfilter != null ? tagfilter.toJson() : {},
-      options: Options(
-        method: 'POST',
-      ),
+      data: tagfilter != null ? tagfilter.toJson() : <String, dynamic>{},
+      options: Options(method: 'POST'),
     );
 
     return ModelList(
@@ -63,14 +69,11 @@ class ClientService {
   }
 
   /// Deletes the clients with the given [clientIds] on the server.
-  Future<void> deleteClients<String>(List<String> clientIds) async {
+  Future<void> deleteClients(List<String> clientIds) async {
     await _apiService.request(
       '/identity/client/deleteList',
       data: clientIds,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -79,9 +82,7 @@ class ClientService {
     await _apiService.request(
       '/identity/client',
       data: client.toJson(),
-      options: Options(
-        method: 'POST',
-      ),
+      options: Options(method: 'POST'),
     );
   }
 
@@ -91,26 +92,24 @@ class ClientService {
   Future<Client> getClient(String id) async {
     var response = await _apiService.request(
       '/identity/client/$id',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return Client.fromJson(response.data);
   }
 
   /// Loads the connection settings for a client app.
+  ///
+  /// Uses the server name announced by the server or the server of the admin
+  /// app, if none is announced.
   Future<ConnectionSettings> getConnectionSettings() async {
     var response = await _apiService.request(
       '/identity/client/connection_settings',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
-    response.data['serverName'] = await SecureStorageService.getInstance().get(
-      SecureStorageService.serverNameStorageKey,
-    );
+    response.data['serverName'] ??= await SecureStorageService.getInstance()
+        .get(SecureStorageService.serverNameStorageKey);
 
     return ConnectionSettings.fromJson(response.data);
   }
@@ -123,15 +122,12 @@ class ClientService {
   ) async {
     await _apiService.request(
       '/identity/client/assign',
-      data: {
+      data: <String, dynamic>{
         "items": clients,
         "groups": groups,
         "initGroups": initialGroups,
       },
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -140,10 +136,7 @@ class ClientService {
     var response = await _apiService.request(
       '/identity/client/assignedGroups',
       data: clients,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
 
     return ModelList(

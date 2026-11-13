@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/models/group.dart';
 import 'package:mml_admin/models/model_list.dart';
 import 'package:mml_admin/services/group.dart';
@@ -16,7 +16,12 @@ class GroupsOverviewViewModel extends ChangeNotifier {
 
   /// Loads the groups with the passed [filter] starting at [offset] and
   /// loading [take] data.
-  Future<ModelList> loadGroups({String? filter, int? offset, int? take, dynamic subfilter}) async {
+  Future<ModelList> loadGroups({
+    String? filter,
+    int? offset,
+    int? take,
+    dynamic subfilter,
+  }) async {
     return await _groupService.getGroups(filter, offset, take);
   }
 
@@ -31,7 +36,11 @@ class GroupsOverviewViewModel extends ChangeNotifier {
     if (shouldDelete) {
       try {
         showProgressIndicator();
-        await _groupService.deleteGroups(groups.map<String>((ModelBase e) => (e as Group).getIdentifier()).toList());
+        await _groupService.deleteGroups(
+          groups
+              .map<String>((ModelBase e) => (e as Group).getIdentifier())
+              .toList(),
+        );
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();

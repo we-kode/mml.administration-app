@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/chip_choices.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/models/group.dart';
@@ -11,10 +11,7 @@ class LivestreamEditDialog extends StatelessWidget {
   final String? id;
 
   /// Initializes the view for the live stream create/edit dialog.
-  const LivestreamEditDialog({
-    super.key,
-    required this.id,
-  });
+  const LivestreamEditDialog({super.key, required this.id});
 
   /// Builds the live stream create/edit dialog.
   @override
@@ -22,7 +19,10 @@ class LivestreamEditDialog extends StatelessWidget {
     return ChangeNotifierProvider<LivestreamEditDialogViewModel>(
       create: (context) => LivestreamEditDialogViewModel(),
       builder: (context, _) {
-        var vm = Provider.of<LivestreamEditDialogViewModel>(context, listen: false);
+        var vm = Provider.of<LivestreamEditDialogViewModel>(
+          context,
+          listen: false,
+        );
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
@@ -35,9 +35,7 @@ class LivestreamEditDialog extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -53,7 +51,10 @@ class LivestreamEditDialog extends StatelessWidget {
   }
 
   /// Creates the edit form that should be shown in the dialog.
-  Widget _createEditForm(BuildContext context, LivestreamEditDialogViewModel vm) {
+  Widget _createEditForm(
+    BuildContext context,
+    LivestreamEditDialogViewModel vm,
+  ) {
     return Form(
       key: vm.formKey,
       child: Column(
@@ -61,6 +62,7 @@ class LivestreamEditDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            onFieldSubmitted: (_) => vm.save(),
             initialValue: vm.stream.title,
             decoration: InputDecoration(
               labelText: vm.locales.displayName,
@@ -79,6 +81,7 @@ class LivestreamEditDialog extends StatelessWidget {
           ),
           verticalSpacer,
           TextFormField(
+            onFieldSubmitted: (_) => vm.save(),
             initialValue: vm.stream.url,
             decoration: InputDecoration(
               labelText: vm.locales.streamUrl,
@@ -97,12 +100,8 @@ class LivestreamEditDialog extends StatelessWidget {
           ChipChoices(
             loadData: vm.getGroups,
             initialSelectedItems: vm.stream.groups,
-            onSelectionChanged: (selectableItems) =>
-                vm.stream.groups = selectableItems
-                    .map(
-                      (e) => e as Group,
-                    )
-                    .toList(),
+            onSelectionChanged: (selectableItems) => vm.stream.groups =
+                selectableItems.map((e) => e as Group).toList(),
           ),
         ],
       ),

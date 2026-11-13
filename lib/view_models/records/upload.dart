@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mime/mime.dart';
 import 'package:mml_admin/models/group.dart';
@@ -18,11 +18,30 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   late AppLocalizations locales;
 
   /// [RecordService] used to load data for the records uplaod dialog.
-  final RecordService _service = RecordService.getInstance();
+  final RecordService _service;
 
   /// [GroupService] used to load data for the groups of the client editing
   /// screen.
-  final GroupService _groupService = GroupService.getInstance();
+  final GroupService _groupService;
+
+  final CancelToken _cancelToken = CancelToken();
+  bool _disposed = false;
+
+  /// Initializes the view model. A custom [service] and [groupService] can be
+  /// passed for tests.
+  RecordsUploadDialogViewModel({
+    RecordService? service,
+    GroupService? groupService,
+  }) : _service = service ?? RecordService.getInstance(),
+       _groupService = groupService ?? GroupService.getInstance();
+
+  /// Stops the running upload, since the dialog was closed.
+  @override
+  void dispose() {
+    _disposed = true;
+    _cancelToken.cancel();
+    super.dispose();
+  }
 
   /// Number of files to be uploaded.
   int fileCount = 0;
@@ -64,19 +83,16 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
     notUploadedFiles = {};
     folder = folderPath;
     files = fileList;
-    return Future<bool>.microtask(
-      () async {
-        _recordValidation = await _service.getValidationSettings();
-        if (_state == UploadProcessState.upload) {
-          initUpload();
-        } else if (_state == UploadProcessState.groups) {
-          final groups = List<Group>.from(await getGroups());
-          selectedGroups =
-              groups.where((element) => element.isDefault).toList();
-        }
-        return true;
-      },
-    );
+    return Future<bool>.microtask(() async {
+      _recordValidation = await _service.getValidationSettings();
+      if (_state == UploadProcessState.upload) {
+        initUpload();
+      } else if (_state == UploadProcessState.groups) {
+        final groups = List<Group>.from(await getGroups());
+        selectedGroups = groups.where((element) => element.isDefault).toList();
+      }
+      return true;
+    });
   }
 
   /// Loads all groups from the server.
@@ -88,18 +104,21 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   Future initUpload() async {
     _state = UploadProcessState.upload;
     notifyListeners();
-    (folder ?? '').isNotEmpty ? _uploadFolder(folder!) : _uploadFiles(files!);
+    return (folder ?? '').isNotEmpty
+        ? _uploadFolder(folder!)
+        : _uploadFiles(files!);
   }
 
   /// Uploads all file given in the [folderPath]. All files in subfolders will be uplaoded also.
   Future _uploadFolder(String folderPath) async {
     final files = await Directory(folderPath).list(recursive: true).toList();
     fileCount = files
-        .where(
-          (element) => element is File && _isMp3(element),
-        )
+        .where((element) => element is File && _isMp3(element))
         .length;
     for (var element in files) {
+      if (_disposed) {
+        return;
+      }
       if (element is File) {
         await _upload(element);
       }
@@ -110,6 +129,9 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
   Future _uploadFiles(List<PlatformFile> fileList) async {
     fileCount = fileList.length;
     for (var element in fileList) {
+      if (_disposed) {
+        return;
+      }
       var file = File(element.path!);
       await _upload(file);
     }
@@ -128,16 +150,23 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
         notUploadedFiles.addAll({
           uploadingFileName: _recordValidation.validationErrors,
         });
-      } else {
+      } else if (!_disposed) {
         await _service.upload(
           file,
           uploadingFileName,
           selectedGroups.map((e) => e.id!).toList(),
+          cancelToken: _cancelToken,
         );
+      }
+      if (_disposed) {
+        return;
       }
       uploadedFiles++;
       notifyListeners();
     } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return;
+      }
       notUploadedFiles.addAll({
         uploadingFileName: List.from(["uploadValidFailed"]),
       });
@@ -159,10 +188,7 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
           }
         }
         messenger.showMessage(
-          messenger.uploadingFileFailed(
-            uploadingFileName,
-            uploadError,
-          ),
+          messenger.uploadingFileFailed(uploadingFileName, uploadError),
         );
         return;
       }
@@ -210,8 +236,4 @@ class RecordsUploadDialogViewModel extends ChangeNotifier {
 }
 
 /// State of the upload process.
-enum UploadProcessState {
-  groups,
-  upload,
-  success,
-}
+enum UploadProcessState { groups, upload, success }

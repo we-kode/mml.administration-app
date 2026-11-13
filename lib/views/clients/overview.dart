@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/async_list_view.dart';
 import 'package:mml_admin/components/async_select_list_dialog.dart';
 import 'package:mml_admin/models/client.dart';
@@ -36,11 +36,8 @@ class ClientsScreen extends StatelessWidget {
                     clients: vm.clientCount,
                     tagFilter: vm.tagFilter,
                   ),
-                  deleteItems: <ModelBase>(List<ModelBase> items) =>
-                      vm.deleteClients(
-                    items,
-                    context,
-                  ),
+                  deleteItems: <T>(List<T> items) =>
+                      vm.deleteClients(items, context),
                   addItem: () async {
                     return await showDialog(
                       barrierDismissible: false,
@@ -56,7 +53,8 @@ class ClientsScreen extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return ClientEditDialog(
-                            clientId: (client as Client).clientId);
+                          clientId: (client as Client).clientId,
+                        );
                       },
                     );
                   },
@@ -64,7 +62,7 @@ class ClientsScreen extends StatelessWidget {
                   availableTags: vm.groups,
                   onChangedAvailableTags: (item, changedTags) =>
                       vm.groupsChanged(item, changedTags),
-                  assignItems: <ModelBase>(List<ModelBase> clients) async {
+                  assignItems: <T>(List<T> clients) async {
                     var result = await showDialog(
                       barrierDismissible: false,
                       context: context,

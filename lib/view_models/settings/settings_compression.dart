@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/settings.dart';
 import 'package:mml_admin/services/record.dart';
@@ -36,6 +36,9 @@ class SettingsCompressionViewModel extends ChangeNotifier {
   Future<bool> init(BuildContext context) async {
     return Future<bool>.microtask(() async {
       _context = context;
+      if (!_context.mounted) {
+        return false;
+      }
       locales = AppLocalizations.of(_context)!;
       try {
         settings = await _recordService.getSettings();
@@ -57,7 +60,7 @@ class SettingsCompressionViewModel extends ChangeNotifier {
 
   /// Clears the errors from the backend for the field with the passed
   /// [fieldName].
-  clearBackendErrors(String fieldName) {
+  void clearBackendErrors(String fieldName) {
     errors.remove(fieldName);
   }
 

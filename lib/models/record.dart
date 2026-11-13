@@ -1,15 +1,22 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:mml_admin/components/shimmer_cover.dart';
+import 'package:mml_admin/components/transfer_indicator.dart';
 import 'package:mml_admin/extensions/datetime.dart';
 import 'package:mml_admin/extensions/flag.dart';
-import 'package:mml_admin/models/group.dart';
-import 'package:mml_admin/models/model_base.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
+import 'package:mml_admin/manager/image_cache_manager.dart';
+import 'package:mml_admin/models/federation/record_sync_state.dart';
+import 'package:mml_admin/models/federation/sync_direction.dart';
+import 'package:mml_admin/models/group.dart';
+import 'package:mml_admin/models/id3_tag_filter.dart';
+import 'package:mml_admin/models/model_base.dart';
+import 'package:mml_admin/models/subfilter.dart';
 
 part 'record.g.dart';
 
@@ -40,14 +47,30 @@ class Record extends ModelBase {
   /// Album of the record or null if no one provided.
   String? album;
 
+  /// Id of the album or null if no one provided or the server does not send it.
+  @JsonKey(includeToJson: false)
+  String? albumId;
+
   /// Language of the record or null if no one provided.
   String? language;
 
   /// The bitrate in kbit/s of the record.
   int? bitrate;
 
-  /// The cover image of the record.
+  /// The file name of the cover image of the record. It is managed by the
+  /// server and not sent on updates. Servers without synchronization send the
+  /// base64 encoded image instead, see [isLegacy].
+  @JsonKey(includeToJson: false)
   String? cover;
+
+  /// The owner of the record or null if the server does not support the
+  /// synchronization.
+  String? ownerInstance;
+
+  /// The synchronization state with partner instances, see
+  /// [RecordSyncState]. Only set in lists of records.
+  @JsonKey(includeToJson: false)
+  int syncState;
 
   /// Indicates whether the record is locked for some operations on records..
   bool? locked;
@@ -58,11 +81,13 @@ class Record extends ModelBase {
   /// Creates a new record instance with the given values.
   Record({
     required this.recordId,
+    this.ownerInstance,
     this.title,
     this.trackNumber,
     this.date,
     this.duration = 0,
     this.album,
+    this.albumId,
     this.artist,
     this.genre,
     this.language,
@@ -71,6 +96,7 @@ class Record extends ModelBase {
     this.locked,
     super.isDeletable,
     List<Group>? groups,
+    this.syncState = RecordSyncState.none,
   }) {
     this.groups = groups ?? [];
   }
@@ -78,8 +104,15 @@ class Record extends ModelBase {
   /// Converts a json object/map to the record model.
   factory Record.fromJson(Map<String, dynamic> json) => _$RecordFromJson(json);
 
-  /// Converts the current record model to a json object/map.
-  Map<String, dynamic> toJson() => _$RecordToJson(this);
+  /// Converts the current record model to a json object/map. Servers without
+  /// synchronization replace the cover with the sent one, so it is kept.
+  Map<String, dynamic> toJson() => {
+    ..._$RecordToJson(this),
+    if (isLegacy && cover != null) 'cover': cover,
+  };
+
+  /// Whether the record was loaded from a server without synchronization.
+  bool get isLegacy => ownerInstance == null;
 
   @override
   String getDisplayDescription() {
@@ -94,8 +127,14 @@ class Record extends ModelBase {
 
   @override
   String? getSubtitle(BuildContext context) {
-    var locales = AppLocalizations.of(context)!;
-    return artist ?? locales.unknown;
+    return artist ?? AppLocalizations.of(context)!.unknown;
+  }
+
+  @override
+  String? getSubtitleNote(BuildContext context) {
+    return syncState == RecordSyncState.received
+        ? AppLocalizations.of(context)!.receivedFrom(ownerInstance ?? '')
+        : null;
   }
 
   @override
@@ -125,7 +164,23 @@ class Record extends ModelBase {
 
   @override
   String? getGroup(BuildContext context) {
-    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}${album?.isNotEmpty ?? false ? ':' : ''} $album';
+    final suffix = album?.isNotEmpty ?? false ? ': $album' : '';
+    return '${DateFormat.yMd().format(date!)} - ${date!.weekdayName()}$suffix';
+  }
+
+  @override
+  Subfilter? getGroupFilter() {
+    final hasAlbum = album?.isNotEmpty ?? false;
+    if (date == null || (hasAlbum && albumId == null)) {
+      return null;
+    }
+
+    final day = DateTime.utc(date!.year, date!.month, date!.day);
+    return ID3TagFilter(
+      albums: hasAlbum ? [albumId!] : null,
+      startDate: day,
+      endDate: day,
+    );
   }
 
   @override
@@ -136,10 +191,24 @@ class Record extends ModelBase {
   @override
   Widget? getAvatar(BuildContext context) {
     if (cover != null && cover!.isNotEmpty) {
-      return Image.memory(
-        Uint8List.fromList(
-          base64.decode(cover!),
-        ),
+      if (isLegacy) {
+        try {
+          return Image.memory(
+            base64.decode(cover!),
+            errorBuilder: (context, error, stackTrace) =>
+                const Icon(Symbols.music_note_2),
+          );
+        } on FormatException {
+          return const Icon(Symbols.music_note_2);
+        }
+      }
+
+      return CachedNetworkImage(
+        cacheKey: cover,
+        imageUrl: cover!,
+        placeholder: (context, url) => const ShimmerCover(),
+        errorWidget: (context, url, error) => const Icon(Symbols.music_note_2),
+        cacheManager: ImageCacheManager(),
       );
     }
     return const Icon(Symbols.music_note);
@@ -147,10 +216,76 @@ class Record extends ModelBase {
 
   @override
   Widget? getSecureState(BuildContext context) {
-    return Icon(
-      Symbols.lock_open,
-      size: 10,
-      color: (locked ?? false) ? Theme.of(context).colorScheme.secondary : null
+    var isLocked = locked ?? false;
+    var syncIcon = _syncIcon(context);
+    if (!isLocked && syncIcon == null) {
+      return null;
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ?syncIcon,
+        if (isLocked)
+          Icon(
+            Symbols.block,
+            size: 10,
+            color: Theme.of(context).colorScheme.error,
+          ),
+      ],
+    );
+  }
+
+  /// Returns the icon of the synchronization state or null for records,
+  /// which are not synchronized.
+  Widget? _syncIcon(BuildContext context) {
+    var locales = AppLocalizations.of(context)!;
+    var colors = Theme.of(context).colorScheme;
+    var (icon, color, message) = switch (syncState) {
+      RecordSyncState.received => (
+        SyncDirection.icon(SyncDirection.incoming),
+        colors.secondary,
+        locales.receivedFrom(ownerInstance ?? ''),
+      ),
+      RecordSyncState.sent => (
+        SyncDirection.icon(SyncDirection.outgoing),
+        colors.primary,
+        locales.syncStateSent,
+      ),
+      RecordSyncState.problem => (
+        Symbols.sync_problem,
+        colors.error,
+        locales.syncStateProblem,
+      ),
+      RecordSyncState.pending => (
+        Symbols.sync,
+        colors.primary,
+        locales.syncStatePending,
+      ),
+      _ => (null, null, null),
+    };
+    if (icon == null) {
+      return null;
+    }
+
+    if (syncState == RecordSyncState.pending) {
+      return TransferIndicator(
+        record: this,
+        message: message!,
+        icon: icon,
+        stateIcon: _syncIcon,
+      );
+    }
+
+    return Tooltip(
+      message: message,
+      child: Container(
+        decoration: BoxDecoration(
+          color: colors.surface,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, size: 16, color: color),
+      ),
     );
   }
 

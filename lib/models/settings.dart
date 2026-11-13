@@ -9,9 +9,7 @@ class Settings {
   int? compressionRate;
 
   /// Initializes the model.
-  Settings({
-    this.compressionRate,
-  });
+  Settings({this.compressionRate});
 
   /// Converts a json object/map to the model.
   factory Settings.fromJson(Map<String, dynamic> json) =>

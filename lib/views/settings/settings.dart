@@ -1,11 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
+import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/view_models/settings/settings.dart';
+import 'package:mml_admin/views/settings/licenses.dart';
 import 'package:mml_admin/views/settings/settings_compression.dart';
+import 'package:mml_admin/views/settings/share_links.dart';
+import 'package:mml_admin/views/settings/settings_share.dart';
 import 'package:mml_admin/views/settings/settings_connection.dart';
 import 'package:mml_admin/views/settings/settings_genre_bitrate.dart';
 import 'package:mml_admin/views/settings/settings_upload_validation.dart';
+import 'package:mml_admin/services/federation.dart';
 import 'package:provider/provider.dart';
 
 /// Screen to modify own app settings.
@@ -25,9 +30,7 @@ class SettingsScreen extends StatelessWidget {
             future: vm.init(context),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
 
               return ListView(
@@ -40,6 +43,11 @@ class SettingsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
+                  if (vm.instance != null)
+                    ListTile(
+                      leading: const Icon(Symbols.computer),
+                      title: Text('${vm.locales.instance}: ${vm.instance}'),
+                    ),
                   ListTile(
                     leading: const Icon(Symbols.person),
                     trailing: ElevatedButton.icon(
@@ -49,15 +57,11 @@ class SettingsScreen extends StatelessWidget {
                       icon: const Icon(Symbols.lock),
                       label: Text(vm.locales.changePassword),
                     ),
-                    title: Text(
-                      '${vm.locales.actualUser}: ${vm.user!.name!}',
-                    ),
+                    title: Text('${vm.locales.actualUser}: ${vm.user!.name!}'),
                   ),
                   ListTile(
                     leading: const Icon(Symbols.qr_code_2),
-                    title: Text(
-                      vm.locales.actualConnectionSettings,
-                    ),
+                    title: Text(vm.locales.actualConnectionSettings),
                     onTap: () => showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -110,6 +114,130 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   const Divider(),
+                  if (vm.isShareSupported) ...[
+                    verticalSpacer,
+                    ListTile(
+                      dense: true,
+                      visualDensity: const VisualDensity(vertical: -4),
+                      title: Text(
+                        vm.locales.share,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ),
+                    ListTile(
+                      leading: const Icon(Symbols.share),
+                      title: Text(vm.locales.shareSettings),
+                      onTap: () => showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const SettingsShareScreen();
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      leading: const Icon(Symbols.link),
+                      title: Text(vm.locales.shareMyLinks),
+                      onTap: () => showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const ShareLinksScreen();
+                        },
+                      ),
+                    ),
+                    const Divider(),
+                  ],
+                  if (vm.instance != null) ...[
+                    verticalSpacer,
+                    ListTile(
+                      dense: true,
+                      visualDensity: const VisualDensity(vertical: -4),
+                      title: Text(
+                        vm.locales.sync,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ),
+                    ListTile(
+                      leading: const Icon(Symbols.history),
+                      trailing: DropdownMenu(
+                        inputDecorationTheme: InputDecorationTheme(
+                          isDense: true,
+                        ),
+                        selectOnly: true,
+                        dropdownMenuEntries: [
+                          for (var days in AuditRetention.allowedDays)
+                            DropdownMenuEntry(
+                              value: days,
+                              label: _retentionLabel(vm.locales, days),
+                            ),
+                        ],
+                        initialSelection: vm.auditRetentionDays,
+                        onSelected: (value) {
+                          if (value != null) {
+                            vm.updateAuditRetention(value);
+                          }
+                        },
+                      ),
+                      title: Text(vm.locales.auditRetention),
+                      subtitle: Text(vm.locales.auditRetentionInfo),
+                    ),
+                    const Divider(),
+                  ],
+                  verticalSpacer,
+                  ListTile(
+                    dense: true,
+                    visualDensity: const VisualDensity(vertical: -4),
+                    title: Text(
+                      vm.locales.cacheSettings,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Symbols.avg_pace),
+                    trailing: DropdownMenu(
+                      inputDecorationTheme: InputDecorationTheme(isDense: true),
+                      selectOnly: true,
+                      dropdownMenuEntries: [
+                        DropdownMenuEntry(
+                          value: 7,
+                          label: vm.locales.cacheRangeWeek,
+                        ),
+                        DropdownMenuEntry(
+                          value: 30,
+                          label: vm.locales.cacheRangeMonth,
+                        ),
+                        DropdownMenuEntry(
+                          value: 365,
+                          label: vm.locales.cacheRangeYear,
+                        ),
+                        DropdownMenuEntry(
+                          value: 3650,
+                          label: vm.locales.cacheRangeNever,
+                        ),
+                      ],
+                      initialSelection: vm.cacheManager.durationLimit,
+                      onSelected: (value) {
+                        vm.updateCacheLimits(duration: value);
+                      },
+                    ),
+                    title: Text(vm.locales.cacheRemoveTime),
+                  ),
+                  verticalSpacer,
+                  TextButton(
+                    onPressed: () {
+                      vm.clearCache();
+                    },
+                    child: ValueListenableBuilder<double>(
+                      valueListenable: vm.cacheManager.cacheSizeMB,
+                      builder: (context, size, _) {
+                        return Text(
+                          '${vm.locales.cacheRemove} (${size.toStringAsFixed(2)} MB)',
+                        );
+                      },
+                    ),
+                  ),
+                  const Divider(),
                   verticalSpacer,
                   ListTile(
                     dense: true,
@@ -123,6 +251,14 @@ class SettingsScreen extends StatelessWidget {
                     leading: const Icon(Symbols.new_releases),
                     title: Text(SettingsViewModel.version),
                   ),
+                  ListTile(
+                    leading: const Icon(Symbols.license),
+                    title: Text(vm.locales.licenses),
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => const LicensesDialog(),
+                    ),
+                  ),
                 ],
               );
             },
@@ -130,5 +266,23 @@ class SettingsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  /// Returns the label of the audit log retention of [days].
+  String _retentionLabel(AppLocalizations locales, int days) {
+    switch (days) {
+      case 7:
+        return locales.cacheRangeWeek;
+      case 30:
+        return locales.cacheRangeMonth;
+      case 90:
+        return locales.retentionThreeMonths;
+      case 180:
+        return locales.retentionSixMonths;
+      case 365:
+        return locales.cacheRangeYear;
+      default:
+        return locales.cacheRangeNever;
+    }
   }
 }

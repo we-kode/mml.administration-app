@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:mml_admin/extensions/multipartfile.dart';
@@ -34,33 +35,25 @@ class RecordService {
   }
 
   /// Uploads a [file] with the given [fileName] and associated [groups] to the server.
-  Future upload(File file, String fileName, List<String> groups) async {
+  /// A running upload is aborted when the [cancelToken] is canceled.
+  Future upload(
+    File file,
+    String fileName,
+    List<String> groups, {
+    CancelToken? cancelToken,
+  }) async {
     final lastModified = await file.lastModified();
-    FormData formData = FormData.fromMap(
-      {
-        "file": MultipartFileExtended.fromFileSync(
-          file.path,
-          filename: fileName,
-        )
-      },
-    );
-    formData.fields.add(
-      MapEntry(
-        'LastModifiedDate',
-        lastModified.toString(),
-      ),
-    );
+    FormData formData = FormData.fromMap({
+      "file": MultipartFileExtended.fromFileSync(file.path, filename: fileName),
+    });
+    formData.fields.add(MapEntry('LastModifiedDate', lastModified.toString()));
     for (String group in groups) {
-      formData.fields.add(
-        MapEntry(
-          'Groups',
-          group,
-        ),
-      );
+      formData.fields.add(MapEntry('Groups', group));
     }
     await _apiService.request(
       '/media/upload',
       data: formData,
+      cancelToken: cancelToken,
       options: Options(method: 'POST'),
     );
   }
@@ -90,10 +83,8 @@ class RecordService {
     var response = await _apiService.request(
       '/media/record/list',
       queryParameters: params,
-      data: tagFilter != null ? tagFilter.toJson() : {},
-      options: Options(
-        method: 'POST',
-      ),
+      data: tagFilter != null ? tagFilter.toJson() : <String, dynamic>{},
+      options: Options(method: 'POST'),
     );
 
     return ModelList(
@@ -110,9 +101,7 @@ class RecordService {
     var response = await _apiService.request(
       '/media/record/artists',
       queryParameters: {"filter": filter, "skip": offset, "take": take},
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return ModelList(
@@ -129,9 +118,7 @@ class RecordService {
     var response = await _apiService.request(
       '/media/record/albums',
       queryParameters: {"filter": filter, "skip": offset, "take": take},
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return ModelList(
@@ -148,9 +135,7 @@ class RecordService {
     var response = await _apiService.request(
       '/media/record/genres',
       queryParameters: {"filter": filter, "skip": offset, "take": take},
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return ModelList(
@@ -167,9 +152,7 @@ class RecordService {
     var response = await _apiService.request(
       '/media/record/languages',
       queryParameters: {"filter": filter, "skip": offset, "take": take},
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return ModelList(
@@ -182,14 +165,11 @@ class RecordService {
   }
 
   /// Deletes the records with the given [recordIds] on the server.
-  Future<void> delete<String>(List<String> recordIds) async {
+  Future<void> delete(List<String> recordIds) async {
     await _apiService.request(
       '/media/record/deleteList',
       data: recordIds,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -199,22 +179,27 @@ class RecordService {
   Future<Record> getRecord(String id) async {
     var response = await _apiService.request(
       '/media/record/$id',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return Record.fromJson(response.data);
   }
 
-  /// Updates the given [Record] on the server.
-  updateRecord(Record record) async {
+  /// Updates the given [Record] on the server. A given [cover] replaces the
+  /// cover of the record, [removeCover] removes it.
+  Future<void> updateRecord(
+    Record record, {
+    Uint8List? cover,
+    bool removeCover = false,
+  }) async {
     await _apiService.request(
       '/media/record',
-      data: record.toJson(),
-      options: Options(
-        method: 'POST',
-      ),
+      data: {
+        ...record.toJson(),
+        if (cover != null) 'cover': base64Encode(cover),
+        if (removeCover) 'removeCover': true,
+      },
+      options: Options(method: 'POST'),
     );
   }
 
@@ -222,23 +207,18 @@ class RecordService {
   Future<Settings> getSettings() async {
     var response = await _apiService.request(
       '/media/settings',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return Settings.fromJson(response.data);
   }
 
   /// Saves the record settings
-  saveSettings(Settings settings) async {
+  Future<void> saveSettings(Settings settings) async {
     await _apiService.request(
       '/media/settings',
       data: settings.toJson(),
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -246,9 +226,7 @@ class RecordService {
   Future<RecordValidation> getValidationSettings() async {
     var response = await _apiService.request(
       '/media/settings/UploadValidation',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     if (response.data == null || response.data.isEmpty) {
@@ -259,18 +237,13 @@ class RecordService {
   }
 
   /// Saves the record validation settings.
-  saveValidationSettings(RecordValidation settings) async {
+  Future<void> saveValidationSettings(RecordValidation settings) async {
     await _apiService.request(
       '/media/settings/UploadValidation',
       data: Map<String, String>.from(<String, String>{
-        "value": json.encode(
-          settings.toJson(),
-        ),
+        "value": json.encode(settings.toJson()),
       }),
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -300,16 +273,12 @@ class RecordService {
       '/media/record/listFolder',
       queryParameters: params,
       data: subfilter.toJson(),
-      options: Options(
-        method: 'POST',
-      ),
+      options: Options(method: 'POST'),
     );
 
     return ModelList(
       List<RecordFolder>.from(
-        response.data['items'].map(
-          (item) => RecordFolder.fromJson(item),
-        ),
+        response.data['items'].map((item) => RecordFolder.fromJson(item)),
       ),
       offset ?? 0,
       response.data["totalCount"],
@@ -321,10 +290,7 @@ class RecordService {
     await _apiService.request(
       '/media/record/deleteFolders',
       data: list,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -332,9 +298,7 @@ class RecordService {
   Future<List<GenreBitrate>> loadBitrates() async {
     var response = await _apiService.request(
       '/media/record/bitrates',
-      options: Options(
-        method: 'GET',
-      ),
+      options: Options(method: 'GET'),
     );
 
     return List<GenreBitrate>.from(
@@ -347,10 +311,7 @@ class RecordService {
     await _apiService.request(
       '/media/record/bitrates',
       data: bitrates,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -361,10 +322,7 @@ class RecordService {
     }
     await _apiService.request(
       '/media/record/bitrate/${bitrate.genreId}',
-      options: Options(
-        method: 'DELETE',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'DELETE', contentType: Headers.jsonContentType),
     );
   }
 
@@ -376,15 +334,12 @@ class RecordService {
   ) async {
     await _apiService.request(
       '/media/record/assign',
-      data: {
+      data: <String, dynamic>{
         "items": items,
         "groups": groups,
         "initGroups": initGroups,
       },
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -396,15 +351,12 @@ class RecordService {
   ) async {
     await _apiService.request(
       '/media/record/assignFolder',
-      data: {
+      data: <String, dynamic>{
         "items": list,
         "groups": selectedGroups,
         "initGroups": initGroups,
       },
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -412,13 +364,8 @@ class RecordService {
   Future lock(List<String> list) async {
     await _apiService.request(
       '/media/record/lock',
-      data: {
-        "items": list,
-      },
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      data: <String, dynamic>{"items": list},
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -426,13 +373,8 @@ class RecordService {
   Future lockFolders(List<RecordFolder> list) async {
     await _apiService.request(
       '/media/record/lockFolder',
-      data: {
-        "items": list,
-      },
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      data: <String, dynamic>{"items": list},
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
   }
 
@@ -441,10 +383,7 @@ class RecordService {
     var response = await _apiService.request(
       '/media/record/assignedGroups',
       data: items,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
 
     return ModelList(
@@ -460,10 +399,7 @@ class RecordService {
     var response = await _apiService.request(
       '/media/record/assignedFolderGroups',
       data: items,
-      options: Options(
-        method: 'POST',
-        contentType: Headers.jsonContentType,
-      ),
+      options: Options(method: 'POST', contentType: Headers.jsonContentType),
     );
 
     return ModelList(

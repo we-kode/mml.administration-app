@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:mml_admin/view_models/settings/settings_compression.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +14,10 @@ class SettingsCompressionScreen extends StatelessWidget {
     return ChangeNotifierProvider<SettingsCompressionViewModel>(
       create: (context) => SettingsCompressionViewModel(),
       builder: (context, _) {
-        var vm =
-            Provider.of<SettingsCompressionViewModel>(context, listen: false);
+        var vm = Provider.of<SettingsCompressionViewModel>(
+          context,
+          listen: false,
+        );
         var locales = AppLocalizations.of(context)!;
 
         return AlertDialog(
@@ -26,9 +28,7 @@ class SettingsCompressionScreen extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -40,8 +40,9 @@ class SettingsCompressionScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           TextFormField(
+                            onFieldSubmitted: (_) => vm.save(),
                             inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
+                              FilteringTextInputFormatter.digitsOnly,
                             ],
                             textAlign: TextAlign.right,
                             keyboardType: TextInputType.number,
@@ -54,17 +55,13 @@ class SettingsCompressionScreen extends StatelessWidget {
                             initialValue:
                                 vm.settings.compressionRate?.toString() ?? '',
                             onSaved: (String? compressionRate) {
-                              vm.clearBackendErrors(
-                                vm.compressionField,
-                              );
+                              vm.clearBackendErrors(vm.compressionField);
                               vm.settings.compressionRate = int.tryParse(
                                 (compressionRate ?? '0'),
                               );
                             },
                             onChanged: (String? compressionRate) {
-                              vm.clearBackendErrors(
-                                vm.compressionField,
-                              );
+                              vm.clearBackendErrors(vm.compressionField);
                               vm.settings.compressionRate = int.tryParse(
                                 (compressionRate ?? '0'),
                               );
@@ -94,14 +91,8 @@ class SettingsCompressionScreen extends StatelessWidget {
     var locales = AppLocalizations.of(context)!;
 
     return [
-      TextButton(
-        onPressed: vm.abort,
-        child: Text(locales.cancel),
-      ),
-      TextButton(
-        onPressed: vm.save,
-        child: Text(locales.save),
-      ),
+      TextButton(onPressed: vm.abort, child: Text(locales.cancel)),
+      TextButton(onPressed: vm.save, child: Text(locales.save)),
     ];
   }
 }

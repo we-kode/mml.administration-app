@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/vertical_spacer.dart';
 import 'package:mml_admin/view_models/groups/edit.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +10,7 @@ class GroupEditDialog extends StatelessWidget {
   final String? groupId;
 
   /// Initializes the view for the group create/edit dialog.
-  const GroupEditDialog({
-    super.key,
-    required this.groupId,
-  });
+  const GroupEditDialog({super.key, required this.groupId});
 
   /// Builds the group create/edit dialog.
   @override
@@ -34,9 +31,7 @@ class GroupEditDialog extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -60,6 +55,7 @@ class GroupEditDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            onFieldSubmitted: (_) => vm.saveGroup(),
             initialValue: vm.group.name,
             decoration: InputDecoration(
               labelText: vm.locales.groupName,
@@ -91,17 +87,13 @@ class GroupEditDialog extends StatelessWidget {
                     vm.locales.groupIsDefault,
                     style: state.isValid
                         ? null
-                        : TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                          ),
+                        : TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                   subtitle: Text(
                     vm.locales.groupIsDefaultHint,
                     style: state.isValid
                         ? null
-                        : TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                          ),
+                        : TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                   value: state.value ?? false,
                   onChanged: (bool? isDefault) {
@@ -118,7 +110,7 @@ class GroupEditDialog extends StatelessWidget {
             },
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: vm.validateIsDefault,
-          )
+          ),
         ],
       ),
     );

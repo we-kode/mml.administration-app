@@ -8,9 +8,11 @@ part of 'client_tag_filter.dart';
 
 ClientTagFilter _$ClientTagFilterFromJson(Map<String, dynamic> json) =>
     ClientTagFilter(
-      groups:
-          (json['groups'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      groups: (json['groups'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       onlyNew: json['onlyNew'] as bool? ?? false,
+      inactive: json['inactive'] as bool? ?? false,
     )..isGrouped = json['isGrouped'] as bool;
 
 Map<String, dynamic> _$ClientTagFilterToJson(ClientTagFilter instance) =>
@@ -18,4 +20,5 @@ Map<String, dynamic> _$ClientTagFilterToJson(ClientTagFilter instance) =>
       'isGrouped': instance.isGrouped,
       'groups': instance.groups,
       'onlyNew': instance.onlyNew,
+      'inactive': instance.inactive,
     };

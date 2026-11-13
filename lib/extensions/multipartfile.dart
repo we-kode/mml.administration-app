@@ -11,22 +11,21 @@ class MultipartFileExtended extends MultipartFile {
   MultipartFileExtended(
     Stream<List<int>> stream,
     length, {
-    filename,
+    super.filename,
     this.filePath,
-    contentType,
-  }) : super.fromStream(() => stream, length, filename: filename, contentType: contentType);
+    super.contentType,
+  }) : super.fromStream(() => stream, length);
 
   /// Create instance of [MultipartFileExtended] from file.
   static MultipartFileExtended fromFileSync(
     String filePath, {
     String? filename,
     MediaType? contentType,
-  }) =>
-      multipartFileFromPathSync(
-        filePath,
-        filename: filename,
-        contentType: contentType,
-      );
+  }) => multipartFileFromPathSync(
+    filePath,
+    filename: filename,
+    contentType: contentType,
+  );
 }
 
 /// Creates a [MultipartFileExtended] from a file.

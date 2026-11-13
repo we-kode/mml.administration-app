@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
@@ -63,4 +63,3 @@ const darkColorScheme = ColorScheme(
   outlineVariant: Color(0xFF43474E),
   scrim: Color(0xFF000000),
 );
-

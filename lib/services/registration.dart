@@ -24,10 +24,7 @@ class RegistrationService {
   final ClientRegisteredFunction onRegistered;
 
   /// Initialize the [RegistrationService]].
-  RegistrationService({
-    required this.onUpdate,
-    required this.onRegistered,
-  });
+  RegistrationService({required this.onUpdate, required this.onRegistered});
 
   /// Connects to the server socket.
   Future<void> connect() async {
@@ -44,25 +41,20 @@ class RegistrationService {
     final builder = HubConnectionBuilder()
       ..url = 'https://$serverName/hub/client'
       ..httpConnectionOptions = HttpConnectionOptions(
-        headers: {
-          "App-Key": "$appKey",
-          "Authorization": "Bearer $accessToken",
-        },
+        headers: {"App-Key": "$appKey", "Authorization": "Bearer $accessToken"},
       )
       ..logLevel = LogLevel.error
       ..reconnect = true;
 
     _connection = builder.build();
-    _connection.on(
-      'REGISTER_TOKEN_UPDATED',
-      (args) {
-        if (args.isNotEmpty) {
-          var tokenInfo = ClientRegistration.fromJson(args.first);
-          tokenInfo.endpoint = serverName;
-          onUpdate(tokenInfo);
-        }
-      },
-    );
+    _connection.on('REGISTER_TOKEN_UPDATED', (args) {
+      if (args.isNotEmpty) {
+        var info = args.first as Map<String, dynamic>;
+        var tokenInfo = ClientRegistration.fromJson(info);
+        tokenInfo.endpoint = info['serverName'] ?? serverName;
+        onUpdate(tokenInfo);
+      }
+    });
     _connection.on(
       'CLIENT_REGISTERED',
       (clientIds) => onRegistered(clientIds.first),

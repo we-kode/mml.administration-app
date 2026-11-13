@@ -1,5 +1,5 @@
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mml_admin/components/check_animation.dart';
 import 'package:mml_admin/components/chip_choices.dart';
@@ -38,9 +38,7 @@ class ClientRegisterDialog extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
+                  children: [CircularProgressIndicator()],
                 );
               }
 
@@ -68,9 +66,7 @@ class ClientRegisterDialog extends StatelessWidget {
             return value.registration == null
                 ? const Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CircularProgressIndicator(),
-                    ],
+                    children: [CircularProgressIndicator()],
                   )
                 : _actualState(context, value);
           },
@@ -91,9 +87,7 @@ class ClientRegisterDialog extends StatelessWidget {
               height: 264,
               width: 264,
               data: vm.registration.toString(),
-              errorBuilder: (context, error) => Center(
-                child: Text(error),
-              ),
+              errorBuilder: (context, error) => Center(child: Text(error)),
             ),
             Container(
               decoration: BoxDecoration(
@@ -126,9 +120,7 @@ class ClientRegisterDialog extends StatelessWidget {
             builder: (context, value, child) {
               return ListView.separated(
                 separatorBuilder: (context, index) {
-                  return const Divider(
-                    height: 1,
-                  );
+                  return const Divider(height: 1);
                 },
                 itemBuilder: (context, index) {
                   return ListTile(
@@ -164,15 +156,26 @@ class ClientRegisterDialog extends StatelessWidget {
                         ),
                       ],
                     ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        vm.deleteClient(
-                          index,
-                          context,
-                        );
-                      },
-                      icon: const Icon(Symbols.delete),
-                      tooltip: AppLocalizations.of(context)!.remove,
+                    trailing: Wrap(
+                      spacing: 2,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            vm.assignAndDeleteClient(index, context);
+                          },
+                          icon: const Icon(Symbols.delete_sweep),
+                          tooltip: AppLocalizations.of(
+                            context,
+                          )!.assignAndRemove,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            vm.deleteClient(index, context);
+                          },
+                          icon: const Icon(Symbols.delete),
+                          tooltip: AppLocalizations.of(context)!.remove,
+                        ),
+                      ],
                     ),
                   );
                 },
@@ -189,6 +192,7 @@ class ClientRegisterDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
+                onFieldSubmitted: (_) => vm.saveClient(),
                 initialValue: vm.client!.displayName,
                 decoration: InputDecoration(
                   labelText: vm.locales.displayName,
@@ -205,6 +209,7 @@ class ClientRegisterDialog extends StatelessWidget {
               ),
               verticalSpacer,
               TextFormField(
+                onFieldSubmitted: (_) => vm.saveClient(),
                 initialValue: vm.client!.deviceIdentifier,
                 decoration: InputDecoration(
                   labelText: vm.locales.deviceName,
@@ -228,12 +233,8 @@ class ClientRegisterDialog extends StatelessWidget {
               ChipChoices(
                 loadData: vm.getGroups,
                 initialSelectedItems: vm.client!.groups,
-                onSelectionChanged: (selectableItems) =>
-                    vm.client!.groups = selectableItems
-                        .map(
-                          (e) => e as Group,
-                        )
-                        .toList(),
+                onSelectionChanged: (selectableItems) => vm.client!.groups =
+                    selectableItems.map((e) => e as Group).toList(),
               ),
             ],
           ),
@@ -265,8 +266,9 @@ class ClientRegisterDialog extends StatelessWidget {
         builder: (context, value, child) {
           return vm.state == RegistrationState.scan
               ? TextButton(
-                  onPressed:
-                      vm.state == RegistrationState.register ? null : vm.abort,
+                  onPressed: vm.state == RegistrationState.register
+                      ? null
+                      : vm.abort,
                   child: Text(locales.cancel),
                 )
               : const SizedBox.shrink();
@@ -278,8 +280,8 @@ class ClientRegisterDialog extends StatelessWidget {
             onPressed: vm.state == RegistrationState.register
                 ? vm.saveClient
                 : vm.state == RegistrationState.preCheck
-                    ? vm.preCheckFinished
-                    : null,
+                ? vm.preCheckFinished
+                : null,
             child: Text(locales.save),
           );
         },

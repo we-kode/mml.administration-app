@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/connection_settings.dart';
 import 'package:mml_admin/services/clients.dart';
@@ -16,18 +16,17 @@ class SettingsConnectionViewModel extends ChangeNotifier {
 
   /// Initialize the registration client view model.
   Future<bool> init(BuildContext context) async {
-     return Future<bool>.microtask(() async {
+    return Future<bool>.microtask(() async {
       _context = context;
       try {
-        connectionSettings =
-            await ClientService.getInstance().getConnectionSettings();
+        connectionSettings = await ClientService.getInstance()
+            .getConnectionSettings();
       } catch (e) {
         // Catch all errors and do nothing, since handled by api service!
       }
       return true;
     });
   }
-
 
   /// Closes the view.
   void abort() async {

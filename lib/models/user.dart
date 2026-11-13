@@ -40,7 +40,7 @@ class User extends ModelBase {
     this.password,
     this.oldPassword,
     this.newPassword,
-    super.isDeletable
+    super.isDeletable,
   });
 
   /// Converts a json object/map to the user model.

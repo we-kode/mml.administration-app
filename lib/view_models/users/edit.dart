@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/user.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
@@ -37,7 +37,6 @@ class UsersEditDialogViewModel extends ChangeNotifier {
 
   /// Map of errors from the server.
   Map<String, List<String>> errors = {};
-
 
   /// Initializes the ViewModel and loads the user with the given [userId] or
   /// creates an new user model if the id is not passed.
@@ -105,7 +104,7 @@ class UsersEditDialogViewModel extends ChangeNotifier {
 
   /// Clears the errors from the backend for the field with the passed
   /// [fieldName].
-  clearBackendErrors(String fieldName) {
+  void clearBackendErrors(String fieldName) {
     errors.remove(fieldName);
   }
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mml_admin/components/progress_indicator.dart';
 import 'package:mml_admin/models/client.dart';
 import 'package:mml_admin/models/group.dart';
@@ -96,7 +96,7 @@ class ClientsEditViewModel extends ChangeNotifier {
 
   /// Clears the errors from the backend for the field with the passed
   /// [fieldName].
-  clearBackendErrors(String fieldName) {
+  void clearBackendErrors(String fieldName) {
     errors.remove(fieldName);
   }
 
