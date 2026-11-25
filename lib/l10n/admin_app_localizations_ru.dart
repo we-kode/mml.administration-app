@@ -172,6 +172,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get retrieveTokenFailed => 'Не удалось загрузить токен!';
 
   @override
+  String get connectingToServer => 'Подключение к серверу …';
+
+  @override
   String get invalidDeviceName => 'Пожалуйста, введите название устройства!';
 
   @override

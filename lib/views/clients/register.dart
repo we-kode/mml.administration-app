@@ -36,10 +36,7 @@ class ClientRegisterDialog extends StatelessWidget {
             future: vm.init(context),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData) {
-                return const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [CircularProgressIndicator()],
-                );
+                return _connecting(locales);
               }
 
               return snapshot.data!
@@ -64,13 +61,21 @@ class ClientRegisterDialog extends StatelessWidget {
         Consumer<ClientsRegisterViewModel>(
           builder: (context, value, child) {
             return value.registration == null
-                ? const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [CircularProgressIndicator()],
-                  )
+                ? _connecting(value.locales)
                 : _actualState(context, value);
           },
         ),
+      ],
+    );
+  }
+
+  Widget _connecting(AppLocalizations locales) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const CircularProgressIndicator(),
+        verticalSpacer,
+        Text(locales.connectingToServer),
       ],
     );
   }

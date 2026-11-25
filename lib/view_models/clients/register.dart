@@ -69,6 +69,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
       if (e.statusCode != HttpStatus.unauthorized) {
         messenger.showMessage(messenger.unexpectedError(e.message));
         if (context.mounted) Navigator.of(_context).pop(false);
+        return false;
       }
 
       await UserService.getInstance().refreshToken();
@@ -219,6 +220,16 @@ class ClientsRegisterViewModel extends ChangeNotifier {
     return _state;
   }
 
+  /// Removes the similar client at [index] and continues with the
+  /// registration form when no similar client is left.
+  @visibleForTesting
+  void removeSimilarClient(int index) {
+    similarClients.removeAt(index);
+    if (similarClients.isEmpty) {
+      _state = RegistrationState.register;
+    }
+  }
+
   /// Deletes one client from list.
   Future<bool> deleteClient(int index, BuildContext context) async {
     var shouldDelete = await showDeleteDialog(context);
@@ -232,7 +243,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
               .map<String>((ModelBase e) => (e as Client).getIdentifier())
               .toList(),
         );
-        similarClients.removeAt(index);
+        removeSimilarClient(index);
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();
@@ -258,7 +269,7 @@ class ClientsRegisterViewModel extends ChangeNotifier {
               .map<String>((ModelBase e) => (e as Client).getIdentifier())
               .toList(),
         );
-        similarClients.removeAt(index);
+        removeSimilarClient(index);
         RouterService.getInstance().navigatorKey.currentState!.pop();
       } catch (e) {
         RouterService.getInstance().navigatorKey.currentState!.pop();

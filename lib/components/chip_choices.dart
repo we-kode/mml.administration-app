@@ -65,6 +65,21 @@ class _ChipChoicesState extends State<ChipChoices> {
   }
 
   @override
+  void didUpdateWidget(ChipChoices oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(
+      widget.initialSelectedItems,
+      oldWidget.initialSelectedItems,
+    )) {
+      _selectedValues = widget.initialSelectedItems.toList();
+    }
+    if (widget.selectableItems != null &&
+        !identical(widget.selectableItems, oldWidget.selectableItems)) {
+      _items = widget.selectableItems!;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final isDarkMode = brightness == Brightness.dark;

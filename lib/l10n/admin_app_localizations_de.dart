@@ -175,6 +175,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get retrieveTokenFailed => 'Es konnte kein Token geladen werden!';
 
   @override
+  String get connectingToServer => 'Verbindung zum Server wird aufgebaut …';
+
+  @override
   String get invalidDeviceName => 'Bitte geben Sie eine Gerätebezeichnung an!';
 
   @override

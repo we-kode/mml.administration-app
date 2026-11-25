@@ -412,6 +412,12 @@ abstract class AppLocalizations {
   /// **'Es konnte kein Token geladen werden!'**
   String get retrieveTokenFailed;
 
+  /// No description provided for @connectingToServer.
+  ///
+  /// In de, this message translates to:
+  /// **'Verbindung zum Server wird aufgebaut …'**
+  String get connectingToServer;
+
   /// No description provided for @invalidDeviceName.
   ///
   /// In de, this message translates to:

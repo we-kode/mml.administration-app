@@ -222,7 +222,10 @@ class ActionButton extends StatelessWidget {
   const ActionButton({super.key, this.onPressed, required this.icon});
 
   /// Called when button is pressed.
-  final VoidCallback? onPressed;
+  ///
+  /// Resolves with true when the list showing this button should reload its
+  /// data.
+  final Future<bool> Function()? onPressed;
 
   /// Icon of this action button.
   final Widget icon;
@@ -238,7 +241,7 @@ class ActionButton extends StatelessWidget {
       color: theme.colorScheme.primary,
       elevation: 4.0,
       child: IconButton(
-        onPressed: onPressed,
+        onPressed: onPressed == null ? null : () => onPressed!(),
         icon: icon,
         color: theme.colorScheme.onPrimary,
       ),

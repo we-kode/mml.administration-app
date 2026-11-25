@@ -59,6 +59,7 @@
   "editUser": "Admin bearbeiten",
   "notFound": "Der aufgerufene Datensatz wurde nicht gefunden!",
   "retrieveTokenFailed": "Es konnte kein Token geladen werden!",
+  "connectingToServer": "Verbindung zum Server wird aufgebaut …",
   "invalidDeviceName": "Bitte geben Sie eine Gerätebezeichnung an!",
   "deviceName": "Gerätebezeichnung",
   "lastTokenRefresh": "Letzte Aktivität: {date}",
