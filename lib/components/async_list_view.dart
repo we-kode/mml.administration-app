@@ -375,7 +375,24 @@ class _AsyncListViewState extends State<AsyncListView> {
     return Visibility(
       visible: widget.showAddButton,
       child: widget.subactions != null && widget.subactions!.isNotEmpty
-          ? ExpandableFab(distance: 96.0, children: widget.subactions!)
+          ? ExpandableFab(
+              distance: 96.0,
+              children: [
+                for (final action in widget.subactions!)
+                  ActionButton(
+                    icon: action.icon,
+                    onPressed: action.onPressed == null
+                        ? null
+                        : () async {
+                            final reload = await action.onPressed!();
+                            if (reload) {
+                              _reloadData();
+                            }
+                            return reload;
+                          },
+                  ),
+              ],
+            )
           : FloatingActionButton(
               onPressed: () {
                 if (widget.addItem == null) {

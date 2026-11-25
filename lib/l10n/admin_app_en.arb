@@ -52,6 +52,7 @@
   "editUser": "Edit admin",
   "notFound": "The requested record wasn't found!",
   "retrieveTokenFailed": "A token could not be retrieved!",
+  "connectingToServer": "Connecting to the server …",
   "invalidDeviceName": "Please enter a device name!",
   "deviceName": "Device name",
   "lastTokenRefresh": "Last activity: {date}",

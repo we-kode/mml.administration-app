@@ -52,6 +52,7 @@
   "editUser": "Изменить администратора",
   "notFound": "Запрошенная запись не найдена!",
   "retrieveTokenFailed": "Не удалось загрузить токен!",
+  "connectingToServer": "Подключение к серверу …",
   "invalidDeviceName": "Пожалуйста, введите название устройства!",
   "deviceName": "Название устройства",
   "lastTokenRefresh": "Последняя активность: {date}",

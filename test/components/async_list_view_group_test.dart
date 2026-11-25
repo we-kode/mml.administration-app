@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mml_admin/components/async_list_view.dart';
+import 'package:mml_admin/components/expandable_fab.dart';
 import 'package:mml_admin/components/list_subfilter_view.dart';
 import 'package:mml_admin/l10n/admin_app_localizations.dart';
 import 'package:mml_admin/models/id3_tag_filter.dart';
@@ -85,6 +86,48 @@ void main() {
 
     expect(find.byType(ActionChip), findsNothing);
     expect(find.byType(Chip), findsOneWidget);
+  });
+
+  testWidgets('reloads the list only when a sub action asks for it', (
+    tester,
+  ) async {
+    var reload = false;
+    var loadCount = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('en'),
+        home: AsyncListView(
+          subactions: [
+            ActionButton(
+              icon: const Icon(Icons.upload),
+              onPressed: () async => reload,
+            ),
+            ActionButton(icon: const Icon(Icons.folder), onPressed: null),
+          ],
+          deleteItems: <T>(List<T> items) async => false,
+          editItem: (item, subfilter) async => false,
+          loadData: ({String? filter, int? offset, int? take, subfilter}) {
+            loadCount++;
+            return Future.value(ModelList([], 0, 0));
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+    loadCount = 0;
+
+    await tester.tap(find.byIcon(Icons.upload));
+    await tester.pumpAndSettle();
+    expect(loadCount, 0);
+
+    reload = true;
+    await tester.tap(find.byIcon(Icons.upload));
+    await tester.pumpAndSettle();
+    expect(loadCount, 1);
   });
 
   testWidgets('list header fits beside a navigation rail', (tester) async {
