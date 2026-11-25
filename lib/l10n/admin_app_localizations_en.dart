@@ -171,6 +171,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retrieveTokenFailed => 'A token could not be retrieved!';
 
   @override
+  String get connectingToServer => 'Connecting to the server …';
+
+  @override
   String get invalidDeviceName => 'Please enter a device name!';
 
   @override

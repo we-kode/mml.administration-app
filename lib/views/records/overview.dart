@@ -53,22 +53,19 @@ class RecordsScreen extends StatelessWidget {
                 ActionButton(
                   icon: const Icon(Symbols.drive_folder_upload),
                   onPressed: () async {
-                    String? selected = await FilePicker.getDirectoryPath(
-                      dialogTitle: locales.uploadFolder,
-                      windowsOptions: const WindowsOptions(
-                        lockParentWindow: true,
+                    String? selected = await RecordsViewModel.pick(
+                      () => FilePicker.getDirectoryPath(
+                        dialogTitle: locales.uploadFolder,
+                        linuxOptions: const LinuxOptions(
+                          lockParentWindow: true,
+                        ),
                       ),
-                      linuxOptions: const LinuxOptions(lockParentWindow: true),
                     );
-                    if (selected == null) {
-                      return;
+                    if (selected == null || !context.mounted) {
+                      return false;
                     }
 
-                    if (!context.mounted) {
-                      return;
-                    }
-
-                    return await showDialog(
+                    await showDialog(
                       barrierDismissible: false,
                       context: context,
                       builder: (BuildContext context) {
@@ -78,22 +75,27 @@ class RecordsScreen extends StatelessWidget {
                         );
                       },
                     );
+                    return true;
                   },
                 ),
                 ActionButton(
                   icon: const Icon(Symbols.file_upload),
                   onPressed: () async {
-                    List<PlatformFile> selected = await FilePicker.pickFiles(
-                      type: FileType.custom,
-                      allowedExtensions: ['mp3'],
-                      dialogTitle: locales.uploadFiles,
+                    List<PlatformFile>? selected = await RecordsViewModel.pick(
+                      () => FilePicker.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['mp3'],
+                        dialogTitle: locales.uploadFiles,
+                      ),
                     );
 
-                    if (selected.isEmpty || !context.mounted) {
-                      return;
+                    if (selected == null ||
+                        selected.isEmpty ||
+                        !context.mounted) {
+                      return false;
                     }
 
-                    return await showDialog(
+                    await showDialog(
                       barrierDismissible: false,
                       context: context,
                       builder: (BuildContext context) {
@@ -103,6 +105,7 @@ class RecordsScreen extends StatelessWidget {
                         );
                       },
                     );
+                    return true;
                   },
                 ),
               ],

@@ -47,6 +47,24 @@ class RecordsViewModel extends ChangeNotifier {
   /// Whether the server supports share links.
   bool isShareSupported = true;
 
+  static bool _isPicking = false;
+
+  /// Opens the file or folder picker [open] and returns its result.
+  ///
+  /// Returns null without opening a picker while another picker is open.
+  static Future<T?> pick<T>(Future<T?> Function() open) async {
+    if (_isPicking) {
+      return null;
+    }
+
+    _isPicking = true;
+    try {
+      return await open();
+    } finally {
+      _isPicking = false;
+    }
+  }
+
   /// Initializes the view model.
   Future<bool> init(BuildContext context) {
     return Future.microtask(() async {
