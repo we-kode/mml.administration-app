@@ -39,7 +39,7 @@ class AppUpdateService {
       if (response.statusCode != HttpStatus.ok) {
         throw HttpException('Status ${response.statusCode}', uri: uri);
       }
-      final file = File('${folder.path}/$fileName');
+      final file = File('${folder.path}${Platform.pathSeparator}$fileName');
       final sink = file.openWrite();
       try {
         await sink.addStream(response.stream.timeout(_timeout));
