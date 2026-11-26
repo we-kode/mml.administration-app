@@ -41,6 +41,19 @@ void main() {
     expect(file.parent.path, contains('mml_update_'));
   });
 
+  test('returns a path the file manager of the platform can open', () async {
+    final file = await AppUpdateService.getInstance().download(
+      uri.resolve('/installer'),
+      'mml_admin-1.2.0.msix',
+    );
+    addTearDown(() => file.parent.delete(recursive: true));
+
+    expect(
+      file.path,
+      '${file.parent.path}${Platform.pathSeparator}mml_admin-1.2.0.msix',
+    );
+  });
+
   int updateFolders() => Directory.systemTemp
       .listSync()
       .where((e) => e.path.contains('mml_update_'))
